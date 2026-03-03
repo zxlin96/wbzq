@@ -1,0 +1,52 @@
+# 环境变量文件（包含敏感信息）
+.env
+.env.local
+
+# Token 文件（包含敏感 API Token）
+*_token
+*token*
+!token_example.txt
+
+# 数据库和缓存
+stock_strategy.db
+*.db
+data_cache/
+logs/
+
+# 生成的结果文件
+*.csv
+*.html
+*.pkl
+*.log
+
+# Python
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# 项目特定文件
+daily_first_j13_interactive.html
+first_j13_step_daily_count.html
+dtw_results/
+validation_report.txt
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 备份目录
+.token_backup/
+.git_backup/
+
+# 迁移工具生成的文件
+MIGRATION_NOTE.md

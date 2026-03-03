@@ -1,0 +1,81 @@
+name: 股票策略定时执行
+
+on:
+  schedule:
+    # 北京时间15:30 = UTC 07:30 (夏令时) 或 07:30 (冬令时)
+    # 周一到周五每天执行
+    - cron: '30 7 * * 1-5'
+  workflow_dispatch:  # 允许手动触发
+  push:
+    branches: [ main, master ]  # 推送到主分支时也运行测试
+
+jobs:
+  run-strategy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+    
+    - name: 设置Python环境
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+    
+    - name: 安装依赖
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: 获取当前日期
+      id: date
+      run: |
+        echo "today=$(date +'%Y%m%d')" >> $GITHUB_OUTPUT
+        echo " Trading date: $(date +'%Y-%m-%d %H:%M:%S')"
+    
+    - name: 运行股票策略
+      env:
+        TUSHARE_TOKEN: ${{ secrets.TUSHARE_TOKEN }}
+        DB_PATH: ${{ github.workspace }}/stock_strategy.db
+        CACHE_DIR: ${{ github.workspace }}/data_cache
+      run: |
+        echo "========================================"
+        echo "开始执行股票策略分析"
+        echo "日期: ${{ steps.date.outputs.today }}"
+        echo "========================================"
+        python main_par2.py --date ${{ steps.date.outputs.today }} --backtest --hold-days 3
+    
+    - name: 上传结果文件
+      uses: actions/upload-artifact@v4
+      if: always()  # 即使失败也上传
+      with:
+        name: strategy-results-${{ steps.date.outputs.today }}
+        path: |
+          result.csv
+          *.csv
+          *.html
+          stock_strategy.db
+        retention-days: 30  # 保留30天
+    
+    - name: 上传日志文件
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: strategy-logs-${{ steps.date.outputs.today }}
+        path: |
+          *.log
+        retention-days: 7
+
+  # 可选：发送通知（需要配置钉钉/企业微信等）
+  notify:
+    needs: run-strategy
+    runs-on: ubuntu-latest
+    if: always()  # 无论成功失败都通知
+    
+    steps:
+    - name: 发送执行结果通知
+      run: |
+        echo "策略执行完成"
+        echo "状态: ${{ needs.run-strategy.result }}"
+        # 这里可以添加钉钉/企业微信通知脚本

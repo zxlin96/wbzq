@@ -1,0 +1,19 @@
+微芯生物（策略1）
+python .\main_par2.py --date 20250620 --days 90 --debug 688321.SH
+华纳药厂（策略1）
+python .\main_par2.py --date 20250508 --days 90 --debug 688799.SH
+
+方正科技（乔丹）（策略1）
+python .\main_par2.py --date 20250723 --days 90 --debug 600601.SH
+宁波韵升（策略1）
+python .\main_par2.py --date 20250804 --days 90 --debug 600366.SH
+国轩高科 （策略2）
+python .\main_par2.py --date 20250804 --days 90 --debug 002074.SZ
+光电股份 （策略2）
+python .\main_par2.py --date 20250710 --days 90 --debug 600184.SH
+
+
+澄天伟业 （策略2）不好选
+python .\main_par2.py --date 20250718 --days 90 --debug 300689.SZ
+野马电池 （策略2）不好选 J=13.72
+python .\main_par2.py --date 20250731 --days 90 --debug 605378.SH

@@ -10,6 +10,7 @@
 # 数据库和缓存
 stock_strategy.db
 *.db
+data_cache/
 logs/
 
 # 生成的结果文件

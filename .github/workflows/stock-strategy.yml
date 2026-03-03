@@ -12,10 +12,14 @@ on:
 jobs:
   run-strategy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # 允许写入仓库内容
     
     steps:
     - name: 检出代码
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # 获取完整历史，用于提交缓存数据
     
     - name: 设置Python环境
       uses: actions/setup-python@v5
@@ -68,6 +72,55 @@ jobs:
         path: |
           *.log
         retention-days: 7
+    
+    - name: 提交并推送缓存数据
+      if: success()  # 只有成功时才提交缓存
+      run: |
+        echo "========================================"
+        echo "检查并提交缓存数据"
+        echo "========================================"
+        
+        # 配置 Git 用户信息
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        
+        # 检查 data_cache 目录是否有变更
+        if [ -d "data_cache" ]; then
+          echo "发现 data_cache 目录"
+          
+          # 添加 data_cache 目录（确保 .gitignore 允许）
+          git add data_cache/
+          
+          # 检查是否有变更需要提交
+          if git diff --staged --quiet; then
+            echo "缓存数据没有变化，无需提交"
+          else
+            echo "发现新的缓存数据，正在提交..."
+            git commit -m "Update cache data [$(date +'%Y-%m-%d %H:%M:%S')]"
+            
+            # 推送变更
+            git push
+            echo "✅ 缓存数据已推送到仓库"
+          fi
+        else
+          echo "data_cache 目录不存在"
+        fi
+    
+    - name: 显示缓存统计
+      if: success()
+      run: |
+        echo "========================================"
+        echo "缓存数据统计"
+        echo "========================================"
+        if [ -d "data_cache" ]; then
+          echo "缓存文件数量: $(find data_cache -type f | wc -l)"
+          echo "缓存目录大小: $(du -sh data_cache | cut -f1)"
+          echo ""
+          echo "最近更新的文件:"
+          ls -lt data_cache/ | head -10
+        else
+          echo "data_cache 目录不存在"
+        fi
 
   # 可选：发送通知（需要配置钉钉/企业微信等）
   notify:

@@ -7,6 +7,11 @@ on:
     - cron: '30 13 * * 1-5'
   workflow_dispatch:  # 允许手动触发
 
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
 jobs:
   run-strategy:
     runs-on: ubuntu-latest
@@ -14,6 +19,8 @@ jobs:
     steps:
     - name: 检出代码
       uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
     
     - name: 设置Python环境
       uses: actions/setup-python@v5
@@ -53,9 +60,9 @@ jobs:
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
-        git add *.html *.json
+        git add html/ reports.json index.html
         git diff --staged --quiet || git commit -m "Auto-commit: Update reports for ${{ steps.date.outputs.today }}"
-        git push
+        git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref }}
     
     - name: 上传结果文件
       uses: actions/upload-artifact@v4

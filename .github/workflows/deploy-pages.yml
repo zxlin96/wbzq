@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   workflow_run:
-    workflows: ["Stock Strategy"]
+    workflows: ["股票策略定时执行"]
     types:
       - completed
   workflow_dispatch:
@@ -29,6 +29,16 @@ jobs:
           path: ./artifacts
           pattern: strategy-results-*
           merge-multiple: true
+
+      - name: Copy index.html and reports.json
+        run: |
+          cp index.html ./artifacts/
+          cp generate_reports_json.py ./artifacts/
+          
+      - name: Generate reports.json
+        run: |
+          cd ./artifacts
+          python generate_reports_json.py
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

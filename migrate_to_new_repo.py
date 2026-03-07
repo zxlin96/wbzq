@@ -30,7 +30,7 @@ EXCLUDE_DIRS = {
 }
 
 EXCLUDE_FILES = {
-    '*.pyc', '*.pyo', '*.db', '*.csv', '*.html', '*.pkl', '*.log',
+    '*.pyc', '*.pyo', '*.db', '*.csv', '*.pkl', '*.log',
     '2000_token', '5000_token', '.env', '.env.local', '.gitignore'
 }
 

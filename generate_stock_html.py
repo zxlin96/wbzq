@@ -97,6 +97,11 @@ def generate_stock_selection_html(result, df, end_date, industry_count):
     if result.empty:
         return
     
+    # 创建 html/日期 目录
+    import os
+    html_dir = os.path.join('html', end_date)
+    os.makedirs(html_dir, exist_ok=True)
+    
     # 准备表格数据
     table_data = []
     stock_charts = {}  # 存储每只股票的数据
@@ -512,7 +517,7 @@ def generate_stock_selection_html(result, df, end_date, industry_count):
 </html>'''
     
     # 保存HTML文件
-    filename = f"stock_selection_{end_date}.html"
+    filename = os.path.join(html_dir, f"stock_selection_{end_date}.html")
     with open(filename, 'w', encoding='utf-8') as f:
         f.write(html_content)
     

@@ -14,29 +14,32 @@ def generate_reports_json():
     
     reports = []
     
-    # 查找所有选股报告文件
-    stock_selection_files = list(Path('.').glob('stock_selection_*.html'))
+    # 查找 html/ 目录下的所有日期目录
+    html_base_dir = Path('html')
+    if not html_base_dir.exists():
+        print("⚠️  html/ 目录不存在，跳过生成索引")
+        return
     
-    # 按日期排序（从文件名提取日期）
-    stock_selection_files.sort(key=lambda x: x.name, reverse=True)
+    # 获取所有日期目录并按日期排序
+    date_dirs = sorted([d for d in html_base_dir.iterdir() if d.is_dir()], 
+                       key=lambda x: x.name, reverse=True)
     
-    # 检查其他趋势图文件是否存在
-    has_industry_trend = Path('industry_total_amount_trend.html').exists()
-    has_j13_trend = Path('first_j13_step_daily_count.html').exists()
-    
-    # 为每个选股报告创建记录
-    for html_file in stock_selection_files:
-        file_name = html_file.name
+    for date_dir in date_dirs:
+        date_str = date_dir.name
         
-        # 提取日期
-        date_str = file_name.replace('stock_selection_', '').replace('.html', '')
+        # 检查该日期目录下的文件
+        stock_selection_file = date_dir / f"stock_selection_{date_str}.html"
+        industry_trend_file = date_dir / "industry_total_amount_trend.html"
+        j13_trend_file = date_dir / "first_j13_step_daily_count.html"
         
-        reports.append({
-            'date': date_str,
-            'stockSelection': file_name,
-            'industryTrend': 'industry_total_amount_trend.html' if has_industry_trend else None,
-            'j13Trend': 'first_j13_step_daily_count.html' if has_j13_trend else None
-        })
+        # 只添加存在选股报告的日期
+        if stock_selection_file.exists():
+            reports.append({
+                'date': date_str,
+                'stockSelection': f"html/{date_str}/stock_selection_{date_str}.html",
+                'industryTrend': f"html/{date_str}/industry_total_amount_trend.html" if industry_trend_file.exists() else None,
+                'j13Trend': f"html/{date_str}/first_j13_step_daily_count.html" if j13_trend_file.exists() else None
+            })
     
     # 统计信息
     total_stocks = 0

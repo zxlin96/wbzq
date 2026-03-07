@@ -1178,11 +1178,14 @@ def generate_industry_visualization(df, daily_stats, end_date):
     fig.update_xaxes(tickformat='%m-%d', tickangle=-45)
     fig.update_yaxes(rangemode='tozero')
     
-    fig.write_html("industry_total_amount_trend.html", auto_open=False)
-    print(f"\n📈 已生成行业总成交额趋势图: industry_total_amount_trend.html")
+    import os
+    html_dir = os.path.join('html', end_date)
+    os.makedirs(html_dir, exist_ok=True)
+    fig.write_html(os.path.join(html_dir, "industry_total_amount_trend.html"), auto_open=False)
+    print(f"\n📈 已生成行业总成交额趋势图: {html_dir}/industry_total_amount_trend.html")
 
 
-def generate_j13_trend(df):
+def generate_j13_trend(df, end_date):
     """生成 first_j13_step 每日趋势图"""
     daily_first_j13_counts = df[df['kdj_qfq'] < 13].groupby('trade_date').size().reset_index(name='count')
     daily_first_j13_counts['trade_date'] = pd.to_datetime(
@@ -1216,8 +1219,10 @@ def generate_j13_trend(df):
     fig.update_xaxes(tickformat='%m-%d', tickangle=-45)
     fig.update_yaxes(rangemode='tozero')
     
-    fig.write_html("first_j13_step_daily_count.html", auto_open=False)
-    print(f"📈 已生成趋势图: first_j13_step_daily_count.html")
+    html_dir = os.path.join('html', end_date)
+    os.makedirs(html_dir, exist_ok=True)
+    fig.write_html(os.path.join(html_dir, "first_j13_step_daily_count.html"), auto_open=False)
+    print(f"📈 已生成趋势图: {html_dir}/first_j13_step_daily_count.html")
 
 
 # ========== 结果输出函数 ==========
@@ -1766,7 +1771,7 @@ def main():
         daily_stats = calculate_daily_stats(df, basic_info)
         print_daily_stats(daily_stats)
         generate_industry_visualization(df, daily_stats, end_date)
-        generate_j13_trend(df)
+        generate_j13_trend(df, end_date)
         
         # 13. DTW模式匹配
         print('\n========== 完美图形模式匹配分析 ==========')

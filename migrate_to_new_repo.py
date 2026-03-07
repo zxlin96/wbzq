@@ -95,9 +95,10 @@ stock_strategy.db
 data_cache/
 logs/
 
-# 生成的结果文件
+# 生成的结果文件（排除 HTML 和 JSON，这些需要提交用于 GitHub Pages）
 *.csv
-*.html
+!*.html
+!*.json
 *.pkl
 *.log
 
@@ -114,8 +115,6 @@ dist/
 build/
 
 # 项目特定文件
-daily_first_j13_interactive.html
-first_j13_step_daily_count.html
 dtw_results/
 validation_report.txt
 

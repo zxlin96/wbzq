@@ -29,6 +29,10 @@ jobs:
           path: ./artifacts
           pattern: strategy-results-*
           merge-multiple: true
+        continue-on-error: true
+
+      - name: Create artifacts directory
+        run: mkdir -p ./artifacts
 
       - name: Copy index.html and reports.json
         run: |

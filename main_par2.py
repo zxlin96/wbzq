@@ -32,6 +32,7 @@ from config import (
 )
 from data_manager import DataManager
 from generate_stock_html import generate_stock_selection_html
+from generate_trend_html import generate_industry_trend_html, generate_j13_trend_html
 # from dtw_similarity import DTWSimilarityAnalyzer  # 模块不存在，已注释
 
 # ========== 全局配置 ==========
@@ -1174,14 +1175,13 @@ def generate_industry_visualization(df, daily_stats, end_date):
     fig.add_hline(y=avg_amount, line_dash="dash", line_color="gray",
                   annotation_text=f"平均: {avg_amount:.2f}万", annotation_position="top right")
     
-    fig.update_layout(hovermode='x unified', title_x=0.5, height=650, width=1100)
-    fig.update_xaxes(tickformat='%m-%d', tickangle=-45)
-    fig.update_yaxes(rangemode='tozero')
-    
-    import os
+    # 生成美观的 HTML 趋势图
     html_dir = os.path.join('html', end_date)
     os.makedirs(html_dir, exist_ok=True)
-    fig.write_html(os.path.join(html_dir, "industry_total_amount_trend.html"), auto_open=False)
+    
+    html_content = generate_industry_trend_html(trend_df, end_date, top_n=PLOT_N)
+    with open(os.path.join(html_dir, "industry_total_amount_trend.html"), 'w', encoding='utf-8') as f:
+        f.write(html_content)
     print(f"\n📈 已生成行业总成交额趋势图: {html_dir}/industry_total_amount_trend.html")
 
 
@@ -1215,13 +1215,13 @@ def generate_j13_trend(df, end_date):
     fig.add_annotation(x=max_row['trade_date'], y=max_row['count'],
                        text=f"峰值: {max_row['count']}只", showarrow=True, arrowhead=2)
     
-    fig.update_layout(title_x=0.5, height=500, width=1100, hovermode='x unified')
-    fig.update_xaxes(tickformat='%m-%d', tickangle=-45)
-    fig.update_yaxes(rangemode='tozero')
-    
+    # 生成美观的 HTML 趋势图
     html_dir = os.path.join('html', end_date)
     os.makedirs(html_dir, exist_ok=True)
-    fig.write_html(os.path.join(html_dir, "first_j13_step_daily_count.html"), auto_open=False)
+    
+    html_content = generate_j13_trend_html(daily_first_j13_counts, end_date)
+    with open(os.path.join(html_dir, "first_j13_step_daily_count.html"), 'w', encoding='utf-8') as f:
+        f.write(html_content)
     print(f"📈 已生成趋势图: {html_dir}/first_j13_step_daily_count.html")
 
 

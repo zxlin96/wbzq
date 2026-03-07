@@ -49,6 +49,14 @@ jobs:
     - name: 生成报告索引
       run: python generate_reports_json.py
     
+    - name: 提交生成的文件到仓库
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add *.html *.json
+        git diff --staged --quiet || git commit -m "Auto-commit: Update reports for ${{ steps.date.outputs.today }}"
+        git push
+    
     - name: 上传结果文件
       uses: actions/upload-artifact@v4
       if: always()  # 即使失败也上传

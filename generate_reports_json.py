@@ -14,44 +14,29 @@ def generate_reports_json():
     
     reports = []
     
-    # 查找所有 HTML 报告文件
-    html_files = []
-    for pattern in ['stock_selection_*.html', 'industry_total_amount_trend.html', 
-                   'kdj_qfq_trend.html', 'first_j13_step_daily_count.html']:
-        html_files.extend(Path('.').glob(pattern))
+    # 查找所有选股报告文件
+    stock_selection_files = list(Path('.').glob('stock_selection_*.html'))
     
-    # 按日期排序
-    html_files.sort(key=lambda x: x.stat().st_mtime, reverse=True)
+    # 按日期排序（从文件名提取日期）
+    stock_selection_files.sort(key=lambda x: x.name, reverse=True)
     
-    # 提取日期并分组
-    date_reports = {}
+    # 检查其他趋势图文件是否存在
+    has_industry_trend = Path('industry_total_amount_trend.html').exists()
+    has_j13_trend = Path('first_j13_step_daily_count.html').exists()
     
-    for html_file in html_files:
+    # 为每个选股报告创建记录
+    for html_file in stock_selection_files:
         file_name = html_file.name
         
         # 提取日期
-        date_str = None
-        if 'stock_selection_' in file_name:
-            date_str = file_name.replace('stock_selection_', '').replace('.html', '')
-        elif 'industry_total_amount_trend' in file_name:
-            continue  # 跳过趋势图，在下面单独处理
-        elif 'kdj_qfq_trend' in file_name:
-            continue
-        elif 'first_j13_step_daily_count' in file_name:
-            continue
+        date_str = file_name.replace('stock_selection_', '').replace('.html', '')
         
-        if date_str:
-            if date_str not in date_reports:
-                date_reports[date_str] = {
-                    'date': date_str,
-                    'stockSelection': f'stock_selection_{date_str}.html',
-                    'industryTrend': 'industry_total_amount_trend.html',
-                    'kdjTrend': 'kdj_qfq_trend.html',
-                    'firstJ13Trend': 'first_j13_step_daily_count.html'
-                }
-    
-    # 转换为列表
-    reports = list(date_reports.values())
+        reports.append({
+            'date': date_str,
+            'stockSelection': file_name,
+            'industryTrend': 'industry_total_amount_trend.html' if has_industry_trend else None,
+            'j13Trend': 'first_j13_step_daily_count.html' if has_j13_trend else None
+        })
     
     # 统计信息
     total_stocks = 0

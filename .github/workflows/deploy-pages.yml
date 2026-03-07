@@ -23,36 +23,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: ./artifacts
-          pattern: strategy-results-*
-          merge-multiple: true
-        continue-on-error: true
-
-      - name: Create artifacts directory
-        run: mkdir -p ./artifacts
-
-      - name: Copy index.html and reports.json
-        run: |
-          cp index.html ./artifacts/
-          cp generate_reports_json.py ./artifacts/
-          
-      - name: Generate reports.json
-        run: |
-          cd ./artifacts
-          python generate_reports_json.py
-
       - name: Setup Pages
         uses: actions/configure-pages@v4
-        with:
-          enablement: true
 
       - name: Upload to GitHub Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./artifacts
+          path: .
 
       - name: Deploy to GitHub Pages
         id: deployment

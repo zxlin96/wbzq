@@ -97,12 +97,13 @@ jobs:
       uses: dawidd6/action-send-mail@v3
       with:
         server_address: smtp.qq.com
-        server_port: 587
-        username: 848282275@qq.com
-        password: ${{ secrets.QQ_EMAIL_AUTH_CODE }}
+        server_port: 465
+        username: ${{ secrets.EMAIL_USERNAME }}
+        password: ${{ secrets.EMAIL_PASSWORD }}
+        secure: true
         subject: "📊 股票策略执行完成 - ${{ needs.run-strategy.result }}"
-        to: 848282275@qq.com
-        from: GitHub Actions <848282275@qq.com>
+        to: ${{ secrets.EMAIL_USERNAME }}
+        from: GitHub Actions <${{ secrets.EMAIL_USERNAME }}>
         html_body: |
           <h2>📊 股票策略执行通知</h2>
           <p><strong>执行状态:</strong> ${{ needs.run-strategy.result }}</p>

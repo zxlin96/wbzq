@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>选股结果报告 - 20260227</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .sortable th { cursor: pointer; user-select: none; }
+        .sortable th:hover { background-color: #f3f4f6; }
+        .sort-asc::after { content: " ▲"; }
+        .sort-desc::after { content: " ▼"; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <!-- 标题区域 -->
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">📊 选股结果报告</h1>
+                    <p class="text-gray-500 mt-1">日期: 20260227 | 共选出 7 只股票</p>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="downloadCSV('stock_selection')" 
+                            class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        下载选股结果 CSV
+                    </button>
+                    <button onclick="downloadCSV('industry')" 
+                            class="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        下载行业分布 CSV
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 统计卡片 -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div class="bg-white rounded-xl shadow-sm p-4">
+                <div class="text-sm text-gray-500">选股总数</div>
+                <div class="text-2xl font-bold text-blue-600">7</div>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm p-4">
+                <div class="text-sm text-gray-500">涉及行业</div>
+                <div class="text-2xl font-bold text-green-600">7</div>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm p-4">
+                <div class="text-sm text-gray-500">最多行业</div>
+                <div class="text-lg font-bold text-purple-600">区域地产</div>
+                <div class="text-sm text-gray-400">1 只</div>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm p-4">
+                <div class="text-sm text-gray-500">平均J值</div>
+                <div class="text-2xl font-bold text-orange-600">-3.12</div>
+            </div>
+        </div>
+        
+        <!-- 选股结果表格 -->
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h2 class="text-lg font-semibold text-gray-900">📋 选股明细</h2>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left sortable" id="stockTable">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3" onclick="sortTable(0)">代码</th>
+                            <th class="px-6 py-3" onclick="sortTable(1)">名称</th>
+                            <th class="px-6 py-3" onclick="sortTable(2)">行业</th>
+                            <th class="px-6 py-3" onclick="sortTable(3)">日期</th>
+                            <th class="px-6 py-3" onclick="sortTable(4)">收盘价</th>
+                            <th class="px-6 py-3" onclick="sortTable(5)">60日线</th>
+                            <th class="px-6 py-3" onclick="sortTable(6)">J值</th>
+                            <th class="px-6 py-3" onclick="sortTable(7)">MACD-DIF</th>
+                            <th class="px-6 py-3" onclick="sortTable(8)">成交额</th>
+                            <th class="px-6 py-3" onclick="sortTable(9)">60日线趋势</th>
+                            <th class="px-6 py-3" onclick="sortTable(10)">回调最低量</th>
+                            <th class="px-6 py-3" onclick="sortTable(11)">成交额前60%</th>
+                            <th class="px-6 py-3" onclick="sortTable(12)">底部暴力K</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-medium text-gray-900">600185.SH</td>
+                            <td class="px-6 py-4">珠免集团</td>
+                            <td class="px-6 py-4"><span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">区域地产</span></td>
+                            <td class="px-6 py-4">20260227</td>
+                            <td class="px-6 py-4">7.06</td>
+                            <td class="px-6 py-4">6.93</td>
+                            <td class="px-6 py-4 font-semibold text-red-600">-14.64</td>
+                            <td class="px-6 py-4">0.1110</td>
+                            <td class="px-6 py-4">196790.85</td>
+                            <td class="px-6 py-4">✅</td>
+                            <td class="px-6 py-4">✅</td>
+                            <td class="px-6 py-4">✅</td>
+                            <td class="px-6 py-4">1次</td>
+                        </tr>
+                        
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-medium text-gray-900">688223.SH</td>
+                            <td class="px-6 py-4">晶科能源</td>
+                            <td class="px-6 py-4"><span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">电气设备</span></td>
+                            <td class="px-6 py-4">20260227</td>
+                            <td class="px-6 py-4">7.54</td>
+                            <td class="px-6 py-4">6.26</td>
+                            <td class="px-6 py-4 font-semibold text-red-600">-13.17</td>
+                            <td class="px-6 py-4">0.3830</td>
+                            <td class="px-6 py-4">1698113.99</td>
+                            <td class="px-6 py-4">✅</td>
+                            <td class="px-6 py-4">❌</td>
+                            <td class="px-6 py-4">✅</td>
+                            <td class="px-6 py-4">2次</td>
+                        </tr>
+                        
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-medium text-gray-900">002995.SZ</td>
+                            <td class="px-6 py-4">天地在线</td>
+                            <td class="px-6 py-4"><span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">互联网</span></td>
+                            <td class="px-6 py-4">20260227</td>
+                            <td class="px-6 py-4">25.70</td>
+                            <td class="px-6 py-4">21.91</td>
+                            <td class="px-6 py-4 font-semibold text-red-600">-10.56</td>
+                            <td class="px-6 py-4">0.9450</td>
+                            <td class="px-6 py-4">327663.46</td>
+                            <td class="px-6 py-4">✅</td>
+                            <td class="px-6 py-4">✅</td>
+                            <td class="px-6 py-4">✅</td>
+                            <td class="px-6 py-4">2次</td>
+                        </tr>
+                        
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-medium text-gray-900">001316.SZ</td>
+                            <td class="px-6 py-4">润贝航科</td>
+                            <td class="px-6 py-4"><span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">批发业</span></td>
+                            <td class="px-6 py-4">20260227</td>
+                            <td class="px-6 py-4">51.03</td>
+                            <td class="px-6 py-4">43.22</td>
+                            <td class="px-6 py-4 font-semibold text-red-600">-5.06</td>
+                            <td class="px-6 py-4">1.9960</td>
+                            <td class="px-6 py-4">170714.45</td>
+                            <td class="px-6 py-4">✅</td>
+                            <td class="px-6 py-4">✅</td>
+                            <td class="px-6 py-4">✅</td>
+                            <td class="px-6 py-4">1次</td>
+                        </tr>
+                        
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-medium text-gray-900">600316.SH</td>
+                            <td class="px-6 py-4">洪都航空</td>
+                            <td class="px-6 py-4"><span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">航空</span></td>
+                            <td class="px-6 py-4">20260227</td>
+                            <td class="px-6 py-4">41.36</td>
+                            <td class="px-6 py-4">37.15</td>
+                            <td class="px-6 py-4 font-semibold text-red-600">-2.31</td>
+                            <td class="px-6 py-4">0.9430</td>
+                            <td class="px-6 py-4">372385.43</td>
+                            <td class="px-6 py-4">✅</td>
+                            <td class="px-6 py-4">✅</td>
+                            <td class="px-6 py-4">✅</td>
+                            <td class="px-6 py-4">1次</td>
+                        </tr>
+                        
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-medium text-gray-900">002951.SZ</td>
+                            <td class="px-6 py-4">金时科技</td>
+                            <td class="px-6 py-4"><span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">广告包装</span></td>
+                            <td class="px-6 py-4">20260227</td>
+                            <td class="px-6 py-4">15.59</td>
+                            <td class="px-6 py-4">14.43</td>
+                            <td class="px-6 py-4 font-semibold text-green-600">11.28</td>
+                            <td class="px-6 py-4">0.6090</td>
+                            <td class="px-6 py-4">193886.57</td>
+                            <td class="px-6 py-4">✅</td>
+                            <td class="px-6 py-4">✅</td>
+                            <td class="px-6 py-4">✅</td>
+                            <td class="px-6 py-4">2次</td>
+                        </tr>
+                        
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-medium text-gray-900">002723.SZ</td>
+                            <td class="px-6 py-4">小崧股份</td>
+                            <td class="px-6 py-4"><span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">家用电器</span></td>
+                            <td class="px-6 py-4">20260227</td>
+                            <td class="px-6 py-4">9.67</td>
+                            <td class="px-6 py-4">8.97</td>
+                            <td class="px-6 py-4 font-semibold text-green-600">12.63</td>
+                            <td class="px-6 py-4">0.2750</td>
+                            <td class="px-6 py-4">211687.85</td>
+                            <td class="px-6 py-4">✅</td>
+                            <td class="px-6 py-4">✅</td>
+                            <td class="px-6 py-4">✅</td>
+                            <td class="px-6 py-4">2次</td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- 行业分布 -->
+        <div class="bg-white rounded-xl shadow-sm p-6 mt-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">📊 行业分布</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <span class="text-sm text-gray-600">区域地产</span>
+                    <span class="text-sm font-bold text-blue-600">1只</span>
+                </div>
+                
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <span class="text-sm text-gray-600">电气设备</span>
+                    <span class="text-sm font-bold text-blue-600">1只</span>
+                </div>
+                
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <span class="text-sm text-gray-600">互联网</span>
+                    <span class="text-sm font-bold text-blue-600">1只</span>
+                </div>
+                
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <span class="text-sm text-gray-600">批发业</span>
+                    <span class="text-sm font-bold text-blue-600">1只</span>
+                </div>
+                
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <span class="text-sm text-gray-600">航空</span>
+                    <span class="text-sm font-bold text-blue-600">1只</span>
+                </div>
+                
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <span class="text-sm text-gray-600">广告包装</span>
+                    <span class="text-sm font-bold text-blue-600">1只</span>
+                </div>
+                
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <span class="text-sm text-gray-600">家用电器</span>
+                    <span class="text-sm font-bold text-blue-600">1只</span>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // CSV数据
+        const stockCSV = `代码,名称,行业,日期,收盘价,60日线,J值,MACD-DIF,成交额,60日线趋势,回调最低量,成交额前60%,底部暴力K
+600185.SH,珠免集团,区域地产,20260227,7.06,6.93,-14.64,0.1110,196790.85,✅,✅,✅,1次
+688223.SH,晶科能源,电气设备,20260227,7.54,6.26,-13.17,0.3830,1698113.99,✅,❌,✅,2次
+002995.SZ,天地在线,互联网,20260227,25.70,21.91,-10.56,0.9450,327663.46,✅,✅,✅,2次
+001316.SZ,润贝航科,批发业,20260227,51.03,43.22,-5.06,1.9960,170714.45,✅,✅,✅,1次
+600316.SH,洪都航空,航空,20260227,41.36,37.15,-2.31,0.9430,372385.43,✅,✅,✅,1次
+002951.SZ,金时科技,广告包装,20260227,15.59,14.43,11.28,0.6090,193886.57,✅,✅,✅,2次
+002723.SZ,小崧股份,家用电器,20260227,9.67,8.97,12.63,0.2750,211687.85,✅,✅,✅,2次
+`;
+        const industryCSV = `行业,股票数
+区域地产,1
+电气设备,1
+互联网,1
+批发业,1
+航空,1
+广告包装,1
+家用电器,1
+`;
+        
+        // 下载CSV函数
+        function downloadCSV(type) {
+            const csv = type === 'stock_selection' ? stockCSV : industryCSV;
+            const filename = type === 'stock_selection' ? 'stock_selection_20260227.csv' : 'industry_distribution_20260227.csv';
+            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            link.click();
+        }
+        
+        // 表格排序
+        let sortDirection = {};
+        function sortTable(columnIndex) {
+            const table = document.getElementById('stockTable');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            
+            // 切换排序方向
+            sortDirection[columnIndex] = !sortDirection[columnIndex];
+            
+            // 更新表头样式
+            table.querySelectorAll('th').forEach((th, idx) => {
+                th.classList.remove('sort-asc', 'sort-desc');
+                if (idx === columnIndex) {
+                    th.classList.add(sortDirection[columnIndex] ? 'sort-desc' : 'sort-asc');
+                }
+            });
+            
+            // 排序
+            rows.sort((a, b) => {
+                const aVal = a.cells[columnIndex].textContent.trim();
+                const bVal = b.cells[columnIndex].textContent.trim();
+                
+                // 尝试数字排序
+                const aNum = parseFloat(aVal);
+                const bNum = parseFloat(bVal);
+                
+                if (!isNaN(aNum) && !isNaN(bNum)) {
+                    return sortDirection[columnIndex] ? bNum - aNum : aNum - bNum;
+                }
+                
+                return sortDirection[columnIndex] ? bVal.localeCompare(aVal) : aVal.localeCompare(bVal);
+            });
+            
+            // 重新插入
+            rows.forEach(row => tbody.appendChild(row));
+        }
+    </script>
+</body>
+</html>

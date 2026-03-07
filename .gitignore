@@ -15,7 +15,8 @@ logs/
 
 # 生成的结果文件
 *.csv
-*.html
+!*.html
+!*.json
 *.pkl
 *.log
 

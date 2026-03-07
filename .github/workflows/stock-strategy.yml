@@ -60,7 +60,6 @@ jobs:
           *.html
           *.json
           stock_strategy.db
-          data_cache
         retention-days: 30  # 保留30天
     
     - name: 上传日志文件

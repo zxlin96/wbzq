@@ -6,8 +6,6 @@ on:
     # 周一到周五每天执行
     - cron: '30 13 * * 1-5'
   workflow_dispatch:  # 允许手动触发
-  push:
-    branches: [ main, master ]  # 推送到主分支时也运行测试
 
 jobs:
   run-strategy:
@@ -48,6 +46,9 @@ jobs:
         echo "========================================"
         python main_par2.py --date ${{ steps.date.outputs.today }} --backtest --hold-days 3
     
+    - name: 生成报告索引
+      run: python generate_reports_json.py
+    
     - name: 上传结果文件
       uses: actions/upload-artifact@v4
       if: always()  # 即使失败也上传
@@ -57,7 +58,9 @@ jobs:
           result.csv
           *.csv
           *.html
+          *.json
           stock_strategy.db
+          data_cache
         retention-days: 30  # 保留30天
     
     - name: 上传日志文件

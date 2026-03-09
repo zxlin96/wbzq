@@ -26,7 +26,8 @@ __version__ = "1.1.0"
 # 定义要排除的文件和目录
 EXCLUDE_DIRS = {
     '.git', '__pycache__', '.pytest_cache', '.venv', 'venv',
-    'data_cache', 'logs', '.token_backup', '.git_backup', '.idea', '.vscode'
+    'data_cache', 'logs', '.token_backup', '.git_backup', '.idea', '.vscode',
+    '.trae'  # Trae Skills 目录（本地开发配置）
 }
 
 EXCLUDE_FILES = {

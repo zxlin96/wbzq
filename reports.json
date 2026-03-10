@@ -1,9 +1,21 @@
 {
-  "lastUpdate": "2026-03-07 23:31:29",
+  "lastUpdate": "2026-03-10 13:08:31",
   "totalStocks": 7,
-  "totalReports": 1,
-  "latestDate": "20260306",
+  "totalReports": 3,
+  "latestDate": "20260310",
   "reports": [
+    {
+      "date": "20260310",
+      "stockSelection": "html/20260310/stock_selection_20260310.html",
+      "industryTrend": "html/20260310/industry_total_amount_trend.html",
+      "j13Trend": "html/20260310/first_j13_step_daily_count.html"
+    },
+    {
+      "date": "20260309",
+      "stockSelection": "html/20260309/stock_selection_20260309.html",
+      "industryTrend": "html/20260309/industry_total_amount_trend.html",
+      "j13Trend": "html/20260309/first_j13_step_daily_count.html"
+    },
     {
       "date": "20260306",
       "stockSelection": "html/20260306/stock_selection_20260306.html",

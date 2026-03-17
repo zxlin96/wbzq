@@ -62,6 +62,12 @@ def generate_stock_charts(stock_data, ts_code, name):
             'is_double': is_double_volume
         })
     
+    # 换手率数据
+    turnover_data = []
+    for _, row in stock_data.iterrows():
+        turnover_rate = float(row['turnover_rate']) if 'turnover_rate' in row and pd.notna(row['turnover_rate']) else 0
+        turnover_data.append(round(turnover_rate, 2))
+    
     # KDJ数据
     k_data = stock_data['kdj_k_qfq'].fillna(0).tolist() if 'kdj_k_qfq' in stock_data.columns else [0] * len(dates)
     d_data = stock_data['kdj_d_qfq'].fillna(0).tolist() if 'kdj_d_qfq' in stock_data.columns else [0] * len(dates)
@@ -81,6 +87,7 @@ def generate_stock_charts(stock_data, ts_code, name):
         'candlestick': candlestick_data,
         'volume': volume_data,
         'price_change': price_change_data,
+        'turnover': turnover_data,
         'kdj_k': [float(x) for x in k_data],
         'kdj_d': [float(x) for x in d_data],
         'kdj_j': [float(x) for x in j_data],
@@ -370,8 +377,10 @@ def generate_stock_selection_html(result, df, end_date, industry_count):
             klineChart = echarts.init(document.getElementById('klineChart'));
             
             // 构建K线数据（包含涨跌幅）
+            // ECharts K线图格式: [开盘, 收盘, 最低, 最高]
+            // data.candlestick 格式: [日期, 开盘, 收盘, 最高, 最低]
             const candlestickWithChange = data.candlestick.map((d, i) => ({{
-                value: [d[1], d[2], d[3], d[4]],
+                value: [d[1], d[2], d[4], d[3]],  // [开盘, 收盘, 最低, 最高]
                 itemStyle: {{
                     color: d[2] >= d[1] ? '#ef4444' : '#22c55e',
                     color0: d[2] >= d[1] ? '#ef4444' : '#22c55e',
@@ -391,13 +400,20 @@ def generate_stock_selection_html(result, df, end_date, industry_count):
                             if (param.seriesType === 'candlestick') {{
                                 const dataIndex = param.dataIndex;
                                 const change = data.price_change[dataIndex];
+                                const turnover = data.turnover[dataIndex];
                                 const changeColor = change >= 0 ? '#ef4444' : '#22c55e';
                                 const changeSymbol = change >= 0 ? '+' : '';
+                                // param.data 是 [开盘, 收盘, 最低, 最高] 格式
+                                const open = param.data[0];
+                                const close = param.data[1];
+                                const low = param.data[2];
+                                const high = param.data[3];
                                 result += `涨跌幅: <span style="color:${{changeColor}}">${{changeSymbol}}${{change}}%</span><br/>`;
-                                result += `开盘: ${{param.data[1]}}<br/>`;
-                                result += `收盘: ${{param.data[2]}}<br/>`;
-                                result += `最高: ${{param.data[3]}}<br/>`;
-                                result += `最低: ${{param.data[4]}}<br/>`;
+                                result += `开盘: ${{open !== undefined ? open.toFixed(2) : '-'}}<br/>`;
+                                result += `收盘: ${{close !== undefined ? close.toFixed(2) : '-'}}<br/>`;
+                                result += `最高: ${{high !== undefined ? high.toFixed(2) : '-'}}<br/>`;
+                                result += `最低: ${{low !== undefined ? low.toFixed(2) : '-'}}<br/>`;
+                                result += `换手率: ${{turnover}}%<br/>`;
                             }} else if (param.seriesName === 'MA60') {{
                                 result += `MA60: ${{param.data}}<br/>`;
                             }} else if (param.seriesName === '多空指标') {{

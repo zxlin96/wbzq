@@ -73,18 +73,35 @@ class DataManager:
             return pd.read_pickle(cache_file).tolist()
 
         logging.info("从API获取交易日历")
-        try:
-            trade_cal = pro.trade_cal(exchange='',
-                                      is_open=1,
-                                      start_date=start_date,
-                                      end_date=end_date)
-            trade_dates = trade_cal['cal_date'].tolist()
-            os.makedirs(self.cache_dir, exist_ok=True)
-            pd.Series(trade_dates).to_pickle(cache_file)
-            return trade_dates
-        except Exception as e:
-            logging.error(f"获取交易日历失败: {e}")
-            return []
+        max_retries = 3
+        retry_delay = 2  # 初始重试延迟（秒）
+        
+        for attempt in range(max_retries):
+            try:
+                trade_cal = pro.trade_cal(exchange='',
+                                          is_open=1,
+                                          start_date=start_date,
+                                          end_date=end_date)
+                trade_dates = trade_cal['cal_date'].tolist()
+                os.makedirs(self.cache_dir, exist_ok=True)
+                pd.Series(trade_dates).to_pickle(cache_file)
+                logging.info(f"成功获取交易日历，共 {len(trade_dates)} 个交易日")
+                return trade_dates
+            except Exception as e:
+                error_msg = str(e)
+                if "每分钟最多访问" in error_msg or "频次" in error_msg:
+                    logging.warning(f"触发API频次限制，等待 {retry_delay} 秒后重试... ({attempt + 1}/{max_retries})")
+                    time.sleep(retry_delay)
+                    retry_delay *= 2  # 指数退避
+                elif attempt < max_retries - 1:
+                    logging.warning(f"获取交易日历失败: {e}，{retry_delay}秒后重试... ({attempt + 1}/{max_retries})")
+                    time.sleep(retry_delay)
+                    retry_delay *= 2
+                else:
+                    logging.error(f"获取交易日历失败，已达最大重试次数: {e}")
+                    return []
+        
+        return []
 
     # -------------------- 因子数据（parquet 按日缓存） --------------------
     def get_stock_factors(self, trade_dates, fields):
@@ -147,7 +164,15 @@ class DataManager:
                     return date, daily_data, True
                     
                 except Exception as e:
+                    error_msg = str(e)
                     logging.error(f"获取 {date} 数据失败: {e}")
+                    
+                    # 检查是否是频次限制错误
+                    if "每分钟最多访问" in error_msg or "频次" in error_msg:
+                        logging.warning(f"触发API频次限制，等待 5 秒后重试...")
+                        time.sleep(5)
+                        return date, None, False  # 重新加入队列
+                    
                     # 将任务重新加入队列，等待重试
                     if retry_count + 1 < max_retries:
                         return date, None, False

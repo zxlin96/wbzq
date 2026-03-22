@@ -32,14 +32,13 @@ def generate_reports_json():
         industry_trend_file = date_dir / "industry_total_amount_trend.html"
         j13_trend_file = date_dir / "first_j13_step_daily_count.html"
         
-        # 只添加存在选股报告的日期
-        if stock_selection_file.exists():
-            reports.append({
-                'date': date_str,
-                'stockSelection': f"html/{date_str}/stock_selection_{date_str}.html",
-                'industryTrend': f"html/{date_str}/industry_total_amount_trend.html" if industry_trend_file.exists() else None,
-                'j13Trend': f"html/{date_str}/first_j13_step_daily_count.html" if j13_trend_file.exists() else None
-            })
+        # 添加所有日期（包括没有选股的）
+        reports.append({
+            'date': date_str,
+            'stockSelection': f"html/{date_str}/stock_selection_{date_str}.html" if stock_selection_file.exists() else None,
+            'industryTrend': f"html/{date_str}/industry_total_amount_trend.html" if industry_trend_file.exists() else None,
+            'j13Trend': f"html/{date_str}/first_j13_step_daily_count.html" if j13_trend_file.exists() else None
+        })
     
     # 统计信息
     total_stocks = 0

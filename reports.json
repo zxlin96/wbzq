@@ -1,9 +1,15 @@
 {
-  "lastUpdate": "2026-03-26 13:24:01",
-  "totalStocks": 0,
-  "totalReports": 15,
-  "latestDate": "20260326",
+  "lastUpdate": "2026-03-27 13:14:43",
+  "totalStocks": 3,
+  "totalReports": 16,
+  "latestDate": "20260327",
   "reports": [
+    {
+      "date": "20260327",
+      "stockSelection": "html/20260327/stock_selection_20260327.html",
+      "industryTrend": "html/20260327/industry_total_amount_trend.html",
+      "j13Trend": "html/20260327/first_j13_step_daily_count.html"
+    },
     {
       "date": "20260326",
       "stockSelection": null,

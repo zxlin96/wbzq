@@ -18,7 +18,6 @@ import numpy as np
 import pandas as pd
 import plotly.express as px
 import tushare as ts
-from sklearn.preprocessing import MinMaxScaler
 from tabulate import tabulate
 from tqdm import tqdm
 
@@ -33,6 +32,7 @@ from config import (
 from data_manager import DataManager
 from generate_stock_html import generate_stock_selection_html
 from generate_trend_html import generate_industry_trend_html, generate_j13_trend_html
+from sentiment_rebound_strategy import SentimentReboundStrategy, generate_strategy_report
 # from dtw_similarity import DTWSimilarityAnalyzer  # 模块不存在，已注释
 
 # ========== 全局配置 ==========
@@ -41,6 +41,7 @@ logging.basicConfig(level=logging.INFO, format="[%(asctime)s] %(levelname)s | %(
 # Tushare API 初始化
 ts.set_token(APIConfig.get_token())
 pro = ts.pro_api()
+pro._DataApi__http_url = "http://118.89.66.41:8010/"
 
 # 行业缓存配置
 INDUSTRY_CACHE_FILE = 'industry_cache.pkl'
@@ -970,6 +971,79 @@ def calculate_trend_indicators(df):
     return df
 
 
+def calculate_zhixing_brick_indicator(df):
+    """
+    计算知行砖形图指标（短期砖型图指标V2026）
+    
+    指标公式：
+    VAR1A:=(HHV(HIGH,4)-CLOSE)/(HHV(HIGH,4)-LLV(LOW,4))*100-90;
+    VAR2A:=SMA(VAR1A,4,1)+100;
+    VAR3A:=(CLOSE-LLV(LOW,4))/(HHV(HIGH,4)-LLV(LOW,4))*100;
+    VAR4A:=SMA(VAR3A,6,1);
+    VAR5A:=SMA(VAR4A,6,1)+100;
+    VAR6A:=VAR5A-VAR2A;
+    砖型图:=IF(VAR6A>4,VAR6A-4,0);
+    """
+    print("开始计算知行砖形图指标...")
+    
+    grouped = df.groupby('ts_code')
+    
+    # 计算4日最高价(HHV)和4日最低价(LLV)
+    df['hhv_high_4'] = grouped['high_qfq'].transform(lambda x: x.rolling(window=4, min_periods=4).max())
+    df['llv_low_4'] = grouped['low_qfq'].transform(lambda x: x.rolling(window=4, min_periods=4).min())
+    
+    # 计算价格区间，避免除以0
+    df['price_range'] = df['hhv_high_4'] - df['llv_low_4']
+    df['price_range'] = df['price_range'].replace(0, np.nan)
+    
+    # VAR1A:=(HHV(HIGH,4)-CLOSE)/(HHV(HIGH,4)-LLV(LOW,4))*100-90
+    df['var1a'] = (df['hhv_high_4'] - df['close_qfq']) / df['price_range'] * 100 - 90
+    
+    # VAR2A:=SMA(VAR1A,4,1)+100
+    # SMA(X,N,M) = M*X+(N-M)*SMA(X,N,M)/N，这里N=4, M=1
+    df['var2a'] = grouped['var1a'].transform(lambda x: x.ewm(span=4, adjust=False).mean()) + 100
+    
+    # VAR3A:=(CLOSE-LLV(LOW,4))/(HHV(HIGH,4)-LLV(LOW,4))*100
+    df['var3a'] = (df['close_qfq'] - df['llv_low_4']) / df['price_range'] * 100
+    
+    # VAR4A:=SMA(VAR3A,6,1)
+    df['var4a'] = grouped['var3a'].transform(lambda x: x.ewm(span=6, adjust=False).mean())
+    
+    # VAR5A:=SMA(VAR4A,6,1)+100
+    df['var5a'] = grouped['var4a'].transform(lambda x: x.ewm(span=6, adjust=False).mean()) + 100
+    
+    # VAR6A:=VAR5A-VAR2A
+    df['var6a'] = df['var5a'] - df['var2a']
+    
+    # 砖型图:=IF(VAR6A>4,VAR6A-4,0)
+    df['zhixing_brick'] = np.where(df['var6a'] > 4, df['var6a'] - 4, 0)
+    
+    # 判断砖型图上升/下降（用于绘制红绿柱）
+    # AA:=REF(砖型图,1)<砖型图;  (上升，红色)
+    # BB:=REF(砖型图,1)>砖型图;  (下降，绿色)
+    df['zhixing_brick_prev'] = grouped['zhixing_brick'].shift(1)
+    df['zhixing_brick_rising'] = df['zhixing_brick_prev'] < df['zhixing_brick']  # AA
+    df['zhixing_brick_falling'] = df['zhixing_brick_prev'] > df['zhixing_brick']  # BB
+    
+    # XG信号：前一期AA=0 且 当期AA=1（砖型图由绿转红的第一个交易日）
+    # CC:=REF(AA,1)=0 AND (AA=1);
+    # XG:=CC>0;
+    df['zhixing_brick_prev_rising'] = grouped['zhixing_brick_rising'].shift(1)
+    df['zhixing_brick_xg'] = (~df['zhixing_brick_prev_rising'].fillna(False).astype(bool)) & df['zhixing_brick_rising']
+    
+    # 清理中间变量
+    df = df.drop(columns=['hhv_high_4', 'llv_low_4', 'price_range', 
+                          'var1a', 'var2a', 'var3a', 'var4a', 'var5a', 'var6a',
+                          'zhixing_brick_prev', 'zhixing_brick_prev_rising'])
+    
+    logging.info("知行砖形图指标计算完成")
+    logging.info("  - 砖型图上升(红): %d 条", df['zhixing_brick_rising'].sum())
+    logging.info("  - 砖型图下降(绿): %d 条", df['zhixing_brick_falling'].sum())
+    logging.info("  - XG信号(绿转红): %d 条", df['zhixing_brick_xg'].sum())
+    
+    return df
+
+
 def calculate_amount_rank(df):
     """计算每日成交额排名（前40%）"""
     print("\n正在计算每日成交额排名...")
@@ -1223,6 +1297,118 @@ def generate_j13_trend(df, end_date):
     with open(os.path.join(html_dir, "first_j13_step_daily_count.html"), 'w', encoding='utf-8') as f:
         f.write(html_content)
     print(f"📈 已生成趋势图: {html_dir}/first_j13_step_daily_count.html")
+
+
+def run_sentiment_rebound_strategy(df, end_date, data_manager):
+    """
+    执行情绪反弹策略
+    
+    买入：J13数量 > 90%分位数时倍投（2000→4000→8000→16000）
+    卖出：砖型图红柱4根卖一半，红转绿全卖
+    """
+    print('\n' + '='*70)
+    print('📊 情绪反弹策略分析')
+    print('='*70)
+    
+    try:
+        # 初始化策略
+        strategy = SentimentReboundStrategy(
+            etf_code='563300.SH',
+            investment_levels=[2000, 4000, 8000, 16000],
+            percentile_threshold=0.9,
+            lookback_days=60
+        )
+        
+        # 准备J13数据
+        daily_first_j13_counts = df[df['kdj_qfq'] < 13].groupby('trade_date').size().reset_index(name='count')
+        
+        if daily_first_j13_counts.empty:
+            print("⚠️ 无J13数据，跳过策略分析")
+            return
+        
+        # 计算J13统计
+        j13_stats = strategy.calculate_j13_stats(daily_first_j13_counts)
+        
+        print(f"\n📈 J13市场统计:")
+        print(f"  当前J13数量: {j13_stats['current']:.0f} 只")
+        print(f"  90%分位数: {j13_stats['percentile_90']:.1f} 只")
+        print(f"  平均值: {j13_stats['mean']:.1f} 只")
+        print(f"  是否触发买入: {'✅ 是' if j13_stats['is_above_threshold'] else '❌ 否'}")
+        
+        # 获取ETF数据（563300.SH 中证2000ETF）
+        print(f"\n📊 获取ETF数据: {strategy.etf_code}")
+        etf_data = None
+        try:
+            etf_df = pro.fund_daily(ts_code=strategy.etf_code, 
+                                   start_date=(datetime.strptime(end_date, '%Y%m%d') - timedelta(days=30)).strftime('%Y%m%d'),
+                                   end_date=end_date)
+            if etf_df is not None and not etf_df.empty:
+                etf_data = etf_df.sort_values('trade_date').reset_index(drop=True)
+                etf_data['close_qfq'] = etf_data['close']
+                etf_data['high_qfq'] = etf_data['high']
+                etf_data['low_qfq'] = etf_data['low']
+                etf_data['ts_code'] = strategy.etf_code
+                print(f"  获取到 {len(etf_data)} 条数据")
+        except Exception as e:
+            print(f"获取ETF数据失败: {e}")
+            etf_data = None
+        
+        # 计算砖型图指标
+        brick_data = None
+        if etf_data is not None and not etf_data.empty:
+            print("\n📊 计算知行砖形图指标...")
+            brick_data = calculate_zhixing_brick_indicator(etf_data.copy())
+            latest_brick = brick_data.iloc[-1]
+            print(f"  最新砖型图值: {latest_brick['zhixing_brick']:.2f}")
+            print(f"  是否上升(红柱): {'是' if latest_brick['zhixing_brick_rising'] else '否'}")
+            print(f"  XG信号: {'是' if latest_brick['zhixing_brick_xg'] else '否'}")
+        
+        # 生成当前日期的交易信号
+        current_date = end_date
+        current_price = etf_data['close'].iloc[-1] if etf_data is not None and not etf_data.empty else 0
+        
+        if etf_data is not None and not etf_data.empty:
+            signals = strategy.generate_current_signal(j13_stats, current_date, brick_data, current_price)
+        else:
+            # ETF数据获取失败，仅基于J13数据生成买入信号
+            print("\n⚠️ ETF数据获取失败，仅基于J13数据生成买入信号")
+            signals = strategy.generate_current_signal(j13_stats, current_date, None, 0)
+        
+        # 显示交易信号
+        if signals:
+            print(f"\n⚡ 交易信号:")
+            for signal in signals:
+                action_emoji = '🟢' if signal['action'] == 'BUY' else '🔴'
+                print(f"  {action_emoji} {signal['date']} | {signal['action']} | {signal.get('type', '')}")
+                if 'amount' in signal:
+                    print(f"     金额: ¥{signal['amount']:,.0f} (第{signal['level']}级)")
+                print(f"     原因: {signal['reason']}")
+        else:
+            print(f"\n⚡ 暂无交易信号")
+        
+        # 显示当前状态
+        position_summary = strategy.get_position_summary()
+        print(f"\n📊 当前策略状态:")
+        print(f"  投资级别: 第 {position_summary['investment_level'] + 1} 级")
+        print(f"  持仓数量: {position_summary['position']}")
+        print(f"  红柱计数: {position_summary['red_bar_count']}")
+        print(f"  历史交易: {position_summary['total_trades']} 笔")
+        
+        # 生成策略报告
+        html_dir = os.path.join('html', end_date)
+        os.makedirs(html_dir, exist_ok=True)
+        report_file = os.path.join(html_dir, "sentiment_rebound_strategy.html")
+        
+        generate_strategy_report(strategy, signals, j13_stats, report_file)
+        print(f"\n📄 策略报告已生成: {report_file}")
+        
+        # 保存策略状态
+        strategy.save_state()
+        
+    except Exception as e:
+        print(f"❌ 情绪反弹策略执行失败: {e}")
+        import traceback
+        traceback.print_exc()
 
 
 # ========== 结果输出函数 ==========
@@ -1744,7 +1930,10 @@ def main():
         # 7. 计算趋势指标
         df = calculate_trend_indicators(df)
         
-        # 8. 计算成交额排名
+        # 8. 计算知行砖形图指标
+        df = calculate_zhixing_brick_indicator(df)
+        
+        # 9. 计算成交额排名
         df = calculate_amount_rank(df)
         
         # 9. 应用最终筛选
@@ -1773,7 +1962,10 @@ def main():
         generate_industry_visualization(df, daily_stats, end_date)
         generate_j13_trend(df, end_date)
         
-        # 13. DTW模式匹配
+        # 13. 情绪反弹策略
+        run_sentiment_rebound_strategy(df, end_date, data_manager)
+        
+        # 14. DTW模式匹配
         print('\n========== 完美图形模式匹配分析 ==========')
         # patterns = load_perfect_patterns('data')
         # if patterns:

@@ -61,7 +61,7 @@ jobs:
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
-        git add html/ reports.json index.html
+        git add html/ reports.json index.html strategy_state.json
         git diff --staged --quiet || git commit -m "Auto-commit: Update reports for ${{ steps.date.outputs.today }}"
         git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref }}
     

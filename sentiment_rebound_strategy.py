@@ -168,6 +168,11 @@ class SentimentReboundStrategy:
             'reason': f"J13数量({j13_stats['current']:.0f})超过{self.percentile_threshold*100:.0f}%分位数({j13_stats['percentile_90']:.1f})"
         }
         
+        # 更新持仓（假设每2000元买1份）
+        shares_bought = investment_amount / 2000
+        self.position += shares_bought
+        self.position_cost = (self.position_cost * (self.position - shares_bought) + investment_amount) / self.position if self.position > 0 else 0
+        
         # 升级投资级别
         self.investment_level_idx = min(self.investment_level_idx + 1, len(self.investment_levels) - 1)
         self.last_trade_date = current_date
@@ -195,8 +200,15 @@ class SentimentReboundStrategy:
         if brick_data.empty or 'zhixing_brick_rising' not in brick_data.columns:
             return None
         
+        # 需要至少2条数据来判断红转绿
+        if len(brick_data) < 2:
+            return None
+        
+        # 获取最近两天的数据
         latest = brick_data.iloc[-1]
+        previous = brick_data.iloc[-2]
         is_rising = latest['zhixing_brick_rising']
+        was_rising = previous['zhixing_brick_rising']
         
         signal = None
         
@@ -204,8 +216,8 @@ class SentimentReboundStrategy:
         if is_rising:
             self.red_bar_count += 1
         else:
-            # 红转绿
-            if self.red_bar_count > 0:
+            # 红转绿：前一天是红柱，今天是绿柱
+            if was_rising and self.position > 0:
                 # 方案2：未到4根红柱，红转绿也全卖
                 if self.red_bar_count < 4:
                     signal = {
@@ -217,8 +229,14 @@ class SentimentReboundStrategy:
                         'price': current_price,
                         'reason': f"红转绿，连续红柱{self.red_bar_count}根（未满4根）"
                     }
+                    # 更新持仓 - 全卖
+                    self.position = 0
+                    self.position_cost = 0
                     self.red_bar_count = 0
                     self.investment_level_idx = 0  # 重置投资级别
+                    self.save_state()
+            # 重置红柱计数（因为是绿柱）
+            self.red_bar_count = 0
         
         # 方案1：红柱4根卖一半
         if self.red_bar_count == 4 and self.position > 0:
@@ -231,6 +249,10 @@ class SentimentReboundStrategy:
                 'price': current_price,
                 'reason': "连续红柱达到4根，卖出一半"
             }
+            # 更新持仓 - 卖一半
+            self.position = self.position * 0.5
+            self.red_bar_count = 0
+            self.save_state()
         
         return signal
     

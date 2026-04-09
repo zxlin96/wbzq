@@ -41,7 +41,6 @@ logging.basicConfig(level=logging.INFO, format="[%(asctime)s] %(levelname)s | %(
 # Tushare API 初始化
 ts.set_token(APIConfig.get_token())
 pro = ts.pro_api()
-pro._DataApi__http_url = "http://118.89.66.41:8010/"
 
 # 行业缓存配置
 INDUSTRY_CACHE_FILE = 'industry_cache.pkl'
@@ -1963,7 +1962,7 @@ def main():
         generate_j13_trend(df, end_date)
         
         # 13. 情绪反弹策略
-        run_sentiment_rebound_strategy(df, end_date, data_manager)
+        # run_sentiment_rebound_strategy(df, end_date, data_manager)
         
         # 14. DTW模式匹配
         print('\n========== 完美图形模式匹配分析 ==========')

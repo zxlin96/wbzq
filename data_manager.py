@@ -24,7 +24,6 @@ if not logging.getLogger().hasHandlers():
 # ---------- 0. 配置 ----------
 ts.set_token(APIConfig.get_token())
 pro = ts.pro_api()
-pro._DataApi__http_url = "http://118.89.66.41:8010/"
 
 # -------------------- DataManager 本体 --------------------
 class DataManager:

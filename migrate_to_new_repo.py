@@ -28,7 +28,10 @@ EXCLUDE_DIRS = {
     '.git', '__pycache__', '.pytest_cache', '.venv', 'venv',
     'data_cache', 'logs', '.token_backup', '.git_backup', '.idea', '.vscode',
     '.trae',  # Trae Skills 目录（本地开发配置）
-    '.conda'  # Conda 环境目录
+    '.conda',  # Conda 环境目录
+    'html/',  # HTML 输出目录
+    'test/'  # 测试目录
+
 }
 
 EXCLUDE_FILES = {

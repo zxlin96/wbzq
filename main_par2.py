@@ -41,6 +41,7 @@ logging.basicConfig(level=logging.INFO, format="[%(asctime)s] %(levelname)s | %(
 # Tushare API 初始化
 ts.set_token(APIConfig.get_token())
 pro = ts.pro_api()
+pro._DataApi__http_url = 'http://119.45.182.56'
 
 # 行业缓存配置
 INDUSTRY_CACHE_FILE = 'industry_cache.pkl'

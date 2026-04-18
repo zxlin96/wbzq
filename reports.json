@@ -1,9 +1,21 @@
 {
-  "lastUpdate": "2026-04-17 13:22:40",
-  "totalStocks": 1,
-  "totalReports": 22,
-  "latestDate": "20260407",
+  "lastUpdate": "2026-04-18 16:29:58",
+  "totalStocks": 3,
+  "totalReports": 29,
+  "latestDate": "20260417",
   "reports": [
+    {
+      "date": "20260417",
+      "stockSelection": "html/20260417/stock_selection_20260417.html",
+      "industryTrend": "html/20260417/industry_total_amount_trend.html",
+      "j13Trend": "html/20260417/first_j13_step_daily_count.html"
+    },
+    {
+      "date": "20260409",
+      "stockSelection": null,
+      "industryTrend": "html/20260409/industry_total_amount_trend.html",
+      "j13Trend": "html/20260409/first_j13_step_daily_count.html"
+    },
     {
       "date": "20260407",
       "stockSelection": "html/20260407/stock_selection_20260407.html",
@@ -135,6 +147,36 @@
       "stockSelection": "html/20260306/stock_selection_20260306.html",
       "industryTrend": "html/20260306/industry_total_amount_trend.html",
       "j13Trend": "html/20260306/first_j13_step_daily_count.html"
+    },
+    {
+      "date": "20251112",
+      "stockSelection": "html/20251112/stock_selection_20251112.html",
+      "industryTrend": "html/20251112/industry_total_amount_trend.html",
+      "j13Trend": "html/20251112/first_j13_step_daily_count.html"
+    },
+    {
+      "date": "20250804",
+      "stockSelection": "html/20250804/stock_selection_20250804.html",
+      "industryTrend": "html/20250804/industry_total_amount_trend.html",
+      "j13Trend": "html/20250804/first_j13_step_daily_count.html"
+    },
+    {
+      "date": "20250723",
+      "stockSelection": "html/20250723/stock_selection_20250723.html",
+      "industryTrend": "html/20250723/industry_total_amount_trend.html",
+      "j13Trend": "html/20250723/first_j13_step_daily_count.html"
+    },
+    {
+      "date": "20250620",
+      "stockSelection": "html/20250620/stock_selection_20250620.html",
+      "industryTrend": "html/20250620/industry_total_amount_trend.html",
+      "j13Trend": "html/20250620/first_j13_step_daily_count.html"
+    },
+    {
+      "date": "20250508",
+      "stockSelection": "html/20250508/stock_selection_20250508.html",
+      "industryTrend": "html/20250508/industry_total_amount_trend.html",
+      "j13Trend": "html/20250508/first_j13_step_daily_count.html"
     }
   ]
 }

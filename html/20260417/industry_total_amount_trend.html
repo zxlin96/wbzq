@@ -36,7 +36,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <div class="glass p-4">
                 <div class="text-sm text-gray-500">平均成交额</div>
-                <div class="text-2xl font-bold text-blue-600">401.25 万</div>
+                <div class="text-2xl font-bold text-blue-600">406.35 万</div>
             </div>
             <div class="glass p-4">
                 <div class="text-sm text-gray-500">最高成交额行业</div>
@@ -85,17 +85,17 @@
         
 
             <tr class="hover:bg-gray-50">
-                <td class="px-4 py-3 font-medium">建筑工程</td>
-                <td class="px-4 py-3 text-right">235.71</td>
-                <td class="px-4 py-3 text-right">1,294.75</td>
-                <td class="px-4 py-3 text-right">6.67</td>
+                <td class="px-4 py-3 font-medium">半导体</td>
+                <td class="px-4 py-3 text-right">234.23</td>
+                <td class="px-4 py-3 text-right">872.49</td>
+                <td class="px-4 py-3 text-right">4.38</td>
             </tr>
         
 
             <tr class="hover:bg-gray-50">
                 <td class="px-4 py-3 font-medium">新型电力</td>
-                <td class="px-4 py-3 text-right">235.20</td>
-                <td class="px-4 py-3 text-right">429.40</td>
+                <td class="px-4 py-3 text-right">245.24</td>
+                <td class="px-4 py-3 text-right">455.02</td>
                 <td class="px-4 py-3 text-right">5.53</td>
             </tr>
         
@@ -126,8 +126,8 @@
 
             <tr class="hover:bg-gray-50">
                 <td class="px-4 py-3 font-medium">电气设备</td>
-                <td class="px-4 py-3 text-right">651.86</td>
-                <td class="px-4 py-3 text-right">2,046.58</td>
+                <td class="px-4 py-3 text-right">655.91</td>
+                <td class="px-4 py-3 text-right">2,065.20</td>
                 <td class="px-4 py-3 text-right">8.35</td>
             </tr>
         
@@ -171,7 +171,7 @@
                 textStyle: { color: '#333' }
             },
             legend: {
-                data: ["电气设备", "元器件", "化工原料", "火力发电", "汽车整车", "白酒", "普钢", "船舶", "建筑工程", "新型电力"],
+                data: ["电气设备", "元器件", "化工原料", "火力发电", "汽车整车", "白酒", "普钢", "船舶", "新型电力", "半导体"],
                 top: 40,
                 type: 'scroll'
             },
@@ -208,7 +208,7 @@
                     }
                 }
             },
-            series: [{"name": "电气设备", "type": "line", "data": [333.36, 161.12, 21.52, null, null, 8.35, 164.22, 531.76, 485.66, 628.99, 1069.18, 2046.58, 1134.33, 470.05, 452.14, 441.51, 466.27, 1098.91, 1125.78, 1437.82, 1463.65, 1327.98, 1198.24, 874.19, 405.15, 59.38, 18.67, 32.38, 476.66, 318.3], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#5470c6"}, "emphasis": {"focus": "series"}}, {"name": "元器件", "type": "line", "data": [222.46, 1413.08, 88.65, 47.38, 80.65, 329.47, 221.85, 742.79, 657.03, 808.65, 1020.72, 2795.04, 1614.38, 1057.62, 1053.72, 652.12, 598.57, 888.66, 810.58, 578.6, 542.6, 460.38, 225.48, 144.64, 104.12, 14.4, 13.01, 7.99, 16.96, 19.93], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#91cc75"}, "emphasis": {"focus": "series"}}, {"name": "化工原料", "type": "line", "data": [579.53, 395.85, 208.08, 141.37, 93.13, 87.3, 152.16, 444.93, 441.49, 1163.22, 2066.46, 2249.46, 1724.68, 828.46, 317.95, 258.51, 146.43, 251.32, 216.0, 271.29, 521.35, 324.52, 466.19, 458.25, 267.41, 191.59, 175.21, 243.37, 223.8, 224.14], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#fac858"}, "emphasis": {"focus": "series"}}, {"name": "火力发电", "type": "line", "data": [null, null, null, null, null, null, null, 114.3, 160.26, 588.76, 639.4, 883.53, 516.71, null, null, null, 276.84, 601.44, 611.06, 636.69, 644.42, 514.07, 568.14, 395.77, 263.68, 224.44, 194.42, 153.36, 41.74, 126.94], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#ee6666"}, "emphasis": {"focus": "series"}}, {"name": "汽车整车", "type": "line", "data": [216.96, 292.67, null, null, null, 134.62, null, null, 99.13, 191.87, 267.4, 399.89, 134.55, 45.99, 44.96, null, null, null, 738.32, 615.4, 492.12, 373.2, 562.14, 376.45, null, null, null, null, null, null], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#73c0de"}, "emphasis": {"focus": "series"}}, {"name": "白酒", "type": "line", "data": [575.82, 582.12, 8.51, 10.47, null, null, null, null, null, 15.73, 57.96, 380.39, 622.36, 459.33, 443.93, 473.55, 413.4, null, null, null, null, null, null, null, 87.62, 56.97, null, null, null, null], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#3ba272"}, "emphasis": {"focus": "series"}}, {"name": "普钢", "type": "line", "data": [71.6, null, 173.87, 500.79, 242.83, 422.72, 589.64, 379.58, 363.53, 576.7, 514.76, 440.36, 356.08, 41.0, 29.55, null, null, null, null, null, 34.01, 93.91, 119.13, 105.63, null, null, null, null, null, 81.95], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#fc8452"}, "emphasis": {"focus": "series"}}, {"name": "船舶", "type": "line", "data": [78.93, 75.7, 351.37, 351.98, 328.43, 318.92, 333.84, 310.87, 285.13, 316.1, 361.79, 473.68, 252.41, null, 268.94, null, null, null, null, null, 6.2, 6.21, null, null, null, null, null, null, null, null], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#9a60b4"}, "emphasis": {"focus": "series"}}, {"name": "建筑工程", "type": "line", "data": [25.24, 21.87, 14.39, 26.11, 27.36, 41.35, 36.03, 89.94, 69.26, 200.57, 384.75, 1294.75, 823.93, 716.82, 493.03, 353.22, 382.67, 372.18, 261.77, 251.72, 292.04, 252.28, null, 8.17, 6.67, 105.87, 15.19, 22.4, null, 10.42], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#ea7ccc"}, "emphasis": {"focus": "series"}}, {"name": "新型电力", "type": "line", "data": [null, null, null, null, null, null, null, 8.17, 73.67, 365.58, 429.4, 416.37, 8.24, 5.92, 5.53, null, 287.09, 366.88, 382.23, 301.02, 373.49, 264.09, 362.98, 270.96, 249.32, 180.11, 117.77, null, null, null], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#ff9f7f"}, "emphasis": {"focus": "series"}}]
+            series: [{"name": "电气设备", "type": "line", "data": [336.84, 166.39, 21.52, null, null, 8.35, 164.22, 531.76, 485.66, 628.99, 1069.18, 2065.2, 1136.81, 472.63, 454.65, 441.51, 466.27, 1098.91, 1150.12, 1450.26, 1476.81, 1340.13, 1206.83, 881.92, 405.15, 59.38, 18.67, 32.38, 476.66, 318.3], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#5470c6"}, "emphasis": {"focus": "series"}}, {"name": "元器件", "type": "line", "data": [222.46, 1413.08, 88.65, 47.38, 80.65, 329.47, 221.85, 742.79, 657.03, 808.65, 1020.72, 2795.04, 1614.38, 1057.62, 1053.72, 652.12, 598.57, 888.66, 810.58, 578.6, 542.6, 460.38, 225.48, 144.64, 104.12, 14.4, 13.01, 7.99, 16.96, 19.93], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#91cc75"}, "emphasis": {"focus": "series"}}, {"name": "化工原料", "type": "line", "data": [579.53, 395.85, 208.08, 141.37, 93.13, 87.3, 152.16, 444.93, 441.49, 1163.22, 2066.46, 2249.46, 1724.68, 828.46, 317.95, 258.51, 146.43, 251.32, 216.0, 271.29, 521.35, 324.52, 466.19, 458.25, 267.41, 191.59, 175.21, 243.37, 223.8, 224.14], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#fac858"}, "emphasis": {"focus": "series"}}, {"name": "火力发电", "type": "line", "data": [null, null, null, null, null, null, null, 114.3, 160.26, 588.76, 639.4, 883.53, 516.71, null, null, null, 276.84, 601.44, 611.06, 636.69, 644.42, 514.07, 568.14, 395.77, 263.68, 224.44, 194.42, 153.36, 41.74, 126.94], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#ee6666"}, "emphasis": {"focus": "series"}}, {"name": "汽车整车", "type": "line", "data": [216.96, 292.67, null, null, null, 134.62, null, null, 99.13, 191.87, 267.4, 399.89, 134.55, 45.99, 44.96, null, null, null, 738.32, 615.4, 492.12, 373.2, 562.14, 376.45, null, null, null, null, null, null], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#73c0de"}, "emphasis": {"focus": "series"}}, {"name": "白酒", "type": "line", "data": [575.82, 582.12, 8.51, 10.47, null, null, null, null, null, 15.73, 57.96, 380.39, 622.36, 459.33, 443.93, 473.55, 413.4, null, null, null, null, null, null, null, 87.62, 56.97, null, null, null, null], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#3ba272"}, "emphasis": {"focus": "series"}}, {"name": "普钢", "type": "line", "data": [71.6, null, 173.87, 500.79, 242.83, 422.72, 589.64, 379.58, 363.53, 576.7, 514.76, 440.36, 356.08, 41.0, 29.55, null, null, null, null, null, 34.01, 93.91, 119.13, 105.63, null, null, null, null, null, 81.95], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#fc8452"}, "emphasis": {"focus": "series"}}, {"name": "船舶", "type": "line", "data": [78.93, 75.7, 351.37, 351.98, 328.43, 318.92, 333.84, 310.87, 285.13, 316.1, 361.79, 473.68, 252.41, null, 268.94, null, null, null, null, null, 6.2, 6.21, null, null, null, null, null, null, null, null], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#9a60b4"}, "emphasis": {"focus": "series"}}, {"name": "新型电力", "type": "line", "data": [null, null, null, null, null, null, null, 8.17, 73.67, 388.81, 455.02, 453.86, 39.83, 5.92, 5.53, null, 287.09, 366.88, 398.16, 318.64, 398.59, 278.24, 362.98, 270.96, 249.32, 180.11, 117.77, null, null, null], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#ea7ccc"}, "emphasis": {"focus": "series"}}, {"name": "半导体", "type": "line", "data": [123.99, 208.9, 136.9, null, 98.72, 148.82, null, 149.83, 214.67, 285.02, 355.93, 872.49, 528.33, 37.65, 285.11, 24.76, 4.38, 377.96, 359.7, 352.06, 323.24, 234.52, null, null, null, null, null, 32.57, 120.27, 111.43], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#ff9f7f"}, "emphasis": {"focus": "series"}}]
         };
         
         chart.setOption(option);

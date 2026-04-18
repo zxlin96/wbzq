@@ -400,11 +400,17 @@ def generate_stock_selection_html(result, df, end_date, industry_count):
                                 const change = data.price_change[dataIndex];
                                 const changeColor = change >= 0 ? '#ef4444' : '#22c55e';
                                 const changeSymbol = change >= 0 ? '+' : '';
+                                // 从原始数据获取开盘收盘最高最低
+                                const rawData = data.candlestick[dataIndex];
+                                const open = rawData[1];
+                                const close = rawData[2];
+                                const high = rawData[3];
+                                const low = rawData[4];
                                 result += `涨跌幅: <span style="color:${{changeColor}}">${{changeSymbol}}${{change}}%</span><br/>`;
-                                result += `开盘: ${{param.data[1]}}<br/>`;
-                                result += `收盘: ${{param.data[2]}}<br/>`;
-                                result += `最高: ${{param.data[3]}}<br/>`;
-                                result += `最低: ${{param.data[4]}}<br/>`;
+                                result += `开盘: ${{open}}<br/>`;
+                                result += `收盘: ${{close}}<br/>`;
+                                result += `最高: ${{high}}<br/>`;
+                                result += `最低: ${{low}}<br/>`;
                             }} else if (param.seriesName === 'MA60') {{
                                 result += `MA60: ${{param.data}}<br/>`;
                             }} else if (param.seriesName === '多空指标') {{

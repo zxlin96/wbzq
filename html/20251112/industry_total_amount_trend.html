@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>行业总成交额趋势 - 20251112</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
+        .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- 标题 -->
+        <div class="glass p-6 mb-6">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold text-gray-800">📊 行业总成交额趋势</h1>
+                    <p class="text-gray-500 mt-1">日期: 20251112 | Top 10 行业</p>
+                </div>
+                <div class="flex gap-3">
+                    <a href="../../index.html" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        ← 返回首页
+                    </a>
+                    <a href="stock_selection_20251112.html" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                        查看选股 →
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 统计卡片 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div class="glass p-4">
+                <div class="text-sm text-gray-500">平均成交额</div>
+                <div class="text-2xl font-bold text-blue-600">484.54 万</div>
+            </div>
+            <div class="glass p-4">
+                <div class="text-sm text-gray-500">最高成交额行业</div>
+                <div class="text-lg font-bold text-green-600">软件服务</div>
+            </div>
+            <div class="glass p-4">
+                <div class="text-sm text-gray-500">数据天数</div>
+                <div class="text-2xl font-bold text-purple-600">30 天</div>
+            </div>
+        </div>
+        
+        <!-- 图表 -->
+        <div class="glass p-6">
+            <div id="chart" style="width: 100%; height: 600px;"></div>
+        </div>
+        
+        <!-- 数据表格 -->
+        <div class="glass p-6 mt-6">
+            <h2 class="text-lg font-semibold text-gray-800 mb-4">📋 行业成交额详情</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-100">
+                        <tr>
+                            <th class="px-4 py-3">行业</th>
+                            <th class="px-4 py-3 text-right">平均成交额(万)</th>
+                            <th class="px-4 py-3 text-right">最高成交额(万)</th>
+                            <th class="px-4 py-3 text-right">最低成交额(万)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        
+            <tr class="hover:bg-gray-50">
+                <td class="px-4 py-3 font-medium">专用机械</td>
+                <td class="px-4 py-3 text-right">334.34</td>
+                <td class="px-4 py-3 text-right">771.34</td>
+                <td class="px-4 py-3 text-right">88.67</td>
+            </tr>
+        
+
+            <tr class="hover:bg-gray-50">
+                <td class="px-4 py-3 font-medium">元器件</td>
+                <td class="px-4 py-3 text-right">509.69</td>
+                <td class="px-4 py-3 text-right">1,367.12</td>
+                <td class="px-4 py-3 text-right">14.82</td>
+            </tr>
+        
+
+            <tr class="hover:bg-gray-50">
+                <td class="px-4 py-3 font-medium">半导体</td>
+                <td class="px-4 py-3 text-right">655.34</td>
+                <td class="px-4 py-3 text-right">1,666.39</td>
+                <td class="px-4 py-3 text-right">32.47</td>
+            </tr>
+        
+
+            <tr class="hover:bg-gray-50">
+                <td class="px-4 py-3 font-medium">汽车整车</td>
+                <td class="px-4 py-3 text-right">485.09</td>
+                <td class="px-4 py-3 text-right">1,366.64</td>
+                <td class="px-4 py-3 text-right">8.84</td>
+            </tr>
+        
+
+            <tr class="hover:bg-gray-50">
+                <td class="px-4 py-3 font-medium">汽车配件</td>
+                <td class="px-4 py-3 text-right">359.89</td>
+                <td class="px-4 py-3 text-right">763.29</td>
+                <td class="px-4 py-3 text-right">46.03</td>
+            </tr>
+        
+
+            <tr class="hover:bg-gray-50">
+                <td class="px-4 py-3 font-medium">电气设备</td>
+                <td class="px-4 py-3 text-right">376.82</td>
+                <td class="px-4 py-3 text-right">1,239.36</td>
+                <td class="px-4 py-3 text-right">92.69</td>
+            </tr>
+        
+
+            <tr class="hover:bg-gray-50">
+                <td class="px-4 py-3 font-medium">白酒</td>
+                <td class="px-4 py-3 text-right">420.28</td>
+                <td class="px-4 py-3 text-right">891.76</td>
+                <td class="px-4 py-3 text-right">5.23</td>
+            </tr>
+        
+
+            <tr class="hover:bg-gray-50">
+                <td class="px-4 py-3 font-medium">证券</td>
+                <td class="px-4 py-3 text-right">639.10</td>
+                <td class="px-4 py-3 text-right">1,553.42</td>
+                <td class="px-4 py-3 text-right">15.55</td>
+            </tr>
+        
+
+            <tr class="hover:bg-gray-50">
+                <td class="px-4 py-3 font-medium">软件服务</td>
+                <td class="px-4 py-3 text-right">787.19</td>
+                <td class="px-4 py-3 text-right">2,703.41</td>
+                <td class="px-4 py-3 text-right">42.35</td>
+            </tr>
+        
+
+            <tr class="hover:bg-gray-50">
+                <td class="px-4 py-3 font-medium">通信设备</td>
+                <td class="px-4 py-3 text-right">315.84</td>
+                <td class="px-4 py-3 text-right">771.62</td>
+                <td class="px-4 py-3 text-right">6.67</td>
+            </tr>
+        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const chart = echarts.init(document.getElementById('chart'));
+        
+        const option = {
+            title: {
+                text: '行业总成交额趋势（Top 10）',
+                left: 'center',
+                textStyle: { fontSize: 18, fontWeight: 'bold' }
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: { type: 'cross' },
+                backgroundColor: 'rgba(255,255,255,0.95)',
+                borderColor: '#ccc',
+                borderWidth: 1,
+                textStyle: { color: '#333' }
+            },
+            legend: {
+                data: ["软件服务", "半导体", "证券", "元器件", "汽车整车", "白酒", "电气设备", "汽车配件", "专用机械", "通信设备"],
+                top: 40,
+                type: 'scroll'
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '15%',
+                top: '20%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: { title: '保存图片' },
+                    dataZoom: { title: { zoom: '区域缩放', back: '还原' } },
+                    restore: { title: '还原' }
+                }
+            },
+            dataZoom: [
+                { type: 'inside', start: 0, end: 100 },
+                { type: 'slider', start: 0, end: 100, bottom: 10 }
+            ],
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: ["2025-09-24", "2025-09-25", "2025-09-26", "2025-09-29", "2025-09-30", "2025-10-09", "2025-10-10", "2025-10-13", "2025-10-14", "2025-10-15", "2025-10-16", "2025-10-17", "2025-10-20", "2025-10-21", "2025-10-22", "2025-10-23", "2025-10-24", "2025-10-27", "2025-10-28", "2025-10-29", "2025-10-30", "2025-10-31", "2025-11-03", "2025-11-04", "2025-11-05", "2025-11-06", "2025-11-07", "2025-11-10", "2025-11-11", "2025-11-12"],
+                axisLabel: { rotate: 45 }
+            },
+            yAxis: {
+                type: 'value',
+                name: '成交额（万元）',
+                axisLabel: {
+                    formatter: function(value) {
+                        return (value / 10000).toFixed(1) + '亿';
+                    }
+                }
+            },
+            series: [{"name": "软件服务", "type": "line", "data": [292.43, 344.13, 610.53, 490.96, 334.71, 91.72, 558.25, 151.7, 702.87, 666.24, 900.52, 1470.33, 1198.79, 949.9, 909.72, 637.57, 614.38, 71.16, 110.52, 106.91, 436.31, 329.61, 42.35, 614.32, 662.03, 803.31, 2110.95, 2044.14, 2655.92, 2703.41], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#5470c6"}, "emphasis": {"focus": "series"}}, {"name": "半导体", "type": "line", "data": [null, null, 41.66, 36.71, 32.47, 34.12, 68.29, 528.48, 633.66, 925.15, 1103.44, 1666.39, 1545.15, 1406.97, 1102.29, 710.54, 360.65, 54.26, 50.13, 130.66, 317.8, 605.29, 562.21, 878.96, 921.56, 957.76, 910.93, 968.72, 965.15, 830.18], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#91cc75"}, "emphasis": {"focus": "series"}}, {"name": "证券", "type": "line", "data": [148.35, 15.55, 38.27, null, null, null, null, null, null, null, 81.14, 246.23, 378.09, 779.46, 609.89, 410.7, 71.56, null, null, null, null, 91.73, 249.86, 832.95, 1297.77, 1004.47, 1393.13, 1499.27, 1441.04, 1553.42], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#fac858"}, "emphasis": {"focus": "series"}}, {"name": "元器件", "type": "line", "data": [22.13, 69.24, 234.43, 267.58, 181.08, 209.95, 410.61, 135.9, 1322.02, 858.26, 732.47, 1367.12, 1113.49, 864.83, 620.61, 341.36, 147.0, 35.96, 16.01, 14.82, 50.7, 42.23, 129.93, 653.91, 715.83, 667.9, 595.71, 1069.2, 1121.01, 1279.33], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#ee6666"}, "emphasis": {"focus": "series"}}, {"name": "汽车整车", "type": "line", "data": [604.41, 46.19, 44.34, 43.96, 35.19, 8.84, null, null, null, null, null, 1366.64, 912.3, 1018.73, 848.96, 519.1, 276.49, 181.3, 175.09, 68.27, 60.04, 15.76, 318.69, 988.67, 1318.57, 763.04, 655.85, 576.95, 785.88, 494.01], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#73c0de"}, "emphasis": {"focus": "series"}}, {"name": "白酒", "type": "line", "data": [488.71, 528.04, 688.14, null, 11.63, null, null, 653.31, null, null, null, 5.23, null, null, null, null, 151.73, 165.58, 569.12, 666.85, 891.76, 515.82, 494.53, 379.39, 490.85, null, 23.74, null, null, null], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#3ba272"}, "emphasis": {"focus": "series"}}, {"name": "电气设备", "type": "line", "data": [137.52, 148.67, 168.04, 98.56, 92.69, 137.83, 128.39, 351.96, 477.07, 372.17, 380.23, 1216.44, 1239.36, 587.36, 710.29, 572.55, 605.48, 242.97, 368.99, 101.82, 254.63, 196.42, 276.28, 240.41, 241.48, 205.81, 272.15, 305.76, 516.14, 657.13], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#fc8452"}, "emphasis": {"focus": "series"}}, {"name": "汽车配件", "type": "line", "data": [311.52, 376.2, 530.46, 428.2, 444.12, 321.4, 406.1, 600.36, 763.29, 695.32, 503.02, 692.88, 538.79, 276.93, 211.57, 155.57, 55.13, 46.03, 111.53, 91.97, 196.9, 166.33, 139.24, 122.25, 235.5, 78.15, 217.12, 759.41, 638.17, 683.29], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#9a60b4"}, "emphasis": {"focus": "series"}}, {"name": "专用机械", "type": "line", "data": [246.26, 233.78, 319.53, 331.75, 288.45, 212.04, 252.31, 123.9, 256.47, 238.12, 379.06, 700.16, 582.31, 432.18, 360.61, 389.25, 261.81, 238.75, 111.85, 88.67, 149.66, 255.3, 180.73, 160.7, 256.66, 400.16, 514.62, 692.53, 601.13, 771.34], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#ea7ccc"}, "emphasis": {"focus": "series"}}, {"name": "通信设备", "type": "line", "data": [16.94, 60.86, 247.34, 233.66, 281.36, 265.37, 435.04, 259.95, 444.34, 429.13, 443.7, 771.62, 660.97, 366.06, 187.74, 172.74, 122.4, 15.73, 6.67, 16.92, 158.77, 184.29, 296.25, 493.43, 618.58, 740.99, 412.56, 238.75, 426.53, 466.46], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#ff9f7f"}, "emphasis": {"focus": "series"}}]
+        };
+        
+        chart.setOption(option);
+        
+        window.addEventListener('resize', () => chart.resize());
+    </script>
+</body>
+</html>

@@ -41,7 +41,6 @@ logging.basicConfig(level=logging.INFO, format="[%(asctime)s] %(levelname)s | %(
 # Tushare API 初始化
 ts.set_token(APIConfig.get_token())
 pro = ts.pro_api()
-pro._DataApi__http_url = 'http://119.45.182.56'
 
 # 行业缓存配置
 INDUSTRY_CACHE_FILE = 'industry_cache.pkl'
@@ -58,62 +57,22 @@ logging.info(f"全局线程池初始化完成，大小: {GLOBAL_THREAD_POOL_SIZE
 # ========== 数据字段定义 ==========
 # 将长字段列表提取到顶部，便于维护
 STOCK_FACTOR_FIELDS = [
-    # 1. 基础价格（未复权）
-    'ts_code', 'trade_date', 'open', 'high', 'low', 'close', 'pre_close', 'change', 'pct_chg', 'vol', 'amount',
-    # 2. 换手 & 量比
+    # 1. 基础价格 & 成交
+    'ts_code', 'trade_date', 'open', 'high', 'low', 'close', 'pre_close', 'pct_chg', 'amount',
+    # 2. 换手 & 量比 & 估值 & 股本（来自 daily_basic）
     'turnover_rate', 'turnover_rate_f', 'volume_ratio',
-    # 3. 前复权价格
-    'open_qfq', 'high_qfq', 'low_qfq', 'close_qfq',
-    # 4. 后复权价格
-    'open_hfq', 'high_hfq', 'low_hfq', 'close_hfq',
-    # 5. 估值 & 股本 & 复权因子
     'pe', 'pe_ttm', 'pb', 'ps', 'ps_ttm', 'dv_ratio', 'dv_ttm',
     'total_share', 'float_share', 'free_share', 'total_mv', 'circ_mv', 'adj_factor',
-    # 6. 技术指标（未复权）
-    'asi_bfq', 'asit_bfq', 'atr_bfq', 'bbi_bfq', 'bias1_bfq', 'bias2_bfq', 'bias3_bfq',
-    'boll_lower_bfq', 'boll_mid_bfq', 'boll_upper_bfq', 'brar_ar_bfq', 'brar_br_bfq', 'cci_bfq', 'cr_bfq',
-    'dfma_dif_bfq', 'dfma_difma_bfq', 'dmi_adx_bfq', 'dmi_adxr_bfq', 'dmi_mdi_bfq', 'dmi_pdi_bfq',
-    'dpo_bfq', 'madpo_bfq', 'ema_bfq_5', 'ema_bfq_10', 'ema_bfq_20', 'ema_bfq_30', 'ema_bfq_60', 'ema_bfq_90', 'ema_bfq_250',
-    'emv_bfq', 'maemv_bfq', 'expma_12_bfq', 'expma_50_bfq',
-    'kdj_bfq', 'kdj_d_bfq', 'kdj_k_bfq', 'ktn_down_bfq', 'ktn_mid_bfq', 'ktn_upper_bfq',
-    'mass_bfq', 'ma_mass_bfq', 'mfi_bfq', 'mtm_bfq', 'mtmma_bfq', 'obv_bfq', 'psy_bfq', 'psyma_bfq',
-    'roc_bfq', 'maroc_bfq', 'rsi_bfq_6', 'rsi_bfq_12', 'rsi_bfq_24',
-    'taq_down_bfq', 'taq_mid_bfq', 'taq_up_bfq', 'trix_bfq', 'trma_bfq', 'vr_bfq', 'wr_bfq', 'wr1_bfq',
-    'xsii_td1_bfq', 'xsii_td2_bfq', 'xsii_td3_bfq', 'xsii_td4_bfq',
-    # 7. 技术指标（前复权）
-    'asi_qfq', 'asit_qfq', 'atr_qfq', 'bbi_qfq', 'bias1_qfq', 'bias2_qfq', 'bias3_qfq',
-    'boll_lower_qfq', 'boll_mid_qfq', 'boll_upper_qfq', 'brar_ar_qfq', 'brar_br_qfq', 'cci_qfq', 'cr_qfq',
-    'dfma_dif_qfq', 'dfma_difma_qfq', 'dmi_adx_qfq', 'dmi_adxr_qfq', 'dmi_mdi_qfq', 'dmi_pdi_qfq',
-    'dpo_qfq', 'madpo_qfq', 'ema_qfq_5', 'ema_qfq_10', 'ema_qfq_20', 'ema_qfq_30', 'ema_qfq_60', 'ema_qfq_90', 'ema_qfq_250',
-    'emv_qfq', 'maemv_qfq', 'expma_12_qfq', 'expma_50_qfq',
-    'kdj_qfq', 'kdj_d_qfq', 'kdj_k_qfq', 'ktn_down_qfq', 'ktn_mid_qfq', 'ktn_upper_qfq',
-    'mass_qfq', 'ma_mass_qfq', 'mfi_qfq', 'mtm_qfq', 'mtmma_qfq', 'obv_qfq', 'psy_qfq', 'psyma_qfq',
-    'roc_qfq', 'maroc_qfq', 'rsi_qfq_6', 'rsi_qfq_12', 'rsi_qfq_24',
-    'taq_down_qfq', 'taq_mid_qfq', 'taq_up_qfq', 'trix_qfq', 'trma_qfq', 'vr_qfq', 'wr_qfq', 'wr1_qfq',
-    'xsii_td1_qfq', 'xsii_td2_qfq', 'xsii_td3_qfq', 'xsii_td4_qfq',
-    # 8. 技术指标（后复权）
-    'asi_hfq', 'asit_hfq', 'atr_hfq', 'bbi_hfq', 'bias1_hfq', 'bias2_hfq', 'bias3_hfq',
-    'boll_lower_hfq', 'boll_mid_hfq', 'boll_upper_hfq', 'brar_ar_hfq', 'brar_br_hfq', 'cci_hfq', 'cr_hfq',
-    'dfma_dif_hfq', 'dfma_difma_hfq', 'dmi_adx_hfq', 'dmi_adxr_hfq', 'dmi_mdi_hfq', 'dmi_pdi_hfq',
-    'dpo_hfq', 'madpo_hfq', 'ema_hfq_5', 'ema_hfq_10', 'ema_hfq_20', 'ema_hfq_30', 'ema_hfq_60', 'ema_hfq_90', 'ema_hfq_250',
-    'emv_hfq', 'maemv_hfq', 'expma_12_hfq', 'expma_50_hfq',
-    'kdj_hfq', 'kdj_d_hfq', 'kdj_k_hfq', 'ktn_down_hfq', 'ktn_mid_hfq', 'ktn_upper_hfq',
-    'mass_hfq', 'ma_mass_hfq', 'mfi_hfq', 'mtm_hfq', 'mtmma_hfq', 'obv_hfq', 'psy_hfq', 'psyma_hfq',
-    'roc_hfq', 'maroc_hfq', 'rsi_hfq_6', 'rsi_hfq_12', 'rsi_hfq_24',
-    'taq_down_hfq', 'taq_mid_hfq', 'taq_up_hfq', 'trix_hfq', 'trma_hfq', 'vr_hfq', 'wr_hfq', 'wr1_hfq',
-    'xsii_td1_hfq', 'xsii_td2_hfq', 'xsii_td3_hfq', 'xsii_td4_hfq',
-    # 9. 简单均线（未复权）
-    'ma_bfq_5', 'ma_bfq_10', 'ma_bfq_20', 'ma_bfq_30', 'ma_bfq_60', 'ma_bfq_90', 'ma_bfq_250',
-    # 10. 简单均线（前复权）
+    # 3. 前复权价格
+    'open_qfq', 'high_qfq', 'low_qfq', 'close_qfq',
+    # 4. 均线（前复权）
     'ma_qfq_5', 'ma_qfq_10', 'ma_qfq_20', 'ma_qfq_30', 'ma_qfq_60', 'ma_qfq_90', 'ma_qfq_250',
-    # 11. 简单均线（后复权）
-    'ma_hfq_5', 'ma_hfq_10', 'ma_hfq_20', 'ma_hfq_30', 'ma_hfq_60', 'ma_hfq_90', 'ma_hfq_250',
-    # 12. 状态类
-    'updays', 'downdays', 'lowdays', 'topdays',
-    # 13. MACD 细分
-    'macd_dif_bfq', 'macd_dea_bfq', 'macd_bfq',
+    # 5. EMA（前复权）
+    'ema_qfq_10', 'ema_qfq_13', 'ema_qfq_30', 'ema_qfq_60', 'ema_qfq_90', 'ema_qfq_250',
+    # 6. MACD（前复权）
     'macd_dif_qfq', 'macd_dea_qfq', 'macd_qfq',
-    'macd_dif_hfq', 'macd_dea_hfq', 'macd_hfq'
+    # 7. KDJ（前复权）
+    'kdj_k_qfq', 'kdj_d_qfq', 'kdj_qfq',
 ]
 
 
@@ -1963,7 +1922,7 @@ def main():
         generate_j13_trend(df, end_date)
         
         # 13. 情绪反弹策略
-        # run_sentiment_rebound_strategy(df, end_date, data_manager)
+        run_sentiment_rebound_strategy(df, end_date, data_manager)
         
         # 14. DTW模式匹配
         print('\n========== 完美图形模式匹配分析 ==========')

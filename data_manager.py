@@ -1,37 +1,60 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-DataManager – 完整抽离版
-与原脚本保持 100 % 一致，含所有 dead code / docstring / 注释
+DataManager – 基于 daily + adj_factor + daily_basic 的本地化计算版
+替代已不可用的 stk_factor_pro，保持外部接口 100% 兼容
 """
 import os
 import sqlite3
 import logging
 import time
+import threading
 from datetime import datetime
+
+import numpy as np
 import pandas as pd
 import tushare as ts
-import threading
 
-# ✅ 新增配置导入
 from config import DBConfig, APIConfig
 
-# 如果外部已配置 logging，这里不再重复；否则兜底
 if not logging.getLogger().hasHandlers():
     logging.basicConfig(level=logging.INFO,
                         format="[%(asctime)s] %(levelname)s | %(message)s")
 
-# ---------- 0. 配置 ----------
+# ---------- Tushare 初始化 ----------
 ts.set_token(APIConfig.get_token())
 pro = ts.pro_api()
-pro._DataApi__http_url = 'http://119.45.182.56'
 
 # -------------------- DataManager 本体 --------------------
 class DataManager:
-    """数据管理器 - 整合数据存储功能（与原脚本 100% 一致，含 dead code）"""
+    """数据管理器 - 基于 daily + adj_factor + daily_basic 本地计算"""
+
+    # 需要从 API 获取的原始字段
+    RAW_API_COLS = {
+        'ts_code', 'trade_date', 'open', 'high', 'low', 'close',
+        'pre_close', 'change', 'pct_chg', 'vol', 'amount',
+        'adj_factor',
+        'turnover_rate', 'turnover_rate_f', 'volume_ratio',
+        'pe', 'pe_ttm', 'pb', 'ps', 'ps_ttm',
+        'dv_ratio', 'dv_ttm', 'total_share', 'float_share', 'free_share',
+        'total_mv', 'circ_mv'
+    }
+
+    # 本地计算生成的字段
+    COMPUTED_COLS = {
+        'open_qfq', 'high_qfq', 'low_qfq', 'close_qfq',
+        'ma_qfq_5', 'ma_qfq_10', 'ma_qfq_20', 'ma_qfq_30',
+        'ma_qfq_60', 'ma_qfq_90', 'ma_qfq_250',
+        'ema_qfq_5', 'ema_qfq_10', 'ema_qfq_12', 'ema_qfq_13',
+        'ema_qfq_20', 'ema_qfq_26', 'ema_qfq_30', 'ema_qfq_60',
+        'ema_qfq_90', 'ema_qfq_250',
+        'macd_dif_qfq', 'macd_dea_qfq', 'macd_qfq',
+        'kdj_k_qfq', 'kdj_d_qfq', 'kdj_qfq',
+    }
+
+    ALL_FACTOR_COLS = RAW_API_COLS | COMPUTED_COLS
 
     def __init__(self, db_path=None, cache_dir=None):
-        # ✅ 使用配置默认值
         self.db_path = db_path or DBConfig.DB_PATH
         self.cache_dir = cache_dir or DBConfig.CACHE_DIR
         self.conn = None
@@ -41,7 +64,6 @@ class DataManager:
     def _init_database(self):
         self.conn = sqlite3.connect(self.db_path)
         cursor = self.conn.cursor()
-
         cursor.execute('''
         CREATE TABLE IF NOT EXISTS stock_factors (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -53,7 +75,6 @@ class DataManager:
             UNIQUE(ts_code, trade_date)
         )
         ''')
-
         cursor.execute('''
         CREATE TABLE IF NOT EXISTS stock_basic_info (
             ts_code TEXT PRIMARY KEY,
@@ -87,197 +108,226 @@ class DataManager:
             logging.error(f"获取交易日历失败: {e}")
             return []
 
-    # -------------------- 因子数据（parquet 按日缓存） --------------------
+    # -------------------- 核心：因子数据 --------------------
     def get_stock_factors(self, trade_dates, fields):
-        """获取股票因子数据：使用多线程并行获取，并显示进度条"""
-        from concurrent.futures import ThreadPoolExecutor, as_completed
+        """获取股票因子数据（兼容旧接口，内部已切换为 daily+adj+basic）"""
         from tqdm import tqdm
-        import time
         import queue
-        
+
         os.makedirs(self.cache_dir, exist_ok=True)
-        fields = list(fields)  # 确保有序
-        
-        # 确保 trade_dates 是排序的
+        fields = list(fields)
         trade_dates = sorted(trade_dates)
-        
-        # 创建一个队列用于存储需要重试的日期
-        retry_queue = queue.Queue()
+
+        # 1. 检查缓存
+        cached_frames = []
+        missing_dates = []
         for date in trade_dates:
-            retry_queue.put((date, 0))  # (date, retry_count)
-        
-        # 存放最终结果
-        result_data = []
-        lock = threading.Lock()  # 用于线程安全地添加数据到结果列表
-        
-        # 处理单个日期的函数
-        def process_date(date, retry_count=0):
-            max_retries = 3
             file_path = os.path.join(self.cache_dir, f"factors_{date}.parquet")
-            need_cols = set(fields)
-            
-            # 检查缓存文件是否存在且字段完整
             if os.path.exists(file_path):
                 try:
                     temp = pd.read_parquet(file_path)
-                    missing_fields = need_cols - set(temp.columns)
-                    if missing_fields:
-                        logging.warning(f"{date} 缺失字段 {list(missing_fields)}，将重新拉取并补齐")
-                        os.remove(file_path)  # 删除不完整的缓存文件
+                    missing_cols = set(fields) - set(temp.columns)
+                    if missing_cols:
+                        logging.warning(f"{date} 缓存缺失字段 {list(missing_cols)}，将重新生成")
+                        os.remove(file_path)
+                        missing_dates.append(date)
                     else:
-                        # 缓存文件完整，直接读取所需字段
-                        daily_data = pd.read_parquet(file_path, columns=fields)
-                        return date, daily_data, True
+                        cached_frames.append(pd.read_parquet(file_path, columns=fields))
                 except Exception as e:
-                    logging.warning(f"{date} parquet 读取失败，重新拉取: {e}")
+                    logging.warning(f"{date} 缓存读取失败: {e}")
                     os.remove(file_path)
-            
-            # 从API获取数据
-            if retry_count < max_retries:
+                    missing_dates.append(date)
+            else:
+                missing_dates.append(date)
+
+        if not missing_dates:
+            return pd.concat(cached_frames, ignore_index=True)
+
+        # 2. 确定计算区间（向前扩展 150 天保证指标收敛）
+        compute_start = pd.to_datetime(min(missing_dates), format='%Y%m%d') - pd.Timedelta(days=150)
+        compute_end = pd.to_datetime(max(trade_dates), format='%Y%m%d')
+        extended_dates = self.get_trade_dates(
+            compute_start.strftime('%Y%m%d'),
+            compute_end.strftime('%Y%m%d')
+        )
+
+        # 3. 读取扩展区间内已有缓存的数据作为历史铺垫
+        history_frames = []
+        for date in extended_dates:
+            file_path = os.path.join(self.cache_dir, f"factors_{date}.parquet")
+            if os.path.exists(file_path) and date not in missing_dates:
                 try:
-                    logging.info(f"从API获取 {date} 数据 (尝试 {retry_count + 1}/{max_retries})")
-                    daily_data = pro.stk_factor_pro(trade_date=date, fields=','.join(fields))
-                    
-                    # 检查数据是否为空
-                    if daily_data.empty:
-                        logging.warning(f"获取 {date} 数据为空")
-                        raise ValueError("Empty data")
-                    
-                    # 保存到缓存
-                    daily_data.to_parquet(file_path, index=False)
-                    return date, daily_data, True
-                    
-                except Exception as e:
-                    logging.error(f"获取 {date} 数据失败: {e}")
-                    # 将任务重新加入队列，等待重试
-                    if retry_count + 1 < max_retries:
-                        return date, None, False
-                    else:
-                        logging.error(f"{date} 数据获取失败，已达最大重试次数")
-                        return date, pd.DataFrame(), True  # 返回空DataFrame
-            
-            return date, pd.DataFrame(), True  # 返回空DataFrame
-        
-        # 多线程处理函数
-        def worker():
-            while True:
-                try:
-                    date, retry_count = retry_queue.get_nowait()
-                except queue.Empty:
-                    break
-                    
-                try:
-                    date, data, completed = process_date(date, retry_count)
-                    
-                    if completed:
-                        with lock:
-                            if not data.empty:
-                                result_data.append(data)
-                    else:
-                        # 重新加入队列进行重试
-                        retry_queue.put((date, retry_count + 1))
-                        # 短暂休眠避免过于频繁的重试
-                        time.sleep(1)
-                        
-                except Exception as e:
-                    logging.error(f"处理 {date} 时发生异常: {e}")
-                    # 重新加入队列进行重试
-                    if retry_count + 1 < max_retries:
-                        retry_queue.put((date, retry_count + 1))
-                        time.sleep(1)
-                    else:
-                        logging.error(f"{date} 处理失败，已达最大重试次数")
-                
-                finally:
-                    retry_queue.task_done()
-                    pbar.update(1)
-        
-        # 创建进度条
-        total_tasks = len(trade_dates)
-        pbar = tqdm(total=total_tasks, desc="获取因子数据")
-        
-        # 创建并启动线程
-        num_threads = min(10, len(trade_dates))  # 限制线程数量
-        threads = []
-        for _ in range(num_threads):
-            t = threading.Thread(target=worker)
-            t.daemon = True
-            t.start()
-            threads.append(t)
-        
-        # 等待所有任务完成
-        retry_queue.join()
-        
-        # 关闭进度条
-        pbar.close()
-        
-        # 合并所有数据
-        if not result_data:
+                    history_frames.append(pd.read_parquet(file_path))
+                except Exception:
+                    pass
+
+        # 4. 多线程拉取 missing_dates 的原始数据
+        raw_frames = self._fetch_raw_data_parallel(missing_dates)
+
+        if not history_frames and not raw_frames:
+            logging.error("无法获取任何原始数据")
+            return pd.concat(cached_frames, ignore_index=True) if cached_frames else pd.DataFrame()
+
+        # 5. 合并、去重、计算指标
+        df = pd.concat(history_frames + raw_frames, ignore_index=True)
+        df = df.sort_values(['ts_code', 'trade_date']).drop_duplicates(subset=['ts_code', 'trade_date']).reset_index(drop=True)
+        df = self._calculate_indicators(df)
+
+        # 6. 保存扩展区间内所有日期的缓存
+        for date, day_df in df.groupby('trade_date'):
+            if date in extended_dates:
+                out_path = os.path.join(self.cache_dir, f"factors_{date}.parquet")
+                day_df.to_parquet(out_path, index=False)
+
+        # 7. 提取 missing_dates 的数据并与缓存合并
+        new_frames = []
+        for date in missing_dates:
+            day_df = df[df['trade_date'] == date]
+            if not day_df.empty:
+                avail_cols = [c for c in fields if c in day_df.columns]
+                if avail_cols:
+                    new_frames.append(day_df[avail_cols])
+
+        all_frames = cached_frames + new_frames
+        if not all_frames:
             return pd.DataFrame()
-        
-        result = pd.concat(result_data, ignore_index=True)
-        
-        # 检查数据完整性
-        if not self._validate_and_fix_data(result, trade_dates, fields):
-            # 如果数据有问题，重新获取
-            logging.warning("数据验证失败，将重新获取异常日期的数据")
-            # 找出缺失的日期并重新获取
-            missing_dates = self._find_missing_dates(result, trade_dates)
-            if missing_dates:
-                missing_data = self.get_stock_factors(missing_dates, fields)
-                result = pd.concat([result, missing_data], ignore_index=True)
-        
-        return result
+        return pd.concat(all_frames, ignore_index=True)
+
+    def _fetch_raw_data_parallel(self, dates):
+        """多线程拉取每日原始数据（daily + adj_factor + daily_basic）"""
+        from concurrent.futures import ThreadPoolExecutor, as_completed
+        from tqdm import tqdm
+
+        results = {}
+        max_workers = min(10, len(dates)) if dates else 1
+
+        def fetch_one(date):
+            try:
+                # daily
+                daily_fields = 'ts_code,trade_date,open,high,low,close,pre_close,change,pct_chg,vol,amount'
+                daily_df = pro.daily(trade_date=date, fields=daily_fields)
+                if daily_df is None or daily_df.empty:
+                    return date, None
+
+                # adj_factor
+                adj_df = pro.adj_factor(trade_date=date, fields='ts_code,adj_factor')
+                if adj_df is not None and not adj_df.empty:
+                    daily_df = daily_df.merge(adj_df[['ts_code', 'adj_factor']], on='ts_code', how='left')
+                else:
+                    daily_df['adj_factor'] = np.nan
+
+                # daily_basic
+                basic_fields = (
+                    'ts_code,trade_date,turnover_rate,turnover_rate_f,volume_ratio,'
+                    'pe,pe_ttm,pb,ps,ps_ttm,dv_ratio,dv_ttm,'
+                    'total_share,float_share,free_share,total_mv,circ_mv'
+                )
+                basic_df = pro.daily_basic(trade_date=date, fields=basic_fields)
+                if basic_df is not None and not basic_df.empty:
+                    basic_df = basic_df.drop(columns=['trade_date'], errors='ignore')
+                    daily_df = daily_df.merge(basic_df, on='ts_code', how='left')
+
+                time.sleep(0.12)  # 频率保护
+                return date, daily_df
+            except Exception as e:
+                logging.error(f"拉取 {date} 原始数据失败: {e}")
+                return date, None
+
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            future_to_date = {executor.submit(fetch_one, d): d for d in dates}
+            with tqdm(total=len(dates), desc="拉取原始数据") as pbar:
+                for future in as_completed(future_to_date):
+                    date, df = future.result()
+                    if df is not None:
+                        results[date] = df
+                    pbar.update(1)
+
+        return [results[d] for d in dates if d in results]
+
+    def _calculate_indicators(self, df):
+        """基于原始数据本地计算所有技术指标"""
+        if df.empty:
+            return df
+
+        df = df.sort_values(['ts_code', 'trade_date']).reset_index(drop=True)
+        grouped = df.groupby('ts_code')
+
+        # ---------- 前复权价格 ----------
+        latest_adj = grouped['adj_factor'].transform('last')
+        for col in ['open', 'high', 'low', 'close']:
+            df[f'{col}_qfq'] = df[col] * df['adj_factor'] / latest_adj
+
+        # ---------- MA（简单均线）----------
+        for period in [5, 10, 20, 30, 60, 90, 250]:
+            df[f'ma_qfq_{period}'] = grouped['close_qfq'].transform(
+                lambda x: x.rolling(window=period, min_periods=period).mean()
+            )
+
+        # ---------- EMA ----------
+        for period in [5, 10, 12, 13, 20, 26, 30, 60, 90, 250]:
+            df[f'ema_qfq_{period}'] = grouped['close_qfq'].transform(
+                lambda x: x.ewm(span=period, adjust=False).mean()
+            )
+
+        # ---------- MACD ----------
+        df['macd_dif_qfq'] = df['ema_qfq_12'] - df['ema_qfq_26']
+        df['macd_dea_qfq'] = grouped['macd_dif_qfq'].transform(
+            lambda x: x.ewm(span=9, adjust=False).mean()
+        )
+        df['macd_qfq'] = (df['macd_dif_qfq'] - df['macd_dea_qfq']) * 2
+
+        # ---------- KDJ ----------
+        low_min = grouped['low_qfq'].transform(lambda x: x.rolling(window=9, min_periods=9).min())
+        high_max = grouped['high_qfq'].transform(lambda x: x.rolling(window=9, min_periods=9).max())
+        rsv = (df['close_qfq'] - low_min) / (high_max - low_min) * 100
+        rsv = rsv.replace([np.inf, -np.inf], 0).fillna(0)
+
+        df['rsv_tmp'] = rsv
+        df['kdj_k_qfq'] = df.groupby('ts_code')['rsv_tmp'].transform(lambda x: x.ewm(com=2, adjust=False).mean())
+        df['kdj_d_qfq'] = df.groupby('ts_code')['kdj_k_qfq'].transform(lambda x: x.ewm(com=2, adjust=False).mean())
+        df['kdj_qfq'] = 3 * df['kdj_k_qfq'] - 2 * df['kdj_d_qfq']
+        df = df.drop(columns=['rsv_tmp'])
+
+        return df
 
     def _validate_and_fix_data(self, df, trade_dates, fields):
-        """验证数据完整性并修复问题"""
+        """验证数据完整性并修复问题（兼容旧逻辑）"""
         if df.empty:
             logging.error("数据为空")
             return False
-        
-        # 检查每日股票数量
         daily_counts = df.groupby('trade_date')['ts_code'].nunique().sort_index()
-        
-        # 计算平均股票数量
         avg_count = daily_counts.mean()
-        
-        # 检查异常日期（股票数量低于平均值的1%）
         abnormal_dates = []
         for date, count in daily_counts.items():
-            if count < avg_count * 0.90:  # 1%阈值
+            if count < avg_count * 0.90:
                 logging.error(f"发现异常日期 {date}: 股票数量 {count}，低于平均值 {avg_count:.0f} 的90%")
                 abnormal_dates.append(date)
-        
-        # 如果有异常日期，删除对应的缓存文件
         if abnormal_dates:
             for date in abnormal_dates:
                 file_path = os.path.join(self.cache_dir, f"factors_{date}.parquet")
                 if os.path.exists(file_path):
                     logging.warning(f"删除异常日期的缓存文件: {file_path}")
                     os.remove(file_path)
-            return False  # 返回False表示需要重新获取
-        
-        # 检查是否有重复记录
+            return False
         duplicate_check = df.duplicated(subset=['ts_code', 'trade_date']).sum()
         if duplicate_check > 0:
             logging.warning(f"发现 {duplicate_check} 条重复记录")
-            # 删除重复记录
             df = df.drop_duplicates(subset=['ts_code', 'trade_date'])
-        
-        # 检查字段完整性
         missing_fields = set(fields) - set(df.columns)
         if missing_fields:
             logging.error(f"缺失字段: {missing_fields}")
             return False
-        
-        # 检查空值情况
         null_counts = df.isnull().sum()
-        high_null_cols = null_counts[null_counts > len(df) * 0.05]  # 超过5%为空
+        high_null_cols = null_counts[null_counts > len(df) * 0.05]
         if not high_null_cols.empty:
             logging.warning(f"以下字段空值较多: {high_null_cols.to_dict()}")
-        
         logging.info("数据验证通过")
         return True
+
+    def _find_missing_dates(self, df, trade_dates):
+        """找出缺失的日期（兼容旧逻辑）"""
+        existing_dates = set(df['trade_date'].unique())
+        return [d for d in trade_dates if d not in existing_dates]
 
     # -------------------- 单日因子（parquet） --------------------
     def _get_factors_from_db(self, trade_date, fields):
@@ -288,7 +338,6 @@ class DataManager:
         df = pd.read_parquet(file, columns=fields)
         return df
 
-    # -------------------- 保存因子到 parquet（dead code 也搬） --------------------
     def _save_factors_to_db(self, data):
         """保存因子到 parquet，按日分区"""
         for trade_date, day_df in data.groupby('trade_date'):
@@ -299,18 +348,12 @@ class DataManager:
     def get_stock_basic_info(self):
         """获取股票基本信息"""
         cache_file = os.path.join(self.cache_dir, "stock_basic.pkl")
-
-        # 首先尝试从数据库读取
         db_data = self._get_basic_info_from_db()
         if db_data is not None:
             return db_data
-
-        # 然后尝试从缓存读取
         if os.path.exists(cache_file):
             logging.info("从缓存读取股票基本信息")
             return pd.read_pickle(cache_file)
-
-        # 最后从API获取
         logging.info("从API获取股票基本信息")
         try:
             basic_info = pro.stock_basic(exchange='',
@@ -318,17 +361,14 @@ class DataManager:
                                          fields='ts_code,name,industry,list_date')
             basic_info = basic_info.rename(columns={'industry': 'industry_name'})
             basic_info['industry_name'] = basic_info['industry_name'].fillna('未知行业')
-
             os.makedirs(self.cache_dir, exist_ok=True)
             basic_info.to_pickle(cache_file)
             self._save_basic_info_to_db(basic_info)
-
             return basic_info
         except Exception as e:
             logging.error(f"获取股票基本信息失败: {e}")
             return pd.DataFrame()
 
-    # -------------------- 内部 DB 辅助 --------------------
     def _get_basic_info_from_db(self):
         """从数据库读取基本信息"""
         try:

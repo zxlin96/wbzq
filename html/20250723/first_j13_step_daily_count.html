@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>J13 每日数量趋势 - 20260331</title>
+    <title>J13 每日数量趋势 - 20250723</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -21,13 +21,13 @@
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <h1 class="text-2xl md:text-3xl font-bold text-gray-800">📈 J13 每日数量趋势</h1>
-                    <p class="text-gray-500 mt-1">日期: 20260331 | KDJ J值小于13的股票数量</p>
+                    <p class="text-gray-500 mt-1">日期: 20250723 | KDJ J值小于13的股票数量</p>
                 </div>
                 <div class="flex gap-3">
                     <a href="../../index.html" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
                         ← 返回首页
                     </a>
-                    <a href="stock_selection_20260331.html" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                    <a href="stock_selection_20250723.html" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
                         查看选股 →
                     </a>
                 </div>
@@ -38,16 +38,16 @@
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             <div class="glass p-4 stat-card">
                 <div class="text-sm text-gray-500">平均数量</div>
-                <div class="text-2xl font-bold text-blue-600">1298.9 只</div>
+                <div class="text-2xl font-bold text-blue-600">988.3 只</div>
             </div>
             <div class="glass p-4 stat-card">
                 <div class="text-sm text-gray-500">最高数量</div>
-                <div class="text-2xl font-bold text-green-600">4705 只</div>
-                <div class="text-xs text-gray-400">2026-03-23 00:00:00</div>
+                <div class="text-2xl font-bold text-green-600">3576 只</div>
+                <div class="text-xs text-gray-400">2025-06-20 00:00:00</div>
             </div>
             <div class="glass p-4 stat-card">
                 <div class="text-sm text-gray-500">最低数量</div>
-                <div class="text-2xl font-bold text-orange-600">262 只</div>
+                <div class="text-2xl font-bold text-orange-600">152 只</div>
             </div>
             <div class="glass p-4 stat-card">
                 <div class="text-sm text-gray-500">数据天数</div>
@@ -55,7 +55,7 @@
             </div>
             <div class="glass p-4 stat-card">
                 <div class="text-sm text-gray-500">90%分位数</div>
-                <div class="text-2xl font-bold text-red-600">2843.4 只</div>
+                <div class="text-2xl font-bold text-red-600">2121.9 只</div>
             </div>
         </div>
         
@@ -117,7 +117,7 @@
             xAxis: {
                 type: 'category',
                 boundaryGap: false,
-                data: ["2025-12-26", "2025-12-29", "2025-12-30", "2025-12-31", "2026-01-05", "2026-01-06", "2026-01-07", "2026-01-08", "2026-01-09", "2026-01-12", "2026-01-13", "2026-01-14", "2026-01-15", "2026-01-16", "2026-01-19", "2026-01-20", "2026-01-21", "2026-01-22", "2026-01-23", "2026-01-26", "2026-01-27", "2026-01-28", "2026-01-29", "2026-01-30", "2026-02-02", "2026-02-03", "2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-12", "2026-02-13", "2026-02-24", "2026-02-25", "2026-02-26", "2026-02-27", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31"],
+                data: ["2025-04-25", "2025-04-28", "2025-04-29", "2025-04-30", "2025-05-06", "2025-05-07", "2025-05-08", "2025-05-09", "2025-05-12", "2025-05-13", "2025-05-14", "2025-05-15", "2025-05-16", "2025-05-19", "2025-05-20", "2025-05-21", "2025-05-22", "2025-05-23", "2025-05-26", "2025-05-27", "2025-05-28", "2025-05-29", "2025-05-30", "2025-06-03", "2025-06-04", "2025-06-05", "2025-06-06", "2025-06-09", "2025-06-10", "2025-06-11", "2025-06-12", "2025-06-13", "2025-06-16", "2025-06-17", "2025-06-18", "2025-06-19", "2025-06-20", "2025-06-23", "2025-06-24", "2025-06-25", "2025-06-26", "2025-06-27", "2025-06-30", "2025-07-01", "2025-07-02", "2025-07-03", "2025-07-04", "2025-07-07", "2025-07-08", "2025-07-09", "2025-07-10", "2025-07-11", "2025-07-14", "2025-07-15", "2025-07-16", "2025-07-17", "2025-07-18", "2025-07-21", "2025-07-22", "2025-07-23"],
                 axisLabel: { rotate: 45 }
             },
             yAxis: {
@@ -128,7 +128,7 @@
             series: [{
                 name: 'J13数量',
                 type: 'line',
-                data: [371, 572, 877, 1181, 778, 420, 423, 411, 318, 262, 376, 460, 602, 834, 814, 1132, 1275, 1239, 843, 1007, 936, 1414, 1934, 2049, 3073, 2430, 1654, 1847, 1560, 759, 670, 666, 766, 1209, 861, 674, 827, 814, 1345, 2776, 3369, 2874, 1302, 1260, 539, 509, 762, 1112, 984, 1912, 1646, 2840, 4116, 4705, 3340, 903, 1072, 688, 570, 973],
+                data: [1079, 1574, 1512, 1237, 630, 394, 290, 303, 291, 266, 259, 549, 912, 997, 785, 1010, 1753, 2854, 2544, 2084, 2184, 992, 1439, 1324, 705, 478, 452, 360, 446, 459, 604, 1273, 1448, 1678, 2115, 3024, 3576, 2300, 596, 383, 382, 343, 225, 152, 186, 195, 474, 944, 759, 947, 1046, 871, 677, 853, 906, 726, 768, 481, 494, 711],
                 smooth: true,
                 symbol: 'circle',
                 symbolSize: 8,
@@ -148,7 +148,7 @@
                             lineStyle: { color: '#91cc75', type: 'dashed', width: 2 }
                         },
                         {
-                            yAxis: 2843.4,
+                            yAxis: 2121.9,
                             name: '90%分位',
                             lineStyle: { color: '#ee6666', type: 'dashed', width: 2 }
                         }

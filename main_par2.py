@@ -1,8 +1,37 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""
+股票多因子选股策略回测系统 (main_par2.py)
+
+本模块实现了基于多因子策略的股票筛选与回测系统，核心策略为"阶梯放量+J13低吸"，
+即在上穿60日线后出现阶梯放量，并在KDJ的J值低于13时进行低吸。
+
+主要策略逻辑：
+    1. 基础趋势筛选：MACD>0、收盘价>MA60、MA60向上
+    2. 阶梯放量策略：上穿60日线后出现连续价随量升
+    3. 放量确认：周期内存在成交额显著放大的交易日
+    4. 异动检测：收集区异动 / 堆量建仓 / 突破放量
+    5. K线形态过滤：仅保留阳线、十字星、带下影阴线
+    6. 振幅过滤：主板<4%、创业板/科创板<7%
+    7. 底部暴力K确认：周期内存在底部放量长阳信号
+    8. 出货信号排除：排除存在主力出货信号的股票
+    9. 知行多空线：中期多空线>多空线，收盘价>=多空线
+    10. 次新股排除：上市不足180天
+    11. 成交额排名：当日成交额处于全市场前60%
+
+所有策略阈值参数均通过 config.py 中的 STRATEGY_CONFIG (ST) 和 BACKTEST_CONFIG (BT) 集中管理，
+便于策略调优和回测验证。
+
+使用方式：
+    python main_par2.py                              # 默认今天，60天回测
+    python main_par2.py --date 20250620 --days 60    # 指定日期和天数
+    python main_par2.py --debug 688321.SH            # 调试单只股票
+    python main_par2.py --backtest --hold-days 5     # 执行回测
+"""
 
 # ========== 标准库导入 ==========
 import argparse
+import concurrent.futures
 import glob
 import logging
 import os
@@ -78,6 +107,21 @@ STOCK_FACTOR_FIELDS = [
 
 # ========== 工具函数 ==========
 
+def _is_main_board(ts_code: str) -> bool:
+    """判断是否为主板股票
+    
+    主板股票代码以 00（深市主板）或 60（沪市主板）开头，
+    创业板以 30 开头，科创板以 68 开头，北交所以 8/4 开头。
+    
+    Args:
+        ts_code: 股票代码，如 '000547.SZ'、'688321.SH'
+    
+    Returns:
+        True 为主板，False 为创业板/科创板/北交所
+    """
+    return ts_code.startswith(('00', '60'))
+
+
 def parse_args():
     """解析命令行参数"""
     parser = argparse.ArgumentParser(description="股票策略回测脚本")
@@ -151,13 +195,26 @@ def get_nearest_trade_date(data_manager, target_date: Optional[datetime] = None,
 
 
 def _threaded_apply_grouped(func, grouped_data, desc: str = "Processing"):
-    """使用线程池的并行处理"""
+    """使用全局线程池对分组数据并行执行函数
+    
+    将 DataFrame 的 groupby 分组结果提交到全局线程池并行处理，
+    适用于按股票代码分组后独立计算策略标记的场景。
+    
+    Args:
+        func: 处理单个分组的函数，接收 group DataFrame，返回 pd.Series
+        grouped_data: pd.core.groupby.DataFrameGroupBy 对象
+        desc: tqdm 进度条描述文本
+    
+    Returns:
+        合并后的 pd.Series，索引与原始 DataFrame 对齐
+    """
     results = []
     
     # 使用全局线程池
     global global_thread_pool
     future_to_key = {global_thread_pool.submit(func, group): name for name, group in grouped_data}
     
+    # 等待所有任务完成，收集结果
     for future in tqdm(concurrent.futures.as_completed(future_to_key), 
                       total=len(future_to_key), desc=desc):
         ts_code = future_to_key[future]
@@ -165,36 +222,55 @@ def _threaded_apply_grouped(func, grouped_data, desc: str = "Processing"):
             result = future.result()
             results.append(result)
         except Exception as e:
+            # 单只股票处理失败不影响整体，返回全 False 的 Series
             print(f'{ts_code} 处理失败: {e}')
             group = grouped_data.get_group(ts_code)
             results.append(pd.Series(False, index=group.index))
     
+    # 合并所有结果并按原始索引排序
     if results:
         return pd.concat(results).sort_index()
     return pd.Series([], dtype=bool)
 
 
-# 添加缺少的导入
-import concurrent.futures
-
 
 # ========== 分析函数 ==========
 
 def is_ignorable_gap(gap_row, after_gap, debug: bool = False) -> bool:
-    """判断跳空缺口是否可忽略"""
+    """判断跳空缺口是否可忽略（即后续走势已回补缺口）
+    
+    跳空缺口分为两种情况：
+    - 小跳空（< MIN_GAP_SIZE_RATIO）：如果后续量能和价格都显著放大，则可忽略
+    - 大跳空（>= MIN_GAP_SIZE_RATIO）：需要同时满足以下条件才可忽略：
+      1. 跳空幅度 < GAP_SIZE_RATIO（2.5%）
+      2. 缺口位于60日线下方
+      3. 后续量能放大 > GAP_LARGE_VOL_RATE 倍
+      4. 后续价格上涨 > GAP_LARGE_PRICE_RATE 倍
+    
+    Args:
+        gap_row: 跳空日的那一行数据（需含 low_qfq, prev_high, close_qfq, ma_qfq_60, amount）
+        after_gap: 跳空日之后的所有数据（DataFrame）
+        debug: 是否输出调试信息
+    
+    Returns:
+        True 表示缺口可忽略（已回补），False 表示缺口未回补
+    """
+    # 计算跳空幅度：当日最低价 - 前一日最高价
     gap_size = gap_row['low_qfq'] - gap_row['prev_high']
     gap_percent = gap_size / max(gap_row['prev_high'], 0.01) * 100
     
     if debug:
         print(f"跳空幅度: {gap_size:.4f} ({gap_percent:.2f}%)")
     
-    if gap_percent < 0.5:
+    if gap_percent < ST.MIN_GAP_SIZE_RATIO * 100:
+        # 小跳空：后续量能和价格都显著放大则可忽略
         max_vol = after_gap['amount'].max()
         vol_rate = max_vol / max(gap_row['amount'], 1)
         max_prc = after_gap['close_qfq'].max()
         prc_rate = max_prc / max(gap_row['close_qfq'], 0.01)
-        return (vol_rate > 1.5) and (prc_rate > 1.15)
+        return (vol_rate > ST.GAP_IGNORE_VOL_RATE) and (prc_rate > ST.GAP_IGNORE_PRICE_RATE)
     
+    # 大跳空：需同时满足多个条件才可忽略
     below_ma60 = gap_row['close_qfq'] < gap_row['ma_qfq_60']
     max_volume_after = after_gap['amount'].max()
     volume_ratio = max_volume_after / max(gap_row['amount'], 1)
@@ -202,34 +278,56 @@ def is_ignorable_gap(gap_row, after_gap, debug: bool = False) -> bool:
     price_ratio = max_price_after / max(gap_row['close_qfq'], 0.01)
     
     conditions = {
-        '跳空幅度<2.5%': gap_percent < 2.5,
+        '跳空幅度<2.5%': gap_percent < ST.GAP_SIZE_RATIO * 100,
         '位于60日线下': below_ma60,
-        '量能放大>3x': volume_ratio > 3,
-        '价格上涨>15%': price_ratio > 1.15
+        '量能放大>3x': volume_ratio > ST.GAP_LARGE_VOL_RATE,
+        '价格上涨>15%': price_ratio > ST.GAP_LARGE_PRICE_RATE
     }
     
     return all(conditions.values())
 
 
-def identify_candle_pattern(df, body_ratio_threshold: float = 0.2, min_shadow_ratio: float = 0.4) -> Tuple[pd.Series, pd.Series]:
-    """识别三类可接受K线形态"""
+def identify_candle_pattern(df) -> Tuple[pd.Series, pd.Series]:
+    """识别K线形态（向量化计算）
+    
+    将K线分为四种形态，按优先级排序：
+    1. yang（阳线）：收盘>开盘，且涨跌幅在 KLINE_PCT_RANGE 范围内
+    2. doji（十字星）：实体占比 < BODY_RATIO_THRESHOLD，且涨跌幅在范围内
+    3. yin_with_shadow（带下影阴线）：阴线且下影线占比 >= MIN_SHADOW_RATIO
+    4. other（其他）：不符合以上条件的K线
+    
+    Args:
+        df: 含 open_qfq, close_qfq, high_qfq, low_qfq, pct_chg 的 DataFrame
+    
+    Returns:
+        (candle_label, candle_rank): 形态名称 Series 和优先级 Series（1=最优，4=最差）
+    """
     open_ = df['open_qfq']
     close = df['close_qfq']
     high = df['high_qfq']
     low = df['low_qfq']
+    
+    # 计算实体和振幅
     body = (close - open_).abs()
     range_ = high - low
-    range_ = np.where(range_ == 0, 1e-6, range_)
-    body_ratio = body / range_
+    range_ = np.where(range_ == 0, 1e-6, range_)  # 避免除零
+    body_ratio = body / range_  # 实体占振幅的比例
     
-    in_range = df['pct_chg'].between(-2, 2)
+    # 涨跌幅范围过滤（排除涨停/跌停等极端K线）
+    in_range = df['pct_chg'].between(ST.KLINE_PCT_RANGE[0], ST.KLINE_PCT_RANGE[1])
+    
+    # 条件1：阳线
     is_yang = (close > open_) & in_range
-    is_doji = (body_ratio < body_ratio_threshold) & in_range
     
+    # 条件2：十字星（实体极小）
+    is_doji = (body_ratio < ST.BODY_RATIO_THRESHOLD) & in_range
+    
+    # 条件3：带下影阴线（下影线较长，说明下方有支撑）
     lower_shadow = np.minimum(open_, close) - low
     lower_shadow_ratio = lower_shadow / range_
-    is_yin_shadow = (close < open_) & in_range & (lower_shadow_ratio >= min_shadow_ratio)
+    is_yin_shadow = (close < open_) & in_range & (lower_shadow_ratio >= ST.MIN_SHADOW_RATIO)
     
+    # 使用 np.select 按优先级选择形态（条件列表按优先级从高到低排列）
     condition_list = [is_yang, (~is_yang) & is_doji, (~is_yang) & (~is_doji) & is_yin_shadow]
     choice_label = ['yang', 'doji', 'yin_with_shadow']
     choice_rank = [1, 2, 3]
@@ -241,24 +339,42 @@ def identify_candle_pattern(df, body_ratio_threshold: float = 0.2, min_shadow_ra
 
 
 def mark_step_vol_price(group, debug: bool = False) -> pd.Series:
-    """标记阶梯放量+价升条件"""
+    """标记阶梯放量策略信号（first_j13_step）
+    
+    策略逻辑：
+    1. 找到上穿60日线且不跳空的交易日
+    2. 检查上穿后的走势中是否存在不可忽略的跳空缺口
+    3. 检查是否出现连续价随量升（至少 PRICE_VOLUME_CONSECUTIVE 天）
+    4. 检查最大成交额日是否为阴线下跌（排除出货嫌疑）
+    5. 在满足以上条件且 J<13 的日期标记信号
+    
+    Args:
+        group: 单只股票的 DataFrame（按 ts_code 分组）
+        debug: 是否输出调试信息
+    
+    Returns:
+        布尔 Series，True 表示该日为阶梯放量+J13低吸信号
+    """
     out = pd.Series(False, index=group.index)
     
+    # 排除ST股和北交所股票
     basic_mask = (~group['name'].str.contains('ST|st', na=False)) & (~group['ts_code'].str.endswith('.BJ'))
     group = group.loc[basic_mask]
     
     if group.empty:
         return out
     
+    # 找到上穿60日线且不跳空的交易日
     cross_rows = group[group['cross'] & ~group['gap_up']]
     if cross_rows.empty:
         return out
     
     for _, cross_row in cross_rows.iterrows():
         cross_idx = cross_row.name
+        # 取上穿日及之后的所有数据
         after = group.loc[group.index >= cross_idx].copy()
         
-        # 跳空回补检查
+        # 检查跳空缺口是否可忽略
         gap_days = after[after['gap_up']]
         if not gap_days.empty:
             all_gaps_ok = True
@@ -276,7 +392,7 @@ def mark_step_vol_price(group, debug: bool = False) -> pd.Series:
             if not all_gaps_ok:
                 continue
         
-        # 连续价随量升检查
+        # 检查连续价随量升天数
         consecutive_rise = 0
         max_consecutive = 0
         
@@ -288,10 +404,11 @@ def mark_step_vol_price(group, debug: bool = False) -> pd.Series:
             else:
                 consecutive_rise = 0
         
-        if max_consecutive < 1:
+        # 连续价随量升天数不足，跳过
+        if max_consecutive < ST.PRICE_VOLUME_CONSECUTIVE - 1:
             continue
         
-        # 下跌日量能检查
+        # 检查最大成交额日是否为阴线下跌（出货嫌疑检查）
         max_volume = after['amount'].max()
         valid_volume = True
         
@@ -305,7 +422,7 @@ def mark_step_vol_price(group, debug: bool = False) -> pd.Series:
         if not valid_volume:
             continue
         
-        # 标记J值<13的日期
+        # 标记J值<13的日期为信号
         j_below_13_mask = after['kdj_qfq'] < 13
         if j_below_13_mask.any():
             for idx in after[j_below_13_mask].index:
@@ -315,25 +432,49 @@ def mark_step_vol_price(group, debug: bool = False) -> pd.Series:
 
 
 def mark_volume_surge(group, debug: bool = False) -> pd.Series:
-    """标记是否存在成交额≥前5天均值4倍的交易日"""
-    out = pd.Series(False, index=group.index)
+    """标记放量信号（向量化计算）
     
-    if len(group) < 6:
-        return out
+    判断当日成交额是否 >= 前5日均值 × VOLUME_SURGE_RATIO。
+    使用 rolling 窗口计算前5日均值，避免逐行循环。
     
-    group = group.sort_values('trade_date').reset_index(drop=True)
+    Args:
+        group: 单只股票的 DataFrame（按 ts_code 分组）
+        debug: 是否输出调试信息
     
-    for i in range(5, len(group)):
-        prev_5_avg = group.loc[i-5:i-1, 'amount'].mean()
-        curr_amount = group.loc[i, 'amount']
-        is_surge = curr_amount >= (prev_5_avg * 3)
-        out.iloc[i] = is_surge
-    
-    return out
+    Returns:
+        布尔 Series，True 表示该日为放量日
+    """
+    if len(group) < 6:  # 至少需要6天数据（5天窗口+1天当前）
+        return pd.Series(False, index=group.index)
+    group = group.sort_values('trade_date')
+    # 计算前5日成交额均值（shift(1)确保不包含当日）
+    rolling_avg = group['amount'].rolling(window=5, min_periods=5).mean().shift(1)
+    out = group['amount'] >= (rolling_avg * ST.VOLUME_SURGE_RATIO)
+    return out.fillna(False)
 
 
 def mark_abnormal_movement(group, debug: bool = False, max_life: int = 60) -> pd.Series:
-    """标记异动 - 基于上穿60日线判断收集区"""
+    """标记异动信号（三种类型）
+    
+    基于上穿60日线判断收集区，识别三种异动类型：
+    
+    类型1 - 收集区异动：上穿60日线后，在收集区（收盘价 <= MA60 × COLLECT_MA60_TOLERANCE）内
+        出现放量（成交额 > MA5 × COLLECT_VOL_MULTIPLIER）且涨幅达标（主板>=3.8%，其他>=7%）
+    
+    类型2 - 堆量建仓：在收集区内出现 >= 2 次放量上涨
+        （成交额 > MA5 × VOLUME_MULTIPLIER，涨幅阈值主板>=2.5%，其他>=5%）
+    
+    类型3 - 突破放量：上穿60日线当日放量突破
+        （成交额 > MA5 × BREAKTHROUGH_VOL_MULTIPLIER，涨幅>=3%）
+    
+    Args:
+        group: 单只股票的 DataFrame（按 ts_code 分组）
+        debug: 是否输出调试信息
+        max_life: 收集区最长存活天数（默认60天）
+    
+    Returns:
+        布尔 Series，True 表示该日为异动日
+    """
     out = pd.Series(False, index=group.index)
     
     if len(group) < 20:
@@ -341,12 +482,13 @@ def mark_abnormal_movement(group, debug: bool = False, max_life: int = 60) -> pd
     
     group = group.sort_values('trade_date')
     group['trade_date'] = pd.to_datetime(group['trade_date'], format='%Y%m%d')
-    group['amount_ma5'] = group['amount'].rolling(5).mean()
+    group['amount_ma5'] = group['amount'].rolling(5).mean()  # 5日成交额均值
     
     ts_code = group['ts_code'].iloc[0]
-    pct_threshold = 3.8 if ts_code.startswith(('00', '60')) else 7.0
+    # 根据板块确定收集区涨幅阈值
+    pct_threshold = ST.COLLECT_PCT_00_60 if _is_main_board(ts_code) else ST.COLLECT_PCT_OTHER
     
-    # 类型1：收集区异动
+    # 找到上穿60日线的交易日
     up_crosses = group[
         (group['close_qfq'] >= group['ma_qfq_60']) &
         (group['close_qfq'].shift(1) < group['ma_qfq_60'].shift(1))
@@ -356,6 +498,7 @@ def mark_abnormal_movement(group, debug: bool = False, max_life: int = 60) -> pd
         latest_up = up_crosses.index.max()
         up_date = group.loc[latest_up, 'trade_date']
         
+        # 确定收集区结束日期：下次跌破60日线，或超过max_life天
         after_up = group.loc[latest_up:]
         pullback_mask = after_up[after_up['close_qfq'] < after_up['ma_qfq_60']].index
         
@@ -364,20 +507,21 @@ def mark_abnormal_movement(group, debug: bool = False, max_life: int = 60) -> pd
         else:
             life_end = group.loc[pullback_mask[0], 'trade_date']
         
+        # 类型1：收集区异动 - 在收集区内放量且涨幅达标
         collect_mask = (
             (group['trade_date'] >= up_date) &
             (group['trade_date'] <= life_end) &
-            (group['close_qfq'] <= group['ma_qfq_60'] * 1.15)
+            (group['close_qfq'] <= group['ma_qfq_60'] * ST.COLLECT_MA60_TOLERANCE)
         )
         
         cond1 = (
             collect_mask &
-            (group['amount'] > group['amount_ma5'] * 2.4) &
+            (group['amount'] > group['amount_ma5'] * ST.COLLECT_VOL_MULTIPLIER) &
             (group['pct_chg'] >= pct_threshold)
         )
         out |= cond1
     
-    # 类型2：堆量建仓 ≥ 2次
+    # 类型2：堆量建仓 - 收集区内出现 >= 2 次放量上涨
     if not up_crosses.empty:
         latest2_up = up_crosses.index.max()
         up2_date = group.loc[latest2_up, 'trade_date']
@@ -386,80 +530,83 @@ def mark_abnormal_movement(group, debug: bool = False, max_life: int = 60) -> pd
         sub2_df = group[
             (group['trade_date'] >= up2_date) &
             (group['trade_date'] <= life2_end) &
-            (group['close_qfq'] <= group['ma_qfq_60'] * 1.15)
+            (group['close_qfq'] <= group['ma_qfq_60'] * ST.COLLECT_MA60_TOLERANCE)
         ].copy()
         
-        vol_mul_threshold = 1.9
-        pct_threshold2 = 2.5 if ts_code.startswith(('00', '60')) else 5.0
+        # 堆量建仓涨幅阈值（主板/其他不同）
+        pct_threshold2 = ST.PILE_PCT_00_60 if _is_main_board(ts_code) else ST.PILE_PCT_OTHER
         
         day_hit2 = (
-            (sub2_df['amount'] > sub2_df['amount_ma5'] * vol_mul_threshold) &
+            (sub2_df['amount'] > sub2_df['amount_ma5'] * ST.VOLUME_MULTIPLIER) &
             (sub2_df['pct_chg'] >= pct_threshold2)
         )
         
         if day_hit2.sum() >= 2:
             out.loc[sub2_df.index] = True
     
-    # 类型3：突破放量
+    # 类型3：突破放量 - 上穿60日线当日放量突破
     break_through = (
         (group['close_qfq'] >= group['ma_qfq_60']) &
         (group['close_qfq'].shift(1) < group['ma_qfq_60'].shift(1)) &
-        (group['amount'] > group['amount_ma5'] * 2.0) &
-        (group['pct_chg'] >= 3)
+        (group['amount'] > group['amount_ma5'] * ST.BREAKTHROUGH_VOL_MULTIPLIER) &
+        (group['pct_chg'] >= ST.BREAKTHROUGH_PCT)
     )
     out |= break_through
     
     return out
 
 
-def mark_bottom_violent_k(group, volume_multiplier: float = 2.0, debug: bool = False) -> pd.Series:
-    """
-    标记底部暴力K线
+def mark_bottom_violent_k(group, debug: bool = False) -> pd.Series:
+    """标记底部暴力K线信号
     
-    条件：
-    1. 相对底部：收盘价接近60日线
-       - 主板（60/00开头）：±10%
-       - 创业板/科创板（30/68开头）：±20%
-    2. 放量：成交额 >= 前一日 × 2.0
-    3. 长阳：实体涨幅根据股票类型不同
-       - 主板（10%涨停）：>= 3%
-       - 创业板/科创板（20%涨停）：>= 6%
+    底部暴力K线表示在相对底部位置出现的放量长阳线，暗示主力资金介入。
+    需同时满足三个条件：
+    1. 放量：当日成交额 >= 前一日 × BOTTOM_VK_VOL_MULTIPLIER
+    2. 长阳：实体涨幅 = (收盘-开盘)/开盘 >= 阈值
+       - 主板（10%涨停板）：>= BOTTOM_VK_BODY_PCT_00_60 (3%)
+       - 创业板/科创板（20%涨停板）：>= BOTTOM_VK_BODY_PCT_OTHER (6%)
+    3. 接近60日线：|收盘价/MA60 - 1| <= 阈值
+       - 主板：<= BOTTOM_VK_MA60_TOL_00_60 (10%)
+       - 创业板/科创板：<= BOTTOM_VK_MA60_TOL_OTHER (20%)
+    
+    Args:
+        group: 单只股票的 DataFrame（按 ts_code 分组）
+        debug: 是否输出调试信息
+    
+    Returns:
+        布尔 Series，True 表示该日为底部暴力K线
     """
     out = pd.Series(False, index=group.index)
     
-    if len(group) < 10:  # 至少10天数据
+    if len(group) < 10:  # 至少需要10天数据确保MA60有效
         return out
     
     group = group.sort_values('trade_date')
     ts_code = group['ts_code'].iloc[0]
     
-    # 判断股票类型确定阈值
-    if ts_code.startswith(('30', '68')):  # 创业板/科创板 20%涨停
-        min_body_pct = 0.06
-        ma60_tolerance = 0.20  # ±20%
-    else:  # 主板 10%涨停
-        min_body_pct = 0.03
-        ma60_tolerance = 0.10  # ±10%
+    # 根据板块确定阈值
+    is_main = _is_main_board(ts_code)
+    min_body_pct = ST.BOTTOM_VK_BODY_PCT_00_60 if is_main else ST.BOTTOM_VK_BODY_PCT_OTHER
+    ma60_tolerance = ST.BOTTOM_VK_MA60_TOL_00_60 if is_main else ST.BOTTOM_VK_MA60_TOL_OTHER
     
-    # 计算前一日成交额
+    # 前一日成交额
     group['amount_prev'] = group['amount'].shift(1)
     
-    # 条件1: 放量（成交额>=前一日2倍）
-    volume_surge = group['amount'] >= (group['amount_prev'] * volume_multiplier)
+    # 条件1：放量
+    volume_surge = group['amount'] >= (group['amount_prev'] * ST.BOTTOM_VK_VOL_MULTIPLIER)
     
-    # 条件2: 长阳（实体涨幅 = (收盘价-开盘价)/开盘价）
+    # 条件2：长阳（实体涨幅 = (收盘价-开盘价)/开盘价）
     body_pct = (group['close_qfq'] - group['open_qfq']) / group['open_qfq']
     is_long_yang = body_pct >= min_body_pct
     
-    # 条件3: 接近60日线（根据板块不同阈值不同）
+    # 条件3：接近60日线（相对底部位置）
     near_ma60 = abs(group['close_qfq'] / group['ma_qfq_60'] - 1) <= ma60_tolerance
     
-    # 综合条件（已移除价格位置条件）
     out = volume_surge & is_long_yang & near_ma60
     
     if debug and out.any():
         violent_days = group[out]
-        board_type = "20%" if ts_code.startswith(('30', '68')) else "10%"
+        board_type = "20%" if not is_main else "10%"
         tol_pct = ma60_tolerance * 100
         print(f"\n[底部暴力K] {ts_code} ({board_type}板, ±{tol_pct:.0f}%) 发现 {len(violent_days)} 个信号:")
         for idx, row in violent_days.iterrows():
@@ -473,30 +620,32 @@ def mark_bottom_violent_k(group, volume_multiplier: float = 2.0, debug: bool = F
 
 
 def mark_distribution_signal(group, debug: bool = False) -> pd.Series:
-    """
-    标记主力出货信号 - 周期最高点放天量大阴线
+    """标记主力出货信号V1 - 周期最高点放天量大阴线
     
-    条件：
-    1. 当日最高价 = 回测周期内最高价
-    2. 天量：当日成交额 >= 前一日 × 2倍
-    3. 大阴线：
-       - 开盘价 > 收盘价
-       - 实体跌幅 = (开盘价 - 收盘价) / 开盘价
-       - 主板 >= 3%，创业板/科创板 >= 6%
+    当日同时满足以下三个条件时标记为出货信号：
+    1. 当日最高价 = 回测周期内最高价（创周期新高）
+    2. 天量：当日成交额 >= 前一日 × DISTRIBUTION_VOL_MULTIPLIER
+    3. 大阴线：开盘价 > 收盘价，且实体跌幅 >= 阈值
+       - 主板 >= DISTRIBUTION_YIN_PCT_00_60 (3%)
+       - 创业板/科创板 >= DISTRIBUTION_YIN_PCT_OTHER (6%)
+    
+    Args:
+        group: 单只股票的 DataFrame（按 ts_code 分组）
+        debug: 是否输出调试信息
+    
+    Returns:
+        布尔 Series，True 表示该日为主力出货信号
     """
     out = pd.Series(False, index=group.index)
     
-    if len(group) < 2:
+    if len(group) < 2:  # 至少需要2天数据（当日+前日）
         return out
     
     group = group.sort_values('trade_date')
     ts_code = group['ts_code'].iloc[0]
     
-    # 判断股票类型确定阴线阈值
-    if ts_code.startswith(('30', '68')):  # 创业板/科创板 20%涨停
-        min_yin_pct = 0.06  # 6%
-    else:  # 主板 10%涨停
-        min_yin_pct = 0.03  # 3%
+    # 根据板块确定大阴线阈值
+    min_yin_pct = ST.DISTRIBUTION_YIN_PCT_00_60 if _is_main_board(ts_code) else ST.DISTRIBUTION_YIN_PCT_OTHER
     
     # 条件1: 当日最高价为周期内最高价
     period_high = group['high_qfq'].max()
@@ -504,7 +653,7 @@ def mark_distribution_signal(group, debug: bool = False) -> pd.Series:
     
     # 条件2: 天量 - 当日成交额 >= 前一日 × 2倍
     group['amount_prev'] = group['amount'].shift(1)
-    is_volume_surge = group['amount'] >= (group['amount_prev'] * 2)
+    is_volume_surge = group['amount'] >= (group['amount_prev'] * ST.DISTRIBUTION_VOL_MULTIPLIER)
     
     # 条件3: 大阴线
     # 实体跌幅 = (开盘价 - 收盘价) / 开盘价
@@ -516,7 +665,7 @@ def mark_distribution_signal(group, debug: bool = False) -> pd.Series:
     
     if debug and out.any():
         signal_days = group[out]
-        board_type = "20%" if ts_code.startswith(('30', '68')) else "10%"
+        board_type = "20%" if not _is_main_board(ts_code) else "10%"
         print(f"\n[主力出货信号] {ts_code} ({board_type}板) 发现 {len(signal_days)} 个信号:")
         for idx, row in signal_days.iterrows():
             yin = (row['open_qfq'] - row['close_qfq']) / row['open_qfq'] * 100
@@ -527,33 +676,36 @@ def mark_distribution_signal(group, debug: bool = False) -> pd.Series:
 
 
 def mark_distribution_signal_v2(group, debug: bool = False) -> pd.Series:
-    """
-    标记主力出货信号V2 - 周期最高点后放量下跌
+    """标记主力出货信号V2 - 周期最高点后放量下跌
     
-    条件：
+    在周期最高点出现后，检查后续两天是否出现放量下跌：
     1. 当日最高价 = 回测周期内最高价
-    2. 后两天成交额均值 > 最高价当天成交额
+    2. 后两天成交额均值 > 最高价当天成交额（放量）
     3. 后两天累计跌幅 >= 阈值
-       - 主板 >= 8%
-       - 创业板/科创板 >= 12%
+       - 主板 >= DISTRIBUTION_V2_DROP_00_60 (8%)
+       - 创业板/科创板 >= DISTRIBUTION_V2_DROP_OTHER (12%)
     
     注意：需要至少2天的后续数据才能判断
+    
+    Args:
+        group: 单只股票的 DataFrame（按 ts_code 分组）
+        debug: 是否输出调试信息
+    
+    Returns:
+        布尔 Series，True 表示该日为主力出货信号V2
     """
     out = pd.Series(False, index=group.index)
     
-    if len(group) < 3:  # 至少需要3天数据
+    if len(group) < 3:  # 至少需要3天数据（最高点+后2天）
         return out
     
-    # 保存原始索引
+    # 保存原始索引，因为后续会 reset_index
     original_index = group.index
     group = group.sort_values('trade_date').reset_index(drop=True)
     ts_code = group['ts_code'].iloc[0]
     
-    # 判断股票类型确定跌幅阈值
-    if ts_code.startswith(('30', '68')):  # 创业板/科创板
-        drop_threshold = 0.12  # 12%
-    else:  # 主板
-        drop_threshold = 0.08  # 8%
+    # 根据板块确定跌幅阈值
+    drop_threshold = ST.DISTRIBUTION_V2_DROP_00_60 if _is_main_board(ts_code) else ST.DISTRIBUTION_V2_DROP_OTHER
     
     # 找到周期最高点
     period_high = group['high_qfq'].max()
@@ -596,31 +748,33 @@ def mark_distribution_signal_v2(group, debug: bool = False) -> pd.Series:
 
 
 def mark_distribution_signal_v3(group, debug: bool = False) -> pd.Series:
-    """
-    标记主力出货信号V3 - 周期最高点后出现放量长阴（出现2次及以上）
+    """标记主力出货信号V3 - 周期最高点后出现多次放量长阴
     
-    条件：
-    1. 当日最高价 = 回测周期内最高价
-    2. 最高点出现后，后续出现2次及以上放量长阴：
-       - 成交额 > 前一天成交额
-       - 长阴线：开盘价 > 收盘价
-       - 实体跌幅：主板 >= 3%，创业板/科创板 >= 6%
+    在周期最高点出现后，检查后续是否出现 >= DISTRIBUTION_V3_MIN_YIN_COUNT 次放量长阴：
+    - 放量：当日成交额 > 前一日成交额
+    - 长阴线：开盘价 > 收盘价，实体跌幅 >= 阈值
+      - 主板 >= DISTRIBUTION_YIN_PCT_00_60 (3%)
+      - 创业板/科创板 >= DISTRIBUTION_YIN_PCT_OTHER (6%)
     
-    最高点后出现2次及以上符合条件的放量长阴，才标记该最高点日为出货信号
+    只有出现足够次数的放量长阴，才标记该最高点日为出货信号。
+    
+    Args:
+        group: 单只股票的 DataFrame（按 ts_code 分组）
+        debug: 是否输出调试信息
+    
+    Returns:
+        布尔 Series，True 表示该日为主力出货信号V3
     """
     out = pd.Series(False, index=group.index)
     
-    if len(group) < 2:
+    if len(group) < 2:  # 至少需要2天数据
         return out
     
     original_index = group.index
     group = group.sort_values('trade_date').reset_index(drop=True)
     ts_code = group['ts_code'].iloc[0]
     
-    if ts_code.startswith(('30', '68')):
-        min_yin_pct = 0.06
-    else:
-        min_yin_pct = 0.03
+    min_yin_pct = ST.DISTRIBUTION_YIN_PCT_00_60 if _is_main_board(ts_code) else ST.DISTRIBUTION_YIN_PCT_OTHER
     
     period_high = group['high_qfq'].max()
     high_days = group[group['high_qfq'] == period_high]
@@ -659,12 +813,12 @@ def mark_distribution_signal_v3(group, debug: bool = False) -> pd.Series:
                     'vol_ratio': curr_amount / prev_amount if prev_amount > 0 else 0
                 })
         
-        if violent_yin_count >= 2:
+        if violent_yin_count >= ST.DISTRIBUTION_V3_MIN_YIN_COUNT:
             original_idx = original_index[idx]
             out.loc[original_idx] = True
             
             if debug:
-                board_type = "20%" if ts_code.startswith(('30', '68')) else "10%"
+                board_type = "20%" if not _is_main_board(ts_code) else "10%"
                 print(f"\n[主力出货信号V3] {ts_code} ({board_type}板)")
                 print(f"  最高点日期: {group.loc[idx, 'trade_date']}")
                 print(f"  放量长阴次数: {violent_yin_count}")
@@ -677,9 +831,20 @@ def mark_distribution_signal_v3(group, debug: bool = False) -> pd.Series:
 # ========== 回测函数 ==========
 
 def get_next_trade_date(current_date: str, data_manager) -> Optional[str]:
-    """获取下一个交易日"""
+    """获取指定日期之后的下一个交易日
+    
+    先跳过周末，再从 DataManager 获取交易日历确认。
+    
+    Args:
+        current_date: 当前日期，格式 YYYYMMDD
+        data_manager: DataManager 实例
+    
+    Returns:
+        下一个交易日字符串（YYYYMMDD），获取失败返回 None
+    """
     current_dt = pd.to_datetime(current_date, format='%Y%m%d')
     
+    # 先跳过周末
     days_to_add = 1
     while (current_dt + pd.Timedelta(days=days_to_add)).weekday() in [5, 6]:
         days_to_add += 1
@@ -697,7 +862,21 @@ def get_next_trade_date(current_date: str, data_manager) -> Optional[str]:
 
 def backtest_selected_stocks(selected_stocks, buy_date: str, data_manager, 
                              hold_days: int = 3, detailed: bool = False) -> pd.DataFrame:
-    """回测选中的股票"""
+    """回测选中的股票
+    
+    在买入日以开盘价买入，持有指定天数后以收盘价卖出，
+    统计最高涨幅和收盘涨幅。
+    
+    Args:
+        selected_stocks: 选中的股票代码列表
+        buy_date: 买入日期，格式 YYYYMMDD
+        data_manager: DataManager 实例
+        hold_days: 持有天数，默认3天
+        detailed: 是否打印逐日持仓数据
+    
+    Returns:
+        回测结果 DataFrame，含 buy_price, max_price, final_price, max_gain_pct, final_gain_pct 等
+    """
     if not selected_stocks or not buy_date:
         logging.warning("回测参数无效，跳过回测")
         return pd.DataFrame()
@@ -707,6 +886,7 @@ def backtest_selected_stocks(selected_stocks, buy_date: str, data_manager,
     print(f"待回测股票数量：{len(selected_stocks)}只")
     print(f"{'='*70}")
     
+    # 获取持有期间的交易日
     hold_end_date = pd.to_datetime(buy_date, format='%Y%m%d') + pd.Timedelta(days=hold_days+5)
     trade_dates = data_manager.get_trade_dates(buy_date, hold_end_date.strftime('%Y%m%d'))
     
@@ -730,6 +910,7 @@ def backtest_selected_stocks(selected_stocks, buy_date: str, data_manager,
         if stock_data.empty:
             continue
         
+        # 以买入日开盘价作为买入价
         buy_row = stock_data[stock_data['trade_date'] == buy_date]
         if buy_row.empty:
             continue
@@ -738,10 +919,12 @@ def backtest_selected_stocks(selected_stocks, buy_date: str, data_manager,
         if pd.isna(buy_price) or buy_price <= 0:
             continue
         
+        # 持有期间数据（含买入日）
         hold_data = stock_data.head(hold_days + 1).copy()
         if len(hold_data) < 2:
             continue
         
+        # 计算最高涨幅和收盘涨幅
         max_price = hold_data['high_qfq'].max()
         final_price = hold_data['close_qfq'].iloc[-1]
         
@@ -763,7 +946,13 @@ def backtest_selected_stocks(selected_stocks, buy_date: str, data_manager,
 
 
 def print_backtest_stats(backtest_df):
-    """打印回测统计结果"""
+    """打印回测统计结果
+    
+    输出最高涨幅和收盘涨幅的平均值、中位数、极值和胜率。
+    
+    Args:
+        backtest_df: backtest_selected_stocks 返回的回测结果 DataFrame
+    """
     if backtest_df.empty:
         print("\n❌ 无有效回测数据")
         return
@@ -792,7 +981,19 @@ def print_backtest_stats(backtest_df):
 # ========== 数据准备函数 ==========
 
 def prepare_trade_dates(args, data_manager) -> Tuple[str, str, int, list]:
-    """准备交易日期范围"""
+    """准备交易日期范围
+    
+    根据命令行参数确定回测的日期范围。需要额外向前扩展 ma_max_period + 60 天，
+    以确保均线等指标有足够的历史数据来计算。
+    
+    Args:
+        args: 命令行参数（含 date, days）
+        data_manager: DataManager 实例
+    
+    Returns:
+        (start_date, end_date, actual_days, trade_dates_range):
+            回测起始日期、结束日期、实际交易日数、完整交易日列表
+    """
     if args.date:
         end_date = args.date
         today = datetime.strptime(end_date, "%Y%m%d")
@@ -800,6 +1001,7 @@ def prepare_trade_dates(args, data_manager) -> Tuple[str, str, int, list]:
         end_date = get_nearest_trade_date(data_manager)
         today = datetime.strptime(end_date, "%Y%m%d")
     
+    # MA最大周期114天，额外加60天缓冲确保指标计算完整
     ma_max_period = 114
     lookback_buffer = args.days + ma_max_period + 60
     lookback_start_dt = today - timedelta(days=lookback_buffer)
@@ -823,7 +1025,28 @@ def prepare_trade_dates(args, data_manager) -> Tuple[str, str, int, list]:
 
 
 def fetch_and_prepare_data(data_manager, trade_dates):
-    """获取并准备股票数据"""
+    """获取并准备股票数据，计算所有辅助字段
+    
+    从 DataManager 获取股票因子数据，然后计算策略所需的辅助字段：
+    - prev_close / prev_ma60 / prev_high：前一日数据（用于判断上穿、跳空等）
+    - cross：当日上穿60日线标志
+    - amount_yest / amount_2days_ago：前1日/前2日成交额（用于缩量判断）
+    - shrink：缩量标志（成交额低于前1日或前2日）
+    - gap_up：跳空高开标志（当日最低价 > 前一日最高价）
+    - candle_pattern / candle_rank：K线形态及优先级
+    - amplitude / is_amplitude_ok：振幅及振幅是否达标
+    - zhixing_mid_duokong：知行中期多空线（EMA10的EMA10）
+    - ema_qfq_13：13日EMA
+    - ma_qfq_14/28/57/114：各周期均线（用于知行多空线计算）
+    - zhixing_duokong：知行多空线（4条均线的均值）
+    
+    Args:
+        data_manager: DataManager 实例
+        trade_dates: 交易日列表
+    
+    Returns:
+        处理后的 DataFrame，包含所有辅助字段
+    """
     df = data_manager.get_stock_factors(trade_dates, STOCK_FACTOR_FIELDS)
     
     if df.empty:
@@ -832,41 +1055,52 @@ def fetch_and_prepare_data(data_manager, trade_dates):
     
     df = df.sort_values(['ts_code', 'trade_date'])
     
-    # 计算辅助字段
+    # 计算辅助字段：前一日数据（按股票分组shift）
     df['prev_close'] = df.groupby('ts_code')['close_qfq'].shift(1)
     df['prev_ma60'] = df.groupby('ts_code')['ma_qfq_60'].shift(1)
     df['prev_high'] = df.groupby('ts_code')['high_qfq'].shift(1)
     
+    # 上穿60日线标志：当日收盘>=MA60 且 前一日收盘<前一日MA60
     df['cross'] = (df['close_qfq'] >= df['ma_qfq_60']) & (df['prev_close'] < df['prev_ma60'])
+    
+    # 缩量判断相关字段
     df['amount_yest'] = df.groupby('ts_code')['amount'].shift(1)
     df['amount_2days_ago'] = df.groupby('ts_code')['amount'].shift(2)
+    # 缩量：成交额低于前1日或前2日
     df['shrink'] = (df['amount'] < df['amount_yest']) | (df['amount'] < df['amount_2days_ago'])
+    
+    # 跳空高开：当日最低价 > 前一日最高价
     df['gap_up'] = df['low_qfq'] > df['prev_high']
     
     # K线形态
     df['candle_pattern'], df['candle_rank'] = identify_candle_pattern(df)
     df['is_acceptable_candle'] = df['candle_pattern'] != 'other'
     
-    # 振幅
+    # 振幅 = (最高价-最低价)/前收盘 × 100，按板块设置不同阈值
     df['amplitude'] = (df['high_qfq'] - df['low_qfq']) / df['prev_close'] * 100
+    is_main = df['ts_code'].str.startswith(('60', '00'))  # 向量化板块判断
     df['is_amplitude_ok'] = (
-        (df['ts_code'].str.startswith(('60', '00')) & df['amplitude'].lt(4)) |
-        (~df['ts_code'].str.startswith(('60', '00')) & df['amplitude'].lt(7))
+        (is_main & df['amplitude'].lt(ST.AMPLITUDE_00_60)) |
+        (~is_main & df['amplitude'].lt(ST.AMPLITUDE_OTHER))
     )
     
+    # 知行中期多空线：EMA10的EMA10（短期趋势方向）
     df['zhixing_mid_duokong'] = df.groupby('ts_code')['ema_qfq_10'].transform(
         lambda x: x.ewm(span=10, adjust=False).mean()
     )
     
+    # 13日EMA（用于J13策略中的趋势辅助判断）
     df['ema_qfq_13'] = df.groupby('ts_code')['close_qfq'].transform(
         lambda x: x.ewm(span=13, adjust=False).mean()
     )
     
+    # 计算知行多空线所需的各周期均线
     for period in [14, 28, 57, 114]:
         df[f'ma_qfq_{period}'] = df.groupby('ts_code')['close_qfq'].transform(
             lambda x: x.rolling(window=period, min_periods=period).mean()
         )
     
+    # 知行多空线 = (MA14 + MA28 + MA57 + MA114) / 4
     df['zhixing_duokong'] = (
         df['ma_qfq_14'] + df['ma_qfq_28'] + df['ma_qfq_57'] + df['ma_qfq_114']
     ) / 4
@@ -875,7 +1109,23 @@ def fetch_and_prepare_data(data_manager, trade_dates):
 
 
 def apply_strategy_marks(df):
-    """应用策略标记"""
+    """应用所有策略标记（并行计算）
+    
+    按股票代码分组，使用全局线程池并行计算以下策略标记：
+    - first_j13_step：阶梯放量+J13低吸信号
+    - volume_surge / volume_surge_any：放量信号
+    - abnormal_movement / has_am_in_period：异动信号
+    - bottom_violent_k / has_bottom_violent_k：底部暴力K信号
+    - distribution_signal / has_distribution_signal：出货信号V1
+    - distribution_signal_v2 / has_distribution_signal_v2：出货信号V2
+    - distribution_signal_v3 / has_distribution_signal_v3：出货信号V3
+    
+    Args:
+        df: 含辅助字段的股票数据 DataFrame
+    
+    Returns:
+        添加了策略标记列的 DataFrame
+    """
     grouped = df.groupby('ts_code')
     
     print("开始计算 first_j13_step...")
@@ -916,7 +1166,20 @@ def apply_strategy_marks(df):
 
 
 def calculate_trend_indicators(df):
-    """计算趋势指标"""
+    """计算MA60趋势指标
+    
+    通过比较MA60在3日、8日、13日前的值，判断MA60是否向上：
+    - 3日趋势 > 0 计1分
+    - 8日趋势 > 0 计1分
+    - 13日趋势 > 0 计1分
+    至少2分（即2个周期趋势向上）则判定MA60向上。
+    
+    Args:
+        df: 含 ma_qfq_60 列的 DataFrame
+    
+    Returns:
+        添加了 ma60_upward 列的 DataFrame
+    """
     df['ma60_3d_trend'] = df.groupby('ts_code')['ma_qfq_60'].transform(lambda x: (x - x.shift(3)) / 3)
     df['ma60_8d_trend'] = df.groupby('ts_code')['ma_qfq_60'].transform(lambda x: (x - x.shift(8)) / 8)
     df['ma60_13d_trend'] = df.groupby('ts_code')['ma_qfq_60'].transform(lambda x: (x - x.shift(13)) / 13)
@@ -1004,11 +1267,21 @@ def calculate_zhixing_brick_indicator(df):
 
 
 def calculate_amount_rank(df):
-    """计算每日成交额排名（前40%）"""
+    """计算每日成交额排名（前AMOUNT_TOP_PERCENT）
+    
+    对每个交易日，计算全市场成交额的分位数阈值，
+    标记成交额 >= 阈值的股票为成交额排名靠前。
+    
+    Args:
+        df: 含 amount 和 trade_date 列的 DataFrame
+    
+    Returns:
+        添加了 is_amount_top30 和 amount_threshold_40pct 列的 DataFrame
+    """
     print("\n正在计算每日成交额排名...")
     
-    # 计算每日成交额的分位数（40%阈值）
-    daily_amount_threshold = df.groupby('trade_date')['amount'].quantile(0.4)
+    # 计算每日成交额的分位数阈值
+    daily_amount_threshold = df.groupby('trade_date')['amount'].quantile(ST.AMOUNT_TOP_PERCENT)
     
     # 将阈值合并回主表
     df = df.merge(
@@ -1018,7 +1291,7 @@ def calculate_amount_rank(df):
         how='left'
     )
     
-    # 添加布尔标记：是否在前40%
+    # 标记成交额是否在阈值以上
     df['is_amount_top30'] = df['amount'] >= df['amount_threshold_40pct']
     
     print(f"成交额前40%标记完成，共 {df['is_amount_top30'].sum()} 条记录满足")
@@ -1027,14 +1300,41 @@ def calculate_amount_rank(df):
 
 
 def apply_final_filter(df, end_date, basic):
-    """应用最终筛选条件"""
-    # 剔除次新股
-    cutoff_date = pd.to_datetime(end_date) - pd.Timedelta(days=180)
+    """应用最终筛选条件，输出符合所有策略要求的股票
+    
+    筛选条件（全部为 AND 关系）：
+    1. first_j13_step = True（阶梯放量+J13低吸信号）
+    2. MACD DIF > 0（多头趋势）
+    3. 缩量（当日成交额低于前1日或前2日，回调缩量）
+    4. 无跳空高开
+    5. 收盘价 > MA60（价格在60日线上方）
+    6. MA60向上（趋势向上）
+    7. K线形态可接受（阳线/十字星/带下影阴线）
+    8. 振幅达标（主板<4%，创业板/科创板<7%）
+    9. 周期内有异动信号
+    10. 成交额排名靠前（前60%）
+    11. 周期内有底部暴力K信号
+    12. 无出货信号（V1/V2/V3均无）
+    13. 周期内曾放量
+    14. 知行中期多空线 > 知行多空线
+    15. 收盘价 >= 知行多空线
+    16. 非次新股（上市>=180天）
+    
+    Args:
+        df: 含所有策略标记的 DataFrame
+        end_date: 回测结束日期
+        basic: 股票基本信息 DataFrame（含 list_date）
+    
+    Returns:
+        筛选结果 DataFrame，按 KDJ J 值升序排列
+    """
+    # 剔除次新股（上市不足 MIN_STOCK_AGE_DAYS 天）
+    cutoff_date = pd.to_datetime(end_date) - pd.Timedelta(days=BT.MIN_STOCK_AGE_DAYS)
     basic['list_date'] = pd.to_datetime(basic['list_date'])
     non_new_stocks = basic[basic['list_date'] <= cutoff_date]['ts_code']
     df_filtered = df[df['ts_code'].isin(non_new_stocks)].copy()
     
-    # 最终筛选
+    # 最终筛选：所有条件取 AND
     cond = (
         df_filtered['first_j13_step'] &
         (df_filtered['macd_dif_qfq'] > 0) &
@@ -1175,7 +1475,15 @@ def run_dtw_pattern_matching(df, patterns, top_n: int = 10) -> pd.DataFrame:
 # ========== 可视化函数 ==========
 
 def generate_industry_visualization(df, daily_stats, end_date):
-    """生成行业可视化图表"""
+    """生成行业可视化图表（成交额趋势）
+    
+    生成 Top N 行业的总成交额趋势图，保存为 HTML 文件。
+    
+    Args:
+        df: 股票数据 DataFrame
+        daily_stats: calculate_daily_stats 返回的每日统计列表
+        end_date: 回测结束日期
+    """
     trend_data = []
     for daily in daily_stats:
         for industry_data in daily['industries']:
@@ -1219,7 +1527,14 @@ def generate_industry_visualization(df, daily_stats, end_date):
 
 
 def generate_j13_trend(df, end_date):
-    """生成 first_j13_step 每日趋势图"""
+    """生成 first_j13_step 每日出现数量趋势图
+    
+    统计每日 KDJ J<13 的股票数量，绘制趋势线并标注平均值和峰值。
+    
+    Args:
+        df: 股票数据 DataFrame
+        end_date: 回测结束日期
+    """
     daily_first_j13_counts = df[df['kdj_qfq'] < 13].groupby('trade_date').size().reset_index(name='count')
     daily_first_j13_counts['trade_date'] = pd.to_datetime(
         daily_first_j13_counts['trade_date'].astype(str), format='%Y%m%d'
@@ -1373,11 +1688,14 @@ def run_sentiment_rebound_strategy(df, end_date, data_manager):
 # ========== 结果输出函数 ==========
 
 def print_results(result, df, end_date, df_chart=None):
-    """打印筛选结果并生成交互式HTML
+    """打印筛选结果并生成交互式HTML报告
+    
+    按行业分组展示筛选结果，包含代码、名称、收盘价、60日线、
+    J值、MACD-DIF、成交额等关键指标，同时生成交互式HTML报告。
     
     Args:
-        result: 筛选结果
-        df: 回测区间数据（用于表格显示）
+        result: apply_final_filter 返回的筛选结果 DataFrame
+        df: 回测区间数据（用于表格显示和统计）
         end_date: 结束日期
         df_chart: 完整历史数据（用于图表显示），如果为None则使用df
     """
@@ -1444,7 +1762,20 @@ def print_results(result, df, end_date, df_chart=None):
 
 
 def print_stage_statistics(df, result, args):
-    """打印各阶段统计"""
+    """打印各阶段股票计数统计
+    
+    展示从全市场到最终筛选的漏斗式统计，包括：
+    - 全市场股票数
+    - 上穿60日线股票数
+    - 出现阶梯放量的股票数
+    - 最终满足条件的股票数
+    - 底部暴力K / 出货信号等策略标记统计
+    
+    Args:
+        df: 含策略标记的 DataFrame
+        result: 最终筛选结果 DataFrame
+        args: 命令行参数
+    """
     print('\n========== 各阶段股票计数 ==========')
     total = df['ts_code'].nunique()
     print(f'0) 全市场（{args.days} 天内）: {total:>5} 只')
@@ -1476,7 +1807,19 @@ def print_stage_statistics(df, result, args):
 
 
 def calculate_daily_stats(df, basic_info, recent_days: int = 30) -> list:
-    """计算每日行业统计"""
+    """计算每日行业统计
+    
+    对每日出现 first_j13_step 且 J<13 的股票，按行业统计数量、
+    活跃度（占当日总数比例）、渗透率（占行业总数比例）和总成交额。
+    
+    Args:
+        df: 含策略标记的 DataFrame
+        basic_info: 股票基本信息（含 industry_name）
+        recent_days: 统计最近多少个交易日，默认30天
+    
+    Returns:
+        每日统计列表，每项含 date, total, industries
+    """
     filtered_df = df[df['first_j13_step'].fillna(False) & (df['kdj_qfq'] < 13)]
     recent_dates = sorted(filtered_df['trade_date'].unique())[-recent_days:]
     
@@ -1506,7 +1849,14 @@ def calculate_daily_stats(df, basic_info, recent_days: int = 30) -> list:
 
 
 def print_daily_stats(daily_stats, recent_count: int = 10):
-    """打印每日统计"""
+    """打印每日行业统计
+    
+    按日期展示各行业的股票数量、总成交额、活跃度和渗透率。
+    
+    Args:
+        daily_stats: calculate_daily_stats 返回的统计列表
+        recent_count: 显示最近多少个交易日，默认10天
+    """
     print('\n========== 按日分布统计 ==========')
     
     for daily in daily_stats[-recent_count:]:
@@ -1523,7 +1873,33 @@ def print_daily_stats(daily_stats, recent_count: int = 10):
 # ========== 调试函数 ==========
 
 def debug_stock_strategy_detailed(df, ts_code: str, end_date: str, basic: pd.DataFrame = None) -> bool:
-    """详细调试单只股票的策略条件（与主策略完全一致）"""
+    """详细调试单只股票的策略条件（与主策略完全一致）
+    
+    逐项检查11项策略条件，输出每项的通过/未通过状态和详细数值，
+    便于排查某只股票为何未被选中。
+    
+    检查项：
+    1. 基础技术指标（MACD>0, 收盘>MA60, MA60向上, 无跳空, 缩量）
+    2. K线形态
+    3. 振幅
+    4. 阶梯放量策略（first_j13_step）
+    5. 放量
+    6. 异动
+    7. 成交额排名
+    8. 底部暴力K
+    9. 派发信号（V1/V2/V3）
+    10. 知行多空线
+    11. 次新股
+    
+    Args:
+        df: 含所有策略标记的 DataFrame
+        ts_code: 股票代码
+        end_date: 回测结束日期
+        basic: 股票基本信息 DataFrame
+    
+    Returns:
+        True 表示该股票符合所有条件，False 表示不符合
+    """
     print(f'\n{"="*70}')
     print(f'📊 详细调试: {ts_code}')
     print(f'{"="*70}')
@@ -1593,10 +1969,10 @@ def debug_stock_strategy_detailed(df, ts_code: str, end_date: str, basic: pd.Dat
     
     amplitude = latest.get('amplitude', 0)
     is_amplitude_ok = latest.get('is_amplitude_ok', False)
-    is_main_board = ts_code.startswith(('60', '00'))
-    threshold = 4 if is_main_board else 7
+    is_mb = _is_main_board(ts_code)
+    threshold = ST.AMPLITUDE_00_60 if is_mb else ST.AMPLITUDE_OTHER
     
-    print(f"  股票类型: {'主板' if is_main_board else '其他'} ({'60/00' if is_main_board else '其他'}开头)")
+    print(f"  股票类型: {'主板' if is_mb else '其他'} ({'60/00' if is_mb else '其他'}开头)")
     print(f"  振幅阈值: < {threshold}%")
     print(f"  实际振幅: {amplitude:.2f}%")
     print(f"  {'✅ 通过' if is_amplitude_ok else '❌ 未通过'} | 振幅符合要求")
@@ -1673,16 +2049,16 @@ def debug_stock_strategy_detailed(df, ts_code: str, end_date: str, basic: pd.Dat
     has_bvk = latest.get('has_bottom_violent_k', False)
     bvk_count = dbg['bottom_violent_k'].sum() if 'bottom_violent_k' in dbg.columns else 0
     
-    # 根据板块确定阈值
-    is_cy_kc = ts_code.startswith(('30', '68'))
-    board_type = "20%" if is_cy_kc else "10%"
-    min_body_pct = 0.06 if is_cy_kc else 0.03
-    ma60_tol_pct = 12 if is_cy_kc else 6
+    is_mb2 = _is_main_board(ts_code)
+    board_type = "10%" if is_mb2 else "20%"
+    min_body_pct = ST.BOTTOM_VK_BODY_PCT_00_60 if is_mb2 else ST.BOTTOM_VK_BODY_PCT_OTHER
+    ma60_tol = ST.BOTTOM_VK_MA60_TOL_00_60 if is_mb2 else ST.BOTTOM_VK_MA60_TOL_OTHER
+    ma60_tol_pct = ma60_tol * 100
     
-    print(f"  股票板块: {'创业板/科创板' if is_cy_kc else '主板'} ({board_type}涨停)")
+    print(f"  股票板块: {'主板' if is_mb2 else '创业板/科创板'} ({board_type}涨停)")
     print(f"  长阳阈值: 实体涨幅 >= {min_body_pct*100:.0f}%")
-    print(f"  放量阈值: 成交额 >= 前日 × 2.0")
-    print(f"  60日线范围: 收盘价在60日线 ±{ma60_tol_pct}% 范围内")
+    print(f"  放量阈值: 成交额 >= 前日 × {ST.BOTTOM_VK_VOL_MULTIPLIER:.1f}")
+    print(f"  60日线范围: 收盘价在60日线 ±{ma60_tol_pct:.0f}% 范围内")
     print(f"  周期内底部暴力K次数: {bvk_count}")
     
     if bvk_count > 0:
@@ -1720,7 +2096,7 @@ def debug_stock_strategy_detailed(df, ts_code: str, end_date: str, basic: pd.Dat
             
             # 检查每个条件
             is_long_yang = body >= min_body_pct * 100
-            is_volume_surge = vol_ratio >= 2.0
+            is_volume_surge = vol_ratio >= ST.BOTTOM_VK_VOL_MULTIPLIER
             is_near_ma60 = abs(dist_ma60) <= ma60_tol_pct
             status = []
             if is_long_yang:
@@ -1850,27 +2226,48 @@ def debug_stock_strategy_detailed(df, ts_code: str, end_date: str, basic: pd.Dat
 # ========== 主程序 ==========
 
 def main():
-    """主函数"""
+    """主函数 - 执行完整的选股策略流程
+    
+    执行步骤：
+    1. 解析命令行参数
+    2. 准备交易日期范围
+    3. 获取并准备股票数据（含辅助字段计算）
+    4. 合并股票基本信息（名称、行业）
+    5. 应用策略标记（并行计算）
+    6. 计算趋势指标（MA60方向）
+    7. 计算知行砖形图指标
+    8. 计算成交额排名
+    9. 应用最终筛选条件
+    10. 打印筛选结果
+    11. 执行回测（如指定 --backtest）
+    12. 生成每日统计和可视化
+    13. 执行情绪反弹策略
+    14. 调试模式（如指定 --debug）
+    """
     args = parse_args()
     data_manager = DataManager()
     
     try:
+        # 步骤1-2：准备交易日期
         start_date, end_date, actual_days, trade_dates_range = prepare_trade_dates(args, data_manager)
         
+        # 步骤3：获取并准备股票数据
         df_full = fetch_and_prepare_data(data_manager, trade_dates_range)
         if df_full.empty:
             logging.error("未获取到数据，退出程序")
             return
         
-        # 保存完整数据供图表使用
+        # 保存完整数据供图表使用（含回测区间之前的历史数据）
         df_chart = df_full.copy()
         
-        # 筛选回测区间数据
+        # 仅保留回测区间内的数据用于策略计算
         df = df_full[df_full['trade_date'] >= start_date].copy()
         logging.info("数据筛选后: %d 条记录 (回测区间 %s ~ %s)", len(df), start_date, end_date)
         
+        # 步骤4：获取股票基本信息（名称、行业、上市日期）
         basic_info = data_manager.get_stock_basic_info()
         
+        # 补全基本信息缺失字段
         if 'name' not in basic_info.columns:
             basic_info['name'] = basic_info['ts_code']
         if 'industry_name' not in basic_info.columns:
@@ -1879,8 +2276,10 @@ def main():
         basic_info['industry_name'] = basic_info['industry_name'].fillna('未知行业')
         basic_info['name'] = basic_info['name'].fillna(basic_info['ts_code'])
         
+        # 过滤掉上市日期缺失的记录
         basic = basic_info[basic_info['list_date'].notna()].copy()
         
+        # 合并名称和行业信息到主数据
         df = df.merge(basic[['ts_code', 'name', 'industry_name']], on='ts_code', how='left')
         
         # 6. 应用策略标记
@@ -1895,14 +2294,14 @@ def main():
         # 9. 计算成交额排名
         df = calculate_amount_rank(df)
         
-        # 9. 应用最终筛选
+        # 步骤9：应用最终筛选条件
         result = apply_final_filter(df, end_date, basic)
         
-        # 10. 打印结果（传入完整数据df_chart用于图表显示）
+        # 步骤10：打印筛选结果和阶段统计
         print_results(result, df, end_date, df_chart)
         print_stage_statistics(df, result, args)
         
-        # 11. 回测
+        # 步骤11：回测（需指定 --backtest 参数）
         if args.backtest and not result.empty:
             buy_date = get_next_trade_date(end_date, data_manager)
             if buy_date:
@@ -1915,16 +2314,16 @@ def main():
                 )
                 print_backtest_stats(backtest_results)
         
-        # 12. 每日统计和可视化
+        # 步骤12：每日统计和可视化
         daily_stats = calculate_daily_stats(df, basic_info)
         print_daily_stats(daily_stats)
         generate_industry_visualization(df, daily_stats, end_date)
         generate_j13_trend(df, end_date)
         
-        # 13. 情绪反弹策略
+        # 步骤13：情绪反弹策略
         run_sentiment_rebound_strategy(df, end_date, data_manager)
         
-        # 14. DTW模式匹配
+        # 步骤14：DTW模式匹配（已注释，需 dtw_similarity 模块）
         print('\n========== 完美图形模式匹配分析 ==========')
         # patterns = load_perfect_patterns('data')
         # if patterns:
@@ -1933,7 +2332,7 @@ def main():
         #         print(f"找到 {len(dtw_results)} 个DTW匹配结果")
         #         dtw_results.to_csv(f'dtw_pattern_match_{end_date}.csv', index=False, encoding='utf-8-sig')
         
-        # 14. 调试模式
+        # 步骤15：调试模式（需指定 --debug 参数）
         if args.debug:
             for ts_code in [c.strip() for c in args.debug.split(',')]:
                 debug_stock_strategy_detailed(df, ts_code, end_date, basic)

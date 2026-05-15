@@ -57,6 +57,14 @@ class StrategyThresholds:
     COLLECT_PCT_00_60: float = 3.8   # 00/60开头股票
     COLLECT_PCT_OTHER: float = 7.0   # 其他股票
     
+    # 异动 - 收集区量能
+    COLLECT_MA60_TOLERANCE: float = 1.15  # 收集区价格上限 = MA60 × 此值
+    COLLECT_VOL_MULTIPLIER: float = 2.4   # 收集区量能倍数（量 > 5日均量 × 此值）
+    
+    # 异动 - 突破放量
+    BREAKTHROUGH_VOL_MULTIPLIER: float = 2.0  # 突破放量量能倍数
+    BREAKTHROUGH_PCT: float = 3.0             # 突破放量大涨阈值
+    
     # 异动 - 堆量判定阈值
     VOLUME_MULTIPLIER: float = 1.9   # 量 > 5日均量 × 此值
     PILE_PCT_00_60: float = 2.5      # 堆量日涨幅阈值
@@ -65,6 +73,10 @@ class StrategyThresholds:
     # 跳空缺口判定
     GAP_SIZE_RATIO: float = 0.025    # 2.5% 为大跳空
     MIN_GAP_SIZE_RATIO: float = 0.005 # 0.5% 进入宽松模式
+    GAP_IGNORE_VOL_RATE: float = 1.5     # 小跳空可忽略：量能放大倍数
+    GAP_IGNORE_PRICE_RATE: float = 1.15  # 小跳空可忽略：价格上涨倍数
+    GAP_LARGE_VOL_RATE: float = 3.0      # 大跳空回补：量能放大倍数
+    GAP_LARGE_PRICE_RATE: float = 1.15   # 大跳空回补：价格上涨倍数
     
     # 阶梯放量
     PRICE_VOLUME_CONSECUTIVE: int = 2  # 连续价随量升天数
@@ -91,6 +103,21 @@ class StrategyThresholds:
     
     # 成交额排名
     AMOUNT_TOP_PERCENT: float = 0.40  # 前40%
+    
+    # 底部暴力K
+    BOTTOM_VK_VOL_MULTIPLIER: float = 2.0   # 底部暴力K放量倍数
+    BOTTOM_VK_BODY_PCT_00_60: float = 0.03  # 主板实体涨幅阈值
+    BOTTOM_VK_BODY_PCT_OTHER: float = 0.06  # 创业板/科创板实体涨幅阈值
+    BOTTOM_VK_MA60_TOL_00_60: float = 0.10  # 主板MA60容忍度
+    BOTTOM_VK_MA60_TOL_OTHER: float = 0.20  # 创业板/科创板MA60容忍度
+    
+    # 出货信号
+    DISTRIBUTION_VOL_MULTIPLIER: float = 2.0  # 出货信号放量倍数
+    DISTRIBUTION_YIN_PCT_00_60: float = 0.03  # 主板大阴线阈值
+    DISTRIBUTION_YIN_PCT_OTHER: float = 0.06  # 创业板/科创板大阴线阈值
+    DISTRIBUTION_V2_DROP_00_60: float = 0.08  # V2主板跌幅阈值
+    DISTRIBUTION_V2_DROP_OTHER: float = 0.12  # V2创业板/科创板跌幅阈值
+    DISTRIBUTION_V3_MIN_YIN_COUNT: int = 2    # V3最少放量长阴次数
 
 # ======== 回测配置 ========
 @dataclass

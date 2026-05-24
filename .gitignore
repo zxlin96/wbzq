@@ -19,6 +19,7 @@ logs/
 !*.json
 *.pkl
 *.log
+!c154_result_*.csv
 
 # Python
 *.pyc

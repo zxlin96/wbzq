@@ -47,6 +47,7 @@ from main_par2 import (
     fetch_and_prepare_data,
     get_nearest_trade_date,
 )
+from generate_stock_html import generate_c154_html
 
 logging.basicConfig(level=logging.INFO, format="[%(asctime)s] %(levelname)s | %(message)s")
 
@@ -286,6 +287,20 @@ def main():
         print_c154_results(result, df, end_date)
         save_c154_result(result, end_date)
         print_c154_stage_statistics(df, result, args)
+
+        # 生成 HTML 报告
+        industry_count = result['industry_name'].value_counts().to_dict()
+        funnel_stats = {
+            '全市场': df['ts_code'].nunique(),
+            '阶梯放量+J13': int(df.groupby('ts_code')['first_j13_step'].max().astype(bool).sum()),
+            '不跌': int(df[df['first_j13_step'] & (df['pct_chg'].fillna(-100) >= 0)]['ts_code'].nunique()),
+            '无出货': int(df[df['first_j13_step'] & (df['pct_chg'].fillna(-100) >= 0) & ~df['has_distribution_signal'] & ~df['has_distribution_signal_v2'] & ~df['has_distribution_signal_v3']]['ts_code'].nunique()),
+            '底部暴力K': int(df[df['first_j13_step'] & (df['pct_chg'].fillna(-100) >= 0) & ~df['has_distribution_signal'] & ~df['has_distribution_signal_v2'] & ~df['has_distribution_signal_v3'] & df['has_bottom_violent_k']]['ts_code'].nunique()),
+            'J<5': int(df[df['first_j13_step'] & (df['pct_chg'].fillna(-100) >= 0) & ~df['has_distribution_signal'] & ~df['has_distribution_signal_v2'] & ~df['has_distribution_signal_v3'] & df['has_bottom_violent_k'] & (df['kdj_qfq'].fillna(100) < 5)]['ts_code'].nunique()),
+            '异动': int(df[df['first_j13_step'] & (df['pct_chg'].fillna(-100) >= 0) & ~df['has_distribution_signal'] & ~df['has_distribution_signal_v2'] & ~df['has_distribution_signal_v3'] & df['has_bottom_violent_k'] & (df['kdj_qfq'].fillna(100) < 5) & df['has_am_in_period']]['ts_code'].nunique()),
+            '最终': int(result['ts_code'].nunique()),
+        }
+        generate_c154_html(result, df, end_date, funnel_stats, industry_count)
 
         # 回测
         if args.backtest and not result.empty:

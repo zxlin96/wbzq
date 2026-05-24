@@ -65,6 +65,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description="选股条件消融实验回测")
     parser.add_argument("--days", type=int, default=250, help="回测交易日数，默认250")
     parser.add_argument("--hold-days", type=int, default=3, help="持有天数，默认3")
+    parser.add_argument("--skip-a", action="store_true", help="跳过Part A基准递增实验")
     parser.add_argument("--skip-b", action="store_true", help="跳过Part B完整消融实验")
     parser.add_argument("--skip-c", action="store_true", help="跳过Part C最优组合实验")
     parser.add_argument("--skip-d", action="store_true", help="跳过Part D多头/空头择时回测")
@@ -145,6 +146,12 @@ def build_condition_mask(df, condition_key: str, basic_ts_codes) -> pd.Series:
         return df["turnover_rate"].fillna(0) > 2
     elif condition_key == "zhixing_mid_up":
         return df["zhixing_mid_duokong"] > df["zhixing_duokong"]
+    elif condition_key.startswith("j<"):
+        try:
+            threshold = float(condition_key[2:])
+        except ValueError:
+            raise ValueError(f"Invalid J threshold in condition key: {condition_key}")
+        return df["kdj_qfq"].fillna(100) < threshold
     else:
         raise ValueError(f"Unknown condition key: {condition_key}")
 
@@ -640,14 +647,30 @@ def run_part_a(df, trade_dates_list, data_manager, hold_days, price_lookup=None,
         "j_ultra_low",
         "close>MA5",
         "zhixing_mid_up",
+        "j<-10",
+        "j<-5",
+        "j<0",
+        "j<3",
+        "j<8",
+        "j<10",
+        "j<15",
+        "j<20",
     ]
 
     key_short = {
         "close>MA20": ">MA20",
         "not_falling": "不跌",
-        "j_ultra_low": "J<5",
+        "j_ultra_low": "J<-5",
         "close>MA5": ">MA5",
         "zhixing_mid_up": "知行中>多空",
+        "j<-10": "J<-10",
+        "j<-5": "J<-5",
+        "j<0": "J<0",
+        "j<3": "J<3",
+        "j<8": "J<8",
+        "j<10": "J<10",
+        "j<15": "J<15",
+        "j<20": "J<20",
     }
 
     next_idx = len(other_keys) + 1
@@ -706,7 +729,7 @@ def run_part_c(df, trade_dates_list, data_manager, hold_days, price_lookup=None,
         "has_bvk",          # Top4: 底部暴力K，涨幅+0.08%
         "macd_dif>0",       # Top5: MACD多头，涨幅+0.07%
         "ma60_upward",      # Top6: MA60向上，涨幅+0.06%
-        "j_ultra_low",      # Top7: J<5，涨幅+0.14%
+        "j<-5",             # Top7: J<-5（原J<5改为更严格）
         "shrink",           # Top8: 缩量回调，涨幅+0.03%
         "has_am",           # Top9: 周期内异动，涨幅+0.03%
         "close>MA5",        # Top10: >MA5，涨幅+0.02%
@@ -719,7 +742,7 @@ def run_part_c(df, trade_dates_list, data_manager, hold_days, price_lookup=None,
         "has_bvk": "暴力K",
         "macd_dif>0": "MACD",
         "ma60_upward": "MA60↑",
-        "j_ultra_low": "J<5",
+        "j<-5": "J<-5",
         "shrink": "缩量",
         "has_am": "异动",
         "close>MA5": ">MA5",
@@ -727,7 +750,7 @@ def run_part_c(df, trade_dates_list, data_manager, hold_days, price_lookup=None,
 
     combo_groups = [{"label": "C0-基准(J<13 only)", "keys": [base_key]}]
 
-    must_have = {"j_ultra_low"}
+    must_have = {"j<-5"}
     other_keys = [k for k in candidate_keys if k not in must_have]
 
     for r in range(2, len(candidate_keys) + 1):
@@ -875,11 +898,11 @@ def main():
         all_condition_keys = set()
         for part_func in [run_part_a, run_part_b, run_part_c, run_part_d]:
             src = inspect.getsource(part_func)
-            for ck in re.findall(r'"([a-z_~>]+)"', src):
+            for ck in re.findall(r'"([a-z_~><\-\d]+)"', src):
                 if ck in CONDITIONS or ck in {
                     "j_ultra_low", "vol_ratio>1", "close>MA5", "close>MA20",
                     "not_falling", "turnover>2",
-                }:
+                } or ck.startswith("j<"):
                     all_condition_keys.add(ck)
 
         t0 = time.time()
@@ -901,8 +924,9 @@ def main():
         part_d_stats = []
         part_d_trades = {}
 
-        print("\n===== Part A: 基准递增实验 =====")
-        part_a_stats, part_a_trades = run_part_a(df, backtest_dates, data_manager, args.hold_days, price_lookup=price_lookup, df_by_date=df_by_date, mask_cache=mask_cache)
+        if not args.skip_a:
+            print("\n===== Part A: 基准递增实验 =====")
+            part_a_stats, part_a_trades = run_part_a(df, backtest_dates, data_manager, args.hold_days, price_lookup=price_lookup, df_by_date=df_by_date, mask_cache=mask_cache)
 
         if not args.skip_b:
             print("\n===== Part B: 完整消融实验 =====")

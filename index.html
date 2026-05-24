@@ -134,9 +134,11 @@
                             </a>
                         </td>
                         <td class="px-6 py-4">
-                            ${report.c154Result 
-                                ? `<a href="${report.c154Result}" target="_blank" class="text-orange-600 hover:text-orange-800 font-medium">C154结果</a>`
-                                : `<span class="text-gray-400">暂无</span>`
+                            ${report.c154Html 
+                                ? `<a href="${report.c154Html}" target="_blank" class="text-orange-600 hover:text-orange-800 font-medium">📊 查看报告</a>`
+                                : report.c154Result 
+                                    ? `<a href="${report.c154Result}" target="_blank" class="text-orange-600 hover:text-orange-800 font-medium">C154结果</a>`
+                                    : `<span class="text-gray-400">暂无</span>`
                             }
                         </td>
                         <td class="px-6 py-4">

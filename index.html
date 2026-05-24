@@ -21,7 +21,7 @@
         </div>
 
         <!-- 统计卡片 -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <div class="bg-white rounded-xl shadow-lg p-6">
                 <div class="flex items-center">
                     <div class="p-3 bg-blue-100 rounded-full mr-4">
@@ -32,6 +32,19 @@
                     <div>
                         <div class="text-sm text-gray-500">选股总数</div>
                         <div class="text-2xl font-bold text-blue-600" id="totalStocks">-</div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <div class="flex items-center">
+                    <div class="p-3 bg-orange-100 rounded-full mr-4">
+                        <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="text-sm text-gray-500">C154最优组合</div>
+                        <div class="text-2xl font-bold text-orange-600" id="c154Stocks">-</div>
                     </div>
                 </div>
             </div>
@@ -74,6 +87,7 @@
                         <tr>
                             <th class="px-6 py-3">日期</th>
                             <th class="px-6 py-3">选股结果</th>
+                            <th class="px-6 py-3">C154最优组合</th>
                             <th class="px-6 py-3">行业趋势</th>
                             <th class="px-6 py-3">J13趋势</th>
                         </tr>
@@ -105,6 +119,7 @@
                 
                 document.getElementById('lastUpdate').textContent = data.lastUpdate;
                 document.getElementById('totalStocks').textContent = data.totalStocks;
+                document.getElementById('c154Stocks').textContent = data.c154Stocks || 0;
                 document.getElementById('totalReports').textContent = data.reports.length;
                 document.getElementById('latestDate').textContent = data.latestDate;
                 
@@ -117,6 +132,12 @@
                                class="text-blue-600 hover:text-blue-800 font-medium">
                                 查看选股
                             </a>
+                        </td>
+                        <td class="px-6 py-4">
+                            ${report.c154Result 
+                                ? `<a href="${report.c154Result}" target="_blank" class="text-orange-600 hover:text-orange-800 font-medium">C154结果</a>`
+                                : `<span class="text-gray-400">暂无</span>`
+                            }
                         </td>
                         <td class="px-6 py-4">
                             ${report.industryTrend 

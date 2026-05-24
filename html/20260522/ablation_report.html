@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>选股条件消融实验报告</title>
+<style>
+:root {
+  --bg: #0f1117; --card: #1a1d27; --border: #2a2d3a; --text: #e4e6f0;
+  --muted: #8b8fa3; --accent: #6c5ce7; --green: #00b894; --red: #e74c3c;
+  --blue: #0984e3; --orange: #fdcb6e; --pink: #fd79a8;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: 'SF Pro Display', 'Microsoft YaHei', -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height:1.6; }
+.container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+h1 { font-size:28px; font-weight:700; margin-bottom:8px; background: linear-gradient(135deg, var(--accent), var(--pink)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.meta { color: var(--muted); font-size:14px; margin-bottom:24px; }
+.tabs { display:flex; gap:4px; margin-bottom:20px; background:var(--card); border-radius:12px; padding:4px; border:1px solid var(--border); }
+.tab { padding:10px 20px; border-radius:8px; cursor:pointer; font-size:14px; font-weight:500; transition:all .2s; color:var(--muted); user-select:none; }
+.tab:hover { color:var(--text); background:rgba(108,92,231,0.1); }
+.tab.active { background:var(--accent); color:#fff; }
+.card { background:var(--card); border-radius:12px; border:1px solid var(--border); overflow:hidden; margin-bottom:20px; }
+.toolbar { display:flex; gap:8px; padding:16px; border-bottom:1px solid var(--border); align-items:center; flex-wrap:wrap; }
+.toolbar label { font-size:13px; color:var(--muted); }
+.toolbar select, .toolbar input { background:var(--bg); color:var(--text); border:1px solid var(--border); border-radius:6px; padding:6px 10px; font-size:13px; }
+.badge { display:inline-block; padding:2px 8px; border-radius:4px; font-size:11px; font-weight:600; }
+.badge-a { background:rgba(9,132,227,0.2); color:var(--blue); }
+.badge-b { background:rgba(253,203,110,0.2); color:var(--orange); }
+.badge-c { background:rgba(108,92,231,0.2); color:var(--accent); }
+.badge-d { background:rgba(253,121,168,0.2); color:var(--pink); }
+.badge-bull { background:rgba(0,184,148,0.2); color:var(--green); }
+.badge-bear { background:rgba(231,76,60,0.2); color:var(--red); }
+table { width:100%; border-collapse:collapse; font-size:13px; }
+thead th { background:var(--bg); color:var(--muted); font-weight:600; text-transform:uppercase; font-size:11px; letter-spacing:0.5px; padding:10px 12px; text-align:left; cursor:pointer; user-select:none; position:sticky; top:0; z-index:1; white-space:nowrap; transition:color .2s; }
+thead th:hover { color:var(--text); }
+thead th .sort-icon { margin-left:4px; font-size:10px; opacity:0.4; }
+thead th.sorted-asc .sort-icon, thead th.sorted-desc .sort-icon { opacity:1; color:var(--accent); }
+tbody tr { border-bottom:1px solid var(--border); transition:background .15s; }
+tbody tr:hover { background:rgba(108,92,231,0.06); }
+tbody td { padding:8px 12px; white-space:nowrap; }
+.val-positive { color: var(--green); }
+.val-negative { color: var(--red); }
+.val-neutral { color: var(--muted); }
+.highlight-row { background: rgba(0,184,148,0.08) !important; }
+.table-wrap { max-height: 600px; overflow-y:auto; }
+.summary-cards { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:12px; margin-bottom:20px; }
+.scard { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px; }
+.scard .label { font-size:12px; color:var(--muted); margin-bottom:4px; }
+.scard .value { font-size:24px; font-weight:700; }
+.chart-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px; }
+.chart-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px; }
+.chart-card h3 { font-size:14px; color:var(--muted); margin-bottom:12px; font-weight:500; }
+.bar-container { display:flex; align-items:center; gap:8px; margin-bottom:6px; font-size:12px; }
+.bar-label { width:120px; text-align:right; color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.bar-track { flex:1; height:20px; background:var(--bg); border-radius:4px; overflow:hidden; position:relative; }
+.bar-fill { height:100%; border-radius:4px; transition:width .3s; display:flex; align-items:center; justify-content:flex-end; padding-right:6px; font-size:11px; font-weight:600; color:#fff; min-width:30px; }
+.filter-active { background: var(--accent) !important; color: #fff !important; }
+</style>
+</head>
+<body>
+<div class="container">
+<h1>选股条件消融实验报告</h1>
+<p class="meta">持有 3 天 | 250 个交易日 | 2026-05-24 12:36:36 | 次日开盘价买入</p>
+
+<div id="summary-cards" class="summary-cards"></div>
+
+<div class="tabs" id="main-tabs">
+  <div class="tab active" data-tab="overview">总览</div>
+  <div class="tab" data-tab="ranking">综合排名</div>
+  <div class="tab" data-tab="phase">择时分析</div>
+  <div class="tab" data-tab="detail">详细数据</div>
+</div>
+
+<div id="tab-overview">
+  <div class="chart-row" id="chart-row"></div>
+  <div class="card">
+    <div class="toolbar">
+      <label>Part:</label>
+      <select id="ov-part"><option value="">全部</option><option value="A">Part A</option><option value="B">Part B</option><option value="C" selected>Part C</option></select>
+      <label>最低样本:</label>
+      <input type="number" id="ov-min-sample" value="50" style="width:70px">
+      <label>最低胜率%:</label>
+      <input type="number" id="ov-min-win" value="0" style="width:70px">
+    </div>
+    <div class="table-wrap" style="max-height:500px">
+      <table id="ov-table"><thead></thead><tbody></tbody></table>
+    </div>
+  </div>
+</div>
+
+<div id="tab-ranking" style="display:none">
+  <div class="card">
+    <div class="toolbar">
+      <label>排名方式:</label>
+      <select id="rank-mode">
+        <option value="composite">综合得分 (0.4*胜率 + 10*涨幅 + 5*盈亏比)</option>
+        <option value="winrate">胜率优先</option>
+        <option value="gain">平均涨幅优先</option>
+        <option value="plr">盈亏比优先</option>
+        <option value="sample">样本量优先</option>
+      </select>
+      <label>最低样本:</label>
+      <input type="number" id="rank-min-sample" value="50" style="width:70px">
+    </div>
+    <div class="table-wrap" style="max-height:700px">
+      <table id="rank-table"><thead></thead><tbody></tbody></table>
+    </div>
+  </div>
+</div>
+
+<div id="tab-phase" style="display:none">
+  <div class="card">
+    <div class="toolbar">
+      <label>市场阶段:</label>
+      <select id="phase-filter"><option value="">全部</option><option value="多头">多头</option><option value="空头">空头</option></select>
+      <label>最低样本:</label>
+      <input type="number" id="phase-min-sample" value="50" style="width:70px">
+    </div>
+    <div class="table-wrap" style="max-height:700px">
+      <table id="phase-table"><thead></thead><tbody></tbody></table>
+    </div>
+  </div>
+</div>
+
+<div id="tab-detail" style="display:none">
+  <div class="card">
+    <div class="toolbar">
+      <label>Part:</label>
+      <select id="det-part"><option value="">全部</option><option value="A">Part A</option><option value="B">Part B</option><option value="C">Part C</option><option value="D">Part D</option></select>
+    </div>
+    <div class="table-wrap" style="max-height:700px">
+      <table id="det-table"><thead></thead><tbody></tbody></table>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+const DATA = [{"实验组": "A0-基准(J<13)", "样本量": 3438, "平均涨幅": 0.75, "中位涨幅": 0.22, "胜率": 51.8, "大胜率": 24.1, "盈亏比": 1.4, "最大涨幅": 56.27, "最大跌幅": -30.11, "_part": "A"}, {"实验组": "A1-+MACD多头(DIF>0)", "样本量": 2851, "平均涨幅": 0.82, "中位涨幅": 0.32, "胜率": 53.6, "大胜率": 24.9, "盈亏比": 1.37, "最大涨幅": 41.94, "最大跌幅": -30.11, "_part": "A"}, {"实验组": "A2-+缩量回调", "样本量": 2944, "平均涨幅": 0.78, "中位涨幅": 0.29, "胜率": 52.6, "大胜率": 24.1, "盈亏比": 1.38, "最大涨幅": 44.72, "最大跌幅": -30.11, "_part": "A"}, {"实验组": "A3-+无跳空高开", "样本量": 3364, "平均涨幅": 0.76, "中位涨幅": 0.23, "胜率": 52.0, "大胜率": 24.2, "盈亏比": 1.39, "最大涨幅": 56.27, "最大跌幅": -30.11, "_part": "A"}, {"实验组": "A4-+收盘价>60日线", "样本量": 2431, "平均涨幅": 0.68, "中位涨幅": 0.35, "胜率": 53.7, "大胜率": 24.4, "盈亏比": 1.24, "最大涨幅": 34.97, "最大跌幅": -30.11, "_part": "A"}, {"实验组": "A5-+MA60向上", "样本量": 2610, "平均涨幅": 0.81, "中位涨幅": 0.42, "胜率": 54.6, "大胜率": 24.3, "盈亏比": 1.31, "最大涨幅": 43.87, "最大跌幅": -30.11, "_part": "A"}, {"实验组": "A6-+K线形态可接受", "样本量": 2849, "平均涨幅": 0.75, "中位涨幅": 0.36, "胜率": 53.9, "大胜率": 22.6, "盈亏比": 1.32, "最大涨幅": 34.32, "最大跌幅": -33.51, "_part": "A"}, {"实验组": "A7-+振幅达标", "样本量": 2934, "平均涨幅": 0.73, "中位涨幅": 0.31, "胜率": 53.0, "大胜率": 23.2, "盈亏比": 1.35, "最大涨幅": 41.94, "最大跌幅": -30.11, "_part": "A"}, {"实验组": "A8-+周期内异动", "样本量": 1820, "平均涨幅": 0.78, "中位涨幅": 0.15, "胜率": 50.8, "大胜率": 24.9, "盈亏比": 1.47, "最大涨幅": 56.27, "最大跌幅": -30.11, "_part": "A"}, {"实验组": "A9-+成交额前60%", "样本量": 2663, "平均涨幅": 0.86, "中位涨幅": 0.13, "胜率": 50.9, "大胜率": 25.1, "盈亏比": 1.5, "最大涨幅": 41.94, "最大跌幅": -23.16, "_part": "A"}, {"实验组": "A10-+底部暴力K", "样本量": 2789, "平均涨幅": 0.83, "中位涨幅": 0.27, "胜率": 52.3, "大胜率": 25.2, "盈亏比": 1.42, "最大涨幅": 56.27, "最大跌幅": -30.11, "_part": "A"}, {"实验组": "A11-+无出货信号", "样本量": 1356, "平均涨幅": 0.85, "中位涨幅": 0.23, "胜率": 52.4, "大胜率": 25.8, "盈亏比": 1.46, "最大涨幅": 34.32, "最大跌幅": -30.11, "_part": "A"}, {"实验组": "A12-+知行多空线", "样本量": 2329, "平均涨幅": 0.33, "中位涨幅": -0.29, "胜率": 47.5, "大胜率": 23.5, "盈亏比": 1.29, "最大涨幅": 45.88, "最大跌幅": -31.9, "_part": "A"}, {"实验组": "A13-+>MA20(新)", "样本量": 2154, "平均涨幅": 0.35, "中位涨幅": 0.0, "胜率": 49.3, "大胜率": 22.0, "盈亏比": 1.23, "最大涨幅": 34.32, "最大跌幅": -30.19, "_part": "A"}, {"实验组": "A14-+不跌(新)", "样本量": 2795, "平均涨幅": 1.0, "中位涨幅": 0.56, "胜率": 56.6, "大胜率": 25.2, "盈亏比": 1.37, "最大涨幅": 34.32, "最大跌幅": -13.48, "_part": "A"}, {"实验组": "A15-+J<5(新)", "样本量": 3577, "平均涨幅": 0.89, "中位涨幅": 0.32, "胜率": 53.0, "大胜率": 24.2, "盈亏比": 1.46, "最大涨幅": 64.03, "最大跌幅": -30.11, "_part": "A"}, {"实验组": "A16-+>MA5(新)", "样本量": 2826, "平均涨幅": 0.77, "中位涨幅": 0.37, "胜率": 54.0, "大胜率": 21.1, "盈亏比": 1.36, "最大涨幅": 78.51, "最大跌幅": -19.29, "_part": "A"}, {"实验组": "A17-+知行中>多空(新)", "样本量": 2753, "平均涨幅": 0.63, "中位涨幅": 0.25, "胜率": 52.9, "大胜率": 21.9, "盈亏比": 1.27, "最大涨幅": 45.88, "最大跌幅": -19.7, "_part": "A"}];
+const PHASE = [{"实验组": "A0-基准(J<13)", "市场阶段": "多头1", "阶段类型": "多头", "样本量": 774, "平均涨幅": 1.38, "胜率": 65.5, "盈亏比": 1.43}, {"实验组": "A0-基准(J<13)", "市场阶段": "多头2", "阶段类型": "多头", "样本量": 94, "平均涨幅": 1.95, "胜率": 51.1, "盈亏比": 2.0}, {"实验组": "A0-基准(J<13)", "市场阶段": "多头3", "阶段类型": "多头", "样本量": 556, "平均涨幅": 0.64, "胜率": 45.7, "盈亏比": 1.58}, {"实验组": "A0-基准(J<13)", "市场阶段": "空头1", "阶段类型": "空头", "样本量": 1058, "平均涨幅": 0.06, "胜率": 44.0, "盈亏比": 1.29}, {"实验组": "A0-基准(J<13)", "市场阶段": "空头2", "阶段类型": "空头", "样本量": 46, "平均涨幅": -0.38, "胜率": 39.1, "盈亏比": 1.25}, {"实验组": "A1-+MACD多头(DIF>0)", "市场阶段": "多头1", "阶段类型": "多头", "样本量": 842, "平均涨幅": 1.3, "胜率": 65.6, "盈亏比": 1.32}, {"实验组": "A1-+MACD多头(DIF>0)", "市场阶段": "多头2", "阶段类型": "多头", "样本量": 8, "平均涨幅": 9.42, "胜率": 62.5, "盈亏比": 16.92}, {"实验组": "A1-+MACD多头(DIF>0)", "市场阶段": "多头3", "阶段类型": "多头", "样本量": 454, "平均涨幅": 0.57, "胜率": 44.7, "盈亏比": 1.59}, {"实验组": "A1-+MACD多头(DIF>0)", "市场阶段": "空头1", "阶段类型": "空头", "样本量": 801, "平均涨幅": 0.26, "胜率": 47.8, "盈亏比": 1.24}, {"实验组": "A1-+MACD多头(DIF>0)", "市场阶段": "空头2", "阶段类型": "空头", "样本量": 20, "平均涨幅": 0.1, "胜率": 45.0, "盈亏比": 1.18}, {"实验组": "A2-+缩量回调", "市场阶段": "多头1", "阶段类型": "多头", "样本量": 793, "平均涨幅": 1.31, "胜率": 64.9, "盈亏比": 1.4}, {"实验组": "A2-+缩量回调", "市场阶段": "多头2", "阶段类型": "多头", "样本量": 8, "平均涨幅": 0.07, "胜率": 62.5, "盈亏比": 0.62}, {"实验组": "A2-+缩量回调", "市场阶段": "多头3", "阶段类型": "多头", "样本量": 529, "平均涨幅": 0.67, "胜率": 45.9, "盈亏比": 1.58}, {"实验组": "A2-+缩量回调", "市场阶段": "空头1", "阶段类型": "空头", "样本量": 712, "平均涨幅": 0.05, "胜率": 42.8, "盈亏比": 1.34}, {"实验组": "A2-+缩量回调", "市场阶段": "空头2", "阶段类型": "空头", "样本量": 27, "平均涨幅": -0.02, "胜率": 48.1, "盈亏比": 0.99}, {"实验组": "A3-+无跳空高开", "市场阶段": "多头1", "阶段类型": "多头", "样本量": 774, "平均涨幅": 1.38, "胜率": 65.5, "盈亏比": 1.43}, {"实验组": "A3-+无跳空高开", "市场阶段": "多头2", "阶段类型": "多头", "样本量": 81, "平均涨幅": 2.16, "胜率": 53.1, "盈亏比": 2.01}, {"实验组": "A3-+无跳空高开", "市场阶段": "多头3", "阶段类型": "多头", "样本量": 553, "平均涨幅": 0.67, "胜率": 45.9, "盈亏比": 1.58}, {"实验组": "A3-+无跳空高开", "市场阶段": "空头1", "阶段类型": "空头", "样本量": 1006, "平均涨幅": 0.04, "胜率": 44.0, "盈亏比": 1.28}, {"实验组": "A3-+无跳空高开", "市场阶段": "空头2", "阶段类型": "空头", "样本量": 40, "平均涨幅": -0.66, "胜率": 35.0, "盈亏比": 1.33}, {"实验组": "A4-+收盘价>60日线", "市场阶段": "多头1", "阶段类型": "多头", "样本量": 1111, "平均涨幅": 1.38, "胜率": 65.6, "盈亏比": 1.36}, {"实验组": "A4-+收盘价>60日线", "市场阶段": "多头3", "阶段类型": "多头", "样本量": 345, "平均涨幅": -0.05, "胜率": 39.1, "盈亏比": 1.52}, {"实验组": "A4-+收盘价>60日线", "市场阶段": "空头1", "阶段类型": "空头", "样本量": 465, "平均涨幅": -0.26, "胜率": 41.1, "盈亏比": 1.23}, {"实验组": "A4-+收盘价>60日线", "市场阶段": "空头2", "阶段类型": "空头", "样本量": 27, "平均涨幅": -2.01, "胜率": 29.6, "盈亏比": 0.73}, {"实验组": "A5-+MA60向上", "市场阶段": "多头1", "阶段类型": "多头", "样本量": 1280, "平均涨幅": 1.39, "胜率": 63.8, "盈亏比": 1.44}, {"实验组": "A5-+MA60向上", "市场阶段": "多头3", "阶段类型": "多头", "样本量": 359, "平均涨幅": 0.52, "胜率": 46.8, "盈亏比": 1.4}, {"实验组": "A5-+MA60向上", "市场阶段": "空头1", "阶段类型": "空头", "样本量": 589, "平均涨幅": -0.15, "胜率": 42.1, "盈亏比": 1.24}, {"实验组": "A6-+K线形态可接受", "市场阶段": "多头1", "阶段类型": "多头", "样本量": 768, "平均涨幅": 1.31, "胜率": 65.8, "盈亏比": 1.39}, {"实验组": "A6-+K线形态可接受", "市场阶段": "多头2", "阶段类型": "多头", "样本量": 7, "平均涨幅": 0.95, "胜率": 42.9, "盈亏比": 1.97}, {"实验组": "A6-+K线形态可接受", "市场阶段": "多头3", "阶段类型": "多头", "样本量": 454, "平均涨幅": 0.63, "胜率": 43.2, "盈亏比": 1.72}, {"实验组": "A6-+K线形态可接受", "市场阶段": "空头1", "阶段类型": "空头", "样本量": 828, "平均涨幅": 0.22, "胜率": 48.4, "盈亏比": 1.18}, {"实验组": "A6-+K线形态可接受", "市场阶段": "空头2", "阶段类型": "空头", "样本量": 11, "平均涨幅": 1.44, "胜率": 72.7, "盈亏比": 1.02}, {"实验组": "A7-+振幅达标", "市场阶段": "多头1", "阶段类型": "多头", "样本量": 756, "平均涨幅": 1.34, "胜率": 64.9, "盈亏比": 1.45}, {"实验组": "A7-+振幅达标", "市场阶段": "多头2", "阶段类型": "多头", "样本量": 11, "平均涨幅": -0.31, "胜率": 63.6, "盈亏比": 0.46}, {"实验组": "A7-+振幅达标", "市场阶段": "多头3", "阶段类型": "多头", "样本量": 511, "平均涨幅": 0.35, "胜率": 44.8, "盈亏比": 1.45}, {"实验组": "A7-+振幅达标", "市场阶段": "空头1", "阶段类型": "空头", "样本量": 726, "平均涨幅": 0.11, "胜率": 46.4, "盈亏比": 1.22}, {"实验组": "A7-+振幅达标", "市场阶段": "空头2", "阶段类型": "空头", "样本量": 28, "平均涨幅": -0.06, "胜率": 39.3, "盈亏比": 1.42}, {"实验组": "A8-+周期内异动", "市场阶段": "多头1", "阶段类型": "多头", "样本量": 427, "平均涨幅": 1.5, "胜率": 64.4, "盈亏比": 1.63}, {"实验组": "A8-+周期内异动", "市场阶段": "多头2", "阶段类型": "多头", "样本量": 61, "平均涨幅": 2.48, "胜率": 55.7, "盈亏比": 2.17}, {"实验组": "A8-+周期内异动", "市场阶段": "多头3", "阶段类型": "多头", "样本量": 274, "平均涨幅": 0.66, "胜率": 44.5, "盈亏比": 1.67}, {"实验组": "A8-+周期内异动", "市场阶段": "空头1", "阶段类型": "空头", "样本量": 528, "平均涨幅": 0.1, "胜率": 43.6, "盈亏比": 1.37}, {"实验组": "A8-+周期内异动", "市场阶段": "空头2", "阶段类型": "空头", "样本量": 30, "平均涨幅": -1.91, "胜率": 23.3, "盈亏比": 1.38}, {"实验组": "A9-+成交额前60%", "市场阶段": "多头1", "阶段类型": "多头", "样本量": 639, "平均涨幅": 1.12, "胜率": 60.1, "盈亏比": 1.39}, {"实验组": "A9-+成交额前60%", "市场阶段": "多头2", "阶段类型": "多头", "样本量": 27, "平均涨幅": 0.62, "胜率": 40.7, "盈亏比": 1.9}, {"实验组": "A9-+成交额前60%", "市场阶段": "多头3", "阶段类型": "多头", "样本量": 414, "平均涨幅": 1.14, "胜率": 48.8, "盈亏比": 1.66}, {"实验组": "A9-+成交额前60%", "市场阶段": "空头1", "阶段类型": "空头", "样本量": 902, "平均涨幅": 0.37, "胜率": 45.9, "盈亏比": 1.4}, {"实验组": "A9-+成交额前60%", "市场阶段": "空头2", "阶段类型": "空头", "样本量": 80, "平均涨幅": 0.22, "胜率": 48.8, "盈亏比": 1.13}, {"实验组": "A10-+底部暴力K", "市场阶段": "多头1", "阶段类型": "多头", "样本量": 626, "平均涨幅": 1.4, "胜率": 64.9, "盈亏比": 1.43}, {"实验组": "A10-+底部暴力K", "市场阶段": "多头2", "阶段类型": "多头", "样本量": 69, "平均涨幅": 2.85, "胜率": 56.5, "盈亏比": 2.16}, {"实验组": "A10-+底部暴力K", "市场阶段": "多头3", "阶段类型": "多头", "样本量": 488, "平均涨幅": 0.94, "胜率": 47.7, "盈亏比": 1.63}, {"实验组": "A10-+底部暴力K", "市场阶段": "空头1", "阶段类型": "空头", "样本量": 821, "平均涨幅": 0.09, "胜率": 45.3, "盈亏比": 1.25}, {"实验组": "A10-+底部暴力K", "市场阶段": "空头2", "阶段类型": "空头", "样本量": 36, "平均涨幅": -0.58, "胜率": 36.1, "盈亏比": 1.34}, {"实验组": "A11-+无出货信号", "市场阶段": "多头1", "阶段类型": "多头", "样本量": 345, "平均涨幅": 1.35, "胜率": 65.2, "盈亏比": 1.45}, {"实验组": "A11-+无出货信号", "市场阶段": "多头2", "阶段类型": "多头", "样本量": 35, "平均涨幅": 1.45, "胜率": 51.4, "盈亏比": 1.56}, {"实验组": "A11-+无出货信号", "市场阶段": "多头3", "阶段类型": "多头", "样本量": 183, "平均涨幅": 1.1, "胜率": 47.5, "盈亏比": 1.8}, {"实验组": "A11-+无出货信号", "市场阶段": "空头1", "阶段类型": "空头", "样本量": 394, "平均涨幅": 0.04, "胜率": 42.9, "盈亏比": 1.34}, {"实验组": "A11-+无出货信号", "市场阶段": "空头2", "阶段类型": "空头", "样本量": 33, "平均涨幅": 0.39, "胜率": 39.4, "盈亏比": 1.82}, {"实验组": "A12-+知行多空线", "市场阶段": "多头2", "阶段类型": "多头", "样本量": 174, "平均涨幅": 0.7, "胜率": 51.1, "盈亏比": 1.43}, {"实验组": "A12-+知行多空线", "市场阶段": "多头3", "阶段类型": "多头", "样本量": 279, "平均涨幅": 0.55, "胜率": 45.2, "盈亏比": 1.52}, {"实验组": "A12-+知行多空线", "市场阶段": "空头1", "阶段类型": "空头", "样本量": 1724, "平均涨幅": 0.26, "胜率": 47.2, "盈亏比": 1.27}, {"实验组": "A12-+知行多空线", "市场阶段": "空头2", "阶段类型": "空头", "样本量": 152, "平均涨幅": 0.31, "胜率": 51.3, "盈亏比": 1.08}, {"实验组": "A13-+>MA20(新)", "市场阶段": "多头1", "阶段类型": "多头", "样本量": 726, "平均涨幅": 1.23, "胜率": 61.7, "盈亏比": 1.39}, {"实验组": "A13-+>MA20(新)", "市场阶段": "多头2", "阶段类型": "多头", "样本量": 95, "平均涨幅": 0.46, "胜率": 52.6, "盈亏比": 1.19}, {"实验组": "A13-+>MA20(新)", "市场阶段": "多头3", "阶段类型": "多头", "样本量": 340, "平均涨幅": 0.19, "胜率": 42.9, "盈亏比": 1.44}, {"实验组": "A13-+>MA20(新)", "市场阶段": "空头1", "阶段类型": "空头", "样本量": 443, "平均涨幅": -0.8, "胜率": 37.9, "盈亏比": 1.04}, {"实验组": "A13-+>MA20(新)", "市场阶段": "空头2", "阶段类型": "空头", "样本量": 190, "平均涨幅": 0.17, "胜率": 48.4, "盈亏比": 1.17}, {"实验组": "A14-+不跌(新)", "市场阶段": "多头1", "阶段类型": "多头", "样本量": 746, "平均涨幅": 1.24, "胜率": 63.7, "盈亏比": 1.39}, {"实验组": "A14-+不跌(新)", "市场阶段": "多头3", "阶段类型": "多头", "样本量": 400, "平均涨幅": 1.1, "胜率": 47.2, "盈亏比": 1.74}, {"实验组": "A14-+不跌(新)", "市场阶段": "空头1", "阶段类型": "空头", "样本量": 875, "平均涨幅": 0.9, "胜率": 56.7, "盈亏比": 1.29}, {"实验组": "A14-+不跌(新)", "市场阶段": "空头2", "阶段类型": "空头", "样本量": 19, "平均涨幅": 0.41, "胜率": 47.4, "盈亏比": 1.25}, {"实验组": "A15-+J<5(新)", "市场阶段": "多头1", "阶段类型": "多头", "样本量": 773, "平均涨幅": 1.39, "胜率": 64.4, "盈亏比": 1.5}, {"实验组": "A15-+J<5(新)", "市场阶段": "多头2", "阶段类型": "多头", "样本量": 171, "平均涨幅": 2.06, "胜率": 57.3, "盈亏比": 1.98}, {"实验组": "A15-+J<5(新)", "市场阶段": "多头3", "阶段类型": "多头", "样本量": 451, "平均涨幅": 0.96, "胜率": 45.5, "盈亏比": 1.82}, {"实验组": "A15-+J<5(新)", "市场阶段": "空头1", "阶段类型": "空头", "样本量": 1297, "平均涨幅": 0.29, "胜率": 46.8, "盈亏比": 1.33}, {"实验组": "A15-+J<5(新)", "市场阶段": "空头2", "阶段类型": "空头", "样本量": 57, "平均涨幅": -0.21, "胜率": 47.4, "盈亏比": 0.95}, {"实验组": "A16-+>MA5(新)", "市场阶段": "多头1", "阶段类型": "多头", "样本量": 530, "平均涨幅": 0.55, "胜率": 56.4, "盈亏比": 1.17}, {"实验组": "A16-+>MA5(新)", "市场阶段": "多头2", "阶段类型": "多头", "样本量": 226, "平均涨幅": 4.12, "胜率": 79.2, "盈亏比": 2.15}, {"实验组": "A16-+>MA5(新)", "市场阶段": "多头3", "阶段类型": "多头", "样本量": 128, "平均涨幅": 1.7, "胜率": 56.2, "盈亏比": 1.63}, {"实验组": "A16-+>MA5(新)", "市场阶段": "空头1", "阶段类型": "空头", "样本量": 1635, "平均涨幅": 0.31, "胜率": 50.1, "盈亏比": 1.18}, {"实验组": "A16-+>MA5(新)", "市场阶段": "空头2", "阶段类型": "空头", "样本量": 51, "平均涨幅": -0.58, "胜率": 29.4, "盈亏比": 1.68}, {"实验组": "A17-+知行中>多空(新)", "市场阶段": "多头2", "阶段类型": "多头", "样本量": 46, "平均涨幅": 1.41, "胜率": 54.3, "盈亏比": 1.84}, {"实验组": "A17-+知行中>多空(新)", "市场阶段": "多头3", "阶段类型": "多头", "样本量": 395, "平均涨幅": 0.68, "胜率": 45.6, "盈亏比": 1.57}, {"实验组": "A17-+知行中>多空(新)", "市场阶段": "空头1", "阶段类型": "空头", "样本量": 2238, "平均涨幅": 0.63, "胜率": 54.3, "盈亏比": 1.23}, {"实验组": "A17-+知行中>多空(新)", "市场阶段": "空头2", "阶段类型": "空头", "样本量": 74, "平均涨幅": 0.01, "胜率": 47.3, "盈亏比": 1.04}];
+
+const COLS = [
+  {key:"实验组",label:"实验组",type:"string"},
+  {key:"样本量",label:"样本量",type:"number"},
+  {key:"胜率",label:"胜率%",type:"number",fmt:v=>v?.toFixed(1)+"%",cls:v=>v>=65?"val-positive":v>=50?"val-neutral":"val-negative"},
+  {key:"平均涨幅",label:"平均涨幅%",type:"number",fmt:v=>v?.toFixed(2)+"%",cls:v=>v>=1?"val-positive":v>=0?"val-neutral":"val-negative"},
+  {key:"中位涨幅",label:"中位涨幅%",type:"number",fmt:v=>v?.toFixed(2)+"%"},
+  {key:"大胜率",label:"大胜率(>3%)%",type:"number",fmt:v=>v?.toFixed(1)+"%"},
+  {key:"盈亏比",label:"盈亏比",type:"number",fmt:v=>v?.toFixed(2),cls:v=>v>=1.5?"val-positive":v>=1?"val-neutral":"val-negative"},
+  {key:"最大涨幅",label:"最大涨幅%",type:"number",fmt:v=>v?.toFixed(2)+"%"},
+  {key:"最大跌幅",label:"最大跌幅%",type:"number",fmt:v=>v?.toFixed(2)+"%"},
+];
+
+const PHASE_COLS = [
+  {key:"实验组",label:"实验组",type:"string"},
+  {key:"市场阶段",label:"市场阶段",type:"string"},
+  {key:"阶段类型",label:"类型",type:"string"},
+  {key:"样本量",label:"样本量",type:"number"},
+  {key:"胜率",label:"胜率%",type:"number",fmt:v=>v?.toFixed(1)+"%"},
+  {key:"平均涨幅",label:"平均涨幅%",type:"number",fmt:v=>v?.toFixed(2)+"%"},
+  {key:"盈亏比",label:"盈亏比",type:"number",fmt:v=>v?.toFixed(2)},
+];
+
+function badge(part){ const m={A:"badge-a",B:"badge-b",C:"badge-c",D:"badge-d"}; return `<span class="badge ${m[part]||""}">${part}</span>`; }
+function phaseBadge(t){ return t==="多头"?'<span class="badge badge-bull">多头</span>':'<span class="badge badge-bear">空头</span>'; }
+
+function renderTable(tableId, cols, rows, sortCol, sortDir){
+  const thead = document.querySelector(`#${tableId} thead`);
+  const tbody = document.querySelector(`#${tableId} tbody`);
+  let html = "<tr>";
+  html += `<th>Part</th>`;
+  cols.forEach(c => {
+    const cls = sortCol===c.key ? (sortDir==="asc"?"sorted-asc":"sorted-desc") : "";
+    const icon = sortCol===c.key ? (sortDir==="asc"?"▲":"▼") : "⇅";
+    html += `<th class="${cls}" onclick="sortTable('${tableId}','${c.key}')">${c.label}<span class="sort-icon">${icon}</span></th>`;
+  });
+  html += "</tr>";
+  thead.innerHTML = html;
+
+  html = "";
+  rows.forEach(r => {
+    const isTop = sortCol==="胜率" && r["胜率"]>=60 || sortCol==="平均涨幅" && r["平均涨幅"]>=1;
+    html += `<tr class="${isTop?"highlight-row":""}">`;
+    html += `<td>${badge(r._part||"")}</td>`;
+    cols.forEach(c => {
+      let v = r[c.key];
+      const fmt = c.fmt || (x=>x??"");
+      const clsFn = c.cls || (()=>"");
+      const cls = typeof clsFn === "function" ? clsFn(v) : "";
+      html += `<td class="${cls}">${fmt(v)}</td>`;
+    });
+    html += "</tr>";
+  });
+  tbody.innerHTML = html;
+}
+
+const sortState = {};
+function sortTable(tableId, col){
+  if(!sortState[tableId]) sortState[tableId]={col:null,dir:"desc"};
+  if(sortState[tableId].col===col) sortState[tableId].dir = sortState[tableId].dir==="asc"?"desc":"asc";
+  else { sortState[tableId].col=col; sortState[tableId].dir="desc"; }
+  refreshCurrentTab();
+}
+
+function getFilteredData(partFilter, minSample, minWin){
+  return DATA.filter(r => {
+    if(partFilter && r._part !== partFilter) return false;
+    if(r["样本量"] < (minSample||0)) return false;
+    if(r["胜率"] < (minWin||0)) return false;
+    return true;
+  });
+}
+
+function sortRows(rows, col, dir){
+  if(!col) return rows;
+  return [...rows].sort((a,b) => {
+    let va = a[col], vb = b[col];
+    if(typeof va === "string") return dir==="asc" ? va.localeCompare(vb) : vb.localeCompare(va);
+    return dir==="asc" ? (va||0)-(vb||0) : (vb||0)-(va||0);
+  });
+}
+
+function refreshCurrentTab(){
+  const active = document.querySelector(".tab.active").dataset.tab;
+  if(active==="overview") refreshOverview();
+  else if(active==="ranking") refreshRanking();
+  else if(active==="phase") refreshPhase();
+  else if(active==="detail") refreshDetail();
+}
+
+function refreshOverview(){
+  const part = document.getElementById("ov-part").value;
+  const minS = parseInt(document.getElementById("ov-min-sample").value)||0;
+  const minW = parseFloat(document.getElementById("ov-min-win").value)||0;
+  let rows = getFilteredData(part, minS, minW);
+  const s = sortState["ov-table"]||{col:"胜率",dir:"desc"};
+  rows = sortRows(rows, s.col, s.dir);
+  renderTable("ov-table", COLS, rows, s.col, s.dir);
+  renderCharts(rows);
+}
+
+function refreshRanking(){
+  const mode = document.getElementById("rank-mode").value;
+  const minS = parseInt(document.getElementById("rank-min-sample").value)||0;
+  let rows = DATA.filter(r => r["样本量"] >= minS);
+  if(mode==="composite") rows.sort((a,b) => (0.4*(b["胜率"]||0)+10*(b["平均涨幅"]||0)+5*(b["盈亏比"]||0)) - (0.4*(a["胜率"]||0)+10*(a["平均涨幅"]||0)+5*(a["盈亏比"]||0)));
+  else if(mode==="winrate") rows.sort((a,b)=>(b["胜率"]||0)-(a["胜率"]||0));
+  else if(mode==="gain") rows.sort((a,b)=>(b["平均涨幅"]||0)-(a["平均涨幅"]||0));
+  else if(mode==="plr") rows.sort((a,b)=>(b["盈亏比"]||0)-(a["盈亏比"]||0));
+  else rows.sort((a,b)=>(b["样本量"]||0)-(a["样本量"]||0));
+  renderTable("rank-table", COLS, rows, null, null);
+  document.querySelectorAll("#rank-table thead th").forEach(th => th.onclick = null);
+  document.querySelectorAll("#rank-table thead th").forEach((th,i) => {
+    th.style.cursor = "default";
+    th.querySelector(".sort-icon") && (th.querySelector(".sort-icon").textContent = "");
+  });
+}
+
+function refreshPhase(){
+  const pf = document.getElementById("phase-filter").value;
+  const minS = parseInt(document.getElementById("phase-min-sample").value)||0;
+  let rows = PHASE.filter(r => {
+    if(pf && r["阶段类型"]!==pf) return false;
+    if(r["样本量"] < minS) return false;
+    return true;
+  });
+  const s = sortState["phase-table"]||{col:"胜率",dir:"desc"};
+  rows = sortRows(rows, s.col, s.dir);
+  renderTable("phase-table", PHASE_COLS, rows, s.col, s.dir);
+  document.querySelectorAll("#phase-table tbody td").forEach(td => {
+    if(td.textContent==="多头"||td.textContent==="空头") td.innerHTML = phaseBadge(td.textContent);
+  });
+}
+
+function refreshDetail(){
+  const part = document.getElementById("det-part").value;
+  let rows = part ? DATA.filter(r=>r._part===part) : DATA;
+  const s = sortState["det-table"]||{col:null,dir:"desc"};
+  if(s.col) rows = sortRows(rows, s.col, s.dir);
+  renderTable("det-table", COLS, rows, s.col, s.dir);
+}
+
+function renderCharts(rows){
+  const top = rows.slice(0, 20);
+  const maxWin = Math.max(...top.map(r=>r["胜率"]||0), 1);
+  const maxGain = Math.max(...top.map(r=>Math.abs(r["平均涨幅"]||0)), 0.1);
+  const maxSample = Math.max(...top.map(r=>r["样本量"]||0), 1);
+  let html = `<div class="chart-card"><h3>TOP 20 胜率 & 平均涨幅</h3>`;
+  top.forEach(r => {
+    const w = r["胜率"]||0;
+    const g = r["平均涨幅"]||0;
+    const wPct = (w/maxWin*100);
+    const gPct = (Math.abs(g)/maxGain*100);
+    const gColor = g>=0?"var(--green)":"var(--red)";
+    html += `<div class="bar-container"><span class="bar-label" title="${r["实验组"]}">${r["实验组"].replace(/^[A-D]\d+-/,"")}</span><div class="bar-track"><div class="bar-fill" style="width:${wPct}%;background:var(--accent)">${w.toFixed(1)}</div></div><div class="bar-track" style="width:80px"><div class="bar-fill" style="width:${gPct}%;background:${gColor}">${g.toFixed(2)}</div></div></div>`;
+  });
+  html += "</div>";
+
+  html += `<div class="chart-card"><h3>TOP 20 样本量 & 盈亏比</h3>`;
+  top.forEach(r => {
+    const s = r["样本量"]||0;
+    const p = r["盈亏比"]||0;
+    const sPct = (s/maxSample*100);
+    const pMax = Math.max(...top.map(r=>r["盈亏比"]||0), 0.1);
+    const pPct = (p/pMax*100);
+    const pColor = p>=1.5?"var(--green)":p>=1?"var(--orange)":"var(--red)";
+    html += `<div class="bar-container"><span class="bar-label" title="${r["实验组"]}">${r["实验组"].replace(/^[A-D]\d+-/,"")}</span><div class="bar-track"><div class="bar-fill" style="width:${sPct}%;background:var(--blue)">${s}</div></div><div class="bar-track" style="width:80px"><div class="bar-fill" style="width:${pPct}%;background:${pColor}">${p.toFixed(2)}</div></div></div>`;
+  });
+  html += "</div>";
+
+  document.getElementById("chart-row").innerHTML = html;
+}
+
+function renderSummary(){
+  const cRows = DATA.filter(r=>r._part==="C");
+  const best = cRows.reduce((a,b)=>(0.4*(b["胜率"]||0)+10*(b["平均涨幅"]||0)+5*(b["盈亏比"]||0))>(0.4*(a["胜率"]||0)+10*(a["平均涨幅"]||0)+5*(a["盈亏比"]||0))?b:a, cRows[0]||{});
+  const bestWin = cRows.reduce((a,b)=>(b["胜率"]||0)>(a["胜率"]||0)?b:a, cRows[0]||{});
+  const bestGain = cRows.reduce((a,b)=>(b["平均涨幅"]||0)>(a["平均涨幅"]||0)?b:a, cRows[0]||{});
+  document.getElementById("summary-cards").innerHTML = `
+    <div class="scard"><div class="label">总实验组数</div><div class="value">${DATA.length}</div></div>
+    <div class="scard"><div class="label">最高胜率</div><div class="value" style="color:var(--green)">${(bestWin["胜率"]||0).toFixed(1)}%</div><div style="font-size:12px;color:var(--muted);margin-top:4px">${bestWin["实验组"]||""}</div></div>
+    <div class="scard"><div class="label">最高平均涨幅</div><div class="value" style="color:var(--blue)">${(bestGain["平均涨幅"]||0).toFixed(2)}%</div><div style="font-size:12px;color:var(--muted);margin-top:4px">${bestGain["实验组"]||""}</div></div>
+    <div class="scard"><div class="label">综合最优</div><div class="value" style="color:var(--accent)">${(best["胜率"]||0).toFixed(1)}%</div><div style="font-size:12px;color:var(--muted);margin-top:4px">${best["实验组"]||""} | 涨幅${(best["平均涨幅"]||0).toFixed(2)}%</div></div>
+  `;
+}
+
+document.querySelectorAll(".tab").forEach(t => {
+  t.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
+    t.classList.add("active");
+    document.querySelectorAll("[id^=tab-]").forEach(p => p.style.display="none");
+    document.getElementById("tab-"+t.dataset.tab).style.display="";
+    refreshCurrentTab();
+  });
+});
+
+["ov-part","ov-min-sample","ov-min-win"].forEach(id => document.getElementById(id).addEventListener("change", refreshOverview));
+["rank-mode","rank-min-sample"].forEach(id => document.getElementById(id).addEventListener("change", refreshRanking));
+["phase-filter","phase-min-sample"].forEach(id => document.getElementById(id).addEventListener("change", refreshPhase));
+document.getElementById("det-part").addEventListener("change", refreshDetail);
+
+renderSummary();
+sortState["ov-table"] = {col:"胜率",dir:"desc"};
+refreshOverview();
+</script>
+</body>
+</html>

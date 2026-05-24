@@ -31,22 +31,42 @@ def generate_reports_json():
         stock_selection_file = date_dir / f"stock_selection_{date_str}.html"
         industry_trend_file = date_dir / "industry_total_amount_trend.html"
         j13_trend_file = date_dir / "first_j13_step_daily_count.html"
+        c154_csv_file = Path(f"c154_result_{date_str}.csv")
         
         # 添加所有日期（包括没有选股的）
         reports.append({
             'date': date_str,
             'stockSelection': f"html/{date_str}/stock_selection_{date_str}.html" if stock_selection_file.exists() else None,
             'industryTrend': f"html/{date_str}/industry_total_amount_trend.html" if industry_trend_file.exists() else None,
-            'j13Trend': f"html/{date_str}/first_j13_step_daily_count.html" if j13_trend_file.exists() else None
+            'j13Trend': f"html/{date_str}/first_j13_step_daily_count.html" if j13_trend_file.exists() else None,
+            'c154Result': f"c154_result_{date_str}.csv" if c154_csv_file.exists() else None,
         })
+    
+    # 扫描根目录下的 c154_result_*.csv，补充 html 中没有对应目录的日期
+    existing_dates = {r['date'] for r in reports}
+    for csv_file in sorted(Path('.').glob('c154_result_*.csv'), reverse=True):
+        date_str = csv_file.stem.replace('c154_result_', '')
+        if date_str not in existing_dates:
+            reports.append({
+                'date': date_str,
+                'stockSelection': None,
+                'industryTrend': None,
+                'j13Trend': None,
+                'c154Result': str(csv_file),
+            })
+            existing_dates.add(date_str)
+    
+    # 按日期降序重新排序
+    reports.sort(key=lambda x: x['date'], reverse=True)
     
     # 统计信息
     total_stocks = 0
+    c154_stocks = 0
     if reports:
         try:
             latest_report = reports[0]
             stock_selection_file = latest_report['stockSelection']
-            if os.path.exists(stock_selection_file):
+            if stock_selection_file and os.path.exists(stock_selection_file):
                 with open(stock_selection_file, 'r', encoding='utf-8') as f:
                     content = f.read()
                     if '共选出' in content:
@@ -56,12 +76,24 @@ def generate_reports_json():
                             total_stocks = int(match.group(1))
         except:
             pass
+        try:
+            latest_report = reports[0]
+            c154_file = latest_report.get('c154Result')
+            if c154_file and os.path.exists(c154_file):
+                import csv
+                with open(c154_file, 'r', encoding='utf-8-sig') as f:
+                    reader = csv.reader(f)
+                    rows = list(reader)
+                    c154_stocks = max(0, len(rows) - 1)
+        except:
+            pass
     
     latest_date = reports[0]['date'] if reports else '-'
     
     data = {
         'lastUpdate': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
         'totalStocks': total_stocks,
+        'c154Stocks': c154_stocks,
         'totalReports': len(reports),
         'latestDate': latest_date,
         'reports': reports

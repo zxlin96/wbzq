@@ -657,6 +657,7 @@ def generate_c154_html(result, df, end_date, funnel_stats, industry_count):
     ])
     charts_json = json.dumps(stock_charts, ensure_ascii=False, default=str)
     details_json = json.dumps(stock_details, ensure_ascii=False, default=str)
+    sel_codes = json.dumps([row['ts_code'].replace('.SH', '').replace('.SZ', '') for _, row in result.iterrows()], ensure_ascii=False)
 
     stage_labels = [
         ('全市场', '全市场（250天内）'),
@@ -725,10 +726,16 @@ def generate_c154_html(result, df, end_date, funnel_stats, industry_count):
                     <h1 class="text-2xl font-bold text-orange-600">🏆 C154 最优组合选股</h1>
                     <p class="text-gray-500 mt-1">日期: {end_date} | 共选出 <span class="text-orange-600 font-bold text-xl">{n}</span> 只股票</p>
                 </div>
-                <button onclick="downloadCSV()" class="flex items-center gap-2 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    下载 CSV
-                </button>
+                <div class="flex gap-3">
+                    <button onclick="downloadCSV()" class="flex items-center gap-2 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        下载 CSV
+                    </button>
+                    <button onclick="downloadSEL()" class="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        导入同花顺 (.sel)
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -804,6 +811,29 @@ def generate_c154_html(result, df, end_date, funnel_stats, industry_count):
     const stockCharts = {charts_json};
     const stockDetails = {details_json};
     const stockCSV = `{csv_data}`;
+    const selCodes = {sel_codes};
+
+    function downloadSEL() {{
+        if(selCodes.length===0){{alert('无股票数据');return;}}
+        const buf = new ArrayBuffer(2 + selCodes.length * 8);
+        const view = new DataView(buf);
+        view.setUint16(0, selCodes.length, true);
+        let offset = 2;
+        selCodes.forEach(code => {{
+            const market = (code[0]==='6'||code[0]==='9') ? 0x11 : 0x21;
+            view.setUint8(offset, 0x07);
+            view.setUint8(offset + 1, market);
+            for(let i = 0; i < 6; i++) {{
+                view.setUint8(offset + 2 + i, code.charCodeAt(i));
+            }}
+            offset += 8;
+        }});
+        const blob = new Blob([buf], {{type: 'application/octet-stream'}});
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'c154_selection_{end_date}.sel';
+        link.click();
+    }}
 
     function downloadCSV() {{
         const blob = new Blob(['\\uFEFF' + stockCSV], {{ type: 'text/csv;charset=utf-8;' }});

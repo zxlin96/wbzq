@@ -575,6 +575,7 @@ def generate_c154_html(result, df, end_date, funnel_stats, industry_count):
 
     table_data = []
     stock_charts = {}
+    stock_details = {}
     for _, row in result.iterrows():
         ts_code = row['ts_code']
         name = row['name']
@@ -592,11 +593,51 @@ def generate_c154_html(result, df, end_date, funnel_stats, industry_count):
         j_class = 'text-red-600' if j_val < 0 else 'text-orange-600' if j_val < 5 else 'text-green-600'
         pct_val = float(row['pct_chg'])
         pct_class = 'text-red-600' if pct_val > 0 else 'text-green-600'
+        ma60_val = float(row['ma_qfq_60']) if pd.notna(row.get('ma_qfq_60')) else 0
+        ma60_up = bool(row.get('ma60_upward', False))
+        close_val = float(row['close_qfq'])
+        above_ma60 = close_val >= ma60_val if ma60_val > 0 else False
+        cycle_data = df[(df['ts_code'] == ts_code) & (df['trade_date'] <= row['trade_date'])]
+        cycle_max = cycle_data['amount'].max() if not cycle_data.empty else 0
+        is_lowest_volume = bool(row['amount'] <= cycle_max * 0.30) if cycle_max > 0 else False
+        is_amount_top = bool(row.get('is_amount_top30', False))
+        has_step = bool(row.get('first_j13_step', False))
+        has_bvk = bool(row.get('has_bottom_violent_k', False))
+        has_am = bool(row.get('has_am_in_period', False))
+        no_dist = not bool(row.get('has_distribution_signal', False)) and not bool(row.get('has_distribution_signal_v2', False)) and not bool(row.get('has_distribution_signal_v3', False))
+        dist_signals = []
+        if row.get('has_distribution_signal'):
+            dist_signals.append('V1')
+        if row.get('has_distribution_signal_v2'):
+            dist_signals.append('V2')
+        if row.get('has_distribution_signal_v3'):
+            dist_signals.append('V3')
+        stock_details[ts_code] = {
+            'name': name,
+            'industry': row.get('industry_name', '未知'),
+            'close': f"{close_val:.2f}",
+            'pct': f"{pct_val:.2f}%",
+            'ma60': f"{ma60_val:.2f}",
+            'above_ma60': above_ma60,
+            'ma60_up': ma60_up,
+            'j_val': f"{j_val:.2f}",
+            'macd_dif': f"{row.get('macd_dif_qfq', 0):.4f}",
+            'amount': f"{row['amount']/10000:.2f}万",
+            'is_lowest_volume': is_lowest_volume,
+            'is_amount_top': is_amount_top,
+            'has_step': has_step,
+            'no_dist': no_dist,
+            'dist_signals': ','.join(dist_signals) if dist_signals else '无',
+            'has_bvk': has_bvk,
+            'bvk_count': bvk_count,
+            'has_am': has_am,
+            'am_count': am_count,
+        }
         table_data.append({
             '代码': ts_code,
             '名称': name,
             '行业': row.get('industry_name', '未知'),
-            '收盘价': f"{row['close_qfq']:.2f}",
+            '收盘价': f"{close_val:.2f}",
             '涨跌幅': f"{pct_val:.2f}%",
             '涨跌幅样式': pct_class,
             'J值': f"{j_val:.2f}",
@@ -615,6 +656,7 @@ def generate_c154_html(result, df, end_date, funnel_stats, industry_count):
         for ind, cnt in industry_count.items()
     ])
     charts_json = json.dumps(stock_charts, ensure_ascii=False, default=str)
+    details_json = json.dumps(stock_details, ensure_ascii=False, default=str)
 
     stage_labels = [
         ('全市场', '全市场（250天内）'),
@@ -748,6 +790,10 @@ def generate_c154_html(result, df, end_date, funnel_stats, industry_count):
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
             <h2 id="modalTitle" class="text-xl font-bold mb-4"></h2>
+            <div id="stockInfoPanel" class="bg-gray-50 rounded-lg p-4 mb-4">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3" id="stockInfoGrid"></div>
+                <div class="grid grid-cols-3 md:grid-cols-6 gap-2 mt-3" id="stockSignalGrid"></div>
+            </div>
             <div id="klineChart" class="chart-container mb-4"></div>
             <div id="volumeChart" class="chart-container mb-4" style="height:150px;"></div>
             <div id="kdjChart" class="chart-container" style="height:200px;"></div>
@@ -756,10 +802,11 @@ def generate_c154_html(result, df, end_date, funnel_stats, industry_count):
 
     <script>
     const stockCharts = {charts_json};
+    const stockDetails = {details_json};
     const stockCSV = `{csv_data}`;
 
     function downloadCSV() {{
-        const blob = new Blob(['\uFEFF' + stockCSV], {{ type: 'text/csv;charset=utf-8;' }});
+        const blob = new Blob(['\\uFEFF' + stockCSV], {{ type: 'text/csv;charset=utf-8;' }});
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
         link.download = 'c154_selection_{end_date}.csv';
@@ -771,7 +818,7 @@ def generate_c154_html(result, df, end_date, funnel_stats, industry_count):
         const tbl = document.getElementById('stockTable');
         const rows = Array.from(tbl.querySelector('tbody').querySelectorAll('tr'));
         sortDir[col] = !sortDir[col];
-        tbl.querySelectorAll('th').forEach((th,i) => {{ th.classList.remove('sort-asc','sort-desc'); if(i===col) th.classList.add(sortDir[col]?'sort-desc':'sort-asc'); }}));
+        tbl.querySelectorAll('th').forEach((th,i) => {{ th.classList.remove('sort-asc','sort-desc'); if(i===col) th.classList.add(sortDir[col]?'sort-desc':'sort-asc'); }});
         rows.sort((a,b) => {{
             const av=a.cells[col].textContent.trim(), bv=b.cells[col].textContent.trim();
             const an=parseFloat(av), bn=parseFloat(bv);
@@ -784,17 +831,79 @@ def generate_c154_html(result, df, end_date, funnel_stats, industry_count):
     let kc,vc,kdjc;
     function showChart(ts,nm) {{
         const d=stockCharts[ts]; if(!d){{alert('暂无图表');return;}}
-        document.getElementById('modalTitle').textContent=nm+' ('+ts+') - 技术分析';
+        document.getElementById('modalTitle').textContent=nm+' ('+ts+') - C154 技术分析';
         document.getElementById('chartModal').style.display='block';
+        const info=stockDetails[ts];
+        if(info){{
+            document.getElementById('stockInfoGrid').innerHTML=`<div class="bg-white rounded p-2"><div class="text-xs text-gray-500">行业</div><div class="font-bold text-blue-600">${{info.industry}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">收盘价</div><div class="font-bold">${{info.close}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">涨跌幅</div><div class="font-bold ${{info.pct.startsWith('-')?'text-green-600':'text-red-600'}}">${{info.pct}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">60日线</div><div class="font-bold">${{info.ma60}} ${{info.above_ma60?'📈':'📉'}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">J值</div><div class="font-bold ${{parseFloat(info.j_val)<0?'text-red-600':'text-orange-600'}}">${{info.j_val}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">MACD-DIF</div><div class="font-bold">${{info.macd_dif}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">成交额</div><div class="font-bold">${{info.amount}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">60日线趋势</div><div class="font-bold">${{info.ma60_up?'<span class="text-green-600">上升</span>':'<span class="text-red-600">下降</span>'}}</div></div>`;
+            document.getElementById('stockSignalGrid').innerHTML=`<div class="text-center p-1 rounded text-xs ${{info.has_step?'bg-green-100 text-green-700':'bg-gray-100 text-gray-400'}}">${{info.has_step?'✅ J13阶梯':'❌ J13阶梯'}}</div><div class="text-center p-1 rounded text-xs ${{info.no_dist?'bg-green-100 text-green-700':'bg-red-100 text-red-700'}}">${{info.no_dist?'✅ 无出货':'⚠️ '+info.dist_signals}}</div><div class="text-center p-1 rounded text-xs ${{info.has_bvk?'bg-green-100 text-green-700':'bg-gray-100 text-gray-400'}}">${{info.has_bvk?'✅ 暴力K('+info.bvk_count+'次)':'❌ 暴力K'}}</div><div class="text-center p-1 rounded text-xs ${{info.has_am?'bg-green-100 text-green-700':'bg-gray-100 text-gray-400'}}">${{info.has_am?'✅ 异动('+info.am_count+'次)':'❌ 异动'}}</div><div class="text-center p-1 rounded text-xs ${{info.is_lowest_volume?'bg-green-100 text-green-700':'bg-gray-100 text-gray-400'}}">${{info.is_lowest_volume?'✅ 回调最低量':'❌ 回调最低量'}}</div><div class="text-center p-1 rounded text-xs ${{info.is_amount_top?'bg-green-100 text-green-700':'bg-gray-100 text-gray-400'}}">${{info.is_amount_top?'✅ 成交额前60%':'❌ 成交额前60%'}}</div>`;
+        }}
         if(kc)kc.dispose(); if(vc)vc.dispose(); if(kdjc)kdjc.dispose();
         kc=echarts.init(document.getElementById('klineChart'));
         const cd=d.candlestick.map(c=>({{value:[c[1],c[2],c[3],c[4]],itemStyle:{{color:c[2]>=c[1]?'#ef4444':'#22c55e',color0:c[2]>=c[1]?'#ef4444':'#22c55e',borderColor:c[2]>=c[1]?'#ef4444':'#22c55e',borderColor0:c[2]>=c[1]?'#ef4444':'#22c55e'}}}}));
-        kc.setOption({{title:{{text:'K线+MA60+知行多空',left:'center',textStyle:{{fontSize:14}}}},tooltip:{{trigger:'axis',axisPointer:{{type:'cross'}}}},legend:{{data:['K线','MA60','知行多空','知行中'],bottom:0}},grid:{{left:'8%',right:'8%',top:'40px',bottom:'50px'}},xAxis:{{type:'category',data:d.dates}},yAxis:{{type:'value',scale:true}},series:[{{type:'candlestick',data:cd,name:'K线'}},{{type:'line',data:d.ma60,name:'MA60',smooth:true,lineStyle:{{color:'#f59e0b',width:2}}}},{{type:'line',data:d.zhixing_duokong,name:'知行多空',smooth:true,lineStyle:{{color:'#3b82f6',width:1}}}},{{type:'line',data:d.zhixing_mid_duokong,name:'知行中',smooth:true,lineStyle:{{color:'#8b5cf6',width:1}}}}]}});
+        kc.setOption({{
+            title:{{text:'K线 + MA60 + 知行多空',left:'center',textStyle:{{fontSize:14}}}},
+            tooltip:{{trigger:'axis',axisPointer:{{type:'cross'}},
+                formatter:function(params){{
+                    let r=params[0].axisValue+'<br/>';
+                    params.forEach(p=>{{
+                        if(p.seriesType==='candlestick'){{
+                            const i=p.dataIndex;const ch=d.price_change[i];const cc=ch>=0?'#ef4444':'#22c55e';const cs=ch>=0?'+':'';
+                            const raw=d.candlestick[i];
+                            r+='涨跌幅: <span style="color:'+cc+'">'+cs+ch+'%</span><br/>开盘: '+raw[1]+' 收盘: '+raw[2]+'<br/>最高: '+raw[3]+' 最低: '+raw[4]+'<br/>';
+                        }} else if(p.seriesName==='MA60'){{r+='MA60: '+p.data+'<br/>';
+                        }} else if(p.seriesName==='知行多空'){{r+='知行多空: '+p.data+'<br/>';
+                        }} else if(p.seriesName==='知行中'){{r+='知行中: '+p.data+'<br/>';}}
+                    }});
+                    return r;
+                }}
+            }},
+            legend:{{data:['K线','MA60','知行多空','知行中'],bottom:0}},
+            grid:{{left:'8%',right:'8%',top:'40px',bottom:'80px'}},
+            xAxis:{{type:'category',data:d.dates}},
+            yAxis:{{type:'value',scale:true}},
+            dataZoom:[{{type:'inside'}},{{type:'slider',start:70,end:100}}],
+            series:[
+                {{type:'candlestick',data:cd,name:'K线'}},
+                {{type:'line',data:d.ma60,name:'MA60',smooth:true,lineStyle:{{color:'#f59e0b',width:2}},symbol:'none'}},
+                {{type:'line',data:d.zhixing_duokong,name:'知行多空',smooth:true,lineStyle:{{color:'#3b82f6',width:1,type:'dashed'}},symbol:'none'}},
+                {{type:'line',data:d.zhixing_mid_duokong,name:'知行中',smooth:true,lineStyle:{{color:'#8b5cf6',width:1,type:'dotted'}},symbol:'none'}}
+            ]
+        }});
         vc=echarts.init(document.getElementById('volumeChart'));
         const vd=d.volume.map(v=>({{value:v.value,itemStyle:v.itemStyle}}));
-        vc.setOption({{title:{{text:'成交额（万元）',left:'center',textStyle:{{fontSize:14}}}},tooltip:{{trigger:'axis'}},grid:{{left:'8%',right:'8%',top:'40px',bottom:'30px'}},xAxis:{{type:'category',data:d.dates}},yAxis:{{type:'value'}},series:[{{type:'bar',data:vd}}]}});
+        vc.setOption({{
+            title:{{text:'成交额（万元）- 黄色=倍量上涨 紫色=倍量下跌',left:'center',textStyle:{{fontSize:12}}}},
+            tooltip:{{trigger:'axis',
+                formatter:function(params){{
+                    const i=params[0].dataIndex;const vol=d.volume[i];
+                    return params[0].axisValue+'<br/>成交额: '+params[0].value.toFixed(2)+' 万元<br/>是否倍量: '+(vol.is_double?'是':'否');
+                }}
+            }},
+            grid:{{left:'8%',right:'8%',top:'40px',bottom:'30px'}},
+            xAxis:{{type:'category',data:d.dates,show:false}},
+            yAxis:{{type:'value'}},
+            series:[{{type:'bar',data:vd}}]
+        }});
         kdjc=echarts.init(document.getElementById('kdjChart'));
-        kdjc.setOption({{title:{{text:'KDJ指标',left:'center',textStyle:{{fontSize:14}}}},tooltip:{{trigger:'axis'}},legend:{{data:['K','D','J'],bottom:0}},grid:{{left:'10%',right:'10%',top:'40px',bottom:'40px'}},xAxis:{{type:'category',data:d.dates}},yAxis:{{type:'value',min:0,max:100}},series:[{{type:'line',data:d.kdj_k,name:'K',smooth:true,lineStyle:{{color:'#3b82f6'}}}},{{type:'line',data:d.kdj_d,name:'D',smooth:true,lineStyle:{{color:'#f59e0b'}}}},{{type:'line',data:d.kdj_j,name:'J',smooth:true,lineStyle:{{color:'#ef4444'}}}}]}});
+        kdjc.setOption({{
+            title:{{text:'KDJ指标',left:'center',textStyle:{{fontSize:14}}}},
+            tooltip:{{trigger:'axis',
+                formatter:function(params){{
+                    let r=params[0].axisValue+'<br/>';params.forEach(p=>{{r+=p.seriesName+': '+p.data.toFixed(2)+'<br/>';}});
+                    return r;
+                }}
+            }},
+            legend:{{data:['K','D','J'],bottom:0}},
+            grid:{{left:'10%',right:'10%',top:'40px',bottom:'40px'}},
+            xAxis:{{type:'category',data:d.dates}},
+            yAxis:{{type:'value',min:0,max:100}},
+            series:[
+                {{type:'line',data:d.kdj_k,name:'K',smooth:true,lineStyle:{{color:'#3b82f6'}}}},
+                {{type:'line',data:d.kdj_d,name:'D',smooth:true,lineStyle:{{color:'#f59e0b'}}}},
+                {{type:'line',data:d.kdj_j,name:'J',smooth:true,lineStyle:{{color:'#ef4444'}}}}
+            ]
+        }});
         window.addEventListener('resize',()=>{{kc.resize();vc.resize();kdjc.resize();}});
     }}
     function closeModal(){{document.getElementById('chartModal').style.display='none';}}

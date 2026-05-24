@@ -28,10 +28,16 @@
                     <h1 class="text-2xl font-bold text-orange-600">🏆 C154 最优组合选股</h1>
                     <p class="text-gray-500 mt-1">日期: 20260522 | 共选出 <span class="text-orange-600 font-bold text-xl">41</span> 只股票</p>
                 </div>
-                <button onclick="downloadCSV()" class="flex items-center gap-2 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    下载 CSV
-                </button>
+                <div class="flex gap-3">
+                    <button onclick="downloadCSV()" class="flex items-center gap-2 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        下载 CSV
+                    </button>
+                    <button onclick="downloadSEL()" class="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        导入同花顺 (.sel)
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -149,6 +155,29 @@
 301059.SZ,金三江,化工原料,15.15,3.06%,text-red-600,3.98,text-orange-600,0.3058,5.71,1,81
 300348.SZ,长亮科技,软件服务,11.03,0.09%,text-red-600,4.92,text-orange-600,-0.5413,14.06,1,81
 `;
+    const selCodes = ["002833", "002392", "600379", "600930", "301259", "603278", "002582", "600606", "300880", "300762", "300339", "300165", "301040", "300270", "301090", "603418", "301584", "601333", "600166", "301149", "300639", "300591", "300981", "300095", "300161", "300982", "002397", "300290", "688101", "600829", "600572", "301106", "301517", "688580", "600351", "002515", "301141", "300741", "002157", "301059", "300348"];
+
+    function downloadSEL() {
+        if(selCodes.length===0){alert('无股票数据');return;}
+        const buf = new ArrayBuffer(2 + selCodes.length * 8);
+        const view = new DataView(buf);
+        view.setUint16(0, selCodes.length, true);
+        let offset = 2;
+        selCodes.forEach(code => {
+            const market = (code[0]==='6'||code[0]==='9') ? 0x11 : 0x21;
+            view.setUint8(offset, 0x07);
+            view.setUint8(offset + 1, market);
+            for(let i = 0; i < 6; i++) {
+                view.setUint8(offset + 2 + i, code.charCodeAt(i));
+            }
+            offset += 8;
+        });
+        const blob = new Blob([buf], {type: 'application/octet-stream'});
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'c154_selection_20260522.sel';
+        link.click();
+    }
 
     function downloadCSV() {
         const blob = new Blob(['\uFEFF' + stockCSV], { type: 'text/csv;charset=utf-8;' });

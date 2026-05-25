@@ -30,6 +30,7 @@ import os
 import time
 
 import pandas as pd
+import numpy as np
 from tabulate import tabulate
 
 from config import (
@@ -50,6 +51,107 @@ from main_par2 import (
 from generate_stock_html import generate_c154_html
 
 logging.basicConfig(level=logging.INFO, format="[%(asctime)s] %(levelname)s | %(message)s")
+
+
+SCORE_WEIGHTS = {
+    'total_mv': {'weight': 25, 'desc': '小市值(<=P30)'},
+    'turnover_rate': {'weight': 20, 'desc': '换手1~5%'},
+    'pct_chg': {'weight': 20, 'desc': '涨幅>=1%'},
+    'volume_ratio': {'weight': 10, 'desc': '量比1.0~1.5'},
+    'body_ratio': {'weight': 10, 'desc': '实体>=0.4'},
+    'kdj_qfq': {'weight': 10, 'desc': 'J值0~2'},
+    'close_vs_ma60': {'weight': 5, 'desc': '距MA60 2~5%'},
+}
+
+
+def calculate_c154_score(result, df):
+    """为 C154 筛选结果计算胜率评分
+
+    基于胜率优化实验数据重新设计评分维度（目标：最大化胜率）：
+
+    胜率最优单因子（样本>=30）：
+      小市值(<=P30) 胜率62.1%    换手1~5% 胜率61.9%
+      涨幅1~3% 胜率61.6%        量比1.0~1.5 胜率63.6%
+      实体>=0.4 胜率60.6%       J值0~2 胜率60.5%
+
+    胜率最优组合：
+      小盘+换手1~5+涨幅>=1 → 胜率68.1%（样本859）
+
+    评分规则（满分100）：
+      1. 小市值（25分）：<= P30 得 25 分
+      2. 换手率（20分）：1~5% 得 20 分，0.5~1% 或 5~8% 得 10 分
+      3. 当日涨幅（20分）：>=1% 得 20 分，0.5~1% 得 12 分
+      4. 量比（10分）：1.0~1.5 得 10 分，0.8~1.0 或 1.5~2.0 得 5 分
+      5. 实体比例（10分）：>=0.4 得 10 分，0.2~0.4 得 5 分
+      6. J值位置（10分）：0~2 得 10 分，-2~0 或 2~4 得 5 分
+      7. 距MA60（5分）：2~5% 得 5 分，0~2% 得 3 分
+
+    Args:
+        result: C154 筛选结果 DataFrame
+        df: 原始完整数据 DataFrame
+
+    Returns:
+        添加了 score 和各维度分列的 DataFrame，按 score 降序排列
+    """
+    scored = result.copy()
+
+    mv_p30 = df['total_mv'].quantile(0.3)
+    mv_p50 = df['total_mv'].median()
+    scored['score_mv'] = scored['total_mv'].apply(
+        lambda x: 25 if pd.notna(x) and x <= mv_p30
+        else (12 if pd.notna(x) and x <= mv_p50 else (4 if pd.notna(x) else 0))
+    )
+
+    scored['score_turnover'] = scored['turnover_rate'].apply(
+        lambda x: 20 if pd.notna(x) and 1 <= x < 5
+        else (10 if pd.notna(x) and ((0.5 <= x < 1) or (5 <= x < 8)) else (0 if pd.notna(x) else 0))
+    )
+
+    scored['score_pct'] = scored['pct_chg'].apply(
+        lambda x: 20 if pd.notna(x) and x >= 1
+        else (12 if pd.notna(x) and 0.5 <= x < 1 else (5 if pd.notna(x) and 0 <= x < 0.5 else (0 if pd.notna(x) else 0)))
+    )
+
+    scored['score_vr'] = scored['volume_ratio'].apply(
+        lambda x: 10 if pd.notna(x) and 1.0 <= x < 1.5
+        else (5 if pd.notna(x) and ((0.8 <= x < 1.0) or (1.5 <= x < 2.0)) else (0 if pd.notna(x) else 0))
+    )
+
+    if 'open_qfq' in scored.columns and 'high_qfq' in scored.columns:
+        hi = scored['high_qfq']
+        lo = scored['low_qfq']
+        cl = scored['close_qfq']
+        op = scored['open_qfq']
+        rng = hi - lo
+        body = (cl - op).abs()
+        scored['body_ratio'] = np.where(rng > 0, body / rng, 0)
+    scored['score_body'] = scored['body_ratio'].apply(
+        lambda x: 10 if x >= 0.4 else (5 if x >= 0.2 else 0)
+    )
+
+    scored['score_j'] = scored['kdj_qfq'].apply(
+        lambda x: 10 if 0 <= x < 2
+        else (5 if (-2 <= x < 0 or 2 <= x < 4) else (0 if pd.notna(x) else 0))
+    )
+
+    if 'close_qfq' in scored.columns and 'ma_qfq_60' in scored.columns:
+        scored['close_vs_ma60'] = (scored['close_qfq'] - scored['ma_qfq_60']) / scored['ma_qfq_60'] * 100
+    else:
+        scored['close_vs_ma60'] = 0
+    scored['score_ma60'] = scored['close_vs_ma60'].apply(
+        lambda x: 5 if pd.notna(x) and 2 <= x < 5
+        else (3 if pd.notna(x) and 0 <= x < 2 else (0 if pd.notna(x) else 0))
+    )
+
+    score_cols = ['score_mv', 'score_turnover', 'score_pct', 'score_vr',
+                  'score_body', 'score_j', 'score_ma60']
+    scored['score'] = scored[score_cols].sum(axis=1)
+
+    scored['score_level'] = scored['score'].apply(
+        lambda x: 'A' if x >= 80 else ('B' if x >= 65 else ('C' if x >= 50 else 'D'))
+    )
+
+    return scored.sort_values('score', ascending=False)
 
 
 def parse_args():
@@ -105,6 +207,9 @@ def apply_c154_filter(df, end_date, basic):
     result = latest[[
         'ts_code', 'name', 'industry_name', 'trade_date', 'close_qfq', 'ma_qfq_60',
         'kdj_qfq', 'macd_dif_qfq', 'amount', 'pct_chg',
+        'turnover_rate', 'volume_ratio', 'total_mv', 'circ_mv',
+        'open_qfq', 'high_qfq', 'low_qfq', 'kdj_k_qfq', 'kdj_d_qfq',
+        'macd_dea_qfq', 'macd_qfq', 'pe_ttm', 'pb',
     ]].sort_values('kdj_qfq')
 
     return result
@@ -120,7 +225,7 @@ def save_c154_result(result, end_date):
 
 
 def print_c154_results(result, df, end_date):
-    """打印 C154 策略筛选结果"""
+    """打印 C154 策略筛选结果（含评分）"""
     print('\n========== C154 最优组合选股结果 ==========')
     print('条件: 阶梯放量+J13低吸 & 不跌 & 无出货 & 底部暴力K & J<5 & 异动')
     print()
@@ -129,7 +234,13 @@ def print_c154_results(result, df, end_date):
         print('没有符合条件的股票')
         return
 
+    has_score = 'score' in result.columns
     print(f'共找到 {len(result)} 只符合条件的股票:')
+
+    if has_score:
+        level_counts = result['score_level'].value_counts().to_dict()
+        print(f'评分分布: A(≥80)={level_counts.get("A", 0)}只  B(≥65)={level_counts.get("B", 0)}只  '
+              f'C(≥50)={level_counts.get("C", 0)}只  D(<50)={level_counts.get("D", 0)}只')
 
     # 行业分布
     industry_count = result['industry_name'].value_counts()
@@ -140,19 +251,32 @@ def print_c154_results(result, df, end_date):
     # 表格
     table_data = []
     for _, row in result.iterrows():
-        table_data.append([
+        row_items = [
             row['ts_code'],
             row['name'],
             row.get('industry_name', '未知'),
-            row['trade_date'],
             f'{row["close_qfq"]:.2f}',
             f'{row["kdj_qfq"]:.2f}',
             f'{row["pct_chg"]:.2f}%',
-            f'{row["macd_dif_qfq"]:.4f}',
-            f'{row["amount"]:.2f}',
-        ])
+            f'{row["amount"]:.0f}',
+        ]
+        if has_score:
+            mv_wan = row['total_mv'] / 10000 if pd.notna(row.get('total_mv')) else 0
+            row_items.extend([
+                f'{row["score"]:.0f}',
+                row['score_level'],
+                f'{row.get("turnover_rate", 0):.1f}',
+                f'{mv_wan:.0f}万',
+                f'{row.get("volume_ratio", 0):.2f}',
+                f'{row.get("body_ratio", 0):.2f}',
+            ])
+        table_data.append(row_items)
 
-    headers = ['代码', '名称', '行业', '日期', '收盘价', 'J值', '涨跌幅', 'MACD-DIF', '成交额']
+    if has_score:
+        headers = ['代码', '名称', '行业', '收盘价', 'J值', '涨跌幅', '成交额',
+                   '评分', '等级', '换手%', '市值', '量比', '实体比']
+    else:
+        headers = ['代码', '名称', '行业', '收盘价', 'J值', '涨跌幅', '成交额']
     print(tabulate(table_data, headers=headers, tablefmt='github'))
 
 
@@ -282,6 +406,10 @@ def main():
 
         # 应用 C154 筛选条件
         result = apply_c154_filter(df, end_date, basic)
+
+        # 计算评分并排序
+        if not result.empty:
+            result = calculate_c154_score(result, df)
 
         # 打印结果
         print_c154_results(result, df, end_date)

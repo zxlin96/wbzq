@@ -612,6 +612,12 @@ def generate_c154_html(result, df, end_date, funnel_stats, industry_count):
             dist_signals.append('V2')
         if row.get('has_distribution_signal_v3'):
             dist_signals.append('V3')
+        score_val = float(row.get('score', 0)) if pd.notna(row.get('score')) else 0
+        score_level = str(row.get('score_level', 'D')) if pd.notna(row.get('score_level')) else 'D'
+        level_colors = {'A': 'bg-red-100 text-red-700', 'B': 'bg-orange-100 text-orange-700',
+                        'C': 'bg-yellow-100 text-yellow-700', 'D': 'bg-gray-100 text-gray-500'}
+        score_color = 'text-red-600' if score_val >= 80 else 'text-orange-600' if score_val >= 65 else 'text-yellow-600' if score_val >= 50 else 'text-gray-500'
+
         stock_details[ts_code] = {
             'name': name,
             'industry': row.get('industry_name', '未知'),
@@ -632,6 +638,14 @@ def generate_c154_html(result, df, end_date, funnel_stats, industry_count):
             'bvk_count': bvk_count,
             'has_am': has_am,
             'am_count': am_count,
+            'score': f"{score_val:.0f}",
+            'score_level': score_level,
+            'score_color': score_color,
+            'level_color': level_colors.get(score_level, 'bg-gray-100 text-gray-500'),
+            'turnover': f"{row.get('turnover_rate', 0):.1f}%" if pd.notna(row.get('turnover_rate')) else '-',
+            'volume_ratio': f"{row.get('volume_ratio', 0):.2f}" if pd.notna(row.get('volume_ratio')) else '-',
+            'body_ratio': f"{row.get('body_ratio', 0):.2f}" if pd.notna(row.get('body_ratio')) else '-',
+            'total_mv': f"{row.get('total_mv', 0)/10000:.0f}万" if pd.notna(row.get('total_mv')) else '-',
         }
         table_data.append({
             '代码': ts_code,
@@ -642,6 +656,10 @@ def generate_c154_html(result, df, end_date, funnel_stats, industry_count):
             '涨跌幅样式': pct_class,
             'J值': f"{j_val:.2f}",
             'J值样式': j_class,
+            '评分': f"{score_val:.0f}",
+            '评分样式': score_color,
+            '等级': score_level,
+            '等级样式': level_colors.get(score_level, 'bg-gray-100 text-gray-500'),
             'MACD-DIF': f"{row.get('macd_dif_qfq', 0):.4f}",
             '成交额万': f"{row['amount']/10000:.2f}",
             '暴力K次数': bvk_count,
@@ -684,6 +702,8 @@ def generate_c154_html(result, df, end_date, funnel_stats, industry_count):
         f'<td class="px-6 py-4">{r["收盘价"]}</td>'
         f'<td class="px-6 py-4 font-semibold {r["涨跌幅样式"]}">{r["涨跌幅"]}</td>'
         f'<td class="px-6 py-4 font-bold {r["J值样式"]}">{r["J值"]}</td>'
+        f'<td class="px-6 py-4 font-bold {r["评分样式"]}">{r["评分"]}</td>'
+        f'<td class="px-6 py-4"><span class="px-2 py-1 {r["等级样式"]} rounded-full text-xs font-bold">{r["等级"]}</span></td>'
         f'<td class="px-6 py-4">{r["MACD-DIF"]}</td>'
         f'<td class="px-6 py-4">{r["成交额万"]}</td>'
         f'<td class="px-6 py-4">{r["暴力K次数"]}次</td>'
@@ -695,6 +715,30 @@ def generate_c154_html(result, df, end_date, funnel_stats, industry_count):
     avg_pct = result["pct_chg"].mean()
     n = len(result)
     n_ind = len(industry_count)
+
+    has_score = 'score' in result.columns and 'score_level' in result.columns
+    if has_score:
+        level_counts = result['score_level'].value_counts().to_dict()
+        n_a = level_counts.get('A', 0)
+        n_b = level_counts.get('B', 0)
+        n_ab = n_a + n_b
+        score_cards = f'''
+            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">B级以上(推荐)</div><div class="text-2xl font-bold text-red-600">{n_ab}只</div></div>
+            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">A级</div><div class="text-2xl font-bold text-red-600">{n_a}只</div></div>
+            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">B级</div><div class="text-2xl font-bold text-orange-600">{n_b}只</div></div>
+            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">C级</div><div class="text-2xl font-bold text-yellow-600">{level_counts.get("C", 0)}只</div></div>
+            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">D级</div><div class="text-2xl font-bold text-gray-400">{level_counts.get("D", 0)}只</div></div>
+            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">平均J值</div><div class="text-2xl font-bold text-red-600">{avg_j:.2f}</div></div>
+            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">平均涨幅</div><div class="text-2xl font-bold text-blue-600">{avg_pct:.2f}%</div></div>
+            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">涉及行业</div><div class="text-2xl font-bold text-green-600">{n_ind}</div></div>
+        '''
+    else:
+        score_cards = f'''
+            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">选股总数</div><div class="text-2xl font-bold text-orange-600">{n}</div></div>
+            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">涉及行业</div><div class="text-2xl font-bold text-green-600">{n_ind}</div></div>
+            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">平均J值</div><div class="text-2xl font-bold text-red-600">{avg_j:.2f}</div></div>
+            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">平均涨幅</div><div class="text-2xl font-bold text-blue-600">{avg_pct:.2f}%</div></div>
+        '''
 
     html_content = f"""<!DOCTYPE html>
 <html lang="zh-CN">
@@ -757,11 +801,8 @@ def generate_c154_html(result, df, end_date, funnel_stats, industry_count):
             <div class="space-y-2">{funnel_rows}</div>
         </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">选股总数</div><div class="text-2xl font-bold text-orange-600">{n}</div></div>
-            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">涉及行业</div><div class="text-2xl font-bold text-green-600">{n_ind}</div></div>
-            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">平均J值</div><div class="text-2xl font-bold text-red-600">{avg_j:.2f}</div></div>
-            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">平均涨幅</div><div class="text-2xl font-bold text-blue-600">{avg_pct:.2f}%</div></div>
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 mb-6">
+            {score_cards}
         </div>
 
         <div class="bg-white rounded-xl shadow-sm overflow-hidden mb-6">
@@ -776,10 +817,12 @@ def generate_c154_html(result, df, end_date, funnel_stats, industry_count):
                             <th class="px-6 py-3" onclick="sortTable(3)">收盘价</th>
                             <th class="px-6 py-3" onclick="sortTable(4)">涨跌幅</th>
                             <th class="px-6 py-3" onclick="sortTable(5)">J值</th>
-                            <th class="px-6 py-3" onclick="sortTable(6)">MACD-DIF</th>
-                            <th class="px-6 py-3" onclick="sortTable(7)">成交额(万)</th>
-                            <th class="px-6 py-3" onclick="sortTable(8)">暴力K次数</th>
-                            <th class="px-6 py-3" onclick="sortTable(9)">异动次数</th>
+                            <th class="px-6 py-3" onclick="sortTable(6)">评分</th>
+                            <th class="px-6 py-3" onclick="sortTable(7)">等级</th>
+                            <th class="px-6 py-3" onclick="sortTable(8)">MACD-DIF</th>
+                            <th class="px-6 py-3" onclick="sortTable(9)">成交额(万)</th>
+                            <th class="px-6 py-3" onclick="sortTable(10)">暴力K次数</th>
+                            <th class="px-6 py-3" onclick="sortTable(11)">异动次数</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">{table_rows}</tbody>
@@ -798,7 +841,7 @@ def generate_c154_html(result, df, end_date, funnel_stats, industry_count):
             <span class="close" onclick="closeModal()">&times;</span>
             <h2 id="modalTitle" class="text-xl font-bold mb-4"></h2>
             <div id="stockInfoPanel" class="bg-gray-50 rounded-lg p-4 mb-4">
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-3" id="stockInfoGrid"></div>
+                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3" id="stockInfoGrid"></div>
                 <div class="grid grid-cols-3 md:grid-cols-6 gap-2 mt-3" id="stockSignalGrid"></div>
             </div>
             <div id="klineChart" class="chart-container mb-4"></div>
@@ -865,7 +908,7 @@ def generate_c154_html(result, df, end_date, funnel_stats, industry_count):
         document.getElementById('chartModal').style.display='block';
         const info=stockDetails[ts];
         if(info){{
-            document.getElementById('stockInfoGrid').innerHTML=`<div class="bg-white rounded p-2"><div class="text-xs text-gray-500">行业</div><div class="font-bold text-blue-600">${{info.industry}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">收盘价</div><div class="font-bold">${{info.close}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">涨跌幅</div><div class="font-bold ${{info.pct.startsWith('-')?'text-green-600':'text-red-600'}}">${{info.pct}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">60日线</div><div class="font-bold">${{info.ma60}} ${{info.above_ma60?'📈':'📉'}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">J值</div><div class="font-bold ${{parseFloat(info.j_val)<0?'text-red-600':'text-orange-600'}}">${{info.j_val}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">MACD-DIF</div><div class="font-bold">${{info.macd_dif}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">成交额</div><div class="font-bold">${{info.amount}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">60日线趋势</div><div class="font-bold">${{info.ma60_up?'<span class="text-green-600">上升</span>':'<span class="text-red-600">下降</span>'}}</div></div>`;
+            document.getElementById('stockInfoGrid').innerHTML=`<div class="bg-white rounded p-2"><div class="text-xs text-gray-500">行业</div><div class="font-bold text-blue-600">${{info.industry}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">收盘价</div><div class="font-bold">${{info.close}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">涨跌幅</div><div class="font-bold ${{info.pct.startsWith('-')?'text-green-600':'text-red-600'}}">${{info.pct}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">60日线</div><div class="font-bold">${{info.ma60}} ${{info.above_ma60?'📈':'📉'}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">J值</div><div class="font-bold ${{parseFloat(info.j_val)<0?'text-red-600':'text-orange-600'}}">${{info.j_val}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">评分</div><div class="font-bold ${{info.score_color}}">${{info.score}}分</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">等级</div><div class="font-bold"><span class="px-2 py-1 ${{info.level_color}} rounded-full text-xs">${{info.score_level}}</span></div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">MACD-DIF</div><div class="font-bold">${{info.macd_dif}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">成交额</div><div class="font-bold">${{info.amount}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">60日线趋势</div><div class="font-bold">${{info.ma60_up?'<span class="text-green-600">上升</span>':'<span class="text-red-600">下降</span>'}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">换手率</div><div class="font-bold">${{info.turnover}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">量比</div><div class="font-bold">${{info.volume_ratio}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">实体比</div><div class="font-bold">${{info.body_ratio}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">总市值</div><div class="font-bold">${{info.total_mv}}</div></div>`;
             document.getElementById('stockSignalGrid').innerHTML=`<div class="text-center p-1 rounded text-xs ${{info.has_step?'bg-green-100 text-green-700':'bg-gray-100 text-gray-400'}}">${{info.has_step?'✅ J13阶梯':'❌ J13阶梯'}}</div><div class="text-center p-1 rounded text-xs ${{info.no_dist?'bg-green-100 text-green-700':'bg-red-100 text-red-700'}}">${{info.no_dist?'✅ 无出货':'⚠️ '+info.dist_signals}}</div><div class="text-center p-1 rounded text-xs ${{info.has_bvk?'bg-green-100 text-green-700':'bg-gray-100 text-gray-400'}}">${{info.has_bvk?'✅ 暴力K('+info.bvk_count+'次)':'❌ 暴力K'}}</div><div class="text-center p-1 rounded text-xs ${{info.has_am?'bg-green-100 text-green-700':'bg-gray-100 text-gray-400'}}">${{info.has_am?'✅ 异动('+info.am_count+'次)':'❌ 异动'}}</div><div class="text-center p-1 rounded text-xs ${{info.is_lowest_volume?'bg-green-100 text-green-700':'bg-gray-100 text-gray-400'}}">${{info.is_lowest_volume?'✅ 回调最低量':'❌ 回调最低量'}}</div><div class="text-center p-1 rounded text-xs ${{info.is_amount_top?'bg-green-100 text-green-700':'bg-gray-100 text-gray-400'}}">${{info.is_amount_top?'✅ 成交额前60%':'❌ 成交额前60%'}}</div>`;
         }}
         if(kc)kc.dispose(); if(vc)vc.dispose(); if(kdjc)kdjc.dispose();

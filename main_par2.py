@@ -1614,10 +1614,11 @@ def run_sentiment_rebound_strategy(df, end_date, data_manager):
         etf_data = None
         try:
             etf_df = pro.fund_daily(ts_code=strategy.etf_code, 
-                                   start_date=(datetime.strptime(end_date, '%Y%m%d') - timedelta(days=30)).strftime('%Y%m%d'),
+                                   start_date=(datetime.strptime(end_date, '%Y%m%d') - timedelta(days=120)).strftime('%Y%m%d'),
                                    end_date=end_date)
             if etf_df is not None and not etf_df.empty:
                 etf_data = etf_df.sort_values('trade_date').reset_index(drop=True)
+                etf_data['open_qfq'] = etf_data['open']
                 etf_data['close_qfq'] = etf_data['close']
                 etf_data['high_qfq'] = etf_data['high']
                 etf_data['low_qfq'] = etf_data['low']
@@ -1673,7 +1674,9 @@ def run_sentiment_rebound_strategy(df, end_date, data_manager):
         os.makedirs(html_dir, exist_ok=True)
         report_file = os.path.join(html_dir, "sentiment_rebound_strategy.html")
         
-        generate_strategy_report(strategy, signals, j13_stats, report_file)
+        from sentiment_rebound_strategy import generate_etf_chart_data
+        etf_chart = generate_etf_chart_data(brick_data, strategy.etf_code) if brick_data is not None else generate_etf_chart_data(etf_data, strategy.etf_code) if etf_data is not None else None
+        generate_strategy_report(strategy, signals, j13_stats, report_file, etf_chart_data=etf_chart)
         print(f"\n📄 策略报告已生成: {report_file}")
         
         # 保存策略状态

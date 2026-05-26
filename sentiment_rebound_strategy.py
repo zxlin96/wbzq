@@ -403,10 +403,141 @@ class SentimentReboundStrategy:
         self.trades = []
 
 
+def _build_chart_html(etf_chart_data):
+    if etf_chart_data is None:
+        return ''
+    has_brick = len(etf_chart_data.get('brick_val', [])) > 0
+    brick_section = ''
+    if has_brick:
+        brick_section = '''
+        <div class="glass p-6 mb-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">🧱 知行砖形图</h2>
+            <div id="brickChart" class="chart-container"></div>
+        </div>'''
+    return f'''
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <div class="glass p-6 mb-6">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">📈 {etf_chart_data.get("etf_code", "ETF")} K线图</h2>
+        <div id="klineChart" class="chart-container"></div>
+        <div id="volChart" class="chart-container" style="height:180px;"></div>
+    </div>
+    {brick_section}'''
+
+
+def _build_chart_script(etf_chart_data):
+    if etf_chart_data is None:
+        return ''
+    dates_json = json.dumps(etf_chart_data['dates'])
+    candle_json = json.dumps(etf_chart_data['candlestick'])
+    vol_json = json.dumps(etf_chart_data['volume'])
+    has_brick = len(etf_chart_data.get('brick_val', [])) > 0
+
+    brick_script = ''
+    if has_brick:
+        brick_val_json = json.dumps(etf_chart_data['brick_val'])
+        brick_rising_json = json.dumps(etf_chart_data['brick_rising'])
+        brick_script = (
+            "var bc = echarts.init(document.getElementById('brickChart'));\n"
+            "var brickColors = " + brick_rising_json + ".map(function(r){ return r ? '#ef4444' : '#22c55e'; });\n"
+            "var brickSeries = " + brick_val_json + ".map(function(v,i){ return {value:v, itemStyle:{color:brickColors[i]}}; });\n"
+            "bc.setOption({\n"
+            "  title:{text:'知行砖形图',left:'center',textStyle:{fontSize:14}},\n"
+            "  tooltip:{trigger:'axis',formatter:function(p){var i=p[0].dataIndex;var r=" + brick_rising_json + "[i];return p[0].axisValue+'<br/>砖值:'+p[0].value.toFixed(3)+'<br/>方向:'+(r?'<span style=\"color:#ef4444\">红(上升)</span>':'<span style=\"color:#22c55e\">绿(下降)</span>');}},\n"
+            "  grid:{left:'8%',right:'8%',top:'40px',bottom:'40px'},\n"
+            "  xAxis:{type:'category',data:" + dates_json + "},\n"
+            "  yAxis:{type:'value',scale:true},\n"
+            "  dataZoom:[{type:'inside'},{type:'slider',start:70,end:100}],\n"
+            "  series:[{type:'bar',data:brickSeries,name:'砖值'}]\n"
+            "});\n"
+            "window.addEventListener('resize',function(){bc.resize();});\n"
+        )
+
+    script = (
+        "<script>\n"
+        "var kc = echarts.init(document.getElementById('klineChart'));\n"
+        "var cd = " + candle_json + ".map(function(c){ return {value:c, itemStyle:{color:c[1]<=c[2]?'#ef4444':'#22c55e', color0:c[1]<=c[2]?'#ef4444':'#22c55e', borderColor:c[1]<=c[2]?'#ef4444':'#22c55e', borderColor0:c[1]<=c[2]?'#ef4444':'#22c55e'}}; });\n"
+        "kc.setOption({\n"
+        "  title:{text:'K线走势',left:'center',textStyle:{fontSize:14}},\n"
+        "  tooltip:{trigger:'axis',axisPointer:{type:'cross'},formatter:function(params){var c=params[0];if(!c)return '';var d=c.dataIndex;var raw=" + candle_json + "[d];return c.axisValue+'<br/>开:'+raw[0].toFixed(3)+' 收:'+raw[1].toFixed(3)+'<br/>高:'+raw[2].toFixed(3)+' 低:'+raw[3].toFixed(3);}},\n"
+        "  grid:{left:'8%',right:'8%',top:'40px',bottom:'60px'},\n"
+        "  xAxis:{type:'category',data:" + dates_json + "},\n"
+        "  yAxis:{type:'value',scale:true},\n"
+        "  dataZoom:[{type:'inside'},{type:'slider',start:70,end:100}],\n"
+        "  series:[{type:'candlestick',data:cd,name:'K线'}]\n"
+        "});\n"
+        "window.addEventListener('resize',function(){kc.resize();});\n"
+        "\n"
+        "var vc = echarts.init(document.getElementById('volChart'));\n"
+        "vc.setOption({\n"
+        "  title:{text:'成交额(万元)',left:'center',textStyle:{fontSize:12}},\n"
+        "  tooltip:{trigger:'axis'},\n"
+        "  grid:{left:'8%',right:'8%',top:'30px',bottom:'30px'},\n"
+        "  xAxis:{type:'category',data:" + dates_json + ",show:false},\n"
+        "  yAxis:{type:'value'},\n"
+        "  series:[{type:'bar',data:" + vol_json + "}]\n"
+        "});\n"
+        "window.addEventListener('resize',function(){vc.resize();});\n"
+        "\n"
+        + brick_script +
+        "\n</script>"
+    )
+    return script
+
+
+def generate_etf_chart_data(etf_data, etf_code='563300.SH'):
+    """为 ETF 数据生成 ECharts 图表所需的 JSON 数据"""
+    if etf_data is None or etf_data.empty:
+        return None
+    etf_data = etf_data.sort_values('trade_date').reset_index(drop=True)
+    dates = etf_data['trade_date'].astype(str).tolist()
+    candlestick = []
+    for _, row in etf_data.iterrows():
+        op = float(row.get('open_qfq', row.get('open', 0)))
+        cl = float(row.get('close_qfq', row.get('close', 0)))
+        hi = float(row.get('high_qfq', row.get('high', 0)))
+        lo = float(row.get('low_qfq', row.get('low', 0)))
+        if op == 0:
+            op = cl
+        if hi == 0:
+            hi = cl
+        if lo == 0:
+            lo = cl
+        candlestick.append([op, cl, hi, lo])
+
+    volume = []
+    for i, (_, row) in enumerate(etf_data.iterrows()):
+        is_up = row.get('close_qfq', row.get('close', 0)) >= row.get('open_qfq', row.get('open', 0))
+        color = '#ef4444' if is_up else '#22c55e'
+        vol_val = float(row.get('amount', row.get('vol', 0)))
+        if vol_val > 10000:
+            vol_val = vol_val / 10000
+        volume.append({'value': round(vol_val, 2), 'itemStyle': {'color': color}})
+
+    brick_rising = []
+    brick_val = []
+    if 'zhixing_brick' in etf_data.columns:
+        for _, row in etf_data.iterrows():
+            bv = float(row.get('zhixing_brick', 0)) if pd.notna(row.get('zhixing_brick')) else 0
+            brick_val.append(bv)
+    if 'zhixing_brick_rising' in etf_data.columns:
+        for _, row in etf_data.iterrows():
+            brick_rising.append(bool(row.get('zhixing_brick_rising', False)))
+
+    return {
+        'etf_code': etf_code,
+        'dates': dates,
+        'candlestick': candlestick,
+        'volume': volume,
+        'brick_val': brick_val,
+        'brick_rising': brick_rising,
+    }
+
+
 def generate_strategy_report(strategy: SentimentReboundStrategy, 
                             signals: List[Dict],
                             j13_stats: Dict,
-                            output_file: str = None) -> str:
+                            output_file: str = None,
+                            etf_chart_data: Dict = None) -> str:
     """
     生成策略报告HTML
     
@@ -415,6 +546,7 @@ def generate_strategy_report(strategy: SentimentReboundStrategy,
         signals: 交易信号列表
         j13_stats: J13统计数据
         output_file: 输出文件路径
+        etf_chart_data: ETF K线图和砖形图数据
         
     Returns:
         HTML内容字符串
@@ -463,6 +595,9 @@ def generate_strategy_report(strategy: SentimentReboundStrategy,
         .glass {{ background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); }}
         .stat-card {{ transition: transform 0.2s; }}
         .stat-card:hover {{ transform: translateY(-2px); }}
+        .chart-container {{ height: 400px; }}
+        .brick-green {{ background: #22c55e; }}
+        .brick-red {{ background: #ef4444; }}
     </style>
 </head>
 <body class="p-4 md:p-8">
@@ -537,11 +672,15 @@ def generate_strategy_report(strategy: SentimentReboundStrategy,
         </div>
         
         <!-- 历史交易记录 -->
-        <div class="glass p-6">
+        <div class="glass p-6 mb-6">
             <h2 class="text-xl font-bold text-gray-800 mb-4">📜 历史交易记录</h2>
             {f'<table class="w-full"><thead class="bg-gray-50"><tr><th class="px-4 py-3 text-left">日期</th><th class="px-4 py-3 text-left">操作</th><th class="px-4 py-3 text-left">类型</th><th class="px-4 py-3 text-left">金额/价格</th><th class="px-4 py-3 text-left">原因</th></tr></thead><tbody class="divide-y divide-gray-200">' + trades_html + '</tbody></table>' if strategy.trades else '<p class="text-gray-500">暂无交易记录</p>'}
         </div>
+
+        {_build_chart_html(etf_chart_data)}
     </div>
+
+    {_build_chart_script(etf_chart_data)}
 </body>
 </html>'''
     

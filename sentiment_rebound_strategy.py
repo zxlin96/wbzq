@@ -287,11 +287,13 @@ class SentimentReboundStrategy:
             return signals
         
         # 生成买入信号
+        bought_today = False
         if j13_stats.get('is_above_threshold'):
             buy_signal = self.generate_buy_signal(j13_stats, current_date)
             if buy_signal:
                 signals.append(buy_signal)
                 self.trades.append(buy_signal)
+                bought_today = True
                 logging.info(f"买入信号: {current_date} - 金额¥{buy_signal['amount']:,.0f} (第{buy_signal['level']}级)")
         else:
             # 如果J13数量低于阈值，重置投资级别
@@ -301,8 +303,8 @@ class SentimentReboundStrategy:
             self.last_trade_date = current_date
             self.save_state()
         
-        # 生成卖出信号（如果有持仓且提供了砖型图数据）
-        if self.position > 0 and brick_data is not None and not brick_data.empty:
+        # 生成卖出信号（如果有持仓且提供了砖型图数据，且当日未买入）
+        if self.position > 0 and not bought_today and brick_data is not None and not brick_data.empty:
             sell_signal = self.generate_sell_signal(brick_data, current_date, current_price)
             if sell_signal:
                 signals.append(sell_signal)
@@ -455,7 +457,7 @@ def _build_chart_script(etf_chart_data):
     script = (
         "<script>\n"
         "var kc = echarts.init(document.getElementById('klineChart'));\n"
-        "var cd = " + candle_json + ".map(function(c){ return {value:c, itemStyle:{color:c[1]<=c[2]?'#ef4444':'#22c55e', color0:c[1]<=c[2]?'#ef4444':'#22c55e', borderColor:c[1]<=c[2]?'#ef4444':'#22c55e', borderColor0:c[1]<=c[2]?'#ef4444':'#22c55e'}}; });\n"
+        "var cd = " + candle_json + ".map(function(c){ return {value:c, itemStyle:{color:'#ef4444', color0:'#22c55e', borderColor:'#ef4444', borderColor0:'#22c55e'}}; });\n"
         "kc.setOption({\n"
         "  title:{text:'K线走势',left:'center',textStyle:{fontSize:14}},\n"
         "  tooltip:{trigger:'axis',axisPointer:{type:'cross'},formatter:function(params){var c=params[0];if(!c)return '';var d=c.dataIndex;var raw=" + candle_json + "[d];return c.axisValue+'<br/>开:'+raw[0].toFixed(3)+' 收:'+raw[1].toFixed(3)+'<br/>高:'+raw[2].toFixed(3)+' 低:'+raw[3].toFixed(3);}},\n"

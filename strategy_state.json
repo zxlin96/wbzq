@@ -1,9 +1,9 @@
 {
-  "position": 0,
-  "position_cost": 0.0,
-  "investment_level_idx": 0,
+  "position": 1,
+  "position_cost": 2000.0,
+  "investment_level_idx": 1,
   "red_bar_count": 0,
-  "last_trade_date": "20260526",
+  "last_trade_date": "20260527",
   "trades": [
     {
       "date": "20260319",
@@ -63,7 +63,17 @@
       "red_bars": 0,
       "price": 1.583,
       "reason": "红转绿，连续红柱0根（未满4根）"
+    },
+    {
+      "date": "20260527",
+      "action": "BUY",
+      "type": "倍投",
+      "amount": 2000,
+      "level": 1,
+      "j13_count": 3146,
+      "threshold": 2901.2000000000003,
+      "reason": "J13数量(3146)超过90%分位数(2901.2)"
     }
   ],
-  "saved_at": "2026-05-26 13:11:32"
+  "saved_at": "2026-05-27 13:22:13"
 }

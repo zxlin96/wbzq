@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C154 最优组合选股 - 20260527</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: Inter, sans-serif; }
+        .sortable th { cursor: pointer; user-select: none; }
+        .sortable th:hover { background-color: #f3f4f6; }
+        .sort-asc::after { content: " ▲"; }
+        .sort-desc::after { content: " ▼"; }
+        .chart-container { height: 400px; }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
+        .modal-content { background-color: #fefefe; margin: 2% auto; padding: 20px; border-radius: 12px; width: 90%; max-width: 1200px; max-height: 90vh; overflow-y: auto; }
+        .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close:hover { color: black; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+            <div class="flex justify-between items-center flex-wrap gap-4">
+                <div>
+                    <h1 class="text-2xl font-bold text-orange-600">🏆 C154 最优组合选股</h1>
+                    <p class="text-gray-500 mt-1">日期: 20260527 | 共选出 <span class="text-orange-600 font-bold text-xl">1</span> 只股票</p>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="downloadCSV()" class="flex items-center gap-2 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        下载 CSV
+                    </button>
+                    <button onclick="downloadSEL()" class="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        导入同花顺 (.sel)
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200 rounded-xl p-5 mb-6">
+            <h2 class="text-sm font-semibold text-orange-700 mb-3">📋 C154 条件组合（全部 AND）</h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+                <span class="px-2 py-1 bg-red-100 text-red-700 rounded text-xs font-medium">1. 阶梯放量+J13低吸</span>
+                <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs font-medium">2. 不跌 (pct_chg>=0)</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-medium">3. 无出货 (V1/V2/V3)</span>
+                <span class="px-2 py-1 bg-purple-100 text-purple-700 rounded text-xs font-medium">4. 底部暴力K</span>
+                <span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs font-medium">5. J&lt;5</span>
+                <span class="px-2 py-1 bg-pink-100 text-pink-700 rounded text-xs font-medium">6. 周期内异动</span>
+            </div>
+            <p class="text-xs text-gray-500 mt-3">回测（250交易日）：样本717，平均涨幅1.66%，胜率60.0%，盈亏比1.72</p>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm p-5 mb-6">
+            <h2 class="text-lg font-semibold text-gray-800 mb-4">🔽 选股漏斗</h2>
+            <div class="space-y-2"><div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"><span class="text-sm text-gray-600 w-48">全市场（250天内）</span><span class="font-bold text-orange-600 text-lg">5528 只</span></div><div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"><span class="text-sm text-gray-600 w-48">阶梯放量+J13低吸</span><span class="font-bold text-orange-600 text-lg">1632 只</span></div><div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"><span class="text-sm text-gray-600 w-48">+不跌</span><span class="font-bold text-orange-600 text-lg">1244 只</span></div><div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"><span class="text-sm text-gray-600 w-48">+无出货</span><span class="font-bold text-orange-600 text-lg">646 只</span></div><div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"><span class="text-sm text-gray-600 w-48">+底部暴力K</span><span class="font-bold text-orange-600 text-lg">294 只</span></div><div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"><span class="text-sm text-gray-600 w-48">+J<5</span><span class="font-bold text-orange-600 text-lg">219 只</span></div><div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"><span class="text-sm text-gray-600 w-48">+异动</span><span class="font-bold text-orange-600 text-lg">117 只</span></div><div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"><span class="text-sm text-gray-600 w-48">最终满足条件（当日）</span><span class="font-bold text-orange-600 text-lg">1 只</span></div></div>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 mb-6">
+            
+            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">B级以上(推荐)</div><div class="text-2xl font-bold text-red-600">0只</div></div>
+            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">A级</div><div class="text-2xl font-bold text-red-600">0只</div></div>
+            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">B级</div><div class="text-2xl font-bold text-orange-600">0只</div></div>
+            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">C级</div><div class="text-2xl font-bold text-yellow-600">1只</div></div>
+            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">D级</div><div class="text-2xl font-bold text-gray-400">0只</div></div>
+            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">平均J值</div><div class="text-2xl font-bold text-red-600">-3.95</div></div>
+            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">平均涨幅</div><div class="text-2xl font-bold text-blue-600">0.44%</div></div>
+            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">涉及行业</div><div class="text-2xl font-bold text-green-600">1</div></div>
+        
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden mb-6">
+            <div class="px-6 py-4 border-b border-gray-200"><h2 class="text-lg font-semibold text-gray-900">📋 选股明细（点击代码查看图表）</h2></div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left sortable" id="stockTable">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3" onclick="sortTable(0)">代码</th>
+                            <th class="px-6 py-3" onclick="sortTable(1)">名称</th>
+                            <th class="px-6 py-3" onclick="sortTable(2)">行业</th>
+                            <th class="px-6 py-3" onclick="sortTable(3)">收盘价</th>
+                            <th class="px-6 py-3" onclick="sortTable(4)">涨跌幅</th>
+                            <th class="px-6 py-3" onclick="sortTable(5)">J值</th>
+                            <th class="px-6 py-3" onclick="sortTable(6)">评分</th>
+                            <th class="px-6 py-3" onclick="sortTable(7)">等级</th>
+                            <th class="px-6 py-3" onclick="sortTable(8)">MACD-DIF</th>
+                            <th class="px-6 py-3" onclick="sortTable(9)">成交额(万)</th>
+                            <th class="px-6 py-3" onclick="sortTable(10)">暴力K次数</th>
+                            <th class="px-6 py-3" onclick="sortTable(11)">异动次数</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200"><tr class="hover:bg-gray-50 cursor-pointer" onclick="showChart(&apos;002887.SZ&apos;, &apos;绿茵生态&apos;)"><td class="px-6 py-4 font-medium text-blue-600 hover:text-blue-800">002887.SZ</td><td class="px-6 py-4 font-medium">绿茵生态</td><td class="px-6 py-4"><span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">环境保护</span></td><td class="px-6 py-4">13.56</td><td class="px-6 py-4 font-semibold text-red-600">0.44%</td><td class="px-6 py-4 font-bold text-red-600">-3.95</td><td class="px-6 py-4 font-bold text-yellow-600">50</td><td class="px-6 py-4"><span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-bold">C</span></td><td class="px-6 py-4">0.5093</td><td class="px-6 py-4">8.63</td><td class="px-6 py-4">1次</td><td class="px-6 py-4">80次</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm p-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">📊 行业分布</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3"><div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"><span class="text-sm text-gray-600">环境保护</span><span class="text-sm font-bold text-orange-600">1只</span></div></div>
+        </div>
+    </div>
+
+    <div id="chartModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle" class="text-xl font-bold mb-4"></h2>
+            <div id="stockInfoPanel" class="bg-gray-50 rounded-lg p-4 mb-4">
+                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3" id="stockInfoGrid"></div>
+                <div class="grid grid-cols-3 md:grid-cols-6 gap-2 mt-3" id="stockSignalGrid"></div>
+            </div>
+            <div id="klineChart" class="chart-container mb-4"></div>
+            <div id="volumeChart" class="chart-container mb-4" style="height:150px;"></div>
+            <div id="kdjChart" class="chart-container" style="height:200px;"></div>
+        </div>
+    </div>
+
+    <script>
+    const stockCharts = {"002887.SZ": {"ts_code": "002887.SZ", "name": "绿茵生态", "dates": ["20260122", "20260123", "20260126", "20260127", "20260128", "20260129", "20260130", "20260202", "20260203", "20260204", "20260205", "20260206", "20260209", "20260210", "20260211", "20260212", "20260213", "20260224", "20260225", "20260226", "20260227", "20260302", "20260303", "20260304", "20260305", "20260306", "20260309", "20260310", "20260311", "20260312", "20260313", "20260316", "20260317", "20260318", "20260319", "20260320", "20260323", "20260324", "20260325", "20260326", "20260327", "20260330", "20260331", "20260401", "20260402", "20260403", "20260407", "20260408", "20260409", "20260410", "20260413", "20260414", "20260415", "20260416", "20260417", "20260420", "20260421", "20260422", "20260423", "20260424", "20260427", "20260428", "20260429", "20260430", "20260506", "20260507", "20260508", "20260511", "20260512", "20260513", "20260514", "20260515", "20260518", "20260519", "20260520", "20260521", "20260522", "20260525", "20260526", "20260527"], "candlestick": [["20260122", 9.73, 9.84, 9.84, 9.54], ["20260123", 9.85, 9.87, 9.89, 9.74], ["20260126", 9.87, 9.79, 10.02, 9.73], ["20260127", 9.81, 9.79, 9.89, 9.54], ["20260128", 9.78, 9.53, 9.79, 9.48], ["20260129", 9.54, 9.56, 9.75, 9.43], ["20260130", 9.56, 9.68, 9.74, 9.49], ["20260202", 9.68, 9.69, 9.95, 9.55], ["20260203", 9.81, 9.94, 10.03, 9.72], ["20260204", 9.93, 9.94, 10.01, 9.85], ["20260205", 10.0, 10.19, 10.33, 9.85], ["20260206", 10.19, 10.46, 10.68, 10.03], ["20260209", 10.5, 10.63, 10.75, 10.32], ["20260210", 10.59, 10.73, 10.8, 10.42], ["20260211", 10.68, 11.14, 11.22, 10.62], ["20260212", 11.18, 11.24, 11.35, 10.9], ["20260213", 11.15, 11.01, 11.4, 10.98], ["20260224", 11.08, 11.04, 11.31, 11.03], ["20260225", 11.06, 11.4, 11.58, 10.82], ["20260226", 11.4, 11.74, 11.76, 11.15], ["20260227", 11.61, 11.92, 11.94, 11.5], ["20260302", 11.59, 11.45, 11.96, 11.21], ["20260303", 11.45, 11.31, 11.9, 11.27], ["20260304", 11.19, 11.33, 11.58, 10.98], ["20260305", 11.56, 11.33, 11.65, 11.27], ["20260306", 11.31, 11.53, 11.55, 11.27], ["20260309", 11.42, 11.64, 11.74, 11.21], ["20260310", 11.65, 11.85, 11.88, 11.61], ["20260311", 11.85, 12.18, 12.27, 11.66], ["20260312", 12.16, 11.95, 12.37, 11.86], ["20260313", 11.91, 11.96, 12.45, 11.75], ["20260316", 11.95, 11.79, 12.04, 11.74], ["20260317", 11.91, 11.38, 11.91, 11.38], ["20260318", 11.44, 11.45, 11.55, 11.3], ["20260319", 11.48, 11.18, 11.48, 11.1], ["20260320", 11.21, 10.84, 11.3, 10.82], ["20260323", 10.84, 10.27, 10.93, 10.17], ["20260324", 10.51, 11.3, 11.3, 10.38], ["20260325", 11.63, 12.14, 12.38, 11.38], ["20260326", 12.37, 11.49, 12.39, 11.42], ["20260327", 11.41, 11.42, 11.61, 11.23], ["20260330", 11.37, 11.62, 11.77, 11.12], ["20260331", 11.61, 11.55, 11.87, 11.48], ["20260401", 11.76, 11.24, 11.8, 11.14], ["20260402", 11.15, 11.11, 11.47, 11.0], ["20260403", 11.1, 10.52, 11.17, 10.42], ["20260407", 10.86, 11.15, 11.15, 10.38], ["20260408", 11.24, 11.34, 11.38, 10.9], ["20260409", 11.23, 11.45, 11.57, 11.1], ["20260410", 11.47, 11.52, 11.85, 11.46], ["20260413", 11.46, 11.47, 11.68, 11.35], ["20260414", 11.49, 11.38, 11.56, 11.22], ["20260415", 11.35, 11.26, 11.41, 11.2], ["20260416", 11.27, 11.42, 11.45, 11.1], ["20260417", 11.42, 11.19, 11.45, 11.02], ["20260420", 11.25, 11.74, 12.0, 11.17], ["20260421", 11.62, 12.43, 12.77, 11.54], ["20260422", 12.38, 12.89, 13.26, 12.18], ["20260423", 12.83, 12.67, 13.19, 12.63], ["20260424", 12.57, 12.86, 12.98, 12.4], ["20260427", 12.83, 12.86, 13.09, 12.5], ["20260428", 13.04, 12.65, 13.04, 12.58], ["20260429", 12.8, 13.16, 13.5, 12.79], ["20260430", 13.3, 13.3, 13.73, 12.93], ["20260506", 13.08, 12.9, 13.25, 12.5], ["20260507", 12.9, 13.17, 13.21, 12.74], ["20260508", 13.16, 13.58, 13.68, 12.92], ["20260511", 13.57, 14.289999999999997, 14.500000000000002, 13.28], ["20260512", 14.289999999999997, 13.81, 14.44, 13.38], ["20260513", 13.81, 14.35, 14.449999999999998, 13.58], ["20260514", 14.420000000000002, 14.259999999999998, 14.68, 14.0], ["20260515", 14.33, 14.35, 14.8, 14.16], ["20260518", 14.3, 14.150000000000002, 14.33, 13.71], ["20260519", 14.030000000000001, 15.29, 15.480000000000002, 14.030000000000001], ["20260520", 15.09, 15.560000000000002, 16.0, 14.56], ["20260521", 15.42, 15.320000000000002, 15.68, 15.040000000000001], ["20260522", 15.15, 14.7, 15.34, 14.56], ["20260525", 14.59, 13.77, 15.280000000000001, 13.58], ["20260526", 13.7, 13.5, 13.7, 13.02], ["20260527", 13.41, 13.56, 14.4, 13.38]], "volume": [{"value": 3.7174196000000004, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 3.0540474, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 4.5313294, "itemStyle": {"color": "#22c55e"}, "is_double": false}, {"value": 4.0850962, "itemStyle": {"color": "#22c55e"}, "is_double": false}, {"value": 4.6157532, "itemStyle": {"color": "#22c55e"}, "is_double": false}, {"value": 4.1114506, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 4.4525862, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 6.116969, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 7.168231, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 5.8542705999999995, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 11.6495852, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 19.358578, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 14.3828815, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 12.0297467, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 16.161254800000002, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 12.8782191, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 9.452456600000001, "itemStyle": {"color": "#22c55e"}, "is_double": false}, {"value": 7.5537655, "itemStyle": {"color": "#22c55e"}, "is_double": false}, {"value": 13.8124264, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 12.539162699999999, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 8.3083084, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 13.0577644, "itemStyle": {"color": "#22c55e"}, "is_double": false}, {"value": 12.2844506, "itemStyle": {"color": "#22c55e"}, "is_double": false}, {"value": 9.1348553, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 5.014973599999999, "itemStyle": {"color": "#22c55e"}, "is_double": false}, {"value": 3.9920506999999996, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 5.5594726, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 4.7783311, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 11.8428315, "itemStyle": {"color": "#fbbf24"}, "is_double": true}, {"value": 7.5610178, "itemStyle": {"color": "#22c55e"}, "is_double": false}, {"value": 8.7827236, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 5.982978, "itemStyle": {"color": "#22c55e"}, "is_double": false}, {"value": 5.1754021, "itemStyle": {"color": "#22c55e"}, "is_double": false}, {"value": 5.2767835, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 5.1788, "itemStyle": {"color": "#22c55e"}, "is_double": false}, {"value": 5.356137599999999, "itemStyle": {"color": "#22c55e"}, "is_double": false}, {"value": 7.2493082, "itemStyle": {"color": "#22c55e"}, "is_double": false}, {"value": 9.1921258, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 21.6848433, "itemStyle": {"color": "#fbbf24"}, "is_double": true}, {"value": 15.7943359, "itemStyle": {"color": "#22c55e"}, "is_double": false}, {"value": 9.1835848, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 8.5517277, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 7.5906302, "itemStyle": {"color": "#22c55e"}, "is_double": false}, {"value": 6.7988902, "itemStyle": {"color": "#22c55e"}, "is_double": false}, {"value": 4.6712762, "itemStyle": {"color": "#22c55e"}, "is_double": false}, {"value": 5.3635128, "itemStyle": {"color": "#22c55e"}, "is_double": false}, {"value": 8.6423451, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 7.2941692, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 7.265371099999999, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 5.5941773999999995, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 4.6376283, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 4.737598200000001, "itemStyle": {"color": "#22c55e"}, "is_double": false}, {"value": 2.3533618, "itemStyle": {"color": "#22c55e"}, "is_double": false}, {"value": 3.061445, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 4.390634599999999, "itemStyle": {"color": "#22c55e"}, "is_double": false}, {"value": 10.5503875, "itemStyle": {"color": "#fbbf24"}, "is_double": true}, {"value": 17.474245800000002, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 15.1742359, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 9.0770923, "itemStyle": {"color": "#22c55e"}, "is_double": false}, {"value": 8.8564636, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 8.8547563, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 5.6123525999999995, "itemStyle": {"color": "#22c55e"}, "is_double": false}, {"value": 11.367026300000001, "itemStyle": {"color": "#fbbf24"}, "is_double": true}, {"value": 13.913290400000001, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 14.188646299999998, "itemStyle": {"color": "#22c55e"}, "is_double": false}, {"value": 8.9007858, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 9.0802414, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 12.669906600000001, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 14.3140735, "itemStyle": {"color": "#22c55e"}, "is_double": false}, {"value": 11.1259962, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 8.667107399999999, "itemStyle": {"color": "#22c55e"}, "is_double": false}, {"value": 11.2609103, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 9.786166999999999, "itemStyle": {"color": "#22c55e"}, "is_double": false}, {"value": 21.730297200000003, "itemStyle": {"color": "#fbbf24"}, "is_double": true}, {"value": 24.0753043, "itemStyle": {"color": "#ef4444"}, "is_double": false}, {"value": 16.3660429, "itemStyle": {"color": "#22c55e"}, "is_double": false}, {"value": 15.9915199, "itemStyle": {"color": "#22c55e"}, "is_double": false}, {"value": 18.5658549, "itemStyle": {"color": "#22c55e"}, "is_double": false}, {"value": 11.0317748, "itemStyle": {"color": "#22c55e"}, "is_double": false}, {"value": 8.633023, "itemStyle": {"color": "#ef4444"}, "is_double": false}], "price_change": [0, 0.3, -0.81, 0.0, -2.66, 0.31, 1.26, 0.1, 2.58, 0.0, 2.52, 2.65, 1.63, 0.94, 3.82, 0.9, -2.05, 0.27, 3.26, 2.98, 1.53, -3.94, -1.22, 0.18, 0.0, 1.77, 0.95, 1.8, 2.78, -1.89, 0.08, -1.42, -3.48, 0.62, -2.36, -3.04, -5.26, 10.03, 7.43, -5.35, -0.61, 1.75, -0.6, -2.68, -1.16, -5.31, 5.99, 1.7, 0.97, 0.61, -0.43, -0.78, -1.05, 1.42, -2.01, 4.92, 5.88, 3.7, -1.71, 1.5, 0.0, -1.63, 4.03, 1.06, -3.01, 2.09, 3.11, 5.23, -3.36, 3.91, -0.63, 0.63, -1.39, 8.06, 1.77, -1.54, -4.05, -6.33, -1.96, 0.44], "kdj_k": [86.45164105225217, 90.00157712662215, 83.98479125514646, 79.73986083676428, 63.80805537265763, 54.5757406188088, 50.50812086451661, 48.36134611306757, 60.57423074204505, 68.71615382803004, 73.95891736683483, 76.77261157788992, 81.48477135495693, 85.95335121960633, 89.0941416608551, 90.69239073686639, 86.05683191981568, 82.96261912933947, 85.17353799374078, 89.73033554110658, 92.74203439365954, 84.12239522347863, 73.24577592013006, 63.74279798184108, 57.40747935631509, 59.03188682233868, 63.331199402026954, 71.81263633604514, 78.88284282868126, 75.84995277307767, 72.78885740427404, 66.8932518749582, 49.16539372309042, 39.22854205195272, 28.127670009943795, 19.16077796163942, 14.235840278519843, 26.01102802193722, 46.14185493860144, 50.58105644555411, 52.48947306580484, 56.764753815641654, 58.5638899311485, 55.1086593534984, 50.85322034977971, 36.223871609637534, 36.918733643572615, 40.53288710566532, 50.959284916081124, 59.476212315418735, 64.03559568231498, 65.36613408299459, 63.532071248073485, 65.93748060529163, 62.32566734230325, 67.0049903494143, 71.52713642341907, 75.51213856799367, 74.89499714056723, 77.31095047466385, 78.92158603072828, 76.87034306810457, 80.01033623895145, 81.07459915930097, 74.74988497986885, 71.12357923389106, 76.98965432635345, 81.3264362175689, 76.05095747837926, 81.5339716522528, 81.26729608621133, 80.9897915937061, 77.90623787406497, 82.95938972626226, 83.87768838893678, 80.91845892595788, 70.73953241374291, 49.776768165635765, 38.55363962720237, 31.742694874510764], "kdj_d": [70.82746488047063, 77.21883562918781, 79.47415417117404, 79.56272305970413, 74.31116716402197, 67.73269164895092, 61.99116805413949, 57.447894073782194, 58.490006296536485, 61.89872214036768, 65.91878721585674, 69.5367286698678, 73.51940956489751, 77.66405678313379, 81.47408507570756, 84.54685362942718, 85.05017972622335, 84.35432619392873, 84.62739679386608, 86.32837637627959, 88.46626238207291, 87.01830666254149, 82.42746308173768, 76.19924138177215, 69.9353207066198, 66.30084274519277, 65.31096163080417, 67.47818653255116, 71.2797386312612, 72.80314334520003, 72.79838136489137, 70.83000486824699, 63.608467819861474, 55.48182589722523, 46.36377393479809, 37.29610861041187, 29.6093524997812, 28.409911007166542, 34.32055898431151, 39.740724804725716, 43.990307558418756, 48.24845631082639, 51.6869341842671, 52.82750924067754, 52.1694129437116, 46.85423249902025, 43.542399547204376, 42.53922873335803, 45.34591412759906, 50.05601352353895, 54.71587424313096, 58.26596085641884, 60.02133098697039, 61.99338085974414, 62.104143020597185, 63.73775879686956, 66.3342180057194, 69.39352485981084, 71.2273489533963, 73.25521612715215, 75.14400609501087, 75.71945175270878, 77.14974658145634, 78.45803077407123, 77.22198217600378, 75.18918119529954, 75.78933890565085, 77.63503800962354, 77.10701116587545, 78.58266466133458, 79.47754180296016, 79.98162506654214, 79.28982933571642, 80.51301613256504, 81.63457355135563, 81.39586867622305, 77.84375658872966, 68.4880937810317, 58.50994239642192, 49.58752655578487], "kdj_j": [117.69999339581526, 115.56706012149087, 93.00606542309131, 80.09413639088459, 42.80183178992894, 28.261838558524573, 27.54202648527084, 30.188250191638332, 64.7426796330622, 82.35101720335479, 90.03917766879098, 91.24437739393417, 97.41549493507577, 102.5319400925514, 104.33425483115019, 102.98346495174479, 88.07013630700033, 80.17920500016095, 86.26582039349017, 96.53425387076058, 101.29357841683279, 78.33057234535292, 54.882401596914804, 38.82991118197893, 32.35179665570567, 44.49397497663051, 59.37167494447252, 80.4815359430331, 94.08905122352141, 81.94357162883296, 72.76980948303938, 59.01974588838061, 20.27924552954832, 6.721974361407703, -8.344537839764797, -17.109883335905486, -16.51118416400287, 21.21326205147858, 69.78444684718129, 72.2617197272109, 69.48780408057699, 73.79734882527218, 72.3178014249113, 59.67095957914012, 48.22083516191593, 14.963149830872098, 23.6714018363091, 36.5202038502799, 62.18602649304526, 78.3166098991783, 82.675038560683, 79.56648053614609, 70.55355177027967, 73.82568009638659, 62.76871598571539, 73.53945345450379, 81.9129732588184, 87.74936598435934, 82.23029351490908, 85.42241916968726, 86.47674590216309, 79.17212569889617, 85.73151555394168, 86.30773592976044, 69.805690587599, 62.99237531107411, 79.39028516775863, 88.7092326334596, 73.9388501033869, 87.43658563408925, 84.84680465271367, 83.00612464803402, 75.13905495076207, 87.8521369136567, 88.36391806409907, 79.96363942542754, 56.53108406376941, 12.354116934843915, -1.358965911236723, -3.9469684880374416], "ma60": [NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 10.5685, 10.597333333333333, 10.619, 10.648833333333332, 10.679666666666666, 10.713833333333332, 10.750333333333336, 10.785166666666667, 10.818999999999999, 10.850166666666667, 10.883999999999999, 10.915166666666666, 10.955166666666665, 11.005500000000001, 11.060166666666667, 11.110000000000001, 11.162166666666668, 11.2125, 11.258833333333333, 11.315, 11.3735, 11.429666666666666, 11.489833333333333, 11.554833333333333, 11.631499999999999, 11.696, 11.7695, 11.837333333333333, 11.902166666666666, 11.960833333333333, 12.036833333333334, 12.110500000000002, 12.178500000000001, 12.240000000000002, 12.2855, 12.320500000000001, 12.350833333333332], "zhixing_duokong": [9.424788533834587, 9.443410087719297, 9.459197994987468, 9.477883771929825, 9.486994047619048, 9.49687343358396, 9.506947055137845, 9.516965852130326, 9.536904761904763, 9.555664160401001, 9.579458020050124, 9.60920739348371, 9.643801691729323, 9.68360588972431, 9.733963032581453, 9.788504072681706, 9.837844611528823, 9.888109335839598, 9.953770363408522, 10.029498746867167, 10.107241541353384, 10.170067355889724, 10.224075814536342, 10.2774765037594, 10.325963345864661, 10.37453790726817, 10.422749060150377, 10.476809210526316, 10.534255952380951, 10.583203320802006, 10.63765664160401, 10.685726817042607, 10.71717261904762, 10.744505012531329, 10.757929197994986, 10.767106829573935, 10.757622180451127, 10.78218984962406, 10.832310463659148, 10.853840852130325, 10.870167606516292, 10.888612155388472, 10.895562343358396, 10.895032894736842, 10.891383145363408, 10.8709257518797, 10.876011904761903, 10.883063909774435, 10.896846804511277, 10.922553258145363, 10.958020050125313, 10.971846804511276, 10.966538220551378, 10.97704730576441, 10.97951441102757, 10.994666353383458, 11.031560150375938, 11.090557644110277, 11.14376723057644, 11.215260025062658, 11.2793828320802, 11.33390664160401, 11.406002506265665, 11.483787593984964, 11.554033521303257, 11.624602130325812, 11.7034492481203, 11.807243107769423, 11.898526002506264, 11.995560776942355, 12.078071741854638, 12.15638471177945, 12.233815789473685, 12.351793546365915, 12.472716165413534, 12.58625939849624, 12.667097431077694, 12.712268170426066, 12.758388157894737, 12.803193922305763], "zhixing_mid_duokong": [9.439956847155248, 9.47362075326623, 9.506614913447425, 9.53807001527294, 9.558859958965295, 9.572814881305952, 9.585699915887517, 9.597773371569803, 9.61716887920605, 9.64082475194747, 9.674815055123215, 9.723525421542574, 9.786099289259912, 9.859190910153009, 9.95046080810118, 10.054188233732562, 10.155222684486377, 10.252106153685661, 10.354908933771608, 10.46951545816727, 10.594185430426606, 10.705933579445611, 10.800709329468397, 10.881651465286346, 10.950657309419475, 11.016003128734397, 11.080375020053165, 11.148909095397029, 11.228872927804176, 11.306241346926178, 11.379645285448307, 11.442348904278877, 11.48226293327194, 11.507915698688059, 11.514248022687674, 11.496197825606831, 11.443579170516124, 11.403608693289579, 11.40119511123579, 11.402515106349014, 11.403976752454591, 11.412096474146603, 11.42209078456368, 11.42276166064243, 11.412871531054073, 11.376734451542724, 11.345048160248592, 11.32366979466331, 11.31353486250578, 11.31357561494559, 11.318773949555856, 11.324277828111294, 11.32583735580175, 11.329994151832494, 11.328148894569356, 11.340528552283473, 11.384831346214957, 11.464246229880995, 11.557267888206823, 11.662604109459423, 11.772701774613331, 11.87540511162997, 11.986622879000446, 12.104491867769097, 12.209693691068141, 12.311863715224753, 12.422180385437866, 12.5577748378801, 12.689940551072668, 12.833293117719837, 12.976420270013566, 13.117640255598175, 13.246303543283801, 13.399993726171408, 13.574282403107032, 13.748664661118251, 13.896848993799537, 13.991853415055619, 14.039191799035125, 14.05504007925165]}};
+    const stockDetails = {"002887.SZ": {"name": "绿茵生态", "industry": "环境保护", "close": "13.56", "pct": "0.44%", "ma60": "12.35", "above_ma60": true, "ma60_up": false, "j_val": "-3.95", "macd_dif": "0.5093", "amount": "8.63万", "is_lowest_volume": false, "is_amount_top": false, "has_step": false, "no_dist": true, "dist_signals": "无", "has_bvk": false, "bvk_count": 1, "has_am": false, "am_count": 80, "score": "50", "score_level": "C", "score_color": "text-yellow-600", "level_color": "bg-yellow-100 text-yellow-700", "turnover": "2.9%", "volume_ratio": "0.53", "body_ratio": "0.15", "total_mv": "41万"}};
+    const stockCSV = `代码,名称,行业,收盘价,涨跌幅,涨跌幅样式,J值,J值样式,评分,评分样式,等级,等级样式,MACD-DIF,成交额万,暴力K次数,异动次数
+002887.SZ,绿茵生态,环境保护,13.56,0.44%,text-red-600,-3.95,text-red-600,50,text-yellow-600,C,bg-yellow-100 text-yellow-700,0.5093,8.63,1,80
+`;
+    const selCodes = ["002887"];
+
+    function downloadSEL() {
+        if(selCodes.length===0){alert('无股票数据');return;}
+        const buf = new ArrayBuffer(2 + selCodes.length * 8);
+        const view = new DataView(buf);
+        view.setUint16(0, selCodes.length, true);
+        let offset = 2;
+        selCodes.forEach(code => {
+            const market = (code[0]==='6'||code[0]==='9') ? 0x11 : 0x21;
+            view.setUint8(offset, 0x07);
+            view.setUint8(offset + 1, market);
+            for(let i = 0; i < 6; i++) {
+                view.setUint8(offset + 2 + i, code.charCodeAt(i));
+            }
+            offset += 8;
+        });
+        const blob = new Blob([buf], {type: 'application/octet-stream'});
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'c154_selection_20260527.sel';
+        link.click();
+    }
+
+    function downloadCSV() {
+        const blob = new Blob(['\uFEFF' + stockCSV], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'c154_selection_20260527.csv';
+        link.click();
+    }
+
+    let sortDir = {};
+    function sortTable(col) {
+        const tbl = document.getElementById('stockTable');
+        const rows = Array.from(tbl.querySelector('tbody').querySelectorAll('tr'));
+        sortDir[col] = !sortDir[col];
+        tbl.querySelectorAll('th').forEach((th,i) => { th.classList.remove('sort-asc','sort-desc'); if(i===col) th.classList.add(sortDir[col]?'sort-desc':'sort-asc'); });
+        rows.sort((a,b) => {
+            const av=a.cells[col].textContent.trim(), bv=b.cells[col].textContent.trim();
+            const an=parseFloat(av), bn=parseFloat(bv);
+            if(!isNaN(an)&&!isNaN(bn)) return sortDir[col]?bn-an:an-bn;
+            return sortDir[col]?bv.localeCompare(av):av.localeCompare(bv);
+        });
+        rows.forEach(r => tbl.querySelector('tbody').appendChild(r));
+    }
+
+    let kc,vc,kdjc;
+    function showChart(ts,nm) {
+        const d=stockCharts[ts]; if(!d){alert('暂无图表');return;}
+        document.getElementById('modalTitle').textContent=nm+' ('+ts+') - C154 技术分析';
+        document.getElementById('chartModal').style.display='block';
+        const info=stockDetails[ts];
+        if(info){
+            document.getElementById('stockInfoGrid').innerHTML=`<div class="bg-white rounded p-2"><div class="text-xs text-gray-500">行业</div><div class="font-bold text-blue-600">${info.industry}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">收盘价</div><div class="font-bold">${info.close}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">涨跌幅</div><div class="font-bold ${info.pct.startsWith('-')?'text-green-600':'text-red-600'}">${info.pct}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">60日线</div><div class="font-bold">${info.ma60} ${info.above_ma60?'📈':'📉'}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">J值</div><div class="font-bold ${parseFloat(info.j_val)<0?'text-red-600':'text-orange-600'}">${info.j_val}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">评分</div><div class="font-bold ${info.score_color}">${info.score}分</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">等级</div><div class="font-bold"><span class="px-2 py-1 ${info.level_color} rounded-full text-xs">${info.score_level}</span></div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">MACD-DIF</div><div class="font-bold">${info.macd_dif}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">成交额</div><div class="font-bold">${info.amount}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">60日线趋势</div><div class="font-bold">${info.ma60_up?'<span class="text-green-600">上升</span>':'<span class="text-red-600">下降</span>'}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">换手率</div><div class="font-bold">${info.turnover}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">量比</div><div class="font-bold">${info.volume_ratio}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">实体比</div><div class="font-bold">${info.body_ratio}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">总市值</div><div class="font-bold">${info.total_mv}</div></div>`;
+            document.getElementById('stockSignalGrid').innerHTML=`<div class="text-center p-1 rounded text-xs ${info.has_step?'bg-green-100 text-green-700':'bg-gray-100 text-gray-400'}">${info.has_step?'✅ J13阶梯':'❌ J13阶梯'}</div><div class="text-center p-1 rounded text-xs ${info.no_dist?'bg-green-100 text-green-700':'bg-red-100 text-red-700'}">${info.no_dist?'✅ 无出货':'⚠️ '+info.dist_signals}</div><div class="text-center p-1 rounded text-xs ${info.has_bvk?'bg-green-100 text-green-700':'bg-gray-100 text-gray-400'}">${info.has_bvk?'✅ 暴力K('+info.bvk_count+'次)':'❌ 暴力K'}</div><div class="text-center p-1 rounded text-xs ${info.has_am?'bg-green-100 text-green-700':'bg-gray-100 text-gray-400'}">${info.has_am?'✅ 异动('+info.am_count+'次)':'❌ 异动'}</div><div class="text-center p-1 rounded text-xs ${info.is_lowest_volume?'bg-green-100 text-green-700':'bg-gray-100 text-gray-400'}">${info.is_lowest_volume?'✅ 回调最低量':'❌ 回调最低量'}</div><div class="text-center p-1 rounded text-xs ${info.is_amount_top?'bg-green-100 text-green-700':'bg-gray-100 text-gray-400'}">${info.is_amount_top?'✅ 成交额前60%':'❌ 成交额前60%'}</div>`;
+        }
+        if(kc)kc.dispose(); if(vc)vc.dispose(); if(kdjc)kdjc.dispose();
+        kc=echarts.init(document.getElementById('klineChart'));
+        const cd=d.candlestick.map(c=>({value:[c[1],c[2],c[3],c[4]],itemStyle:{color:c[2]>=c[1]?'#ef4444':'#22c55e',color0:c[2]>=c[1]?'#ef4444':'#22c55e',borderColor:c[2]>=c[1]?'#ef4444':'#22c55e',borderColor0:c[2]>=c[1]?'#ef4444':'#22c55e'}}));
+        kc.setOption({
+            title:{text:'K线 + MA60 + 知行多空',left:'center',textStyle:{fontSize:14}},
+            tooltip:{trigger:'axis',axisPointer:{type:'cross'},
+                formatter:function(params){
+                    let r=params[0].axisValue+'<br/>';
+                    params.forEach(p=>{
+                        if(p.seriesType==='candlestick'){
+                            const i=p.dataIndex;const ch=d.price_change[i];const cc=ch>=0?'#ef4444':'#22c55e';const cs=ch>=0?'+':'';
+                            const raw=d.candlestick[i];
+                            r+='涨跌幅: <span style="color:'+cc+'">'+cs+ch+'%</span><br/>开盘: '+raw[1]+' 收盘: '+raw[2]+'<br/>最高: '+raw[3]+' 最低: '+raw[4]+'<br/>';
+                        } else if(p.seriesName==='MA60'){r+='MA60: '+p.data+'<br/>';
+                        } else if(p.seriesName==='知行多空'){r+='知行多空: '+p.data+'<br/>';
+                        } else if(p.seriesName==='知行中'){r+='知行中: '+p.data+'<br/>';}
+                    });
+                    return r;
+                }
+            },
+            legend:{data:['K线','MA60','知行多空','知行中'],bottom:0},
+            grid:{left:'8%',right:'8%',top:'40px',bottom:'80px'},
+            xAxis:{type:'category',data:d.dates},
+            yAxis:{type:'value',scale:true},
+            dataZoom:[{type:'inside'},{type:'slider',start:70,end:100}],
+            series:[
+                {type:'candlestick',data:cd,name:'K线'},
+                {type:'line',data:d.ma60,name:'MA60',smooth:true,lineStyle:{color:'#f59e0b',width:2},symbol:'none'},
+                {type:'line',data:d.zhixing_duokong,name:'知行多空',smooth:true,lineStyle:{color:'#3b82f6',width:1,type:'dashed'},symbol:'none'},
+                {type:'line',data:d.zhixing_mid_duokong,name:'知行中',smooth:true,lineStyle:{color:'#8b5cf6',width:1,type:'dotted'},symbol:'none'}
+            ]
+        });
+        vc=echarts.init(document.getElementById('volumeChart'));
+        const vd=d.volume.map(v=>({value:v.value,itemStyle:v.itemStyle}));
+        vc.setOption({
+            title:{text:'成交额（万元）- 黄色=倍量上涨 紫色=倍量下跌',left:'center',textStyle:{fontSize:12}},
+            tooltip:{trigger:'axis',
+                formatter:function(params){
+                    const i=params[0].dataIndex;const vol=d.volume[i];
+                    return params[0].axisValue+'<br/>成交额: '+params[0].value.toFixed(2)+' 万元<br/>是否倍量: '+(vol.is_double?'是':'否');
+                }
+            },
+            grid:{left:'8%',right:'8%',top:'40px',bottom:'30px'},
+            xAxis:{type:'category',data:d.dates,show:false},
+            yAxis:{type:'value'},
+            series:[{type:'bar',data:vd}]
+        });
+        kdjc=echarts.init(document.getElementById('kdjChart'));
+        kdjc.setOption({
+            title:{text:'KDJ指标',left:'center',textStyle:{fontSize:14}},
+            tooltip:{trigger:'axis',
+                formatter:function(params){
+                    let r=params[0].axisValue+'<br/>';params.forEach(p=>{r+=p.seriesName+': '+p.data.toFixed(2)+'<br/>';});
+                    return r;
+                }
+            },
+            legend:{data:['K','D','J'],bottom:0},
+            grid:{left:'10%',right:'10%',top:'40px',bottom:'40px'},
+            xAxis:{type:'category',data:d.dates},
+            yAxis:{type:'value',min:0,max:100},
+            series:[
+                {type:'line',data:d.kdj_k,name:'K',smooth:true,lineStyle:{color:'#3b82f6'}},
+                {type:'line',data:d.kdj_d,name:'D',smooth:true,lineStyle:{color:'#f59e0b'}},
+                {type:'line',data:d.kdj_j,name:'J',smooth:true,lineStyle:{color:'#ef4444'}}
+            ]
+        });
+        window.addEventListener('resize',()=>{kc.resize();vc.resize();kdjc.resize();});
+    }
+    function closeModal(){document.getElementById('chartModal').style.display='none';}
+    window.onclick=function(e){if(e.target==document.getElementById('chartModal'))document.getElementById('chartModal').style.display='none';}
+    </script>
+</body>
+</html>

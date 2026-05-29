@@ -88,6 +88,7 @@ CONDITIONS = {
     "has_bvk": "底部暴力K",
     "no_dist": "无出货信号",
     "zhixing_ok": "知行多空线",
+    "zhixing_zone": "知行区间(多空≤价<中线)",
 }
 
 CONDITION_KEYS = list(CONDITIONS.keys())
@@ -128,6 +129,11 @@ def build_condition_mask(df, condition_key: str, basic_ts_codes) -> pd.Series:
             (df["zhixing_mid_duokong"] > df["zhixing_duokong"])
             & (df["close_qfq"] >= df["zhixing_duokong"])
         )
+    elif condition_key == "zhixing_zone":
+        return (
+            (df["zhixing_mid_duokong"] > df["close_qfq"])
+            & (df["close_qfq"] >= df["zhixing_duokong"])
+        )
     elif condition_key == "j_ultra_low":
         return df["kdj_qfq"].fillna(100) < 5
     elif condition_key == "vol_ratio>1":
@@ -146,6 +152,28 @@ def build_condition_mask(df, condition_key: str, basic_ts_codes) -> pd.Series:
         return df["turnover_rate"].fillna(0) > 2
     elif condition_key == "zhixing_mid_up":
         return df["zhixing_mid_duokong"] > df["zhixing_duokong"]
+    elif condition_key == "no_long_upper_shadow":
+        open_ = df["open_qfq"]
+        close = df["close_qfq"]
+        high = df["high_qfq"]
+        low = df["low_qfq"]
+        range_ = high - low
+        range_ = np.where(range_ == 0, 1e-6, range_)
+        upper_shadow = high - np.maximum(open_, close)
+        upper_shadow_ratio = upper_shadow / range_
+        return upper_shadow_ratio < 0.5
+    elif condition_key == "no_long_upper_shadow_and_rise":
+        open_ = df["open_qfq"]
+        close = df["close_qfq"]
+        high = df["high_qfq"]
+        low = df["low_qfq"]
+        range_ = high - low
+        range_ = np.where(range_ == 0, 1e-6, range_)
+        upper_shadow = high - np.maximum(open_, close)
+        upper_shadow_ratio = upper_shadow / range_
+        no_long_shadow = upper_shadow_ratio < 0.5
+        is_rise = close > open_
+        return no_long_shadow & is_rise
     elif condition_key.startswith("j<"):
         try:
             threshold = float(condition_key[2:])
@@ -647,6 +675,7 @@ def run_part_a(df, trade_dates_list, data_manager, hold_days, price_lookup=None,
         "j_ultra_low",
         "close>MA5",
         "zhixing_mid_up",
+        "zhixing_zone",
         "j<-10",
         "j<-5",
         "j<0",
@@ -655,6 +684,8 @@ def run_part_a(df, trade_dates_list, data_manager, hold_days, price_lookup=None,
         "j<10",
         "j<15",
         "j<20",
+        "no_long_upper_shadow",
+        "no_long_upper_shadow_and_rise",
     ]
 
     key_short = {
@@ -663,6 +694,7 @@ def run_part_a(df, trade_dates_list, data_manager, hold_days, price_lookup=None,
         "j_ultra_low": "J<-5",
         "close>MA5": ">MA5",
         "zhixing_mid_up": "知行中>多空",
+        "zhixing_zone": "知行区间",
         "j<-10": "J<-10",
         "j<-5": "J<-5",
         "j<0": "J<0",
@@ -671,6 +703,8 @@ def run_part_a(df, trade_dates_list, data_manager, hold_days, price_lookup=None,
         "j<10": "J<10",
         "j<15": "J<15",
         "j<20": "J<20",
+        "no_long_upper_shadow": "非长上影",
+        "no_long_upper_shadow_and_rise": "非长上影+上涨",
     }
 
     next_idx = len(other_keys) + 1

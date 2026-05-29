@@ -33,6 +33,7 @@ def generate_reports_json():
         j13_trend_file = date_dir / "first_j13_step_daily_count.html"
         c154_csv_file = Path(f"c154_result_{date_str}.csv")
         c154_html_file = date_dir / f"c154_selection_{date_str}.html"
+        sentiment_rebound_file = date_dir / "sentiment_rebound_strategy.html"
         
         # 添加所有日期（包括没有选股的）
         reports.append({
@@ -42,6 +43,7 @@ def generate_reports_json():
             'j13Trend': f"html/{date_str}/first_j13_step_daily_count.html" if j13_trend_file.exists() else None,
             'c154Result': f"c154_result_{date_str}.csv" if c154_csv_file.exists() else None,
             'c154Html': f"html/{date_str}/c154_selection_{date_str}.html" if c154_html_file.exists() else None,
+            'sentimentRebound': f"html/{date_str}/sentiment_rebound_strategy.html" if sentiment_rebound_file.exists() else None,
         })
     
     # 扫描根目录下的 c154_result_*.csv，补充 html 中没有对应目录的日期
@@ -50,6 +52,7 @@ def generate_reports_json():
         date_str = csv_file.stem.replace('c154_result_', '')
         if date_str not in existing_dates:
             c154_html_path = html_base_dir / date_str / f"c154_selection_{date_str}.html"
+            sentiment_rebound_path = html_base_dir / date_str / "sentiment_rebound_strategy.html"
             reports.append({
                 'date': date_str,
                 'stockSelection': None,
@@ -57,6 +60,7 @@ def generate_reports_json():
                 'j13Trend': None,
                 'c154Result': str(csv_file),
                 'c154Html': f"html/{date_str}/c154_selection_{date_str}.html" if c154_html_path.exists() else None,
+                'sentimentRebound': f"html/{date_str}/sentiment_rebound_strategy.html" if sentiment_rebound_path.exists() else None,
             })
             existing_dates.add(date_str)
     

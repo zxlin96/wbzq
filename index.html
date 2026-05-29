@@ -90,11 +90,12 @@
                             <th class="px-6 py-3">C154最优组合</th>
                             <th class="px-6 py-3">行业趋势</th>
                             <th class="px-6 py-3">J13趋势</th>
+                            <th class="px-6 py-3">情绪反弹策略</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200" id="reportList">
                         <tr>
-                            <td colspan="5" class="px-6 py-8 text-center text-gray-500">
+                            <td colspan="6" class="px-6 py-8 text-center text-gray-500">
                                 加载中...
                             </td>
                         </tr>
@@ -153,13 +154,19 @@
                                 : `<span class="text-gray-400">暂无</span>`
                             }
                         </td>
+                        <td class="px-6 py-4">
+                            ${report.sentimentRebound 
+                                ? `<a href="${report.sentimentRebound}" target="_blank" class="text-pink-600 hover:text-pink-800 font-medium">📊 查看报告</a>`
+                                : `<span class="text-gray-400">暂无</span>`
+                            }
+                        </td>
                     </tr>
                 `).join('');
                 
             } catch (error) {
                 document.getElementById('reportList').innerHTML = `
                     <tr>
-                        <td colspan="5" class="px-6 py-8 text-center text-red-500">
+                        <td colspan="6" class="px-6 py-8 text-center text-red-500">
                             加载报告列表失败: ${error.message}
                         </td>
                     </tr>

@@ -440,16 +440,37 @@ def _build_chart_script(etf_chart_data):
         brick_rising_json = json.dumps(etf_chart_data['brick_rising'])
         brick_script = (
             "var bc = echarts.init(document.getElementById('brickChart'));\n"
-            "var brickColors = " + brick_rising_json + ".map(function(r){ return r ? '#ef4444' : '#22c55e'; });\n"
-            "var brickSeries = " + brick_val_json + ".map(function(v,i){ return {value:v, itemStyle:{color:brickColors[i]}}; });\n"
+            "var bVals = " + brick_val_json + ";\n"
+            "var bRise = " + brick_rising_json + ";\n"
+            "var bDates = " + dates_json + ";\n"
+            "var brickData = [];\n"
+            "for (var i = 0; i < bVals.length; i++) {\n"
+            "  var prev = i > 0 ? bVals[i-1] : bVals[i];\n"
+            "  brickData.push({value: [i, Math.min(prev, bVals[i]), Math.max(prev, bVals[i]), bRise[i], bDates[i]]});\n"
+            "}\n"
             "bc.setOption({\n"
             "  title:{text:'知行砖形图',left:'center',textStyle:{fontSize:14}},\n"
-            "  tooltip:{trigger:'axis',formatter:function(p){var i=p[0].dataIndex;var r=" + brick_rising_json + "[i];return p[0].axisValue+'<br/>砖值:'+p[0].value.toFixed(3)+'<br/>方向:'+(r?'<span style=\"color:#ef4444\">红(上升)</span>':'<span style=\"color:#22c55e\">绿(下降)</span>');}},\n"
+            "  tooltip:{formatter:function(p){var v=p.value;return v[4]+'<br/>砖值:'+bVals[p.dataIndex].toFixed(3)+'<br/>方向:'+(v[3]?'<span style=\"color:#ef4444\">红(上升)</span>':'<span style=\"color:#22c55e\">绿(下降)</span>');}},\n"
             "  grid:{left:'8%',right:'8%',top:'40px',bottom:'40px'},\n"
-            "  xAxis:{type:'category',data:" + dates_json + "},\n"
+            "  xAxis:{type:'category',data:bDates,axisLabel:{show:false},axisTick:{show:false}},\n"
             "  yAxis:{type:'value',scale:true},\n"
-            "  dataZoom:[{type:'inside'},{type:'slider',start:70,end:100}],\n"
-            "  series:[{type:'bar',data:brickSeries,name:'砖值'}]\n"
+            "  dataZoom:[{type:'inside'},{type:'slider',start:Math.max(0,100-30/bVals.length*100),end:100}],\n"
+            "  series:[{type:'custom',name:'砖形图',data:brickData,\n"
+            "    renderItem:function(params,api){\n"
+            "      var idx=api.value(0),low=api.value(1),high=api.value(2),rise=api.value(3);\n"
+            "      var pLow=api.coord([idx,low]);\n"
+            "      var pHigh=api.coord([idx,high]);\n"
+            "      var bw=api.size([1,0])[0]*0.82;\n"
+            "      if(bw<4)bw=4;\n"
+            "      var x0=pLow[0]-bw/2;\n"
+            "      var yTop=pHigh[1];\n"
+            "      var h=pLow[1]-pHigh[1];\n"
+            "      if(h<2)h=2;\n"
+            "      var fillColor=rise?'#ef4444':'#22c55e';\n"
+            "      return{type:'rect',shape:{x:x0,y:yTop,width:bw,height:Math.max(h,2)},\n"
+            "        style:{fill:fillColor,stroke:rise?'#dc2626':'#16a34a',lineWidth:1},\n"
+            "        emphasis:{style:{fill:rise?'#fca5a5':'#86efac'}}};\n"
+            "    }}]\n"
             "});\n"
             "window.addEventListener('resize',function(){bc.resize();});\n"
         )
@@ -457,15 +478,14 @@ def _build_chart_script(etf_chart_data):
     script = (
         "<script>\n"
         "var kc = echarts.init(document.getElementById('klineChart'));\n"
-        "var cd = " + candle_json + ".map(function(c){ return {value:c, itemStyle:{color:'#ef4444', color0:'#22c55e', borderColor:'#ef4444', borderColor0:'#22c55e'}}; });\n"
         "kc.setOption({\n"
         "  title:{text:'K线走势',left:'center',textStyle:{fontSize:14}},\n"
-        "  tooltip:{trigger:'axis',axisPointer:{type:'cross'},formatter:function(params){var c=params[0];if(!c)return '';var d=c.dataIndex;var raw=" + candle_json + "[d];return c.axisValue+'<br/>开:'+raw[0].toFixed(3)+' 收:'+raw[1].toFixed(3)+'<br/>高:'+raw[2].toFixed(3)+' 低:'+raw[3].toFixed(3);}},\n"
+        "  tooltip:{trigger:'axis',axisPointer:{type:'cross'},formatter:function(params){var c=params[0];if(!c)return '';var d=c.dataIndex;var raw=" + candle_json + "[d];return c.axisValue+'<br/>开:'+raw[0].toFixed(3)+' 收:'+raw[1].toFixed(3)+'<br/>低:'+raw[2].toFixed(3)+' 高:'+raw[3].toFixed(3);}},\n"
         "  grid:{left:'8%',right:'8%',top:'40px',bottom:'60px'},\n"
         "  xAxis:{type:'category',data:" + dates_json + "},\n"
         "  yAxis:{type:'value',scale:true},\n"
         "  dataZoom:[{type:'inside'},{type:'slider',start:70,end:100}],\n"
-        "  series:[{type:'candlestick',data:cd,name:'K线'}]\n"
+        "  series:[{type:'candlestick',data:" + candle_json + ",name:'K线',itemStyle:{color:'#ef4444',color0:'#22c55e',borderColor:'#ef4444',borderColor0:'#22c55e'}}]\n"
         "});\n"
         "window.addEventListener('resize',function(){kc.resize();});\n"
         "\n"
@@ -504,7 +524,7 @@ def generate_etf_chart_data(etf_data, etf_code='563300.SH'):
             hi = cl
         if lo == 0:
             lo = cl
-        candlestick.append([op, cl, hi, lo])
+        candlestick.append([op, cl, lo, hi])
 
     volume = []
     for i, (_, row) in enumerate(etf_data.iterrows()):

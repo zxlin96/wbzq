@@ -187,13 +187,6 @@ def generate_stock_selection_html(result, df, end_date, industry_count):
                     <p class="text-gray-500 mt-1">日期: {end_date} | 共选出 {len(result)} 只股票</p>
                 </div>
                 <div class="flex gap-3">
-                    <a href="sentiment_rebound_strategy.html" 
-                       class="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
-                        </svg>
-                        情绪反弹策略
-                    </a>
                     <button onclick="downloadCSV('stock_selection')" 
                             class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

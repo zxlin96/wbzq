@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ETF定投策略汇总</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .etf-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+        }
+        .etf-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px -4px rgba(0, 0, 0, 0.15);
+        }
+        .action-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .metric-pill {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #4b5563;
+            margin: 2px;
+        }
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            margin-bottom: 16px;
+            transition: color 0.2s;
+        }
+        .back-btn:hover { color: #4338ca; }
+        .pulse-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            display: inline-block; margin-right: 6px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 8px;
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <a href="../../index.html" class="back-btn">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+            </svg>
+            返回首页
+        </a>
+
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">ETF 定投策略汇总</h1>
+            <p class="text-gray-500">周线KDJ定投 · 知行多空线 · 自动更新</p>
+            <p class="text-sm text-gray-400 mt-1">最后更新: <span id="lastUpdate">加载中...</span></p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="etfGrid">
+            <div class="skeleton h-64"></div>
+            <div class="skeleton h-64"></div>
+            <div class="skeleton h-64"></div>
+        </div>
+
+        <div class="text-center mt-10 text-gray-400 text-sm">
+            <p>数据由 Tushare 提供 | 周线KDJ定投策略 | GitHub Actions 自动更新</p>
+        </div>
+    </div>
+
+    <script>
+        function formatDate(d) {
+            if (!d || d.length !== 8) return d;
+            return d.substring(0, 4) + '-' + d.substring(4, 6) + '-' + d.substring(6, 8);
+        }
+
+        function renderCard(etf) {
+            var color = etf.action_color || '#95a5a6';
+            var bgColor = color + '15';
+            var actionText = etf.action_label || '未知';
+            var hasPosition = etf.shares && etf.shares > 0;
+            var returnColor = etf.return_pct >= 0 ? 'text-red-600' : 'text-green-600';
+            var returnSign = etf.return_pct >= 0 ? '+' : '';
+
+            var metricsHtml = '';
+            metricsHtml += '<span class="metric-pill">J=' + (etf.weekly_j || 0).toFixed(1) + '</span>';
+            metricsHtml += '<span class="metric-pill">K=' + (etf.weekly_k || 0).toFixed(1) + '</span>';
+            metricsHtml += '<span class="metric-pill">D=' + (etf.weekly_d || 0).toFixed(1) + '</span>';
+
+            if (hasPosition) {
+                var pnlVal = etf.loss_pct || 0;
+                var pnlLabel = pnlVal >= 0 ? '浮盈' : '浮亏';
+                var pnlColor = pnlVal >= 0 ? 'text-red-600' : 'text-green-600';
+                metricsHtml += '<span class="metric-pill ' + pnlColor + '">' + pnlLabel + Math.abs(pnlVal).toFixed(2) + '%</span>';
+            }
+
+            var positionHtml = '';
+            if (hasPosition) {
+                positionHtml = '<div class="flex items-center gap-4 mt-3 text-sm text-gray-600">'
+                    + '<span>持仓: ' + etf.shares.toFixed(0) + '份</span>'
+                    + (etf.avg_cost ? '<span>成本: ' + etf.avg_cost.toFixed(4) + '</span>' : '')
+                    + '</div>';
+            }
+
+            var totalReturnHtml = '<div class="flex items-center justify-between mt-4 pt-3 border-t border-gray-100">'
+                + '<div>'
+                + '<div class="text-xs text-gray-400">总收益</div>'
+                + '<div class="text-lg font-bold ' + returnColor + '">' + returnSign + etf.return_pct.toFixed(2) + '%</div>'
+                + '</div>'
+                + '<div class="text-right">'
+                + '<div class="text-xs text-gray-400">交易 ' + etf.trade_count + ' 次</div>'
+                + '<div class="text-xs text-gray-400">投入 ' + (etf.total_invested / 10000).toFixed(1) + ' 万</div>'
+                + '</div>'
+                + '</div>';
+
+            return '<a href="' + etf.report_file + '" class="etf-card bg-white rounded-xl shadow-md overflow-hidden">'
+                + '<div class="p-5">'
+                + '<div class="flex items-start justify-between mb-3">'
+                + '<div>'
+                + '<h3 class="text-lg font-bold text-gray-900">' + etf.name + '</h3>'
+                + '<p class="text-xs text-gray-400 mt-0.5">' + (etf.ts_code || '') + ' · 截至 ' + formatDate(String(etf.last_date)) + '</p>'
+                + '</div>'
+                + '<div class="text-right">'
+                + '<div class="text-xl font-bold text-gray-800">' + (etf.last_price || 0).toFixed(4) + '</div>'
+                + '</div>'
+                + '</div>'
+                + '<div class="mb-3">'
+                + '<span class="action-badge" style="background:' + bgColor + ';color:' + color + ';">'
+                + '<span class="pulse-dot" style="background:' + color + ';"></span>'
+                + actionText
+                + '</span>'
+                + '</div>'
+                + '<p class="text-sm text-gray-500 leading-relaxed">' + (etf.action_detail || '') + '</p>'
+                + '<div class="flex flex-wrap gap-1 mt-2">' + metricsHtml + '</div>'
+                + positionHtml
+                + totalReturnHtml
+                + '</div>'
+                + '</a>';
+        }
+
+        async function loadSummary() {
+            try {
+                var response = await fetch('dca_summary.json');
+                if (!response.ok) throw new Error('加载失败');
+                var data = await response.json();
+
+                document.getElementById('lastUpdate').textContent = data.lastUpdate;
+
+                var grid = document.getElementById('etfGrid');
+                if (!data.etf_list || data.etf_list.length === 0) {
+                    grid.innerHTML = '<div class="col-span-full text-center text-gray-500 py-12">暂无ETF数据</div>';
+                    return;
+                }
+
+                var sorted = data.etf_list.slice().sort(function(a, b) {
+                    var order = { buy: 0, sell_third: 1, wait_price_below_dk: 2, wait_dead_cross: 3, wait_golden: 4, hold: 5, wait: 6 };
+                    return (order[a.action] || 9) - (order[b.action] || 9);
+                });
+
+                grid.innerHTML = sorted.map(renderCard).join('');
+            } catch (err) {
+                document.getElementById('etfGrid').innerHTML =
+                    '<div class="col-span-full text-center text-red-500 py-12">加载数据失败: ' + err.message + '</div>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadSummary);
+    </script>
+</body>
+</html>

@@ -21,7 +21,8 @@ def generate_reports_json():
         return
     
     # 获取所有日期目录并按日期排序
-    date_dirs = sorted([d for d in html_base_dir.iterdir() if d.is_dir()], 
+    date_dirs = sorted([d for d in html_base_dir.iterdir()
+                        if d.is_dir() and d.name.isdigit() and len(d.name) == 8],
                        key=lambda x: x.name, reverse=True)
     
     for date_dir in date_dirs:

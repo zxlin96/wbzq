@@ -29,6 +29,24 @@
       "name": "中证2000",
       "target": "zz2000",
       "enabled": true
+    },
+    {
+      "ts_code": "515880.SH",
+      "name": "通信",
+      "target": "telecom",
+      "enabled": true
+    },
+    {
+      "ts_code": "516080.SH",
+      "name": "创新药",
+      "target": "innovative_medicine",
+      "enabled": true
+    },
+    {
+      "ts_code": "159611.SZ",
+      "name": "电力",
+      "target": "electricity",
+      "enabled": true
     }
   ],
   "base_amount": 1000,

@@ -66,6 +66,16 @@ jobs:
         echo "========================================"
         python main_par3.py --date ${{ steps.date.outputs.today }}
     
+    - name: 运行ETF定投回测
+      env:
+        TUSHARE_TOKEN: ${{ secrets.TUSHARE_TOKEN }}
+      run: |
+        echo "========================================"
+        echo "开始执行ETF定投策略回测"
+        echo "日期: ${{ steps.date.outputs.today }}"
+        echo "========================================"
+        python weekly_dca_strategy.py --target config --amount 1000 --years 5
+
     - name: 生成报告索引
       run: python generate_reports_json.py
     
@@ -73,7 +83,7 @@ jobs:
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
-        git add html/ reports.json index.html strategy_state.json c154_result_*.csv
+        git add html/ reports.json index.html strategy_state.json c154_result_*.csv etf_config.json
         git diff --staged --quiet || git commit -m "Auto-commit: Update reports for ${{ steps.date.outputs.today }}"
         git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref }}
     

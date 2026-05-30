@@ -1,0 +1,36 @@
+{
+  "etf_list": [
+    {
+      "ts_code": "512890.SH",
+      "name": "红利低波",
+      "target": "dividend",
+      "enabled": true
+    },
+    {
+      "ts_code": "510050.SH",
+      "name": "上证50",
+      "target": "sz50",
+      "enabled": true
+    },
+    {
+      "ts_code": "510300.SH",
+      "name": "沪深300",
+      "target": "hs300",
+      "enabled": true
+    },
+    {
+      "ts_code": "159941.SZ",
+      "name": "纳斯达克100",
+      "target": "nasdaq",
+      "enabled": true
+    },
+    {
+      "ts_code": "563300.SH",
+      "name": "中证2000",
+      "target": "zz2000",
+      "enabled": true
+    }
+  ],
+  "base_amount": 1000,
+  "years": 5
+}

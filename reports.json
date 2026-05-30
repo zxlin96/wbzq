@@ -1,19 +1,10 @@
 {
-  "lastUpdate": "2026-05-30 16:37:30",
+  "lastUpdate": "2026-05-30 16:54:18",
   "totalStocks": 0,
-  "c154Stocks": 0,
-  "totalReports": 57,
-  "latestDate": "dca",
+  "c154Stocks": 7,
+  "totalReports": 56,
+  "latestDate": "20260529",
   "reports": [
-    {
-      "date": "dca",
-      "stockSelection": null,
-      "industryTrend": null,
-      "j13Trend": null,
-      "c154Result": null,
-      "c154Html": null,
-      "sentimentRebound": null
-    },
     {
       "date": "20260529",
       "stockSelection": null,

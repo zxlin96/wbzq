@@ -1139,6 +1139,14 @@ window.addEventListener('resize', function() {{ chart.resize(); }});
 
 
 def _generate_dca_summary(results: dict, output_dir: str) -> dict:
+    name_to_tscode = {}
+    try:
+        with open('etf_config.json', 'r', encoding='utf-8') as f:
+            cfg = json.load(f)
+        for etf in cfg.get('etf_list', []):
+            name_to_tscode[etf['name']] = etf.get('ts_code', '')
+    except Exception:
+        pass
     summary_items = []
     for name, strategy in results.items():
         try:
@@ -1168,7 +1176,7 @@ def _generate_dca_summary(results: dict, output_dir: str) -> dict:
                     action_info = {}
             item = {
                 'name': strategy.name,
-                'ts_code': action_info.get('ts_code', ''),
+                'ts_code': name_to_tscode.get(strategy.name, ''),
                 'report_file': os.path.basename(report_file),
                 'action_label': action_info.get('action_label', '未知'),
                 'action_color': action_info.get('action_color', '#95a5a6'),

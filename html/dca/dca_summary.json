@@ -189,6 +189,48 @@
       "total_return": 1822.49,
       "return_pct": 45.56,
       "trade_count": 8
+    },
+    {
+      "name": "卫星ETF富国",
+      "ts_code": "",
+      "report_file": "dca_report_卫星ETF富国.html",
+      "action_label": "空仓等待",
+      "action_color": "#95a5a6",
+      "action": "wait",
+      "action_detail": "周线J=22.53，未到超卖区间(J<=13)，继续空仓等待定投信号",
+      "last_date": "20260529",
+      "last_price": 1.355,
+      "weekly_j": 22.53,
+      "weekly_k": 36.48,
+      "weekly_d": 43.45,
+      "shares": 0,
+      "avg_cost": null,
+      "loss_pct": 0,
+      "total_invested": 0,
+      "total_return": 0.0,
+      "return_pct": 0,
+      "trade_count": 0
+    },
+    {
+      "name": "有色金属",
+      "ts_code": "",
+      "report_file": "dca_report_有色金属.html",
+      "action_label": "建议定投(1x)",
+      "action_color": "#e74c3c",
+      "action": "buy",
+      "action_detail": "定投进行中，当前浮盈0.55%，下一交易日建议买入1000元(基础1000x1)",
+      "last_date": "20260529",
+      "last_price": 1.965,
+      "weekly_j": 23.49,
+      "weekly_k": 38.06,
+      "weekly_d": 45.35,
+      "shares": 1535.078,
+      "avg_cost": 1.9543,
+      "loss_pct": 0.55,
+      "total_invested": 57000,
+      "total_return": 7265.47,
+      "return_pct": 12.75,
+      "trade_count": 71
     }
   ]
 }

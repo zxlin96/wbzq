@@ -125,7 +125,7 @@ jobs:
         password: ${{ secrets.EMAIL_PASSWORD }}
         secure: true
         subject: "📊 股票策略执行完成 - ${{ needs.run-strategy.result }}"
-        to: ${{ secrets.EMAIL_USERNAME }}
+        to: ${{ secrets.EMAIL_RECIPIENTS }}
         from: GitHub Actions <${{ secrets.EMAIL_USERNAME }}>
         html_body: |
           <h2>📊 股票策略执行通知</h2>

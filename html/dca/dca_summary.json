@@ -3,7 +3,7 @@
   "etf_list": [
     {
       "name": "红利低波",
-      "ts_code": "",
+      "ts_code": "512890.SH",
       "report_file": "dca_report_红利低波.html",
       "action_label": "定投暂停·持有观望",
       "action_color": "#f39c12",
@@ -24,7 +24,7 @@
     },
     {
       "name": "上证50",
-      "ts_code": "",
+      "ts_code": "510050.SH",
       "report_file": "dca_report_上证50.html",
       "action_label": "空仓等待",
       "action_color": "#95a5a6",
@@ -45,7 +45,7 @@
     },
     {
       "name": "沪深300",
-      "ts_code": "",
+      "ts_code": "510300.SH",
       "report_file": "dca_report_沪深300.html",
       "action_label": "已卖1/3·等收盘<多空线",
       "action_color": "#e67e22",
@@ -66,7 +66,7 @@
     },
     {
       "name": "纳斯达克100",
-      "ts_code": "",
+      "ts_code": "159941.SZ",
       "report_file": "dca_report_纳斯达克100.html",
       "action_label": "已卖1/3·等收盘<多空线",
       "action_color": "#e67e22",
@@ -87,7 +87,7 @@
     },
     {
       "name": "中证2000",
-      "ts_code": "",
+      "ts_code": "563300.SH",
       "report_file": "dca_report_中证2000.html",
       "action_label": "已卖1/3·等收盘<多空线",
       "action_color": "#e67e22",
@@ -108,7 +108,7 @@
     },
     {
       "name": "通信",
-      "ts_code": "",
+      "ts_code": "515880.SH",
       "report_file": "dca_report_通信.html",
       "action_label": "已卖2/3·等死叉",
       "action_color": "#f39c12",
@@ -129,7 +129,7 @@
     },
     {
       "name": "创新药",
-      "ts_code": "",
+      "ts_code": "516080.SH",
       "report_file": "dca_report_创新药.html",
       "action_label": "空仓等待",
       "action_color": "#95a5a6",
@@ -150,7 +150,7 @@
     },
     {
       "name": "电力",
-      "ts_code": "",
+      "ts_code": "159611.SZ",
       "report_file": "dca_report_电力.html",
       "action_label": "已卖2/3·等死叉",
       "action_color": "#f39c12",
@@ -171,7 +171,7 @@
     },
     {
       "name": "科创半导体",
-      "ts_code": "",
+      "ts_code": "588170.SH",
       "report_file": "dca_report_科创半导体.html",
       "action_label": "已卖1/3·等收盘<多空线",
       "action_color": "#e67e22",
@@ -192,7 +192,7 @@
     },
     {
       "name": "卫星ETF富国",
-      "ts_code": "",
+      "ts_code": "563230.SH",
       "report_file": "dca_report_卫星ETF富国.html",
       "action_label": "空仓等待",
       "action_color": "#95a5a6",
@@ -213,7 +213,7 @@
     },
     {
       "name": "有色金属",
-      "ts_code": "",
+      "ts_code": "512400.SH",
       "report_file": "dca_report_有色金属.html",
       "action_label": "定投暂停·持有观望",
       "action_color": "#f39c12",

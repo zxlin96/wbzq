@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2026-05-30",
+  "lastUpdate": "2026-05-31",
   "etf_list": [
     {
       "name": "红利低波",
@@ -168,6 +168,27 @@
       "total_return": 3427.13,
       "return_pct": 9.26,
       "trade_count": 47
+    },
+    {
+      "name": "科创半导体",
+      "ts_code": "",
+      "report_file": "dca_report_科创半导体.html",
+      "action_label": "已卖1/3·等收盘<多空线",
+      "action_color": "#e67e22",
+      "action": "wait_price_below_dk",
+      "action_detail": "已卖1/3仓位，金叉后监控收盘价是否跌破多空线(2.1037)，跌破则再卖1/3，然后等死叉全清",
+      "last_date": "20260529",
+      "last_price": 2.449,
+      "weekly_j": 86.9,
+      "weekly_k": 76.64,
+      "weekly_d": 71.51,
+      "shares": 5447.8864,
+      "avg_cost": 0.979,
+      "loss_pct": 150.16,
+      "total_invested": 8000,
+      "total_return": 8275.64,
+      "return_pct": 103.45,
+      "trade_count": 9
     }
   ]
 }

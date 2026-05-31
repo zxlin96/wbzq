@@ -47,6 +47,12 @@
       "name": "电力",
       "target": "electricity",
       "enabled": true
+    },
+    {
+      "ts_code": "588170.SH",
+      "name": "科创半导体",
+      "target": "kechuang_semi",
+      "enabled": true
     }
   ],
   "base_amount": 1000,

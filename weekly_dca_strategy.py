@@ -960,6 +960,11 @@ def run_backtest(target: str = 'all',
             'report_name': '电力',
             'ts_code': '159611.SZ',
         },
+        'kechuang_semi': {
+            'name': '科创半导体',
+            'report_name': '科创半导体',
+            'ts_code': '588170.SH',
+        },
     }
 
     if target == 'custom' and custom_ts_code:
@@ -1220,8 +1225,8 @@ def run_backtest_from_config(config_path: str = 'etf_config.json',
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='周线KDJ定投策略回测')
     parser.add_argument('--target', type=str, default='all',
-                        choices=['nasdaq', 'dividend', 'sz50', 'hs300', 'zz2000', 'telecom', 'innovative_medicine', 'electricity', 'both', 'all', 'config'],
-                        help='回测标的: nasdaq/dividend/sz50/hs300/zz2000/telecom/innovative_medicine/electricity/both/all/config')
+                        choices=['nasdaq', 'dividend', 'sz50', 'hs300', 'zz2000', 'telecom', 'innovative_medicine', 'electricity', 'kechuang_semi', 'both', 'all', 'config'],
+                        help='回测标的: nasdaq/dividend/sz50/hs300/zz2000/telecom/innovative_medicine/electricity/kechuang_semi/both/all/config')
 
     parser.add_argument('--etf', type=str, default=None,
                         help='自定义ETF代码回测，如 510050.SH 或 159941.SZ')

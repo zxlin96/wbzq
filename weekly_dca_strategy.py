@@ -531,17 +531,28 @@ class WeeklyDCAStrategy:
                         f"再监控收盘<多空线卖1/3，最后死叉全清"
                     )
             elif self.dca_active:
-                invest_amount = self.get_invest_amount(last_price)
-                multiplier = int(invest_amount / self.base_amount)
-                result['action'] = 'buy'
-                result['action_label'] = f'建议定投({multiplier}x)'
-                result['action_color'] = '#e74c3c'
-                pnl_label = "浮盈" if profit_pct > 0 else "浮亏"
-                result['action_detail'] = (
-                    f"定投进行中，当前{pnl_label}{abs(profit_pct)*100:.2f}%，"
-                    f"下一交易日建议买入{invest_amount:.0f}元"
-                    f"(基础{self.base_amount:.0f}x{multiplier})"
-                )
+                if weekly_j <= self.j_buy_threshold:
+                    invest_amount = self.get_invest_amount(last_price)
+                    multiplier = int(invest_amount / self.base_amount)
+                    result['action'] = 'buy'
+                    result['action_label'] = f'建议定投({multiplier}x)'
+                    result['action_color'] = '#e74c3c'
+                    pnl_label = "浮盈" if profit_pct > 0 else "浮亏"
+                    result['action_detail'] = (
+                        f"定投进行中，当前{pnl_label}{abs(profit_pct)*100:.2f}%，"
+                        f"周线J={weekly_j:.2f}<={self.j_buy_threshold}，"
+                        f"下一交易日建议买入{invest_amount:.0f}元"
+                        f"(基础{self.base_amount:.0f}x{multiplier})"
+                    )
+                else:
+                    result['action'] = 'hold'
+                    result['action_label'] = '定投暂停·持有观望'
+                    result['action_color'] = '#f39c12'
+                    result['action_detail'] = (
+                        f"定投周期内但周线J={weekly_j:.2f}>{self.j_buy_threshold}，"
+                        f"暂停买入继续持有，等待卖出信号(J>={self.j_sell_half_threshold})"
+                        f"或重新回到买入区间(J<={self.j_buy_threshold})"
+                    )
             else:
                 result['action'] = 'hold'
                 result['action_label'] = '持有观望'

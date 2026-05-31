@@ -101,10 +101,10 @@
       "shares": 478.2401,
       "avg_cost": 1.394,
       "loss_pct": 11.69,
-      "total_invested": 15000,
-      "total_return": 2307.28,
-      "return_pct": 15.38,
-      "trade_count": 22
+      "total_invested": 7000,
+      "total_return": 3413.64,
+      "return_pct": 48.77,
+      "trade_count": 11
     },
     {
       "name": "通信",
@@ -143,10 +143,10 @@
       "shares": 0.0,
       "avg_cost": null,
       "loss_pct": 0,
-      "total_invested": 89000,
-      "total_return": 3826.37,
-      "return_pct": 4.3,
-      "trade_count": 72
+      "total_invested": 81000,
+      "total_return": 6117.77,
+      "return_pct": 7.55,
+      "trade_count": 68
     },
     {
       "name": "电力",
@@ -164,10 +164,10 @@
       "shares": 1627.8346,
       "avg_cost": 1.0239,
       "loss_pct": 21.21,
-      "total_invested": 37000,
-      "total_return": 3427.13,
-      "return_pct": 9.26,
-      "trade_count": 47
+      "total_invested": 32000,
+      "total_return": 4850.71,
+      "return_pct": 15.16,
+      "trade_count": 43
     },
     {
       "name": "科创半导体",
@@ -182,13 +182,13 @@
       "weekly_j": 86.9,
       "weekly_k": 76.64,
       "weekly_d": 71.51,
-      "shares": 5447.8864,
-      "avg_cost": 0.979,
-      "loss_pct": 150.16,
-      "total_invested": 8000,
-      "total_return": 8275.64,
-      "return_pct": 103.45,
-      "trade_count": 9
+      "shares": 839.7158,
+      "avg_cost": 1.5878,
+      "loss_pct": 54.23,
+      "total_invested": 4000,
+      "total_return": 1822.49,
+      "return_pct": 45.56,
+      "trade_count": 8
     }
   ]
 }

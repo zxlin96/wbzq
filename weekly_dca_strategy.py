@@ -998,12 +998,22 @@ def run_backtest(target: str = 'all',
                     datetime.now() - timedelta(days=(years + 1) * 365),
                     datetime.now())
             weekly = resample_to_weekly(daily_warmup)
+            actual_data_start = daily_warmup['trade_date'].min()
+            effective_start = backtest_start
+            warmup_weeks_needed = 30
+            if len(weekly) > warmup_weeks_needed:
+                warmup_end_date = weekly.iloc[warmup_weeks_needed]['trade_date']
+                if warmup_end_date > backtest_start:
+                    effective_start = warmup_end_date
+                    data_years = (datetime.now() - pd.to_datetime(actual_data_start)).days / 365
+                    logging.info(f"  {cfg['name']} 数据起始: {actual_data_start} ({data_years:.1f}年), "
+                                 f"预热{warmup_weeks_needed}周后回测起始: {effective_start}")
             strategy = WeeklyDCAStrategy(
                 name=cfg['name'],
                 base_amount=base_amount,
             )
             strategy.backtest(daily_warmup, weekly,
-                              backtest_start=backtest_start)
+                              backtest_start=effective_start)
             strategy._nav_curve = strategy.calc_nav_curve(daily_warmup)
             strategy._daily_df = daily_warmup
             strategy._weekly_df = weekly
@@ -1187,6 +1197,8 @@ def run_backtest_from_config(config_path: str = 'etf_config.json',
     all_results = {}
     backtest_start = (datetime.now() - timedelta(days=years * 365)).strftime('%Y%m%d')
     os.makedirs(output_dir, exist_ok=True)
+    WARMUP_WEEKS = 30
+    WARMUP_DAYS = WARMUP_WEEKS * 7 + 30
     for etf in enabled_etfs:
         tgt = etf['target']
         name = etf['name']
@@ -1203,11 +1215,25 @@ def run_backtest_from_config(config_path: str = 'etf_config.json',
                     datetime.now() - timedelta(days=(years + 1) * 365),
                     datetime.now())
             weekly = resample_to_weekly(daily_warmup)
+            actual_data_start = daily_warmup['trade_date'].min()
+            warmup_end = None
+            for i in range(len(weekly)):
+                if i >= WARMUP_WEEKS:
+                    warmup_end = weekly.iloc[i]['trade_date']
+                    break
+            effective_start = backtest_start
+            if warmup_end and warmup_end > backtest_start:
+                effective_start = warmup_end
+                data_years = (datetime.now() - pd.to_datetime(actual_data_start)).days / 365
+                logging.info(f"  [{name}] 数据起始: {actual_data_start} ({data_years:.1f}年), "
+                             f"预热{WARMUP_WEEKS}周后回测起始: {effective_start}")
+            else:
+                logging.info(f"  [{name}] 数据充足, 回测起始: {effective_start}")
             strategy = WeeklyDCAStrategy(
                 name=name,
                 base_amount=base_amount,
             )
-            strategy.backtest(daily_warmup, weekly, backtest_start=backtest_start)
+            strategy.backtest(daily_warmup, weekly, backtest_start=effective_start)
             strategy._nav_curve = strategy.calc_nav_curve(daily_warmup)
             strategy._daily_df = daily_warmup
             strategy._weekly_df = weekly

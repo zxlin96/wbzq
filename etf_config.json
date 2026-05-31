@@ -53,6 +53,18 @@
       "name": "科创半导体",
       "target": "kechuang_semi",
       "enabled": true
+    },
+    {
+      "ts_code": "563230.SH",
+      "name": "卫星ETF富国",
+      "target": "satellite",
+      "enabled": true
+    },
+    {
+      "ts_code": "512400.SH",
+      "name": "有色金属",
+      "target": "nonferrous_metals",
+      "enabled": true
     }
   ],
   "base_amount": 1000,

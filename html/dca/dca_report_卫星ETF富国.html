@@ -9,13 +9,12 @@
 body { font-family: 'Microsoft YaHei', Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
 .container { max-width: 1200px; margin: 0 auto; }
 h1 { text-align: center; color: #333; font-size: 24px; margin-bottom: 5px; }
+h2 { color: #333; font-size: 18px; margin: 15px 0 10px; }
 .subtitle { text-align: center; color: #666; margin-bottom: 20px; font-size: 14px; }
-.summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+.summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 20px; }
 .card { background: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
 .card-label { color: #666; font-size: 12px; margin-bottom: 5px; }
 .card-value { font-size: 20px; font-weight: bold; color: #333; }
-.card-value.positive { color: #e74c3c; }
-.card-value.negative { color: #2ecc71; }
 .action-box { background: white; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 5px solid #e74c3c; }
 .action-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
 .action-label { font-size: 22px; font-weight: bold; color: #e74c3c; }
@@ -23,6 +22,14 @@ h1 { text-align: center; color: #333; font-size: 24px; margin-bottom: 5px; }
 .action-detail { font-size: 14px; color: #555; line-height: 1.8; padding: 10px; background: #fafafa; border-radius: 4px; }
 .action-metrics { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 12px; }
 .action-metric { padding: 6px 12px; background: #f0f2f5; border-radius: 4px; font-size: 13px; color: #333; }
+.positions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.pos-card { background: white; border-radius: 8px; padding: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.pos-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.pos-round { color: white; padding: 2px 8px; border-radius: 3px; font-size: 12px; font-weight: bold; }
+.pos-stage { font-size: 12px; color: #666; }
+.pos-detail { font-size: 14px; font-weight: bold; color: #333; margin-bottom: 6px; }
+.pos-metrics { display: flex; flex-wrap: wrap; gap: 8px; }
+.pos-metrics span { font-size: 11px; color: #888; background: #f5f5f5; padding: 2px 6px; border-radius: 3px; }
 .chart { background: white; border-radius: 8px; padding: 15px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
 .trade-table { width: 100%; border-collapse: collapse; font-size: 12px; }
 .trade-table th { background: #f5f7fa; padding: 8px; text-align: left; border-bottom: 2px solid #ddd; }
@@ -30,19 +37,19 @@ h1 { text-align: center; color: #333; font-size: 24px; margin-bottom: 5px; }
 .trade-table tr:hover { background: #f9f9f9; }
 .buy-tag { background: #e74c3c; color: white; padding: 2px 6px; border-radius: 3px; font-size: 11px; }
 .sell-tag { background: #2ecc71; color: white; padding: 2px 6px; border-radius: 3px; font-size: 11px; }
+.round-tag { color: white; padding: 2px 6px; border-radius: 3px; font-size: 11px; }
 </style>
 </head>
 <body>
 <div class="container">
 <h1>周线KDJ定投策略回测报告</h1>
-<div class="subtitle">卫星ETF富国 | 基础金额: 1000 | "
-    f"J<=13定投 | J>=93卖1/3 | 收盘<多空线卖1/3 | 死叉全清</div>
+<div class="subtitle">卫星ETF富国 | 基础金额: 1000 | J&lt;=13定投 | J&gt;=93卖1/3 | 回撤止盈(peak&gt;=50,回落&gt;=20) | 收盘<中期线:中期>多空卖1/3,中期<多空全清 | 已卖2/3后收盘<多空线全清</div>
 <div class="action-box">
 <div class="action-header">
-    <div class="action-label">下一交易日: 建议定投(1x)</div>
+    <div class="action-label">下一交易日: R1 建议定投(1x)</div>
     <div class="action-date">数据截至: 20260604 收盘价: 1.3560</div>
 </div>
-<div class="action-detail">定投进行中，当前浮亏0.00%，周线J=12.72<=13，下一交易日建议买入1000元(基础1000x1)</div>
+<div class="action-detail">R1 定投中，浮亏0.00%，建议买入1000元(1x)</div>
 <div class="action-metrics">
     <div class="action-metric">周线K=30.28</div>
     <div class="action-metric">周线D=39.06</div>
@@ -68,6 +75,26 @@ h1 { text-align: center; color: #333; font-size: 24px; margin-bottom: 5px; }
     <div class="card-label">交易次数</div>
     <div class="card-value">1</div>
 </div>
+<div class="card">
+    <div class="card-label">轮次数</div>
+    <div class="card-value">1</div>
+</div>
+</div>
+<h2>各仓位状态</h2>
+<div class="positions-grid">
+
+<div class="pos-card" style="border-left: 4px solid #e74c3c;">
+    <div class="pos-header">
+        <span class="pos-round" style="background: #e74c3c;">R1</span>
+        <span class="pos-stage">定投中</span>
+    </div>
+    <div class="pos-detail">R1 建议定投(1x)</div>
+    <div class="pos-metrics">
+        <span>持仓: 737.46份</span>
+        <span>成本: 1.3560</span>
+        <span>J峰值: 12.72</span>
+    </div>
+</div>
 </div>
 <div class="chart">
 <h3 style="margin-top:0">周线 KDJ</h3>
@@ -82,11 +109,12 @@ h1 { text-align: center; color: #333; font-size: 24px; margin-bottom: 5px; }
 <div style="overflow-x:auto;">
 <table class="trade-table">
 <tr>
-    <th>日期</th><th>操作</th><th>价格</th><th>金额</th><th>份额</th>
+    <th>日期</th><th>轮次</th><th>操作</th><th>价格</th><th>金额</th><th>份额</th>
     <th>原因</th><th>持仓</th><th>盈亏</th>
 </tr>
 <tr>
     <td>20260604</td>
+    <td><span class="round-tag" style="background: #e74c3c;">R1</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>1.3560</td>
     <td>1000.00</td>
@@ -127,8 +155,6 @@ var dailyDates = ["20250917", "20250918", "20250919", "20250922", "20250923", "2
 var dailyPrices = [1.004, 0.998, 0.995, 1.005, 0.99, 1.005, 1.013, 0.996, 1.001, 1.03, 1.049, 1.023, 1.031, 1.013, 1.022, 1.002, 0.965, 0.976, 0.987, 0.975, 0.97, 1.004, 1.021, 1.02, 1.033, 1.026, 1.01, 1.017, 0.996, 0.991, 0.999, 1.007, 1.017, 1.005, 1.008, 1.011, 0.993, 0.997, 0.985, 0.982, 0.977, 0.949, 0.985, 0.997, 0.983, 0.983, 1.004, 1.019, 1.017, 1.002, 1.027, 1.058, 1.073, 1.067, 1.084, 1.099, 1.117, 1.142, 1.144, 1.138, 1.18, 1.19, 1.21, 1.158, 1.219, 1.29, 1.335, 1.359, 1.347, 1.451, 1.493, 1.609, 1.579, 1.669, 1.773, 1.95, 1.82, 1.85, 1.68, 1.695, 1.705, 1.625, 1.616, 1.672, 1.839, 1.689, 1.699, 1.664, 1.64, 1.614, 1.593, 1.66, 1.624, 1.588, 1.565, 1.604, 1.576, 1.555, 1.553, 1.538, 1.535, 1.573, 1.598, 1.614, 1.681, 1.538, 1.554, 1.58, 1.581, 1.569, 1.597, 1.57, 1.536, 1.491, 1.481, 1.433, 1.486, 1.465, 1.419, 1.345, 1.368, 1.382, 1.362, 1.362, 1.396, 1.398, 1.392, 1.355, 1.339, 1.33, 1.42, 1.406, 1.408, 1.411, 1.477, 1.484, 1.494, 1.512, 1.593, 1.571, 1.572, 1.561, 1.503, 1.51, 1.458, 1.463, 1.518, 1.571, 1.59, 1.644, 1.669, 1.623, 1.636, 1.542, 1.492, 1.521, 1.502, 1.493, 1.446, 1.475, 1.507, 1.465, 1.433, 1.445, 1.355, 1.332, 1.336, 1.366, 1.356];
 var dkValues = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 1.4951384711779447, 1.4947606516290726, 1.4924196428571428, 1.4916477130325814, 1.4899154135338346, 1.485628446115288, 1.4807072368421053, 1.4767996553884712, 1.4729860588972432, 1.4683703007518796, 1.463359649122807, 1.4590864661654135, 1.455659304511278, 1.4521832706766917, 1.4482655075187971, 1.4434907581453633, 1.4391090225563912, 1.4362468671679196, 1.432669486215539, 1.4285816102756892, 1.4277885338345866, 1.4285233395989976, 1.4296806077694235, 1.4314166666666668, 1.4338187656641603, 1.4383886278195488, 1.442484649122807, 1.446814223057644, 1.4510914786967417, 1.454512531328321, 1.458723527568922, 1.4592551691729323, 1.4604788533834587, 1.4640046992481202, 1.4700244360902255, 1.4749937343358397, 1.4816660401002506, 1.4893698308270678, 1.495309523809524, 1.4997882205513784, 1.5016350250626564, 1.5019523809523811, 1.5038342731829575, 1.5062476503759399, 1.5083029448621554, 1.508779135338346, 1.5101489661654135, 1.5114702380952383, 1.5100902255639097, 1.5073455513784462, 1.503937186716792, 1.4968214285714285, 1.4895266290726816, 1.4814296679197994, 1.4760989974937344, 1.4713997493734334];
 var midValues = [1.004, 1.003801652892562, 1.0033779113448533, 1.0031478724130862, 1.002559238998826, 1.0022458814570874, 1.0023916212363504, 1.002277889312176, 1.0021595104435244, 1.0030006118473684, 1.0050843041310205, 1.0070714269281422, 1.0091926768360289, 1.0107385490277208, 1.012145668460912, 1.0127522304464065, 1.0115796899426002, 1.0096185780369908, 1.0075580459997817, 1.0051023825368637, 1.0022980993084025, 1.0004771130378325, 0.9999365482438861, 1.0002379371588843, 1.001522736774416, 1.0031919749707827, 1.0045344575660107, 1.0058452283093944, 1.0063972243174646, 1.0062577431553474, 1.005924446074745, 1.0057368853488955, 1.005983662537413, 1.006116342720225, 1.00626743134772, 1.0065250218719861, 1.0062503503428752, 1.005760682613706, 1.0047465849565362, 1.003315772972595, 1.0014880137776396, 0.9985293315470449, 0.9961014754572404, 0.9945059197125863, 0.9930574594302117, 0.9917553509955572, 0.9912884734154809, 0.9918920190547527, 0.9931260613734469, 0.9942455091612192, 0.9960776846501834, 0.9993512009808063, 1.0039772341945024, 1.0091573974468278, 1.01509924565882, 1.0218504251839116, 1.0295152503144633, 1.0383647530774125, 1.047780874659968, 1.0570666792016798, 1.0673467077229355, 1.0782830339983898, 1.0899583256704413, 1.1000233283378331, 1.1106941705089686, 1.1237649269868701, 1.1394977498526764, 1.1572859122718464, 1.1754652305104034, 1.196743444190416, 1.2207811427963609, 1.249706175985585, 1.2799549609805008, 1.3130651406554277, 1.3504342645483811, 1.3952703139461966, 1.4393251796109758, 1.4823924804407544, 1.5177551370147133, 1.547286993497621, 1.5722699059036132, 1.5907371478975874, 1.6039346521118152, 1.6150194391606183, 1.6298441498574001, 1.6417236950392984, 1.6515695494159643, 1.6585714998857666, 1.662644822104865, 1.6637634982315386, 1.6621730748706658, 1.6610365741127042, 1.6590514265272025, 1.6553737185889013, 1.6499242209247855, 1.644758054028153, 1.6390267173774105, 1.6324122947474948, 1.6253592582845764, 1.6177498947586697, 1.6099204895964125, 1.6034588054928711, 1.5989527589279262, 1.596433743990139, 1.5975430399742603, 1.5963172615843164, 1.5940977814527237, 1.5921459713992534, 1.5904709259453018, 1.5886398318498367, 1.5876904273115557, 1.5864700679987707, 1.5839847012522361, 1.5792470689259694, 1.5728277590571142, 1.5639081298372322, 1.5553616630094687, 1.5466533120583388, 1.536603810609786, 1.523542448132332, 1.5096569923207361, 1.4961417039734453, 1.482659843047624, 1.4696460405089298, 1.4584997416025665, 1.4490381781494617, 1.4408188446593844, 1.4324796596070388, 1.423806993262674, 1.414900266428424, 1.4091064983351353, 1.4051253313194583, 1.4025552829430312, 1.4011140015359014, 1.4026578048406855, 1.4063802581326255, 1.4117686687451596, 1.4186892190313964, 1.4290843239657731, 1.4407344578816526, 1.4528726646226413, 1.464572698403877, 1.4736752764424272, 1.4809695550817068, 1.485093177804474, 1.4871232664765917, 1.489502969919031, 1.493790111234415, 1.4998405079419226, 1.5086563765496948, 1.5198585240788747, 1.5307671179098505, 1.5415483379815005, 1.548780449335861, 1.5517447404297435, 1.5527127455279706, 1.5516842945432145, 1.5490558506759573, 1.5438895088912328, 1.5381537095513351, 1.5332841675287148, 1.5277670636117966, 1.5209410002091721, 1.5138610404038062, 1.5038699585372783, 1.4915000621295273, 1.4780788897531147, 1.4653893813109504, 1.4532785737980651];
-var buyMarkers = [{"date": "20260604", "price": 1.356, "reason": "\u5468\u7ebfJ=12.72, \u91d1\u989d=1000", "amount": 1000}];
-var sellMarkers = [];
 var deadCross = [{"date": "20260330", "price": 1.396}, {"date": "20260602", "price": 1.336}];
 var dChart = echarts.init(document.getElementById('daily_chart'));
 
@@ -138,7 +164,7 @@ var mainSeries = {
     markPoint: {
         symbol: 'pin', symbolSize: 40, animation: false,
         label: { show: true, fontSize: 10, color: '#fff' },
-        data: [{xAxis: '20260604', yAxis: 1.3560, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}}]
+        data: [{xAxis: '20260604', yAxis: 1.3560, name: 'R1买', itemStyle: {color: '#e74c3c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R1买', color: '#fff', fontSize: 9}}]
     }
 };
 

@@ -9,20 +9,27 @@
 body { font-family: 'Microsoft YaHei', Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
 .container { max-width: 1200px; margin: 0 auto; }
 h1 { text-align: center; color: #333; font-size: 24px; margin-bottom: 5px; }
+h2 { color: #333; font-size: 18px; margin: 15px 0 10px; }
 .subtitle { text-align: center; color: #666; margin-bottom: 20px; font-size: 14px; }
-.summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+.summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 20px; }
 .card { background: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
 .card-label { color: #666; font-size: 12px; margin-bottom: 5px; }
 .card-value { font-size: 20px; font-weight: bold; color: #333; }
-.card-value.positive { color: #e74c3c; }
-.card-value.negative { color: #2ecc71; }
-.action-box { background: white; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 5px solid #f39c12; }
+.action-box { background: white; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 5px solid #95a5a6; }
 .action-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-.action-label { font-size: 22px; font-weight: bold; color: #f39c12; }
+.action-label { font-size: 22px; font-weight: bold; color: #95a5a6; }
 .action-date { color: #999; font-size: 13px; }
 .action-detail { font-size: 14px; color: #555; line-height: 1.8; padding: 10px; background: #fafafa; border-radius: 4px; }
 .action-metrics { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 12px; }
 .action-metric { padding: 6px 12px; background: #f0f2f5; border-radius: 4px; font-size: 13px; color: #333; }
+.positions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.pos-card { background: white; border-radius: 8px; padding: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.pos-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.pos-round { color: white; padding: 2px 8px; border-radius: 3px; font-size: 12px; font-weight: bold; }
+.pos-stage { font-size: 12px; color: #666; }
+.pos-detail { font-size: 14px; font-weight: bold; color: #333; margin-bottom: 6px; }
+.pos-metrics { display: flex; flex-wrap: wrap; gap: 8px; }
+.pos-metrics span { font-size: 11px; color: #888; background: #f5f5f5; padding: 2px 6px; border-radius: 3px; }
 .chart { background: white; border-radius: 8px; padding: 15px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
 .trade-table { width: 100%; border-collapse: collapse; font-size: 12px; }
 .trade-table th { background: #f5f7fa; padding: 8px; text-align: left; border-bottom: 2px solid #ddd; }
@@ -30,44 +37,52 @@ h1 { text-align: center; color: #333; font-size: 24px; margin-bottom: 5px; }
 .trade-table tr:hover { background: #f9f9f9; }
 .buy-tag { background: #e74c3c; color: white; padding: 2px 6px; border-radius: 3px; font-size: 11px; }
 .sell-tag { background: #2ecc71; color: white; padding: 2px 6px; border-radius: 3px; font-size: 11px; }
+.round-tag { color: white; padding: 2px 6px; border-radius: 3px; font-size: 11px; }
 </style>
 </head>
 <body>
 <div class="container">
 <h1>周线KDJ定投策略回测报告</h1>
-<div class="subtitle">通信 | 基础金额: 1000 | "
-    f"J<=13定投 | J>=93卖1/3 | 收盘<多空线卖1/3 | 死叉全清</div>
+<div class="subtitle">通信 | 基础金额: 1000 | J&lt;=13定投 | J&gt;=93卖1/3 | 回撤止盈(peak&gt;=50,回落&gt;=20) | 收盘<中期线:中期>多空卖1/3,中期<多空全清 | 已卖2/3后收盘<多空线全清</div>
 <div class="action-box">
 <div class="action-header">
-    <div class="action-label">下一交易日: 已卖2/3·等死叉</div>
+    <div class="action-label">下一交易日: 空仓等待</div>
     <div class="action-date">数据截至: 20260604 收盘价: 1.7080</div>
 </div>
-<div class="action-detail">已卖2/3仓位，等日线知行多空死叉时清仓剩余1/3</div>
+<div class="action-detail">周线J=93.33，空仓等待J<=13</div>
 <div class="action-metrics">
     <div class="action-metric">周线K=88.13</div>
     <div class="action-metric">周线D=85.52</div>
     <div class="action-metric">周线J=93.33</div>
     <div class='action-metric'>中期=1.5411 多空=1.3901 (多头)</div>
-    <div class='action-metric'>持仓=3376.01份 成本=0.3949 浮盈=332.47%</div>
+    
 </div>
 </div>
 <div class="summary">
 <div class="card">
     <div class="card-label">总投入</div>
-    <div class="card-value">53000.00</div>
+    <div class="card-value">75000.00</div>
 </div>
 <div class="card">
     <div class="card-label">总卖出</div>
-    <div class="card-value">59952.80</div>
+    <div class="card-value">86374.20</div>
 </div>
 <div class="card">
     <div class="card-label">剩余持仓</div>
-    <div class="card-value">3376.0100 份</div>
+    <div class="card-value">0.0000 份</div>
 </div>
 <div class="card">
     <div class="card-label">交易次数</div>
-    <div class="card-value">52</div>
+    <div class="card-value">79</div>
 </div>
+<div class="card">
+    <div class="card-label">轮次数</div>
+    <div class="card-value">10</div>
+</div>
+</div>
+<h2>各仓位状态</h2>
+<div class="positions-grid">
+
 </div>
 <div class="chart">
 <h3 style="margin-top:0">周线 KDJ</h3>
@@ -82,11 +97,12 @@ h1 { text-align: center; color: #333; font-size: 24px; margin-bottom: 5px; }
 <div style="overflow-x:auto;">
 <table class="trade-table">
 <tr>
-    <th>日期</th><th>操作</th><th>价格</th><th>金额</th><th>份额</th>
+    <th>日期</th><th>轮次</th><th>操作</th><th>价格</th><th>金额</th><th>份额</th>
     <th>原因</th><th>持仓</th><th>盈亏</th>
 </tr>
 <tr>
     <td>20210917</td>
+    <td><span class="round-tag" style="background: #e74c3c;">R1</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.3292</td>
     <td>1000.00</td>
@@ -97,6 +113,7 @@ h1 { text-align: center; color: #333; font-size: 24px; margin-bottom: 5px; }
 </tr>
 <tr>
     <td>20210924</td>
+    <td><span class="round-tag" style="background: #e74c3c;">R1</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.3322</td>
     <td>1000.00</td>
@@ -107,6 +124,7 @@ h1 { text-align: center; color: #333; font-size: 24px; margin-bottom: 5px; }
 </tr>
 <tr>
     <td>20210930</td>
+    <td><span class="round-tag" style="background: #e74c3c;">R1</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.3232</td>
     <td>1000.00</td>
@@ -117,6 +135,7 @@ h1 { text-align: center; color: #333; font-size: 24px; margin-bottom: 5px; }
 </tr>
 <tr>
     <td>20211008</td>
+    <td><span class="round-tag" style="background: #e74c3c;">R1</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.3279</td>
     <td>1000.00</td>
@@ -127,6 +146,7 @@ h1 { text-align: center; color: #333; font-size: 24px; margin-bottom: 5px; }
 </tr>
 <tr>
     <td>20211015</td>
+    <td><span class="round-tag" style="background: #e74c3c;">R1</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.3289</td>
     <td>1000.00</td>
@@ -137,6 +157,7 @@ h1 { text-align: center; color: #333; font-size: 24px; margin-bottom: 5px; }
 </tr>
 <tr>
     <td>20211022</td>
+    <td><span class="round-tag" style="background: #e74c3c;">R1</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.3232</td>
     <td>1000.00</td>
@@ -147,316 +168,502 @@ h1 { text-align: center; color: #333; font-size: 24px; margin-bottom: 5px; }
 </tr>
 <tr>
     <td>20211112</td>
+    <td><span class="round-tag" style="background: #7f2921;">R1</span></td>
     <td><span class="sell-tag">卖出</span></td>
     <td>0.3605</td>
     <td>2202.39</td>
     <td>6108.4773</td>
-    <td>周线J=102.15>=93</td>
+    <td>R1 周线J=102.15>=93</td>
     <td>12216.9546</td>
     <td>202.39</td>
 </tr>
 <tr>
+    <td>20211206</td>
+    <td><span class="round-tag" style="background: #7f2921;">R1</span></td>
+    <td><span class="sell-tag">卖出</span></td>
+    <td>0.3635</td>
+    <td>2220.71</td>
+    <td>6108.4773</td>
+    <td>R1 多头回调: 收盘(0.3635)<中期线(0.3641), 中期(0.3641)>多空线</td>
+    <td>6108.4773</td>
+    <td>220.71</td>
+</tr>
+<tr>
     <td>20220111</td>
+    <td><span class="round-tag" style="background: #7f2921;">R1</span></td>
     <td><span class="sell-tag">卖出</span></td>
     <td>0.3605</td>
     <td>2202.39</td>
     <td>6108.4773</td>
-    <td>收盘价(0.3605)<知行多空线(0.3627)</td>
-    <td>6108.4773</td>
+    <td>R1 收盘(0.3605)<多空线(0.3627)全清</td>
+    <td>0.0000</td>
     <td>202.39</td>
 </tr>
 <tr>
+    <td>20220121</td>
+    <td><span class="round-tag" style="background: #3498db;">R2</span></td>
+    <td><span class="buy-tag">买入</span></td>
+    <td>0.3519</td>
+    <td>1000.00</td>
+    <td>2841.8561</td>
+    <td>周线J=-8.26, 金额=1000</td>
+    <td>2841.8561</td>
+    <td>-</td>
+</tr>
+<tr>
     <td>20220128</td>
-    <td><span class="sell-tag">卖出</span></td>
+    <td><span class="round-tag" style="background: #3498db;">R2</span></td>
+    <td><span class="buy-tag">买入</span></td>
     <td>0.3359</td>
-    <td>2051.76</td>
-    <td>6108.4773</td>
-    <td>日线知行多空死叉(全清剩余)</td>
-    <td>0.0000</td>
-    <td>51.76</td>
+    <td>1000.00</td>
+    <td>2977.1825</td>
+    <td>周线J=-13.32, 金额=1000</td>
+    <td>5819.0386</td>
+    <td>-</td>
 </tr>
 <tr>
     <td>20220211</td>
+    <td><span class="round-tag" style="background: #3498db;">R2</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.3346</td>
     <td>1000.00</td>
     <td>2989.0438</td>
     <td>周线J=-14.99, 金额=1000</td>
-    <td>2989.0438</td>
+    <td>8808.0824</td>
     <td>-</td>
 </tr>
 <tr>
     <td>20220218</td>
+    <td><span class="round-tag" style="background: #3498db;">R2</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.3432</td>
     <td>1000.00</td>
     <td>2913.5922</td>
     <td>周线J=0.98, 金额=1000</td>
-    <td>5902.6361</td>
+    <td>11721.6747</td>
+    <td>-</td>
+</tr>
+<tr>
+    <td>20220225</td>
+    <td><span class="round-tag" style="background: #3498db;">R2</span></td>
+    <td><span class="buy-tag">买入</span></td>
+    <td>0.3479</td>
+    <td>1000.00</td>
+    <td>2874.5211</td>
+    <td>J回升=19.43, 剩余预算投入=1000</td>
+    <td>14596.1957</td>
     <td>-</td>
 </tr>
 <tr>
     <td>20220408</td>
+    <td><span class="round-tag" style="background: #3498db;">R2</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.2912</td>
     <td>4000.00</td>
     <td>13734.5538</td>
     <td>周线J=6.16, 金额=4000</td>
-    <td>19637.1898</td>
+    <td>28330.7495</td>
     <td>-</td>
 </tr>
 <tr>
     <td>20220415</td>
+    <td><span class="round-tag" style="background: #3498db;">R2</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.2732</td>
     <td>4000.00</td>
     <td>14639.0244</td>
     <td>周线J=-1.15, 金额=4000</td>
-    <td>34276.2142</td>
+    <td>42969.7739</td>
     <td>-</td>
 </tr>
 <tr>
     <td>20220422</td>
+    <td><span class="round-tag" style="background: #3498db;">R2</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.2656</td>
-    <td>2000.00</td>
-    <td>7530.7403</td>
-    <td>周线J=-4.42, 金额=2000</td>
-    <td>41806.9545</td>
+    <td>4000.00</td>
+    <td>15061.4806</td>
+    <td>周线J=-4.42, 金额=4000</td>
+    <td>58031.2544</td>
     <td>-</td>
 </tr>
 <tr>
     <td>20220429</td>
+    <td><span class="round-tag" style="background: #3498db;">R2</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.2632</td>
-    <td>2000.00</td>
-    <td>7597.4684</td>
-    <td>周线J=8.73, 金额=2000</td>
-    <td>49404.4229</td>
+    <td>4000.00</td>
+    <td>15194.9367</td>
+    <td>周线J=8.73, 金额=4000</td>
+    <td>73226.1912</td>
     <td>-</td>
 </tr>
 <tr>
     <td>20220610</td>
+    <td><span class="round-tag" style="background: #1c5378;">R2</span></td>
     <td><span class="sell-tag">卖出</span></td>
     <td>0.2896</td>
-    <td>4768.68</td>
-    <td>16468.1410</td>
-    <td>周线J=100.88>=93</td>
-    <td>32936.2819</td>
-    <td>102.02</td>
+    <td>7068.04</td>
+    <td>24408.7304</td>
+    <td>R2 周线J=100.88>=93</td>
+    <td>48817.4608</td>
+    <td>68.04</td>
+</tr>
+<tr>
+    <td>20220711</td>
+    <td><span class="round-tag" style="background: #1c5378;">R2</span></td>
+    <td><span class="sell-tag">卖出</span></td>
+    <td>0.3002</td>
+    <td>7328.31</td>
+    <td>24408.7304</td>
+    <td>R2 多头回调: 收盘(0.3002)<中期线(0.3014), 中期(0.3014)>多空线</td>
+    <td>24408.7304</td>
+    <td>328.31</td>
 </tr>
 <tr>
     <td>20220712</td>
+    <td><span class="round-tag" style="background: #1c5378;">R2</span></td>
     <td><span class="sell-tag">卖出</span></td>
     <td>0.2939</td>
-    <td>4840.02</td>
-    <td>16468.1410</td>
-    <td>收盘价(0.2939)<知行多空线(0.2968)</td>
-    <td>16468.1410</td>
-    <td>173.35</td>
+    <td>7173.78</td>
+    <td>24408.7304</td>
+    <td>R2 收盘(0.2939)<多空线(0.2968)全清</td>
+    <td>0.0000</td>
+    <td>173.78</td>
 </tr>
 <tr>
-    <td>20220922</td>
-    <td><span class="sell-tag">卖出</span></td>
-    <td>0.2856</td>
-    <td>4702.83</td>
-    <td>16468.1410</td>
-    <td>日线知行多空死叉(全清剩余)</td>
-    <td>0.0000</td>
-    <td>36.16</td>
+    <td>20220916</td>
+    <td><span class="round-tag" style="background: #9b59b6;">R3</span></td>
+    <td><span class="buy-tag">买入</span></td>
+    <td>0.2926</td>
+    <td>1000.00</td>
+    <td>3417.9954</td>
+    <td>周线J=-4.72, 金额=1000</td>
+    <td>3417.9954</td>
+    <td>-</td>
 </tr>
 <tr>
     <td>20220923</td>
+    <td><span class="round-tag" style="background: #9b59b6;">R3</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.2796</td>
     <td>1000.00</td>
     <td>3576.8772</td>
     <td>周线J=-14.84, 金额=1000</td>
-    <td>3576.8772</td>
+    <td>6994.8727</td>
     <td>-</td>
 </tr>
 <tr>
     <td>20220930</td>
+    <td><span class="round-tag" style="background: #9b59b6;">R3</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.2719</td>
     <td>1000.00</td>
     <td>3677.6961</td>
     <td>周线J=-20.46, 金额=1000</td>
-    <td>7254.5733</td>
+    <td>10672.5688</td>
     <td>-</td>
 </tr>
 <tr>
     <td>20221014</td>
+    <td><span class="round-tag" style="background: #9b59b6;">R3</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.2829</td>
     <td>1000.00</td>
     <td>3534.7468</td>
     <td>周线J=2.32, 金额=1000</td>
-    <td>10789.3201</td>
+    <td>14207.3155</td>
     <td>-</td>
 </tr>
 <tr>
+    <td>20221021</td>
+    <td><span class="round-tag" style="background: #9b59b6;">R3</span></td>
+    <td><span class="buy-tag">买入</span></td>
+    <td>0.2872</td>
+    <td>1000.00</td>
+    <td>3481.4385</td>
+    <td>J回升=20.27, 剩余预算投入=1000</td>
+    <td>17688.7540</td>
+    <td>-</td>
+</tr>
+<tr>
+    <td>20221216</td>
+    <td><span class="round-tag" style="background: #553064;">R3</span></td>
+    <td><span class="sell-tag">卖出</span></td>
+    <td>0.2776</td>
+    <td>1636.65</td>
+    <td>5896.2513</td>
+    <td>R3 J峰值回撤(J_peak=72.92, J=29.38, 回撤=43.54)</td>
+    <td>11792.5027</td>
+    <td>-30.02</td>
+</tr>
+<tr>
     <td>20221223</td>
+    <td><span class="round-tag" style="background: #e67e22;">R4</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.2649</td>
     <td>1000.00</td>
     <td>3774.8428</td>
     <td>周线J=5.74, 金额=1000</td>
-    <td>14564.1628</td>
+    <td>3774.8428</td>
+    <td>-</td>
+</tr>
+<tr>
+    <td>20221230</td>
+    <td><span class="round-tag" style="background: #e67e22;">R4</span></td>
+    <td><span class="buy-tag">买入</span></td>
+    <td>0.2742</td>
+    <td>4000.00</td>
+    <td>14585.6622</td>
+    <td>J回升=13.88, 剩余预算投入=4000</td>
+    <td>18360.5050</td>
     <td>-</td>
 </tr>
 <tr>
     <td>20230203</td>
+    <td><span class="round-tag" style="background: #7e4512;">R4</span></td>
     <td><span class="sell-tag">卖出</span></td>
     <td>0.2976</td>
-    <td>1444.61</td>
-    <td>4854.7209</td>
-    <td>周线J=98.88>=93</td>
-    <td>9709.4419</td>
-    <td>111.27</td>
+    <td>1821.16</td>
+    <td>6120.1683</td>
+    <td>R4 周线J=98.88>=93</td>
+    <td>12240.3367</td>
+    <td>154.50</td>
+</tr>
+<tr>
+    <td>20230316</td>
+    <td><span class="round-tag" style="background: #553064;">R3</span></td>
+    <td><span class="sell-tag">卖出</span></td>
+    <td>0.3146</td>
+    <td>1854.74</td>
+    <td>5896.2513</td>
+    <td>R3 多头回调: 收盘(0.3146)<中期线(0.3156), 中期(0.3156)>多空线</td>
+    <td>5896.2513</td>
+    <td>188.07</td>
+</tr>
+<tr>
+    <td>20230316</td>
+    <td><span class="round-tag" style="background: #7e4512;">R4</span></td>
+    <td><span class="sell-tag">卖出</span></td>
+    <td>0.3146</td>
+    <td>1925.17</td>
+    <td>6120.1683</td>
+    <td>R4 多头回调: 收盘(0.3146)<中期线(0.3156), 中期(0.3156)>多空线</td>
+    <td>6120.1683</td>
+    <td>258.50</td>
 </tr>
 <tr>
     <td>20230427</td>
+    <td><span class="round-tag" style="background: #553064;">R3</span></td>
     <td><span class="sell-tag">卖出</span></td>
     <td>0.3442</td>
-    <td>1671.09</td>
-    <td>4854.7209</td>
-    <td>收盘价(0.3442)<知行多空线(0.3465)</td>
-    <td>4854.7209</td>
-    <td>337.75</td>
+    <td>2029.60</td>
+    <td>5896.2513</td>
+    <td>R3 收盘(0.3442)<多空线(0.3465)全清</td>
+    <td>0.0000</td>
+    <td>362.93</td>
+</tr>
+<tr>
+    <td>20230427</td>
+    <td><span class="round-tag" style="background: #7e4512;">R4</span></td>
+    <td><span class="sell-tag">卖出</span></td>
+    <td>0.3442</td>
+    <td>2106.68</td>
+    <td>6120.1683</td>
+    <td>R4 收盘(0.3442)<多空线(0.3465)全清</td>
+    <td>0.0000</td>
+    <td>440.01</td>
+</tr>
+<tr>
+    <td>20230811</td>
+    <td><span class="round-tag" style="background: #1abc9c;">R5</span></td>
+    <td><span class="buy-tag">买入</span></td>
+    <td>0.3782</td>
+    <td>1000.00</td>
+    <td>2644.0529</td>
+    <td>周线J=-0.23, 金额=1000</td>
+    <td>2644.0529</td>
+    <td>-</td>
 </tr>
 <tr>
     <td>20230818</td>
-    <td><span class="sell-tag">卖出</span></td>
+    <td><span class="round-tag" style="background: #1abc9c;">R5</span></td>
+    <td><span class="buy-tag">买入</span></td>
     <td>0.3619</td>
-    <td>1756.82</td>
-    <td>4854.7209</td>
-    <td>日线知行多空死叉(全清剩余)</td>
-    <td>0.0000</td>
-    <td>423.49</td>
+    <td>1000.00</td>
+    <td>2763.3517</td>
+    <td>周线J=-16.22, 金额=1000</td>
+    <td>5407.4046</td>
+    <td>-</td>
 </tr>
 <tr>
     <td>20230825</td>
+    <td><span class="round-tag" style="background: #1abc9c;">R5</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.3482</td>
-    <td>1000.00</td>
-    <td>2871.7703</td>
-    <td>周线J=-20.13, 金额=1000</td>
-    <td>2871.7703</td>
+    <td>2000.00</td>
+    <td>5743.5407</td>
+    <td>周线J=-20.13, 金额=2000</td>
+    <td>11150.9453</td>
     <td>-</td>
 </tr>
 <tr>
     <td>20230901</td>
+    <td><span class="round-tag" style="background: #1abc9c;">R5</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.3685</td>
-    <td>1000.00</td>
-    <td>2713.3816</td>
-    <td>周线J=-2.54, 金额=1000</td>
-    <td>5585.1519</td>
+    <td>500.00</td>
+    <td>1356.6908</td>
+    <td>周线J=-2.54, 金额=500</td>
+    <td>12507.6361</td>
     <td>-</td>
 </tr>
 <tr>
     <td>20230908</td>
+    <td><span class="round-tag" style="background: #1abc9c;">R5</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.3615</td>
-    <td>1000.00</td>
-    <td>2765.8986</td>
-    <td>周线J=2.40, 金额=1000</td>
-    <td>8351.0505</td>
+    <td>500.00</td>
+    <td>1382.9493</td>
+    <td>周线J=2.40, 金额=500</td>
+    <td>13890.5854</td>
     <td>-</td>
 </tr>
 <tr>
     <td>20230915</td>
+    <td><span class="round-tag" style="background: #1abc9c;">R5</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.3545</td>
     <td>1000.00</td>
     <td>2820.4887</td>
     <td>周线J=0.36, 金额=1000</td>
-    <td>11171.5392</td>
+    <td>16711.0741</td>
     <td>-</td>
 </tr>
 <tr>
     <td>20231020</td>
+    <td><span class="round-tag" style="background: #1abc9c;">R5</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.3389</td>
     <td>2000.00</td>
     <td>5901.6716</td>
     <td>周线J=11.11, 金额=2000</td>
-    <td>17073.2108</td>
+    <td>22612.7457</td>
     <td>-</td>
 </tr>
 <tr>
     <td>20231027</td>
+    <td><span class="round-tag" style="background: #1abc9c;">R5</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.3339</td>
-    <td>1000.00</td>
-    <td>2995.0100</td>
-    <td>周线J=12.70, 金额=1000</td>
-    <td>20068.2208</td>
+    <td>2000.00</td>
+    <td>5990.0200</td>
+    <td>周线J=12.70, 金额=2000</td>
+    <td>28602.7656</td>
     <td>-</td>
 </tr>
 <tr>
+    <td>20231222</td>
+    <td><span class="round-tag" style="background: #0e6755;">R5</span></td>
+    <td><span class="sell-tag">卖出</span></td>
+    <td>0.3316</td>
+    <td>3161.14</td>
+    <td>9534.2552</td>
+    <td>R5 J峰值回撤(J_peak=63.21, J=29.28, 回撤=33.94)</td>
+    <td>19068.5104</td>
+    <td>-172.19</td>
+</tr>
+<tr>
     <td>20240112</td>
+    <td><span class="round-tag" style="background: #f39c12;">R6</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.3106</td>
-    <td>4000.00</td>
-    <td>12879.8283</td>
-    <td>周线J=3.75, 金额=4000</td>
-    <td>32948.0491</td>
+    <td>1000.00</td>
+    <td>3219.9571</td>
+    <td>周线J=3.75, 金额=1000</td>
+    <td>3219.9571</td>
     <td>-</td>
 </tr>
 <tr>
     <td>20240119</td>
+    <td><span class="round-tag" style="background: #f39c12;">R6</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.3166</td>
-    <td>2000.00</td>
-    <td>6317.8947</td>
-    <td>周线J=11.97, 金额=2000</td>
-    <td>39265.9439</td>
+    <td>1000.00</td>
+    <td>3158.9474</td>
+    <td>周线J=11.97, 金额=1000</td>
+    <td>6378.9044</td>
     <td>-</td>
 </tr>
 <tr>
-    <td>20240202</td>
+    <td>20240126</td>
+    <td><span class="round-tag" style="background: #f39c12;">R6</span></td>
     <td><span class="buy-tag">买入</span></td>
-    <td>0.2876</td>
-    <td>4000.00</td>
-    <td>13909.6176</td>
-    <td>周线J=11.41, 金额=4000</td>
-    <td>53175.5615</td>
+    <td>0.3206</td>
+    <td>3000.00</td>
+    <td>9358.6279</td>
+    <td>J回升=23.68, 剩余预算投入=3000</td>
+    <td>15737.5323</td>
     <td>-</td>
 </tr>
 <tr>
     <td>20240301</td>
+    <td><span class="round-tag" style="background: #855509;">R6</span></td>
     <td><span class="sell-tag">卖出</span></td>
     <td>0.3839</td>
-    <td>6804.20</td>
-    <td>17725.1872</td>
-    <td>周线J=109.77>=93</td>
-    <td>35450.3743</td>
-    <td>1137.54</td>
+    <td>2013.73</td>
+    <td>5245.8441</td>
+    <td>R6 周线J=109.77>=93</td>
+    <td>10491.6882</td>
+    <td>347.07</td>
+</tr>
+<tr>
+    <td>20240326</td>
+    <td><span class="round-tag" style="background: #0e6755;">R5</span></td>
+    <td><span class="sell-tag">卖出</span></td>
+    <td>0.3842</td>
+    <td>3663.11</td>
+    <td>9534.2552</td>
+    <td>R5 多头回调: 收盘(0.3842)<中期线(0.3934), 中期(0.3934)>多空线</td>
+    <td>9534.2552</td>
+    <td>329.78</td>
+</tr>
+<tr>
+    <td>20240326</td>
+    <td><span class="round-tag" style="background: #855509;">R6</span></td>
+    <td><span class="sell-tag">卖出</span></td>
+    <td>0.3842</td>
+    <td>2015.48</td>
+    <td>5245.8441</td>
+    <td>R6 多头回调: 收盘(0.3842)<中期线(0.3934), 中期(0.3934)>多空线</td>
+    <td>5245.8441</td>
+    <td>348.81</td>
 </tr>
 <tr>
     <td>20240410</td>
+    <td><span class="round-tag" style="background: #0e6755;">R5</span></td>
     <td><span class="sell-tag">卖出</span></td>
     <td>0.3642</td>
-    <td>6455.72</td>
-    <td>17725.1872</td>
-    <td>收盘价(0.3642)<知行多空线(0.3695)</td>
-    <td>17725.1872</td>
-    <td>789.06</td>
+    <td>3472.49</td>
+    <td>9534.2552</td>
+    <td>R5 收盘(0.3642)<多空线(0.3695)全清</td>
+    <td>0.0000</td>
+    <td>139.16</td>
 </tr>
 <tr>
-    <td>20240730</td>
+    <td>20240410</td>
+    <td><span class="round-tag" style="background: #855509;">R6</span></td>
     <td><span class="sell-tag">卖出</span></td>
-    <td>0.3689</td>
-    <td>6538.41</td>
-    <td>17725.1872</td>
-    <td>日线知行多空死叉(全清剩余)</td>
+    <td>0.3642</td>
+    <td>1910.60</td>
+    <td>5245.8441</td>
+    <td>R6 收盘(0.3642)<多空线(0.3695)全清</td>
     <td>0.0000</td>
-    <td>871.75</td>
+    <td>243.93</td>
 </tr>
 <tr>
     <td>20240802</td>
+    <td><span class="round-tag" style="background: #2ecc71;">R7</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.3625</td>
     <td>1000.00</td>
@@ -467,6 +674,7 @@ h1 { text-align: center; color: #333; font-size: 24px; margin-bottom: 5px; }
 </tr>
 <tr>
     <td>20240809</td>
+    <td><span class="round-tag" style="background: #2ecc71;">R7</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.3466</td>
     <td>1000.00</td>
@@ -477,6 +685,7 @@ h1 { text-align: center; color: #333; font-size: 24px; margin-bottom: 5px; }
 </tr>
 <tr>
     <td>20240816</td>
+    <td><span class="round-tag" style="background: #2ecc71;">R7</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.3549</td>
     <td>1000.00</td>
@@ -487,6 +696,7 @@ h1 { text-align: center; color: #333; font-size: 24px; margin-bottom: 5px; }
 </tr>
 <tr>
     <td>20240823</td>
+    <td><span class="round-tag" style="background: #2ecc71;">R7</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.3466</td>
     <td>1000.00</td>
@@ -497,6 +707,7 @@ h1 { text-align: center; color: #333; font-size: 24px; margin-bottom: 5px; }
 </tr>
 <tr>
     <td>20240830</td>
+    <td><span class="round-tag" style="background: #2ecc71;">R7</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.3436</td>
     <td>1000.00</td>
@@ -507,6 +718,7 @@ h1 { text-align: center; color: #333; font-size: 24px; margin-bottom: 5px; }
 </tr>
 <tr>
     <td>20240906</td>
+    <td><span class="round-tag" style="background: #2ecc71;">R7</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.3262</td>
     <td>2000.00</td>
@@ -517,6 +729,7 @@ h1 { text-align: center; color: #333; font-size: 24px; margin-bottom: 5px; }
 </tr>
 <tr>
     <td>20240913</td>
+    <td><span class="round-tag" style="background: #2ecc71;">R7</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.3392</td>
     <td>1000.00</td>
@@ -527,36 +740,106 @@ h1 { text-align: center; color: #333; font-size: 24px; margin-bottom: 5px; }
 </tr>
 <tr>
     <td>20240930</td>
+    <td><span class="round-tag" style="background: #19703e;">R7</span></td>
     <td><span class="sell-tag">卖出</span></td>
     <td>0.4322</td>
     <td>3361.96</td>
     <td>7778.9051</td>
-    <td>周线J=111.60>=93</td>
+    <td>R7 周线J=111.60>=93</td>
     <td>15557.8102</td>
     <td>695.29</td>
 </tr>
 <tr>
+    <td>20241115</td>
+    <td><span class="round-tag" style="background: #19703e;">R7</span></td>
+    <td><span class="sell-tag">卖出</span></td>
+    <td>0.4635</td>
+    <td>3605.62</td>
+    <td>7778.9051</td>
+    <td>R7 多头回调: 收盘(0.4635)<中期线(0.4733), 中期(0.4733)>多空线</td>
+    <td>7778.9051</td>
+    <td>938.95</td>
+</tr>
+<tr>
     <td>20241125</td>
+    <td><span class="round-tag" style="background: #19703e;">R7</span></td>
     <td><span class="sell-tag">卖出</span></td>
     <td>0.4369</td>
     <td>3398.25</td>
     <td>7778.9051</td>
-    <td>收盘价(0.4369)<知行多空线(0.4385)</td>
-    <td>7778.9051</td>
+    <td>R7 收盘(0.4369)<多空线(0.4385)全清</td>
+    <td>0.0000</td>
     <td>731.58</td>
 </tr>
 <tr>
-    <td>20250317</td>
+    <td>20250103</td>
+    <td><span class="round-tag" style="background: #e84393;">R8</span></td>
+    <td><span class="buy-tag">买入</span></td>
+    <td>0.4272</td>
+    <td>1000.00</td>
+    <td>2340.8736</td>
+    <td>周线J=9.59, 金额=1000</td>
+    <td>2340.8736</td>
+    <td>-</td>
+</tr>
+<tr>
+    <td>20250110</td>
+    <td><span class="round-tag" style="background: #e84393;">R8</span></td>
+    <td><span class="buy-tag">买入</span></td>
+    <td>0.4192</td>
+    <td>1000.00</td>
+    <td>2385.5326</td>
+    <td>周线J=-7.86, 金额=1000</td>
+    <td>4726.4062</td>
+    <td>-</td>
+</tr>
+<tr>
+    <td>20250117</td>
+    <td><span class="round-tag" style="background: #e84393;">R8</span></td>
+    <td><span class="buy-tag">买入</span></td>
+    <td>0.4479</td>
+    <td>3000.00</td>
+    <td>6698.6607</td>
+    <td>J回升=21.87, 剩余预算投入=3000</td>
+    <td>11425.0669</td>
+    <td>-</td>
+</tr>
+<tr>
+    <td>20250221</td>
+    <td><span class="round-tag" style="background: #7f2450;">R8</span></td>
     <td><span class="sell-tag">卖出</span></td>
-    <td>0.4528</td>
-    <td>3522.67</td>
-    <td>7778.9051</td>
-    <td>日线知行多空死叉(全清剩余)</td>
+    <td>0.4902</td>
+    <td>1866.74</td>
+    <td>3808.3556</td>
+    <td>R8 周线J=97.02>=93</td>
+    <td>7616.7113</td>
+    <td>200.07</td>
+</tr>
+<tr>
+    <td>20250227</td>
+    <td><span class="round-tag" style="background: #7f2450;">R8</span></td>
+    <td><span class="sell-tag">卖出</span></td>
+    <td>0.4665</td>
+    <td>1776.64</td>
+    <td>3808.3556</td>
+    <td>R8 多头回调: 收盘(0.4665)<中期线(0.4692), 中期(0.4692)>多空线</td>
+    <td>3808.3556</td>
+    <td>109.97</td>
+</tr>
+<tr>
+    <td>20250228</td>
+    <td><span class="round-tag" style="background: #7f2450;">R8</span></td>
+    <td><span class="sell-tag">卖出</span></td>
+    <td>0.4425</td>
+    <td>1685.27</td>
+    <td>3808.3556</td>
+    <td>R8 收盘(0.4425)<多空线(0.4577)全清</td>
     <td>0.0000</td>
-    <td>856.00</td>
+    <td>18.60</td>
 </tr>
 <tr>
     <td>20250328</td>
+    <td><span class="round-tag" style="background: #00b894;">R9</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.4219</td>
     <td>1000.00</td>
@@ -567,6 +850,7 @@ h1 { text-align: center; color: #333; font-size: 24px; margin-bottom: 5px; }
 </tr>
 <tr>
     <td>20250403</td>
+    <td><span class="round-tag" style="background: #00b894;">R9</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.4112</td>
     <td>1000.00</td>
@@ -577,6 +861,7 @@ h1 { text-align: center; color: #333; font-size: 24px; margin-bottom: 5px; }
 </tr>
 <tr>
     <td>20250411</td>
+    <td><span class="round-tag" style="background: #00b894;">R9</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.3755</td>
     <td>2000.00</td>
@@ -586,24 +871,103 @@ h1 { text-align: center; color: #333; font-size: 24px; margin-bottom: 5px; }
     <td>-</td>
 </tr>
 <tr>
+    <td>20250418</td>
+    <td><span class="round-tag" style="background: #00b894;">R9</span></td>
+    <td><span class="buy-tag">买入</span></td>
+    <td>0.3792</td>
+    <td>1000.00</td>
+    <td>2637.0826</td>
+    <td>J回升=17.00, 剩余预算投入=1000</td>
+    <td>12765.1127</td>
+    <td>-</td>
+</tr>
+<tr>
     <td>20250606</td>
+    <td><span class="round-tag" style="background: #006551;">R9</span></td>
     <td><span class="sell-tag">卖出</span></td>
     <td>0.4349</td>
-    <td>1468.08</td>
-    <td>3376.0100</td>
-    <td>周线J=108.35>=93</td>
-    <td>6752.0201</td>
-    <td>134.74</td>
+    <td>1850.32</td>
+    <td>4255.0376</td>
+    <td>R9 周线J=108.35>=93</td>
+    <td>8510.0751</td>
+    <td>183.66</td>
+</tr>
+<tr>
+    <td>20251013</td>
+    <td><span class="round-tag" style="background: #006551;">R9</span></td>
+    <td><span class="sell-tag">卖出</span></td>
+    <td>0.8660</td>
+    <td>3685.05</td>
+    <td>4255.0376</td>
+    <td>R9 多头回调: 收盘(0.8660)<中期线(0.8821), 中期(0.8821)>多空线</td>
+    <td>4255.0376</td>
+    <td>2018.39</td>
 </tr>
 <tr>
     <td>20251121</td>
+    <td><span class="round-tag" style="background: #006551;">R9</span></td>
     <td><span class="sell-tag">卖出</span></td>
     <td>0.8184</td>
-    <td>2762.91</td>
-    <td>3376.0100</td>
-    <td>收盘价(0.8184)<知行多空线(0.8376)</td>
-    <td>3376.0100</td>
-    <td>1429.57</td>
+    <td>3482.30</td>
+    <td>4255.0376</td>
+    <td>R9 收盘(0.8184)<多空线(0.8376)全清</td>
+    <td>0.0000</td>
+    <td>1815.63</td>
+</tr>
+<tr>
+    <td>20251121</td>
+    <td><span class="round-tag" style="background: #6c5ce7;">R10</span></td>
+    <td><span class="buy-tag">买入</span></td>
+    <td>0.8184</td>
+    <td>1000.00</td>
+    <td>1221.9055</td>
+    <td>周线J=-2.15, 金额=1000</td>
+    <td>1221.9055</td>
+    <td>-</td>
+</tr>
+<tr>
+    <td>20251128</td>
+    <td><span class="round-tag" style="background: #6c5ce7;">R10</span></td>
+    <td><span class="buy-tag">买入</span></td>
+    <td>0.8914</td>
+    <td>4000.00</td>
+    <td>4487.4766</td>
+    <td>J回升=18.63, 剩余预算投入=4000</td>
+    <td>5709.3822</td>
+    <td>-</td>
+</tr>
+<tr>
+    <td>20251226</td>
+    <td><span class="round-tag" style="background: #3b327f;">R10</span></td>
+    <td><span class="sell-tag">卖出</span></td>
+    <td>1.0343</td>
+    <td>1968.45</td>
+    <td>1903.1274</td>
+    <td>R10 周线J=96.07>=93</td>
+    <td>3806.2548</td>
+    <td>301.78</td>
+</tr>
+<tr>
+    <td>20260120</td>
+    <td><span class="round-tag" style="background: #3b327f;">R10</span></td>
+    <td><span class="sell-tag">卖出</span></td>
+    <td>1.0187</td>
+    <td>1938.64</td>
+    <td>1903.1274</td>
+    <td>R10 多头回调: 收盘(1.0187)<中期线(1.0421), 中期(1.0421)>多空线</td>
+    <td>1903.1274</td>
+    <td>271.97</td>
+</tr>
+<tr>
+    <td>20260317</td>
+    <td><span class="round-tag" style="background: #3b327f;">R10</span></td>
+    <td><span class="sell-tag">卖出</span></td>
+    <td>1.0240</td>
+    <td>1948.80</td>
+    <td>1903.1274</td>
+    <td>R10 收盘(1.0240)<多空线(1.0475)全清</td>
+    <td>0.0000</td>
+    <td>282.14</td>
 </tr>
 </table>
 </div>
@@ -637,8 +1001,6 @@ var dailyDates = ["20200605", "20200608", "20200609", "20200610", "20200611", "2
 var dailyPrices = [0.37120959680106635, 0.3738753748750417, 0.3748750416527824, 0.37320893035654784, 0.37320893035654784, 0.3718760413195602, 0.3668777074308564, 0.37687437520826395, 0.3748750416527824, 0.3822059313562146, 0.38487170943018995, 0.3882039320226591, 0.3835388203932023, 0.38587137620793066, 0.38053982005998, 0.3898700433188937, 0.3898700433188937, 0.3962012662445852, 0.4045318227257581, 0.42385871376207934, 0.4245251582805732, 0.43318893702099304, 0.44851716094635125, 0.44051982672442525, 0.4531822725758081, 0.4431856047984006, 0.42352549150283236, 0.40286571142952354, 0.4045318227257581, 0.4198600466511163, 0.4198600466511163, 0.4201932689103632, 0.41352882372542493, 0.3948683772075975, 0.39520159946684436, 0.39953348883705436, 0.41486171276241257, 0.4158613795401533, 0.4201932689103632, 0.43418860379873375, 0.42985671442852386, 0.43452182605798073, 0.43618793735421524, 0.42919026991003, 0.42585804731756083, 0.4201932689103632, 0.42085971342885703, 0.416861046317894, 0.42252582472509165, 0.43218927024325227, 0.42919026991003, 0.41752749083638785, 0.416861046317894, 0.41619460179940027, 0.42352549150283236, 0.4221926024658447, 0.4125291569476841, 0.4181939353548817, 0.4201932689103632, 0.42052649116961016, 0.42085971342885703, 0.42352549150283236, 0.41786071309563483, 0.41752749083638785, 0.4105298233922026, 0.4081972675774742, 0.3972009330223259, 0.3795401532822393, 0.3855381539486838, 0.39053648783738754, 0.39020326557814067, 0.3868710429856715, 0.3882039320226591, 0.39420193268910364, 0.39420193268910364, 0.38920359880039984, 0.3898700433188937, 0.3795401532822393, 0.37654115294901697, 0.37354215261579476, 0.3785404865044985, 0.37687437520826395, 0.3865378207264245, 0.39520159946684436, 0.3958680439853382, 0.3915361546151283, 0.388537154281906, 0.3835388203932023, 0.3852049316894368, 0.3868710429856715, 0.3795401532822393, 0.37787404198600466, 0.37320893035654784, 0.3728757080973009, 0.37420859713428856, 0.37254248583805405, 0.36987670776407866, 0.3635454848383872, 0.3575474841719427, 0.3658780406531157, 0.36387870709763415, 0.3825391536154615, 0.3795401532822393, 0.3962012662445852, 0.3882039320226591, 0.37654115294901697, 0.3762079306897701, 0.37554148617127625, 0.37354215261579476, 0.37087637454181943, 0.3718760413195602, 0.3752082639120293, 0.3762079306897701, 0.3748750416527824, 0.37654115294901697, 0.3758747084305231, 0.37354215261579476, 0.37087637454181943, 0.3705431522825725, 0.37420859713428856, 0.3762079306897701, 0.37354215261579476, 0.3728757080973009, 0.3702099300233256, 0.3688770409863379, 0.3615461512829057, 0.35888037320893035, 0.35421526157947353, 0.3535488170609797, 0.3535488170609797, 0.3455514828390536, 0.34755081639453517, 0.344218593802066, 0.3478840386537821, 0.33922025991336224, 0.3425524825058314, 0.3375541486171276, 0.3375541486171276, 0.33188937020993003, 0.34655114961679445, 0.34655114961679445, 0.3492169276907698, 0.35454848383872045, 0.3595468177274242, 0.35288237254248583, 0.3448850383205598, 0.34988337220926363, 0.352215928023992, 0.35588137287570815, 0.36021326224591804, 0.364545151616128, 0.35788070643118963, 0.36987670776407866, 0.3668777074308564, 0.368543818727091, 0.3688770409863379, 0.36054648450516497, 0.3552149283572143, 0.34955014995001665, 0.34988337220926363, 0.3365544818393869, 0.33455514828390537, 0.3325558147284239, 0.33422192602465844, 0.32622459180273244, 0.3252249250249917, 0.32289236921026326, 0.327890703098967, 0.3352215928023992, 0.3382205931356214, 0.3428857047650783, 0.34755081639453517, 0.34121959346884373, 0.3415528157280906, 0.33888703765411526, 0.3372209263578807, 0.3375541486171276, 0.34388537154281906, 0.34221926024658444, 0.344218593802066, 0.3375541486171276, 0.3408863712095968, 0.3368877040986338, 0.3255581472842386, 0.32255914695101634, 0.3255581472842386, 0.32289236921026326, 0.31356214595134957, 0.31689436854381875, 0.3235588137287571, 0.32255914695101634, 0.31922692435854716, 0.3235588137287571, 0.3245584805064978, 0.3208930356547817, 0.31889370209930024, 0.3242252582472509, 0.32289236921026326, 0.32289236921026326, 0.323892035988004, 0.32489170276574475, 0.3275574808397201, 0.327890703098967, 0.32722425858047316, 0.323892035988004, 0.31889370209930024, 0.3145618127290903, 0.31422859046984336, 0.31689436854381875, 0.3162279240253249, 0.32022659113628793, 0.32622459180273244, 0.32122625791402865, 0.3172275908030656, 0.3208930356547817, 0.31889370209930024, 0.3165611462845718, 0.3128957014328557, 0.3125624791736088, 0.3102299233588804, 0.30556481172942357, 0.3042319226924359, 0.29923358880373213, 0.29590136621126295, 0.29823392202599136, 0.30056647784071977, 0.2999000333222259, 0.3045651449516828, 0.3048983672109297, 0.3048983672109297, 0.3042319226924359, 0.30556481172942357, 0.3032322559146951, 0.307897367544152, 0.31356214595134957, 0.3128957014328557, 0.319893368877041, 0.31756081306231254, 0.3218927024325225, 0.3232255914695102, 0.3172275908030656, 0.32122625791402865, 0.3218927024325225, 0.327890703098967, 0.32989003665444855, 0.3295568143952016, 0.33588803732089306, 0.33055648117294234, 0.33322225924691773, 0.327890703098967, 0.3365544818393869, 0.3408863712095968, 0.34221926024658444, 0.33922025991336224, 0.3425524825058314, 0.3418860379873376, 0.34021992669110296, 0.3455514828390536, 0.3375541486171276, 0.34355214928357214, 0.33588803732089306, 0.3292235921359547, 0.33788737087637455, 0.3385538153948684, 0.34021992669110296, 0.33922025991336224, 0.33788737087637455, 0.34821726091302896, 0.34855048317227594, 0.34388537154281906, 0.3418860379873376, 0.3398867044318561, 0.3448850383205598, 0.344218593802066, 0.3445518160613129, 0.3385538153948684, 0.33622125958013993, 0.32822392535821393, 0.33588803732089306, 0.3335554815061646, 0.3428857047650783, 0.34955014995001665, 0.3612129290236588, 0.35454848383872045, 0.35888037320893035, 0.35688103965344886, 0.3592135954681773, 0.3598800399866712, 0.3615461512829057, 0.35588137287570815, 0.36021326224591804, 0.356214595134955, 0.3575474841719427, 0.3462179273575475, 0.3458847050983006, 0.34988337220926363, 0.3455514828390536, 0.35554815061646117, 0.3548817060979673, 0.3505498167277574, 0.3425524825058314, 0.34221926024658444, 0.3428857047650783, 0.33922025991336224, 0.34021992669110296, 0.33788737087637455, 0.3398867044318561, 0.3445518160613129, 0.34521826057980676, 0.3468843718760413, 0.3458847050983006, 0.3455514828390536, 0.34021992669110296, 0.33588803732089306, 0.33622125958013993, 0.33055648117294234, 0.3292235921359547, 0.3292235921359547, 0.33422192602465844, 0.33222259246917696, 0.32822392535821393, 0.32822392535821393, 0.3218927024325225, 0.3232255914695102, 0.327890703098967, 0.33588803732089306, 0.32989003665444855, 0.32989003665444855, 0.3292235921359547, 0.3288903698767078, 0.3268910363212263, 0.3288903698767078, 0.32722425858047316, 0.3222259246917694, 0.3232255914695102, 0.32722425858047316, 0.33055648117294234, 0.327890703098967, 0.3242252582472509, 0.3288903698767078, 0.3355548150616461, 0.3385538153948684, 0.3382205931356214, 0.34755081639453517, 0.3462179273575475, 0.3458847050983006, 0.34821726091302896, 0.3492169276907698, 0.35454848383872045, 0.36054648450516497, 0.36054648450516497, 0.3628790403198934, 0.36821059646784404, 0.3615461512829057, 0.36521159613462184, 0.3715428190603132, 0.37220926357880707, 0.3752082639120293, 0.36954348550483174, 0.36487837387537486, 0.3635454848383872, 0.36821059646784404, 0.3718760413195602, 0.3655448183938687, 0.368543818727091, 0.3635454848383872, 0.36021326224591804, 0.3688770409863379, 0.36921026324558487, 0.36921026324558487, 0.37354215261579476, 0.3762079306897701, 0.37554148617127625, 0.37654115294901697, 0.3738753748750417, 0.364545151616128, 0.37087637454181943, 0.37420859713428856, 0.37420859713428856, 0.36921026324558487, 0.3688770409863379, 0.36987670776407866, 0.36821059646784404, 0.3728757080973009, 0.37420859713428856, 0.3758747084305231, 0.368543818727091, 0.368543818727091, 0.36421192935688107, 0.3668777074308564, 0.36054648450516497, 0.36221259580139953, 0.3575474841719427, 0.35688103965344886, 0.3688770409863379, 0.36821059646784404, 0.3655448183938687, 0.3598800399866712, 0.3518827057647451, 0.3532155948017328, 0.3408863712095968, 0.34221926024658444, 0.3325558147284239, 0.33588803732089306, 0.3355548150616461, 0.3355548150616461, 0.34388537154281906, 0.3405531489503499, 0.33455514828390537, 0.3335554815061646, 0.3385538153948684, 0.3405531489503499, 0.3398867044318561, 0.34321892702432527, 0.34821726091302896, 0.3425524825058314, 0.35121626124625127, 0.34321892702432527, 0.3478840386537821, 0.34755081639453517, 0.35154948350549814, 0.34988337220926363, 0.3445518160613129, 0.3395534821726091, 0.3268910363212263, 0.3222259246917694, 0.31556147950683106, 0.3182272575808064, 0.3232255914695102, 0.31356214595134957, 0.29690103298900367, 0.30956347884038654, 0.31422859046984336, 0.3145618127290903, 0.315894701766078, 0.31389536821059644, 0.32655781406197937, 0.31522825724758413, 0.30989670109963346, 0.3082305898033989, 0.3028990336554482, 0.30723092302565813, 0.3028990336554482, 0.3022325891369544, 0.2985671442852383, 0.291569476841053, 0.2912362545818061, 0.2772409196934355, 0.2819060313228924, 0.27590803065644787, 0.27557480839720094, 0.2732422525824725, 0.28123958680439853, 0.2782405864711763, 0.275241586137954, 0.26957680773075643, 0.2655781406197934, 0.2502499166944352, 0.24525158280573142, 0.25458180606464514, 0.2529156947684105, 0.263245584805065, 0.26424525158280576, 0.25924691769410196, 0.2595801399533489, 0.2655781406197934, 0.2669110296567811, 0.2692435854715095, 0.26957680773075643, 0.267244251916028, 0.26957680773075643, 0.2705764745084972, 0.2739086971009663, 0.2769076974341886, 0.27790736421192935, 0.267244251916028, 0.26991002999000335, 0.2749083638787071, 0.2732422525824725, 0.275241586137954, 0.2822392535821393, 0.2845718093968677, 0.2902365878040653, 0.2949016994335222, 0.29323558813728756, 0.29223592135954685, 0.28623792069310233, 0.28957014328557146, 0.29223592135954685, 0.2882372542485838, 0.29056981006331223, 0.29423525491502833, 0.2975674775074975, 0.2985671442852383, 0.29590136621126295, 0.2882372542485838, 0.29423525491502833, 0.30189936687770746, 0.3028990336554482, 0.3115628123958681, 0.3058980339886705, 0.3105631456181273, 0.30723092302565813, 0.3048983672109297, 0.3022325891369544, 0.3032322559146951, 0.30523158947017665, 0.30623125624791736, 0.30023325558147285, 0.2939020326557814, 0.29690103298900367, 0.30389870043318895, 0.3022325891369544, 0.30889703432189275, 0.31422859046984336, 0.31789403532155946, 0.31422859046984336, 0.311896034655115, 0.3065644785071643, 0.3085638120626458, 0.30889703432189275, 0.3105631456181273, 0.3082305898033989, 0.31322892369210265, 0.30623125624791736, 0.30956347884038654, 0.31089636787737424, 0.32155948017327557, 0.3205598133955348, 0.323892035988004, 0.32122625791402865, 0.3292235921359547, 0.32022659113628793, 0.3222259246917694, 0.32122625791402865, 0.32489170276574475, 0.33088970343218926, 0.32255914695101634, 0.323892035988004, 0.3208930356547817, 0.30956347884038654, 0.3058980339886705, 0.3058980339886705, 0.30756414528490506, 0.311896034655115, 0.30156614461846054, 0.3022325891369544, 0.30889703432189275, 0.3085638120626458, 0.31356214595134957, 0.31356214595134957, 0.31222925691436193, 0.30956347884038654, 0.3102299233588804, 0.3068977007664112, 0.29790069976674444, 0.29256914361879377, 0.2879040319893369, 0.2882372542485838, 0.2855714761746085, 0.2855714761746085, 0.27957347550816397, 0.2785738087304232, 0.2859046984338554, 0.27757414195268243, 0.2769076974341886, 0.27190936354548484, 0.26291236254581807, 0.26657780739753417, 0.27757414195268243, 0.27957347550816397, 0.28290569810063315, 0.28490503165611464, 0.2882372542485838, 0.28357214261912694, 0.28390536487837387, 0.28723758747084305, 0.28623792069310233, 0.28490503165611464, 0.28957014328557146, 0.2865711429523492, 0.27924025324891705, 0.2869043652115961, 0.2882372542485838, 0.2899033655448184, 0.29056981006331223, 0.29456847717427526, 0.29323558813728756, 0.2935688103965345, 0.2892369210263246, 0.2855714761746085, 0.29090303232255915, 0.29056981006331223, 0.29923358880373213, 0.2972342552482506, 0.2989003665444852, 0.2962345884705098, 0.29456847717427526, 0.29223592135954685, 0.2902365878040653, 0.2882372542485838, 0.28023992002665776, 0.2785738087304232, 0.28323892035988, 0.28357214261912694, 0.28757080973008997, 0.2892369210263246, 0.29256914361879377, 0.2919026991002999, 0.2879040319893369, 0.2859046984338554, 0.28490503165611464, 0.28723758747084305, 0.28290569810063315, 0.28157280906364546, 0.28290569810063315, 0.27757414195268243, 0.2739086971009663, 0.2745751416194602, 0.2715761412862379, 0.26624458513828725, 0.2649116961012996, 0.271242919026991, 0.2739086971009663, 0.2715761412862379, 0.27224258580473176, 0.27424191936021325, 0.28257247584138623, 0.28290569810063315, 0.2845718093968677, 0.2822392535821393, 0.2822392535821393, 0.2822392535821393, 0.2805731422859047, 0.2822392535821393, 0.2819060313228924, 0.2855714761746085, 0.2865711429523492, 0.2879040319893369, 0.28857047650783074, 0.29090303232255915, 0.29290236587804064, 0.29223592135954685, 0.2972342552482506, 0.2962345884705098, 0.2975674775074975, 0.29790069976674444, 0.30056647784071977, 0.2975674775074975, 0.30723092302565813, 0.3092302565811397, 0.3105631456181273, 0.3082305898033989, 0.315894701766078, 0.3105631456181273, 0.3022325891369544, 0.30756414528490506, 0.30889703432189275, 0.3105631456181273, 0.3068977007664112, 0.30889703432189275, 0.3085638120626458, 0.3105631456181273, 0.31889370209930024, 0.32122625791402865, 0.3205598133955348, 0.32289236921026326, 0.311896034655115, 0.31756081306231254, 0.3205598133955348, 0.31522825724758413, 0.32289236921026326, 0.3205598133955348, 0.3185604798400533, 0.3145618127290903, 0.327890703098967, 0.33222259246917696, 0.33422192602465844, 0.34988337220926363, 0.36187937354215266, 0.36221259580139953, 0.36187937354215266, 0.352215928023992, 0.3535488170609797, 0.34655114961679445, 0.35421526157947353, 0.36754415194935025, 0.36754415194935025, 0.3808730423192269, 0.38920359880039984, 0.3748750416527824, 0.37554148617127625, 0.38620459846717764, 0.36987670776407866, 0.3718760413195602, 0.36621126291236256, 0.37887370876374543, 0.37320893035654784, 0.39086971009663446, 0.37087637454181943, 0.3792069310229923, 0.364545151616128, 0.35154948350549814, 0.344218593802066, 0.356547817394202, 0.3488837054315228, 0.3375541486171276, 0.3445518160613129, 0.34021992669110296, 0.3365544818393869, 0.33488837054315224, 0.33222259246917696, 0.33922025991336224, 0.33422192602465844, 0.3405531489503499, 0.3582139286904365, 0.356214595134955, 0.3478840386537821, 0.3415528157280906, 0.3428857047650783, 0.35254915028323897, 0.3575474841719427, 0.36387870709763415, 0.3718760413195602, 0.37454181939353554, 0.37754081972675774, 0.3782072642452516, 0.3855381539486838, 0.3748750416527824, 0.3762079306897701, 0.3702099300233256, 0.3855381539486838, 0.38920359880039984, 0.39786737754081974, 0.4061979340219927, 0.4091969343552149, 0.42985671442852386, 0.4511829390203266, 0.45784738420526494, 0.4381872709096968, 0.4218593802065978, 0.425191602799067, 0.41219593468843724, 0.4275241586137954, 0.4365211596134622, 0.43185604798400534, 0.4351882705764745, 0.4241919360213262, 0.42585804731756083, 0.4241919360213262, 0.4185271576141286, 0.4261912695768077, 0.4051982672442519, 0.42052649116961016, 0.4348550483172276, 0.4368543818727091, 0.425191602799067, 0.42085971342885703, 0.3992002665778074, 0.39820059980006667, 0.4011996001332889, 0.4055314895034989, 0.3962012662445852, 0.3915361546151283, 0.392535821392869, 0.392535821392869, 0.400866377874042, 0.39986671109630123, 0.39653448850383205, 0.4098633788737088, 0.4078640453182273, 0.4011996001332889, 0.38920359880039984, 0.3838720426524492, 0.3782072642452516, 0.3808730423192269, 0.37754081972675774, 0.36954348550483174, 0.3738753748750417, 0.36187937354215266, 0.3628790403198934, 0.3785404865044985, 0.3635454848383872, 0.36621126291236256, 0.34821726091302896, 0.35421526157947353, 0.3678773742085972, 0.3738753748750417, 0.37454181939353554, 0.368543818727091, 0.37354215261579476, 0.3672109296901033, 0.368543818727091, 0.3592135954681773, 0.3615461512829057, 0.3702099300233256, 0.36987670776407866, 0.3612129290236588, 0.3615461512829057, 0.35454848383872045, 0.35154948350549814, 0.34755081639453517, 0.34655114961679445, 0.34855048317227594, 0.36987670776407866, 0.36421192935688107, 0.36521159613462184, 0.3668777074308564, 0.37220926357880707, 0.3705431522825725, 0.3728757080973009, 0.3772075974675108, 0.3738753748750417, 0.3688770409863379, 0.3635454848383872, 0.36387870709763415, 0.35421526157947353, 0.34855048317227594, 0.33888703765411526, 0.3292235921359547, 0.32989003665444855, 0.3268910363212263, 0.3335554815061646, 0.3338887037654115, 0.33888703765411526, 0.3335554815061646, 0.33088970343218926, 0.3275574808397201, 0.33622125958013993, 0.344218593802066, 0.35121626124625127, 0.3505498167277574, 0.3518827057647451, 0.3492169276907698, 0.3585471509496835, 0.3608797067644119, 0.36054648450516497, 0.3538820393202266, 0.36054648450516497, 0.3598800399866712, 0.35588137287570815, 0.3462179273575475, 0.3488837054315228, 0.3415528157280906, 0.34355214928357214, 0.3428857047650783, 0.3405531489503499, 0.3395534821726091, 0.34721759413528824, 0.34521826057980676, 0.33622125958013993, 0.3352215928023992, 0.33922025991336224, 0.35421526157947353, 0.3585471509496835, 0.3532155948017328, 0.34721759413528824, 0.34755081639453517, 0.3428857047650783, 0.3398867044318561, 0.34021992669110296, 0.3315561479506831, 0.33622125958013993, 0.3315561479506831, 0.3338887037654115, 0.32622459180273244, 0.32822392535821393, 0.33888703765411526, 0.3445518160613129, 0.3372209263578807, 0.33088970343218926, 0.327890703098967, 0.31922692435854716, 0.31089636787737424, 0.31322892369210265, 0.3082305898033989, 0.3172275908030656, 0.3105631456181273, 0.31089636787737424, 0.3115628123958681, 0.3058980339886705, 0.3185604798400533, 0.3165611462845718, 0.30723092302565813, 0.3165611462845718, 0.31889370209930024, 0.32989003665444855, 0.3205598133955348, 0.30389870043318895, 0.29423525491502833, 0.2865711429523492, 0.295568143952016, 0.28757080973008997, 0.28523825391536156, 0.3045651449516828, 0.3115628123958681, 0.32022659113628793, 0.3478840386537821, 0.3462179273575475, 0.33922025991336224, 0.3478840386537821, 0.3488837054315228, 0.34821726091302896, 0.3715428190603132, 0.3488837054315228, 0.36821059646784404, 0.3838720426524492, 0.392869043652116, 0.3898700433188937, 0.39020326557814067, 0.38187270909696763, 0.4035321559480174, 0.40253248917027656, 0.39686771076307903, 0.39653448850383205, 0.39420193268910364, 0.4035321559480174, 0.4128623792069311, 0.41086304565144954, 0.4081972675774742, 0.40486504498500503, 0.400866377874042, 0.39320226591136287, 0.3842052649116961, 0.36921026324558487, 0.3802065978007331, 0.3852049316894368, 0.3948683772075975, 0.388537154281906, 0.3758747084305231, 0.3762079306897701, 0.3758747084305231, 0.36421192935688107, 0.36621126291236256, 0.37687437520826395, 0.3808730423192269, 0.36821059646784404, 0.384538487170943, 0.38487170943018995, 0.37654115294901697, 0.3678773742085972, 0.36621126291236256, 0.3808730423192269, 0.37454181939353554, 0.39420193268910364, 0.4011996001332889, 0.3962012662445852, 0.3975341552815728, 0.39320226591136287, 0.388870376541153, 0.39020326557814067, 0.3868710429856715, 0.3868710429856715, 0.3835388203932023, 0.38153948683772076, 0.38720426524491836, 0.3912029323558814, 0.39553482172609133, 0.3918693768743752, 0.388870376541153, 0.38487170943018995, 0.37420859713428856, 0.3795401532822393, 0.3738753748750417, 0.3728757080973009, 0.37220926357880707, 0.37087637454181943, 0.37754081972675774, 0.37987337554148615, 0.37454181939353554, 0.37787404198600466, 0.368543818727091, 0.3718760413195602, 0.3738753748750417, 0.38120626457847384, 0.39853382205931354, 0.40286571142952354, 0.41319560146617795, 0.41019660113295575, 0.40486504498500503, 0.40586471176274574, 0.392869043652116, 0.38053982005998, 0.39220259913362215, 0.3832055981339553, 0.392535821392869, 0.3992002665778074, 0.39453515494835056, 0.3895368210596468, 0.38720426524491836, 0.3865378207264245, 0.38587137620793066, 0.4085304898367211, 0.41019660113295575, 0.4105298233922026, 0.4011996001332889, 0.39686771076307903, 0.400866377874042, 0.3898700433188937, 0.38620459846717764, 0.38287237587470846, 0.384538487170943, 0.37420859713428856, 0.3715428190603132, 0.36221259580139953, 0.3688770409863379, 0.3715428190603132, 0.3688770409863379, 0.37987337554148615, 0.37987337554148615, 0.3625458180606465, 0.3418860379873376, 0.3478840386537821, 0.3492169276907698, 0.3455514828390536, 0.34655114961679445, 0.34521826057980676, 0.3488837054315228, 0.34721759413528824, 0.34855048317227594, 0.3548817060979673, 0.35554815061646117, 0.3518827057647451, 0.352215928023992, 0.34655114961679445, 0.34655114961679445, 0.3425524825058314, 0.3365544818393869, 0.33622125958013993, 0.33455514828390537, 0.34355214928357214, 0.3302232589136954, 0.3335554815061646, 0.3312229256914362, 0.3338887037654115, 0.32622459180273244, 0.327890703098967, 0.3338887037654115, 0.3352215928023992, 0.33455514828390537, 0.33922025991336224, 0.3375541486171276, 0.33788737087637455, 0.3375541486171276, 0.3415528157280906, 0.36054648450516497, 0.3608797067644119, 0.37354215261579476, 0.392869043652116, 0.43218927024325227, 0.47550816394535156, 0.4555148283905365, 0.44885038320559817, 0.43218927024325227, 0.44351882705764745, 0.4335221592802399, 0.421192935688104, 0.4245251582805732, 0.45818060646451186, 0.4628457180939687, 0.4651782739086971, 0.45784738420526494, 0.46451182939020325, 0.4698433855381539, 0.46751082972342556, 0.46251249583472176, 0.4641786071309564, 0.46751082972342556, 0.4525158280573143, 0.46251249583472176, 0.47684105298233925, 0.47184271909363545, 0.4805064978340553, 0.48750416527824064, 0.5041652782405864, 0.4951682772409197, 0.5044985004998334, 0.481839386871043, 0.46351216261246253, 0.4511829390203266, 0.46217927357547484, 0.4691769410196601, 0.46351216261246253, 0.4475174941686105, 0.4368543818727091, 0.43618793735421524, 0.44485171609463514, 0.43618793735421524, 0.44485171609463514, 0.4548483838720427, 0.44985004998333894, 0.4418527157614129, 0.4478507164278574, 0.4511829390203266, 0.4431856047984006, 0.44518493835388206, 0.45418193935354884, 0.4591802732422526, 0.4491836054648451, 0.4475174941686105, 0.45084971676107966, 0.45284905031656114, 0.4681772742419194, 0.4685104965011663, 0.45851382872375873, 0.4628457180939687, 0.4641786071309564, 0.4851716094635122, 0.4758413862045985, 0.4688437187604132, 0.45451516161279576, 0.4398533822059314, 0.4271909363545485, 0.4241919360213262, 0.43718760413195606, 0.43085638120626457, 0.43452182605798073, 0.41919360213262247, 0.4185271576141286, 0.4388537154281906, 0.43185604798400534, 0.4441852715761413, 0.4478507164278574, 0.45384871709430197, 0.4651782739086971, 0.4771742752415861, 0.4668443852049317, 0.47817394201932695, 0.4518493835388204, 0.43718760413195606, 0.45084971676107966, 0.46351216261246253, 0.46651116294568473, 0.4648450516494502, 0.4735088303898701, 0.4595134955014995, 0.45884705098300566, 0.4761746084638454, 0.46351216261246253, 0.4728423858713762, 0.4725091636121293, 0.490169943352216, 0.485838053982006, 0.4775074975008331, 0.4808397200933023, 0.46651116294568473, 0.44251916027990673, 0.43552149283572145, 0.44051982672442525, 0.4461846051316228, 0.4548483838720427, 0.4478507164278574, 0.4471842719093636, 0.4441852715761413, 0.4505164945018328, 0.4421859380206598, 0.4515161612795735, 0.45284905031656114, 0.4591802732422526, 0.44885038320559817, 0.4458513828723759, 0.43618793735421524, 0.43585471509496837, 0.4288570476507831, 0.42685771409530154, 0.4245251582805732, 0.4218593802065978, 0.4221926024658447, 0.4201932689103632, 0.4245251582805732, 0.41119626791069647, 0.3702099300233256, 0.34821726091302896, 0.356214595134955, 0.3715428190603132, 0.37554148617127625, 0.3802065978007331, 0.37654115294901697, 0.3702099300233256, 0.3688770409863379, 0.3792069310229923, 0.3838720426524492, 0.3802065978007331, 0.39053648783738754, 0.384538487170943, 0.39053648783738754, 0.38620459846717764, 0.38487170943018995, 0.3868710429856715, 0.4011996001332889, 0.4018660446517827, 0.41752749083638785, 0.41186271242919026, 0.4215261579473509, 0.41886037987337554, 0.4218593802065978, 0.4105298233922026, 0.41352882372542493, 0.41186271242919026, 0.41352882372542493, 0.4115294901699434, 0.41019660113295575, 0.4031989336887704, 0.4065311562812396, 0.4001999333555482, 0.40586471176274574, 0.41619460179940027, 0.41219593468843724, 0.4098633788737088, 0.4185271576141286, 0.43185604798400534, 0.4348550483172276, 0.44251916027990673, 0.43618793735421524, 0.43552149283572145, 0.4445184938353882, 0.44051982672442525, 0.45084971676107966, 0.4478507164278574, 0.45718093968677115, 0.45418193935354884, 0.4471842719093636, 0.4458513828723759, 0.45218260579806735, 0.45884705098300566, 0.46251249583472176, 0.4741752749083639, 0.48450516494501833, 0.48317227590803064, 0.47184271909363545, 0.48450516494501833, 0.47784071976007997, 0.4731756081306231, 0.4951682772409197, 0.49583472175941357, 0.4961679440186605, 0.49350216594468516, 0.494168610463179, 0.5244918360546484, 0.5228257247584138, 0.5431522825724758, 0.5421526157947351, 0.5441519493502166, 0.5414861712762413, 0.5401532822392536, 0.5431522825724758, 0.5434855048317228, 0.554481839386871, 0.5778073975341553, 0.5798067310896368, 0.583138953682106, 0.5741419526824393, 0.5778073975341553, 0.5881372875708097, 0.5891369543485505, 0.587137620793069, 0.5878040653115628, 0.6001332889036988, 0.6201266244585139, 0.660113295568144, 0.6431189603465511, 0.6494501832722426, 0.6771076307897368, 0.704431856047984, 0.7064311896034656, 0.6991002999000333, 0.7264245251582806, 0.7754081972675775, 0.7590803065644786, 0.7787404198600467, 0.8513828723758748, 0.8507164278573809, 0.9010329890036656, 0.8490503165611464, 0.8663778740419861, 0.7854048650449851, 0.8390536487837387, 0.797734088637121, 0.7817394201932689, 0.8170609796734422, 0.8987004331889371, 0.8740419860046652, 0.8587137620793069, 0.8650449850049984, 0.8680439853382206, 0.8847050983005664, 0.8933688770409864, 0.9036987670776409, 0.911029656781073, 0.9050316561146285, 0.9260246584471843, 0.8980339886704432, 0.9103632122625792, 0.8917027657447518, 0.8997000999666779, 0.8810396534488505, 0.8660446517827391, 0.8120626457847384, 0.833722092635788, 0.8403865378207264, 0.8150616461179607, 0.8427190936354548, 0.8997000999666779, 0.8913695434855048, 0.8750416527824059, 0.9256914361879374, 0.9706764411862712, 0.971676107964012, 0.9900033322225925, 0.956014661779407, 0.9056981006331223, 0.9126957680773076, 0.9013662112629124, 0.8970343218927025, 0.9203598800399867, 0.9093635454848384, 0.9003665444851716, 0.8723758747084305, 0.8813728757080973, 0.8750416527824059, 0.8467177607464179, 0.854381872709097, 0.8517160946351217, 0.8613795401532822, 0.8657114295234921, 0.8183938687104299, 0.8083972009330224, 0.8380539820059981, 0.8850383205598135, 0.8883705431522826, 0.8913695434855048, 0.9166944351882705, 0.9203598800399867, 0.9120293235588138, 0.9193602132622459, 0.9290236587804065, 0.9800066644451849, 1.0103298900366544, 1.0193268910363213, 0.9793402199266912, 0.9916694435188271, 0.967677440853049, 0.9416861046317895, 0.9940019993335556, 0.9743418860379873, 0.9806731089636789, 1.0269910029990004, 1.024325224925025, 1.0446517827390869, 1.0463178940353217, 1.0343218927024327, 1.0373208930356548, 1.0379873375541486, 1.0263245584805065, 1.0473175608130623, 1.0436521159613463, 1.0523158947017661, 1.0423192269243586, 1.0476507830723094, 1.0793068977007665, 1.0393202265911363, 1.0583138953682107, 1.0636454515161613, 1.069643452182606, 1.0516494501832723, 1.0186604465178275, 1.0296567810729758, 1.0579806731089636, 1.0489836721092969, 1.0376541152949017, 1.0626457847384205, 1.0663112295901367, 1.0539820059980007, 1.0899700099966678, 1.05298233922026, 1.084, 1.051, 1.025, 1.017, 1.075, 1.073, 1.05, 1.067, 1.046, 1.078, 1.084, 1.112, 1.097, 1.116, 1.082, 1.066, 1.094, 1.084, 1.052, 1.099, 1.103, 1.088, 1.078, 1.079, 1.024, 1.069, 1.06, 1.078, 1.033, 1.052, 1.093, 1.074, 1.069, 1.084, 1.067, 1.101, 1.081, 1.111, 1.113, 1.196, 1.2, 1.222, 1.216, 1.239, 1.22, 1.264, 1.326, 1.342, 1.338, 1.413, 1.396, 1.3390000000000002, 1.355, 1.327, 1.328, 1.321, 1.352, 1.414, 1.4300000000000002, 1.483, 1.501, 1.557, 1.544, 1.5, 1.5170000000000001, 1.511, 1.5170000000000001, 1.44, 1.505, 1.562, 1.548, 1.539, 1.619, 1.59, 1.532, 1.635, 1.716, 1.708];
 var dkValues = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 0.38436519489326443, 0.3843132072099609, 0.38393577454131833, 0.38351554076794786, 0.38269616059475586, 0.38206223447656135, 0.3818015131130058, 0.38166752477661997, 0.3814682386572897, 0.3812851334434052, 0.3811077176446615, 0.380963394407378, 0.3805378887906204, 0.3800474507662024, 0.37934713073921056, 0.3786389812418417, 0.3777498143893556, 0.37663594173704845, 0.37547373515428023, 0.3742813590123259, 0.373204650246075, 0.3718499952814392, 0.3706542263689881, 0.3693009807090202, 0.36801475531547967, 0.3665339414848351, 0.36562300870470077, 0.3647558687622088, 0.3641152614959592, 0.3636649103598717, 0.3633668163243831, 0.36303192377812243, 0.36241026383018526, 0.36202515828057313, 0.3616927711648331, 0.3616261162736899, 0.36167925227931547, 0.361939973642871, 0.3619941013814109, 0.3625593369461642, 0.362809149247661, 0.36317562065777576, 0.36356333603084684, 0.3635436579619659, 0.3632809531325816, 0.36294512104987564, 0.36277094143222105, 0.36201800736429546, 0.36116783127428703, 0.36030157867177104, 0.3593640778888241, 0.35813652132664214, 0.3570289644471058, 0.35569310021137485, 0.35444372552507564, 0.3533784999820444, 0.352382121581862, 0.351669587581082, 0.3511435515646831, 0.3505654756685115, 0.35007347175001813, 0.3496968742248825, 0.3492751789503749, 0.3488639229697035, 0.3485874382724556, 0.34838653406258063, 0.34833773036389715, 0.3480369221120111, 0.3478293889505503, 0.3473616563902258, 0.346460118974544, 0.34547078709770096, 0.3445560439753165, 0.3437130709980549, 0.34257179519942804, 0.3416995400029564, 0.3411228212149835, 0.3405071116645329, 0.3397129423859549, 0.33915642363155474, 0.33863498090444377, 0.3381201149324494, 0.33746290918900046, 0.3369040415934872, 0.336457239817304, 0.33600918532586044, 0.3354853937576363, 0.33508374192729407, 0.33497486009258404, 0.3348728159953366, 0.3346188279763053, 0.33427438347618466, 0.33375372369611134, 0.3330172837124467, 0.33221575473171433, 0.33165443390214955, 0.33102786748610946, 0.3304942107852103, 0.3302922104494826, 0.3299619111925098, 0.3294718385433761, 0.3291377811406223, 0.3287566425226679, 0.328267091838226, 0.32762956416365807, 0.3270756552327169, 0.3265972745926796, 0.32599534491009263, 0.32538250616544695, 0.3245967927148761, 0.3237457292848917, 0.32282936807196266, 0.3218561649040963, 0.32093463624071844, 0.32021369860840043, 0.31940538408667457, 0.3186382003826628, 0.3178911123192854, 0.3172774384311328, 0.3166296802486055, 0.31621435294333805, 0.31607785917643155, 0.3159590600125773, 0.31613188252203317, 0.3163274104955825, 0.3165784233158705, 0.3168123156942674, 0.31695815262915705, 0.3172131845775719, 0.3174400826290986, 0.3178966451450185, 0.31851110198020877, 0.3191043670489119, 0.31993157669248096, 0.3205147678426322, 0.32116101232755334, 0.32162686581498734, 0.32230802973779005, 0.323221206966099, 0.32410186579410877, 0.32478229896634286, 0.32569281417472373, 0.3264621901304411, 0.32714502434025755, 0.32788329120034343, 0.32832790072482104, 0.32898275762715684, 0.3292816346096831, 0.32942120796827123, 0.32976554807545355, 0.3302427803931689, 0.33055037418604827, 0.3307710086612733, 0.3308613085529552, 0.33132695325451245, 0.33176780463320915, 0.3320503963173512, 0.3323258892816847, 0.3323815307178309, 0.3327500899867129, 0.33300178136110026, 0.33339022748473984, 0.333751009479714, 0.33387006962591415, 0.33377481106966017, 0.3338515398793552, 0.3338537321310608, 0.3341988551852808, 0.334587457898328, 0.33530317588372793, 0.3358821391198757, 0.33662552123394124, 0.33727860345632493, 0.33800554368259866, 0.338715259074043, 0.33954304287877307, 0.34036231865902683, 0.34126923231103423, 0.3421408611498757, 0.3429118029996685, 0.34332024037100417, 0.34358769507908393, 0.34375101783114903, 0.34356149245155543, 0.3439173157819574, 0.3441804381830952, 0.3443430823810609, 0.3441321564491035, 0.34391585428082033, 0.34368321461768386, 0.34344060542893384, 0.34320039727776624, 0.3430207892273169, 0.3428295413642403, 0.34297689199673626, 0.34305816189925, 0.34306265079559944, 0.3430084708605903, 0.34281247311881846, 0.3424147360236647, 0.34197278851911517, 0.3416383657410771, 0.34114416957087823, 0.3405516874492128, 0.34011031410582443, 0.3398157172337709, 0.33950473067039477, 0.33901930350701814, 0.33854515078098446, 0.3378493718468113, 0.33713991743771293, 0.3365885661337616, 0.3362061226040777, 0.33575613684327454, 0.3354397218471036, 0.3351672562779825, 0.3349702668032961, 0.33473245968971077, 0.3346006636050306, 0.3343421344931806, 0.33398871220036097, 0.33376750356397494, 0.3336073647965298, 0.3336867034296838, 0.33360480716954, 0.3332918893368042, 0.3329385192404537, 0.3329929079613395, 0.33315680487456567, 0.3333265477923399, 0.3338538887204683, 0.33438289993561043, 0.3348548604099385, 0.33541973059940755, 0.3360958314646998, 0.3369727843433976, 0.337974069211683, 0.33900672415794575, 0.3401594831797922, 0.34148689158751594, 0.3424533092143889, 0.3434458772723211, 0.3445902848590988, 0.3457863669503649, 0.3469407962592252, 0.3479449519333155, 0.34877936468963144, 0.3495447215172219, 0.3504998125102827, 0.35147745237802935, 0.3521039665976003, 0.3527613289304568, 0.35322164959215774, 0.3534980820929364, 0.3541518950658887, 0.3546860215350105, 0.35510515918252816, 0.3556825565246004, 0.3561988839977318, 0.35684841686021124, 0.3576102765243666, 0.3583029758668581, 0.3585848368004316, 0.35895464878457395, 0.3595112197354432, 0.36001058335609104, 0.36044156960211265, 0.3608704157928978, 0.3611942948841614, 0.36138810037422786, 0.3617175644876938, 0.3620125789315007, 0.36229611015208796, 0.3623880281343145, 0.3625139782144465, 0.362545400488893, 0.362811184909959, 0.3627469832528673, 0.3627485491469426, 0.3625333431045124, 0.36242028555226785, 0.36273440390379486, 0.3629325417008032, 0.36302247621720074, 0.3628254867425144, 0.36227653647614544, 0.3617243500286872, 0.3608516250639929, 0.3600188303982215, 0.3589625826478894, 0.35805540801353597, 0.3571797600465676, 0.35622999309336323, 0.3556122478806146, 0.35496469848396395, 0.3538962889563128, 0.35276534805858367, 0.3519023838336261, 0.3511276316415831, 0.3504352454779067, 0.3498219369650384, 0.34966539975396677, 0.3493216338079454, 0.3494971705337987, 0.3493364576051926, 0.34937122045366664, 0.3493690282019611, 0.3494165269889151, 0.3494505068903515, 0.34932706224074017, 0.34907161272057186, 0.34829242382864856, 0.34737173030877766, 0.34632367740410674, 0.3452836627556896, 0.3444188194578416, 0.34333616029410413, 0.34162771766136435, 0.34046650281151064, 0.3394105682399935, 0.33834831789570563, 0.3371789082001906, 0.33600229539192866, 0.33543272752023345, 0.3345818728761257, 0.33372000477702085, 0.33285777130263183, 0.33193530310280867, 0.3310741657542724, 0.3299287664345803, 0.3290171551003467, 0.3282077966492372, 0.32702486806820447, 0.32569782503576505, 0.3239395869714272, 0.32226799504592873, 0.3204585522453251, 0.31845509516877835, 0.3165739866159902, 0.3151789315842088, 0.31375668219198444, 0.31239931301095125, 0.3107802829299172, 0.3090554506058549, 0.30695099336144427, 0.3048910597052445, 0.30319744086975187, 0.30139280014431286, 0.30017902344999453, 0.2988917019306012, 0.29751288000073495, 0.29605268377541655, 0.2949566101190998, 0.2938024939890546, 0.2927873248599673, 0.29186762307301073, 0.2909216142655873, 0.2901474362347054, 0.2896577811573252, 0.289438555986768, 0.28918749097001084, 0.28904050571279916, 0.28844755382291115, 0.28787746398652414, 0.28761329765600274, 0.28729129763762956, 0.2869840692200344, 0.2868443392720388, 0.28680409579430083, 0.2869934123880177, 0.2874598400366127, 0.28784353628155696, 0.28828511841082216, 0.2885555483176452, 0.28887118036677834, 0.28922308896199184, 0.2895397649405086, 0.28986239131651187, 0.290249532528422, 0.2907833980151979, 0.2912167852988018, 0.29147479244596, 0.29143580168348227, 0.29150376148635504, 0.2917781061283666, 0.29207280739335845, 0.29268084406283956, 0.29319623199952566, 0.29379706555625984, 0.2942703831387866, 0.294828102411978, 0.295306691837892, 0.2956844376853497, 0.2961208001676968, 0.296557736811205, 0.296763599685652, 0.2968406416741621, 0.2968790582754788, 0.2969980140287406, 0.2971007888765566, 0.29729475095603053, 0.2979155757604608, 0.2985646388547176, 0.2991073777412542, 0.2996496468595682, 0.2999962314149252, 0.3003545601758479, 0.30066220616519646, 0.3010045106100807, 0.3013867453538879, 0.3021135811872233, 0.3024786432926702, 0.30275564995460996, 0.3031096464085906, 0.30360551286580334, 0.30400805203612163, 0.3044124702793305, 0.3047909990738259, 0.3055119889026131, 0.3060883423153018, 0.3066758135759258, 0.30717543817891946, 0.3077696427840678, 0.3086620980141123, 0.30922414959424555, 0.3099463921382931, 0.31043197589107724, 0.31052478121327975, 0.3102468350148948, 0.3099325600739603, 0.30962914199861535, 0.3095725088295547, 0.30900977869532215, 0.30868485567467485, 0.3085177747768288, 0.30833545250998207, 0.30822933708813854, 0.308004787877725, 0.3078764367600107, 0.3077431269777242, 0.3076332012136305, 0.3075805871726969, 0.30718415498927254, 0.30659026356293934, 0.3058075253111119, 0.3049699285701759, 0.3041864073713107, 0.30348227700206865, 0.30248354976077313, 0.3014517299580174, 0.30054690416477714, 0.2993069248429304, 0.2981743136581875, 0.2969208676472922, 0.29537553898074076, 0.2940890526048544, 0.29338257339449925, 0.2928175466156227, 0.29244235839515487, 0.29208413402717054, 0.29197253797606315, 0.2917132259171755, 0.2915133656366842, 0.29143454896822196, 0.29115634178749106, 0.2909743848959286, 0.29096895646313387, 0.2909516794318352, 0.2908700963505064, 0.2909931756248335, 0.2910439627893459, 0.2911103566981432, 0.29118332736205726, 0.29132911210047785, 0.2913998383162171, 0.2915277196657088, 0.29162151672082576, 0.2915278240586471, 0.2915578370284258, 0.2916624909491322, 0.29194816222495595, 0.29228649973818255, 0.2928807043433308, 0.29321711058719774, 0.2934154049736136, 0.29350800150993944, 0.2934944304279526, 0.29333074230060324, 0.29286796840485085, 0.2924247681850411, 0.292217443809457, 0.29202259439000705, 0.2918683016271101, 0.2917582192736089, 0.29156076003069986, 0.2914152362746253, 0.29120050000041753, 0.290882153734887, 0.2905461128663044, 0.29035194200095377, 0.2900473756032868, 0.28973122158946185, 0.2896025572929325, 0.28934178373290775, 0.2889192011184242, 0.28857778401351597, 0.28801949057916365, 0.28721999726072933, 0.2862735186850833, 0.2855841077201501, 0.28507597509268007, 0.2845824052801113, 0.2841123760751429, 0.2836436517819039, 0.2835246960286421, 0.2834322038852546, 0.2834260968983605, 0.28344567057430314, 0.28351462211009026, 0.2835789281601204, 0.2835864966481515, 0.28373363849477073, 0.28386590434767356, 0.2839980136111689, 0.28415376787520286, 0.284460996292798, 0.2847465631756833, 0.2850446572111719, 0.2852686844568937, 0.28547569565366265, 0.285782976267727, 0.28615785130937976, 0.2865909254141686, 0.2870678967495379, 0.2877020316536092, 0.2882327653522343, 0.289097191078329, 0.28985518820376505, 0.29064304170957217, 0.29133986457312894, 0.2922928155109534, 0.29304052993196084, 0.2934184845652953, 0.29399201936864827, 0.2945110088617078, 0.29514984144800527, 0.29567253689037654, 0.29623406650581807, 0.2967356745746405, 0.297325860051662, 0.2980061366344886, 0.2986811935703972, 0.2993071336288071, 0.3000640346283904, 0.30031854461211344, 0.3008481299884166, 0.3016181844982333, 0.30215178900266326, 0.30288875095101964, 0.3035204848175086, 0.3041682951965051, 0.3046600903291217, 0.305588978694654, 0.30666881924905565, 0.30758763369603614, 0.30899359778987623, 0.31077349738892385, 0.31254295769413537, 0.3144591944706818, 0.31598849882119495, 0.31755021717906895, 0.3188851418783547, 0.3203182481361685, 0.3222111530909914, 0.32417541061918376, 0.3266481661501304, 0.32916309642817476, 0.3311047528852121, 0.33295344743063926, 0.33486180254033954, 0.3359908121687091, 0.33716194434770697, 0.33825843557577717, 0.3398796579085167, 0.34124814493748534, 0.3433660166744753, 0.3446129903231922, 0.3458900291381569, 0.34670304134210905, 0.346873567206921, 0.3465397707865131, 0.34683087049513156, 0.34683796921494003, 0.34609516126203554, 0.3457425219162535, 0.3452052114625117, 0.3446563133926118, 0.34388422322049716, 0.34313948399823285, 0.3424169804718394, 0.34179730398973107, 0.3411196372303635, 0.34130326440893977, 0.3415529723174982, 0.3415622632890123, 0.3412688147392807, 0.34113320831235033, 0.3413869353490357, 0.3418107184823104, 0.3425096292046344, 0.34358993952725864, 0.34472850110948816, 0.3460426516140401, 0.34707812516963854, 0.3486588430422942, 0.34966566073631267, 0.3505397950056748, 0.35138600416402554, 0.35298342490681883, 0.35464619562902594, 0.3566302356190376, 0.3588237400398698, 0.36089980240504627, 0.3635242930719001, 0.3667429361474329, 0.3701577857506145, 0.372927852370012, 0.3750685339640337, 0.3772465360335194, 0.37909048070025114, 0.381202245450347, 0.3837442656958958, 0.3858728377090678, 0.38806712507693764, 0.3897944106350515, 0.3913356679770068, 0.3926771172349401, 0.3934676849571446, 0.39405077171435754, 0.3938125470290187, 0.39435304146738054, 0.39567695271166925, 0.39686076863267805, 0.3980718833070681, 0.3988053480919894, 0.3987755439080875, 0.39871290814507115, 0.3986895241268784, 0.3988697585349579, 0.3986747525261003, 0.3983555711170629, 0.3979513616597308, 0.39723595685314583, 0.3971350610782204, 0.3968931304435698, 0.3964533229942567, 0.3963803523303427, 0.3965752017497927, 0.39645749871179115, 0.3961648853055665, 0.395770697570317, 0.39513635388036905, 0.39464027863727963, 0.394174529542784, 0.3934794813591793, 0.3929346546138756, 0.3918948487513352, 0.39088688273499483, 0.3902948703815521, 0.3891085490300226, 0.38774580361266375, 0.3859020677318087, 0.3844460994204939, 0.38385283435179085, 0.3835945140258176, 0.3833743493188152, 0.3828224760501721, 0.38253268125328316, 0.3821751876358674, 0.38172838585968427, 0.38106757855986184, 0.3802980982112062, 0.3795184395510603, 0.37913260325087966, 0.3783597823281964, 0.3779379826607505, 0.3772752962880377, 0.3762792310666704, 0.3750507871645124, 0.3738188982953886, 0.37270413830310534, 0.37232106841579127, 0.37192468842883625, 0.371483106299571, 0.37143148399155174, 0.3714691698422999, 0.3712612191090856, 0.37117593007844507, 0.3713156600264407, 0.3714514230427786, 0.3715868206838322, 0.37147663393739266, 0.3715225668302713, 0.37129086670358, 0.3708909373567207, 0.3696970997136293, 0.36839625930871833, 0.36713320914749387, 0.3658039216668797, 0.3645904581513764, 0.36331201003174385, 0.36216969030373336, 0.3608699460246752, 0.35946398193083506, 0.3581183047588983, 0.3571990205436951, 0.3565902009271763, 0.35642411176224464, 0.3563622067497969, 0.35632911418833657, 0.35644191075823517, 0.356859064939924, 0.35736276086751373, 0.35772745759767627, 0.35785680044830503, 0.35802388134615115, 0.3582844461202991, 0.358475798376314, 0.35851170954711004, 0.35852653334435725, 0.35808813519971205, 0.3576646130487833, 0.35724479684716626, 0.35682790364782335, 0.3564706188162843, 0.3562059827175403, 0.35584734077780256, 0.35513057886301896, 0.3544394976110721, 0.353665580562536, 0.3534960464306384, 0.35364005648910685, 0.3537997254883293, 0.3536935056735474, 0.35363744666564784, 0.3533253639764189, 0.3529456868596016, 0.3525908030656447, 0.3519190867037638, 0.351204047272463, 0.3503475032132146, 0.3497375352743739, 0.34890902071907526, 0.34806964929818723, 0.34728038648771214, 0.34658805252050484, 0.34584284353001793, 0.3450171997805243, 0.3441838831500611, 0.34317299413144664, 0.34198823867399253, 0.34091445291001576, 0.3398704191334718, 0.3390376766641696, 0.338091041499116, 0.33720516302418824, 0.3364580749608109, 0.33543084844734294, 0.334482073227053, 0.3333574481020946, 0.3320824971458971, 0.3313044565762958, 0.33063143530268524, 0.3305128971211768, 0.33023959640854883, 0.3293811210799408, 0.3283551472817332, 0.3268901489812502, 0.3258626092889672, 0.32452173419219493, 0.32318733145760103, 0.3226081072391075, 0.3218774610635219, 0.32145680971839796, 0.32220269726298423, 0.32286475727806685, 0.32325362097345994, 0.323814733017148, 0.32462826718579185, 0.32569772064282665, 0.32778599698179134, 0.32916821168215443, 0.3310743745401491, 0.33364875659658977, 0.33661894447882446, 0.3391937963034878, 0.3415052125481982, 0.3433367866517343, 0.3454804434444993, 0.3475598463837034, 0.34959603064642614, 0.35137332042201475, 0.35316746965714857, 0.3554489251285495, 0.3577055872770898, 0.3603598299313763, 0.36249163812563734, 0.3643222726927281, 0.3658657744828583, 0.36705648033779886, 0.36787345947340866, 0.36820965693139884, 0.3682446807622188, 0.36851866002894607, 0.3693174225968119, 0.3698583868033964, 0.3700468682536064, 0.37014353611452827, 0.36985640333756753, 0.36946127606587276, 0.36898962877035973, 0.368821190764315, 0.3687823565912448, 0.3684671421138651, 0.36887850248747495, 0.3695766302627612, 0.36962752182021197, 0.3693557870016595, 0.3688728652688034, 0.3689659315733519, 0.3690289327116525, 0.3696842071857418, 0.37057013785713866, 0.37155487644469387, 0.37261164615971787, 0.3733033015728258, 0.37384468335116366, 0.37473604245535536, 0.3752348319148421, 0.37581624838504124, 0.3763005272260959, 0.3767156457454867, 0.3772917381758294, 0.3778208015874408, 0.37869858960964564, 0.3790912636472888, 0.3792662784084504, 0.37940407708708634, 0.37924602617840836, 0.3791464353152124, 0.3788351877694904, 0.37856011237691034, 0.37819186628684337, 0.3777659430983323, 0.37769991456481933, 0.3777202711877996, 0.37749253799276594, 0.37721166879210694, 0.37659940420862226, 0.37600869676690896, 0.37544142553985765, 0.37519312693596707, 0.37572923687091775, 0.3763548115540434, 0.3774897193834303, 0.37854293973854997, 0.37951034909833736, 0.3805699896191662, 0.38114916164119067, 0.3812325194024715, 0.3817437838180924, 0.38183116070750023, 0.38239211616178065, 0.3832231883440691, 0.38390649232210816, 0.3843241684684888, 0.38451191916813027, 0.3845239765525109, 0.3843477612725583, 0.38497177006160854, 0.38580660038967796, 0.3865874073721458, 0.3872002461167915, 0.38790881318591386, 0.388648593743606, 0.3891392405539006, 0.3893548641680843, 0.3893142031185929, 0.38932881812996334, 0.38902842744983085, 0.38856915071751363, 0.3877827587128434, 0.3871376625502443, 0.3862401964591585, 0.3852709080264807, 0.3846258640603508, 0.38424811821289306, 0.38347529729020985, 0.3817857497793133, 0.38055182524789144, 0.37934232866404605, 0.3779725367233479, 0.376661883382231, 0.3755504639639753, 0.37459615591795214, 0.37385527923440726, 0.3729800488391923, 0.3720566411029239, 0.37117285048676335, 0.36997692498490475, 0.36888053814977295, 0.36793228489417484, 0.36725952460291017, 0.36647000081008924, 0.3654870890989554, 0.3646299186820768, 0.36367493208195434, 0.3631069301043345, 0.36199994738595903, 0.3610455871434668, 0.35991694289038156, 0.3587023832490256, 0.3572659364171843, 0.35589254292011274, 0.3547286660503307, 0.35395500998414064, 0.35337354131747234, 0.35290345991603467, 0.352491264398918, 0.35210182654236394, 0.3517206357279403, 0.3513438294169278, 0.3518286824191435, 0.35231583206600314, 0.35325375042070356, 0.3547119109837239, 0.35750473526368404, 0.36176631598990816, 0.3652134752075123, 0.36850524553636677, 0.371290292542419, 0.3744072046995196, 0.37732577027373493, 0.37981392376308987, 0.38246258139517403, 0.3860319847435984, 0.3895668340294255, 0.39316645913350523, 0.39635420189928333, 0.3993756467142532, 0.40193906751216596, 0.40364500471438514, 0.4054467224375501, 0.40741113655515, 0.40987350498872976, 0.41168660154217607, 0.41398789167186545, 0.4169698237596658, 0.4197350361074295, 0.4221562737232953, 0.42457051701229087, 0.42748871721122195, 0.43015527823223504, 0.4328240315049537, 0.43427514554463464, 0.4347689241430801, 0.43513664826845533, 0.43590247486426825, 0.43700126273698237, 0.4380725430704385, 0.43855014076343807, 0.438545182098866, 0.43859941423034426, 0.4384875050004217, 0.4378760755604439, 0.4372777474342303, 0.43718645580963406, 0.4367030121120863, 0.43627541863656144, 0.4364362359581059, 0.436977408950567, 0.43701201520963356, 0.43698127148928634, 0.43751571113722326, 0.43836724433543045, 0.43897475904021965, 0.43956129076439854, 0.44001378195572244, 0.440617903890015, 0.4413576322512379, 0.4420139506547107, 0.4422886084755374, 0.44296961580893257, 0.44352947513736024, 0.44464668836369503, 0.445584189146642, 0.44623972460307726, 0.4463896850590321, 0.4460455537377266, 0.4456206222821299, 0.44519344637835845, 0.44505569989619165, 0.44459710171797373, 0.44391191866704416, 0.44261572374789027, 0.441573047079545, 0.441158763703661, 0.44040442033106764, 0.4396728868155059, 0.4392994732749902, 0.4392259806463844, 0.4397294155916282, 0.44096135665722125, 0.44210701695925925, 0.44363334611102895, 0.4440495085598034, 0.4440315007779362, 0.4442392427252737, 0.4450590926666884, 0.446123274280336, 0.4466863697898529, 0.44773708471445195, 0.44799216885933596, 0.4483049822991334, 0.44910233556233137, 0.44938456187118914, 0.4499196278767562, 0.4508200169701161, 0.4521940368248178, 0.45378122705965185, 0.45537447208491066, 0.4568204708706121, 0.45769037722597067, 0.4576610428102913, 0.4572735362230969, 0.45698979621663294, 0.4570253942086139, 0.45731096109149916, 0.45702200143811716, 0.45682407242698553, 0.45621436547049066, 0.45588192615828144, 0.4549025116105826, 0.45455336942823577, 0.4545144830586964, 0.4544878106629453, 0.45415041268616396, 0.4541124136566007, 0.45390790789035235, 0.45346429009878914, 0.4527189245188948, 0.45157101976868197, 0.4504003051614374, 0.4493109126531758, 0.448302268082736, 0.4471562946018829, 0.4462233871082238, 0.4447580234324565, 0.4419114367892407, 0.4381422253567942, 0.43492593112237443, 0.43255093957820245, 0.43056340242475566, 0.4285890709780116, 0.42658582268734146, 0.4242807222154019, 0.42203016705375573, 0.4201478579821764, 0.4183850266285507, 0.4164593422910826, 0.41489872005906137, 0.4132115735857471, 0.4125709663194975, 0.4121673310233264, 0.41159337864822004, 0.41074711729340013, 0.4104003761486355, 0.4099823868234398, 0.4102265619062652, 0.41051421664791765, 0.4111988777341554, 0.4115338224768853, 0.4119227383687476, 0.4119884537234456, 0.4119676273322427, 0.4120632512637809, 0.41249376774157986, 0.41314883342979236, 0.41371620904978207, 0.41392139337012973, 0.41402949225780217, 0.41391445123972875, 0.4137370876374542, 0.4140240638250074, 0.41397165856995044, 0.4138450299357191, 0.4139107974868862, 0.4146497429010714, 0.415304234428123, 0.4163562020679824, 0.41707635675326266, 0.4178355022010207, 0.41889837890293874, 0.4199466405934864, 0.4211645408088699, 0.4224537935976228, 0.42380531677410793, 0.42495066389733077, 0.42581039194119924, 0.42672179448955616, 0.4276899867963812, 0.428773637693033, 0.4299401765827431, 0.43138262600854016, 0.43333294707946146, 0.4354198141137583, 0.4370902577169348, 0.43927394920156104, 0.44098745489181135, 0.44263931655195976, 0.4447427298669867, 0.4468611235686685, 0.44915202660099096, 0.4513964225792739, 0.4534141814883761, 0.4561603421248891, 0.4587484518527241, 0.4617154035538697, 0.4645225296663853, 0.4674575371283925, 0.4704767374951875, 0.47323693898191, 0.4760874403603143, 0.47898972063614553, 0.4817835888454892, 0.4852828923358045, 0.4889609687330622, 0.4927688055527022, 0.49618172388652404, 0.4991305634128641, 0.5024503110491991, 0.5053238832669813, 0.5080249461541224, 0.5107266353988938, 0.5140154827254743, 0.5178806834647431, 0.5231480901520713, 0.5279221880091766, 0.5325579130264849, 0.5376581344230287, 0.5435736124716991, 0.5495186337219257, 0.5553993489221221, 0.561818992666605, 0.5696514904388597, 0.5767128375754448, 0.5844594199594287, 0.5946072487115823, 0.6045364786508091, 0.6157460357825587, 0.6245205754305792, 0.6341350084641795, 0.6408709106154257, 0.6486544480995893, 0.6545820879255788, 0.6599456927056062, 0.6667099897360863, 0.6756555772136105, 0.682781543579041, 0.6896670408109579, 0.6963699025972129, 0.701853611452824, 0.7078907594711537, 0.7132378701669202, 0.7194277972505405, 0.725700246951935, 0.7331736852126984, 0.740035902819361, 0.7464632194448133, 0.7535820870904352, 0.7595276825018228, 0.7640127163126076, 0.7677348987263227, 0.7713916267676857, 0.772846864328432, 0.7743401531152105, 0.7757423068668006, 0.7757167305969022, 0.7769023733943323, 0.7796860110957167, 0.7829888992725065, 0.784843439822482, 0.7891200009353607, 0.794823770105036, 0.8005429372331194, 0.8060471593011185, 0.8109480945783318, 0.8145544008304667, 0.8192906562474164, 0.8232477749689118, 0.8267860170252355, 0.8314276924400305, 0.835031597654583, 0.8370923142578205, 0.8384886742013313, 0.8402754637343107, 0.841062743078957, 0.8398491229740462, 0.8390399733088135, 0.8377804725074933, 0.837478098361532, 0.8381085795127606, 0.8375823869069542, 0.8366285486291537, 0.8363773270229891, 0.8375076937595572, 0.8384582436597994, 0.8393975191226986, 0.8416573130593896, 0.844386248861073, 0.8462423031086548, 0.8486348848629404, 0.8512895972854495, 0.855377311572834, 0.8602357067276656, 0.8658597196924334, 0.8709912589704851, 0.8767604825125126, 0.8812025064326929, 0.8836599162017006, 0.8878883521699952, 0.8914145368419383, 0.8949321090964666, 0.8998858150040212, 0.9048155627322221, 0.9106667869273317, 0.9162778029712736, 0.9206896573322677, 0.924537267861423, 0.9282231215325886, 0.9327257977499563, 0.937990177042072, 0.9432030906155761, 0.9487160816903973, 0.953048493025299, 0.9577647049980834, 0.9629414464184454, 0.9659600204276102, 0.9697817937045213, 0.973079723216739, 0.9762600540838935, 0.9785873380552347, 0.9794290061207668, 0.9806863668668506, 0.9836520658527358, 0.9857997417736277, 0.9879031550886548, 0.9909353001798064, 0.993671804469521, 0.9960816632551055, 0.9990222035428459, 1.0011891921573344, 1.0040223586707522, 1.0054449140908752, 1.0059423112095467, 1.0065632206244535, 1.0097093614993833, 1.0124841544568686, 1.0139634885176119, 1.0162265849771046, 1.0180247949931476, 1.020077661978171, 1.0221499083638788, 1.0252039684557945, 1.026933115392196, 1.0301646357542473, 1.031699780367697, 1.0331616596159678, 1.0360269415729428, 1.0388547872826854, 1.0395727249751336, 1.0414843039997528, 1.0437017790748948, 1.0454045378253198, 1.047181846913602, 1.0482966035131147, 1.0475138932385948, 1.0475942198987138, 1.0473843755819905, 1.0477222114871483, 1.0466988419273777, 1.046855412805172, 1.0480843091463248, 1.0488949316393281, 1.0496858383254035, 1.0501250948409846, 1.050169079709437, 1.0515475708180817, 1.0526511471426818, 1.054420669613888, 1.0571328787960406, 1.061660165544234, 1.0665315174808063, 1.0713820195899615, 1.0773331254869931, 1.0838076912436874, 1.088531727467202, 1.095027421884852, 1.1040434541347537, 1.1130103183024205, 1.1221378879867947, 1.1332807087487127, 1.1443268736027006, 1.153001146443249, 1.1625644981852332, 1.1692424817771687, 1.176040948913019, 1.1819141801312678, 1.1895542541061919, 1.1985268073236237, 1.2081650305161435, 1.2191316582338052, 1.2296546303174631, 1.2413778406362457, 1.2528781048025763, 1.2613588441488595, 1.2709181307776274, 1.2811412572166838, 1.2910556125193022, 1.298030465826345, 1.3069903361891066, 1.3178397764132925, 1.3275832409977795, 1.335855008178143, 1.3467683210650752, 1.3552358895197005, 1.3609159754810218, 1.3689183104900706, 1.3796184015833486, 1.3901303726869656];
 var midValues = [0.37120959680106635, 0.3712977216960738, 0.3714749729053501, 0.37165094958102096, 0.3718202556457436, 0.3719354369179569, 0.3718453440675509, 0.37195128294093904, 0.37211885387971433, 0.3725644865734895, 0.37326965301665144, 0.37423540175979314, 0.3751894457492817, 0.3761812249640186, 0.37698922906961807, 0.37795593642127645, 0.37899692586817557, 0.3802625250971381, 0.38191203524639794, 0.38440291984270186, 0.38739672650428947, 0.39091463709648294, 0.39517381770282295, 0.39952404634083905, 0.40421000852777444, 0.4086353417692973, 0.41208999128580553, 0.4140976730330125, 0.41512543187842355, 0.4159699519244489, 0.4166638899627524, 0.41724510068087656, 0.4175113234936555, 0.4169410116150675, 0.4158405743360715, 0.41456484076917277, 0.4137206512572237, 0.41322630053543724, 0.41312568454399096, 0.4137546248887167, 0.41470795155055157, 0.416001133018637, 0.4175341488554737, 0.41894570891334143, 0.42011914460180555, 0.42090711805634956, 0.42143303732335863, 0.4216339587829113, 0.4217979430968988, 0.42225123266729875, 0.42278406410674774, 0.4229669819043835, 0.4228875818982887, 0.4226131742876339, 0.42245963918348306, 0.4223480318255759, 0.42194872855696397, 0.4215573009737747, 0.4212501789697088, 0.42102066133723165, 0.4208616967102552, 0.42084334170517435, 0.4207324551774908, 0.42055227611875706, 0.4201003396339335, 0.4194043136546232, 0.41820438285418254, 0.41612296704324475, 0.41371855437329264, 0.41134263955998895, 0.4090533288508568, 0.4067875163640763, 0.4046563994318871, 0.4028841817585114, 0.40141080466908113, 0.4000209503904152, 0.3987549848957207, 0.3972723193459341, 0.3955944633532037, 0.39374226849071775, 0.3919998312030629, 0.3903333911676973, 0.38909236699720384, 0.38846355684901035, 0.3882873942584454, 0.38827686427159386, 0.3882784199005713, 0.3881227802965854, 0.38792213399616016, 0.38775307024098327, 0.38736839394342704, 0.38679702048944564, 0.3859653377596598, 0.38497587643931197, 0.38395756665279734, 0.38289853015720515, 0.38175911490335823, 0.38039426237590795, 0.3787253353714507, 0.3771834158157946, 0.3757113966514906, 0.37495170636675723, 0.37459483756178635, 0.3750702040207, 0.37582259736929374, 0.37635001954743413, 0.37669839013420037, 0.37689335213152575, 0.3769130804267359, 0.3767267264463421, 0.37644162386023444, 0.37620999783322995, 0.376054874058344, 0.3759120281460464, 0.37583720153708583, 0.37578835089450685, 0.37568139473612877, 0.3754509523426919, 0.3751344479285691, 0.37489196643500644, 0.3747731470634402, 0.37465291279164314, 0.3745136748181478, 0.3742781933715989, 0.37394200653927245, 0.3733071755108104, 0.37240528689500085, 0.37120022012522663, 0.36981000507887374, 0.36834180531997984, 0.36660556176300374, 0.36481337408045056, 0.36293282595317494, 0.36117646605642373, 0.35927489600510887, 0.35744913709474846, 0.3555692492794618, 0.3537152714638622, 0.3517526614797358, 0.3502668973791903, 0.3491494603280021, 0.34840365428093456, 0.34810753054885746, 0.34828745721345267, 0.3485598020163316, 0.34862063568782004, 0.34870310241076496, 0.34887443387366945, 0.34922076118361506, 0.34981598859150603, 0.35070136108851147, 0.35153138219287633, 0.3526934731989785, 0.35394030219419986, 0.35525771719208826, 0.3565898486797408, 0.3576124040004148, 0.35821766911117336, 0.35833631702296526, 0.3581363062923895, 0.35728896606934285, 0.3559702071502641, 0.35431337209131586, 0.35254007106617996, 0.3504830520571734, 0.3482710599261134, 0.34595133988083027, 0.34380142359326504, 0.34207859266387464, 0.34079775544574537, 0.34000935860780207, 0.3397308932133684, 0.33959369572636655, 0.3395666170781, 0.33952602461359144, 0.33942264955038454, 0.3392916794358987, 0.3393558628173394, 0.3394934863182789, 0.33974181634729744, 0.3398357342103538, 0.33993333664758135, 0.33989799174857016, 0.339400286668593, 0.33851038030207686, 0.3374864848660507, 0.3363186171557923, 0.33478454137605096, 0.3331661874133404, 0.3317652273660851, 0.3305230613703169, 0.32931810274466145, 0.3283210878294407, 0.3275292809085758, 0.32677984833332596, 0.32601746301488516, 0.32544785946228805, 0.32498207558816855, 0.3246011886516784, 0.3243227716887826, 0.3241552010302147, 0.3241554976904959, 0.3242791741460055, 0.32445932398595706, 0.3245611668375626, 0.3244419884245625, 0.3240355904556791, 0.323439340576151, 0.32282383538300136, 0.32219375632452346, 0.3217069376097329, 0.32153039464174915, 0.3214021588787941, 0.3211783128531554, 0.3210190348624924, 0.32084215181871983, 0.32058222166432176, 0.3201541189913291, 0.31961657456336806, 0.3189464282535929, 0.318055450425589, 0.31700203459913506, 0.31570946877166084, 0.3141893841248261, 0.3126443535067356, 0.3112108081949224, 0.30987725224659474, 0.3088089343871386, 0.3079645045084544, 0.307297865092227, 0.3067502488747594, 0.306344474807022, 0.30596995765779855, 0.3057829638599334, 0.30591494923793827, 0.3062340717536247, 0.3068992462351476, 0.3076969768162386, 0.30870027499420144, 0.3098520801042529, 0.31086694172995055, 0.31188876864249454, 0.31290351008940503, 0.3140782442153389, 0.31538734036374455, 0.3167320898195023, 0.31826554846348526, 0.31969839045522447, 0.3211046357155356, 0.32227033931569204, 0.32352288941244783, 0.32493537275976864, 0.32645228764472933, 0.327889824791476, 0.32933685900423554, 0.33072038369155726, 0.33196057932520384, 0.33324007899777225, 0.3342392174436851, 0.33521592770383796, 0.33589197703888424, 0.33612409651431424, 0.33633777234041395, 0.3365540691514214, 0.3368200482576224, 0.33707744622642605, 0.337276528326202, 0.33777147527189755, 0.3384591342322517, 0.33909884766225956, 0.33961922410135836, 0.3399764175963087, 0.34037779905075477, 0.3407734608426174, 0.3411632296526641, 0.3413378876409501, 0.3412856627220073, 0.34081890926837477, 0.34034345044577835, 0.3398007724260365, 0.3395394733331198, 0.33969548556403995, 0.34051124394869287, 0.34152137112817216, 0.3427714232757825, 0.3440746686432793, 0.3454475494868068, 0.3468436925473455, 0.34826433240557586, 0.3494671422435691, 0.35062757263106376, 0.3515890846261268, 0.35242971330202244, 0.35278709990507734, 0.35279816383582396, 0.35270921352081763, 0.35241304907253196, 0.35231842994744583, 0.352339826273645, 0.352294975564873, 0.3519428856504374, 0.351385746934035, 0.3507317931761472, 0.34991347592457656, 0.3490452288641541, 0.3480951508158455, 0.34718779455593685, 0.3464932509936963, 0.34598616016562156, 0.34567639561824653, 0.34547591883793943, 0.3453442133569442, 0.3450866489716221, 0.34461014350208485, 0.3440138420250576, 0.3431697935701181, 0.34214373794543423, 0.34102976200463, 0.3400589901440925, 0.33915008013249587, 0.3381804410412855, 0.3372022027840927, 0.33604124988955636, 0.33484042494627014, 0.3338068240553991, 0.33318370984797285, 0.3326577020498272, 0.33221408805617997, 0.33181826394736735, 0.3314565008969834, 0.3310634044888501, 0.3307284214515991, 0.3303883365135674, 0.32989084455267687, 0.3293374737992487, 0.328897177171953, 0.32865728617354806, 0.3284713563952908, 0.32820652412561313, 0.3280518461847907, 0.32819633347653293, 0.3286354524707847, 0.32924627231536097, 0.33026027713955414, 0.3314665993844436, 0.33275076900999295, 0.3341217087395933, 0.33553846075531507, 0.3371152955123984, 0.3389454473412812, 0.340884674174298, 0.3429099207698083, 0.3451020503320271, 0.34711311560759106, 0.3490576627929531, 0.35110269541348005, 0.3531694219830998, 0.35528148991578506, 0.357166824501766, 0.35868383523696346, 0.3598600705093328, 0.3609235181200432, 0.3619974796842218, 0.36283368002750327, 0.363582215420926, 0.3640820868633812, 0.36428881651932354, 0.3645788826350209, 0.3649261626169527, 0.3653002624603494, 0.36582315211272054, 0.36651648414702026, 0.3672789626831797, 0.36809557030708273, 0.36883329291706607, 0.3691853835468586, 0.36947698110878446, 0.3698285998411648, 0.37020877427501026, 0.3704302625809919, 0.37052718544385055, 0.3705705642965155, 0.3705215875671864, 0.3705666236584657, 0.37071716760306833, 0.3709884421718504, 0.37108922519905957, 0.3710725458545643, 0.37083458310336714, 0.3705444799171108, 0.37001976636558565, 0.3694104235562444, 0.3686103531009234, 0.3676870228474448, 0.3671082651782201, 0.3667572730621151, 0.3664822302515573, 0.36607985646052654, 0.3653411715030338, 0.36444583440913203, 0.3630676512900892, 0.36145586288664716, 0.3594215236030794, 0.35728172668491626, 0.35513105563645103, 0.35304420177508816, 0.3513444457114562, 0.34984985539576513, 0.3483437343708196, 0.34684663673049554, 0.34557030454695203, 0.34455004397460964, 0.3437128996396448, 0.34313616756036025, 0.3429180607420844, 0.3427599701203873, 0.3429336876753128, 0.34305940733932117, 0.34330305872810235, 0.34360658594427596, 0.3440723487108458, 0.3445762402652741, 0.344912748687529, 0.34496084882094197, 0.3443956989102609, 0.3432844903182019, 0.34162416024215014, 0.3397392482850794, 0.3379315417083437, 0.3359158242228597, 0.3332767144603834, 0.33072612906170107, 0.3284733392132655, 0.32650538810863755, 0.3248372328619838, 0.3233588193612854, 0.32247488948728714, 0.32164360974552947, 0.3206988056656455, 0.3196541610877977, 0.3184009650503178, 0.3171927911070574, 0.31591149260118523, 0.31460156869347805, 0.3131946138657322, 0.3115378875091527, 0.30975771092574494, 0.3074910872217345, 0.30512797363809635, 0.3025801060992428, 0.2999817717070502, 0.2973584397874972, 0.2950694703873634, 0.29298085834541643, 0.29099627434353575, 0.2889596696278048, 0.2868233795616374, 0.2841842609928079, 0.2811305476306303, 0.2782086819397184, 0.2754165904550152, 0.2731451571255874, 0.27133039909372975, 0.26971610714183736, 0.26830039212648826, 0.26726269028954563, 0.2665564052372861, 0.2661724352513676, 0.2660279387311871, 0.2659714183560197, 0.2660527688280063, 0.26625677057141856, 0.2666462899708779, 0.2672462627081461, 0.2680003304580127, 0.2684801252809156, 0.26884857982216753, 0.2692955546491722, 0.2697252385559539, 0.27019523679378293, 0.270908013028639, 0.2718368565038146, 0.27306689986489086, 0.2746121288774669, 0.27626218992753254, 0.2778948334877257, 0.2792635647042311, 0.2805205361328451, 0.28174926527850247, 0.2827862819452675, 0.2837377898996489, 0.28472177340680926, 0.2858051244851791, 0.2869522279277261, 0.2880159629027712, 0.28873536536857203, 0.2893987633678753, 0.290256099334676, 0.29124796669495656, 0.2925835091659183, 0.2939176995745043, 0.2953610979816941, 0.2967197308011835, 0.29789959695008955, 0.29883266411379905, 0.2996027203738325, 0.3003042908981969, 0.3009698700211092, 0.3013910720971204, 0.30142546226564565, 0.3012989158734471, 0.3013001462905618, 0.30133179451512265, 0.3016030710888128, 0.30220204199784606, 0.30312174957575144, 0.30410458988473243, 0.30502009272860836, 0.305684004079585, 0.3062236408676953, 0.30667326197227157, 0.3071028391958592, 0.3074276884317332, 0.3078369258627024, 0.30805779820525914, 0.3082554294638344, 0.30847503182415464, 0.3090545821099598, 0.3098228837487409, 0.31080229731649567, 0.31180253154276233, 0.31304801265598853, 0.31411907285510027, 0.315104058668941, 0.3159658160896141, 0.31683776565803595, 0.31788599430381104, 0.3187421854682458, 0.31948558122360315, 0.32002975373524495, 0.3200480419489933, 0.31959251561405383, 0.31883486636089986, 0.317955093850078, 0.31716585574961165, 0.3161218298763689, 0.3149637880690108, 0.3139880161567424, 0.3131555009396339, 0.3126116401748494, 0.3122789897712003, 0.3120546623817545, 0.3118221396320803, 0.3116138486583909, 0.3113185084894921, 0.31067723750955994, 0.30964934226214197, 0.3082423938643562, 0.30663922544548233, 0.30486957553628996, 0.3030469801636345, 0.30105091203299833, 0.2989716563983551, 0.29714779244575923, 0.29527979589920905, 0.2934219767741624, 0.2914671519638856, 0.2892145902506237, 0.2869583536375115, 0.2851377584936982, 0.28373506974501217, 0.28276866251178007, 0.2821923525174457, 0.2820063896859041, 0.28193366259811914, 0.28195015776349464, 0.2821359910463443, 0.2823959928190538, 0.2826529870251506, 0.2830536907915599, 0.2834382099132319, 0.28355683984875396, 0.2837469152721313, 0.2840225968027046, 0.2844015495212574, 0.28485913805324914, 0.28548642753734366, 0.28616251919528934, 0.286859945551476, 0.287405395441976, 0.28770990588876144, 0.2880193096236772, 0.28831074519629474, 0.2888669241699457, 0.28951584831192045, 0.290260484084071, 0.2909564503244838, 0.29154175092673673, 0.2919565115094948, 0.2921773041738062, 0.2921948579432966, 0.29181140425455415, 0.29111710565220156, 0.29039189137154164, 0.2896809711092019, 0.2891353084086567, 0.288773389166727, 0.28865659213542094, 0.2886857150141294, 0.2886793697337675, 0.28858339739567695, 0.28839755258292005, 0.2882347981177827, 0.28794967818600814, 0.28754800718631235, 0.2871256552250059, 0.28652717124190574, 0.2857093935626093, 0.2847938811676043, 0.2837440674194979, 0.28246280425651066, 0.2810248972414461, 0.27973896020774314, 0.27868539035520556, 0.27774509155907817, 0.27693373432351037, 0.2763016087372775, 0.2760857516788607, 0.2761667050999791, 0.2764987517470712, 0.27691079956322606, 0.2773627804655748, 0.27782655191645494, 0.27822780686686066, 0.27862902536143896, 0.2790059404185188, 0.2794752979610628, 0.2800240693735521, 0.28065192338078165, 0.2813339926956063, 0.28210691643947916, 0.2829812025635117, 0.2838724095984768, 0.2849107166433633, 0.2859801245602591, 0.2870790621888336, 0.2881724547361574, 0.28931411497377285, 0.29035120529924185, 0.2916034630452638, 0.2930244552070099, 0.294555489312348, 0.29603246587843546, 0.29767778856772187, 0.2992051651465138, 0.3003277039799345, 0.3013183767958598, 0.30223208859911666, 0.3031191537572972, 0.30383788488001684, 0.3044862635470234, 0.30505509715107315, 0.3056179708353397, 0.306433637723616, 0.3074686749030542, 0.3085943159402808, 0.3098205071559443, 0.31070995838293125, 0.31153185068130707, 0.31238048809473973, 0.3130427253434953, 0.3138116492494149, 0.31454946324085264, 0.31517596737063164, 0.31557506006439967, 0.31624934998451104, 0.3172287752197812, 0.3184461805691729, 0.32030038387380994, 0.32291613946347086, 0.32596623886937376, 0.32919525201457417, 0.3321178368806808, 0.33478274014411746, 0.33695572198072143, 0.3389809260068365, 0.34128087997283135, 0.34368872591623345, 0.34652982332968424, 0.34984241830796836, 0.35288746530483006, 0.35567477844707457, 0.3585499160057705, 0.3608490342643458, 0.3627526425880272, 0.3641412934600564, 0.36555790818608225, 0.36675914687608185, 0.3683603252791577, 0.36951536368989973, 0.3706089536122342, 0.37114056994053723, 0.3708488061128711, 0.3697731555402745, 0.36861589067279843, 0.36718888905932184, 0.3652539626753517, 0.36327431289388284, 0.361186964322725, 0.35897535139547593, 0.35669858634988527, 0.35436534714149126, 0.35230276263907445, 0.35032431064607095, 0.3486768787599869, 0.34788932683394547, 0.34763733813307507, 0.3474768068711934, 0.347173509377104, 0.34682872991041525, 0.3467870319326425, 0.34711483583973013, 0.34788845238109967, 0.34919930606378374, 0.35091458872177067, 0.35294304177397634, 0.35513611274185863, 0.3576092277271956, 0.35983555474797774, 0.36186714146244486, 0.3635029239262082, 0.36532638921261096, 0.3673363852997992, 0.36969120887026463, 0.3724744122571623, 0.3755515160813848, 0.3794066086694061, 0.3843600617357979, 0.39010534263047225, 0.39554084234605513, 0.40004951696096736, 0.403898863962292, 0.40674998288801006, 0.4093453327713679, 0.4119810901921973, 0.41440254624388667, 0.41671065233907006, 0.41850306331790377, 0.4199460817086819, 0.42105242804672827, 0.42170956004384685, 0.42229761400994975, 0.4221260023090534, 0.42195824534764537, 0.4222722858270195, 0.4229645640337307, 0.4235016110569122, 0.4237737864153046, 0.42314363868538557, 0.42189724098567716, 0.4203786560510826, 0.4188712672420537, 0.41711276726253954, 0.41509008173419004, 0.41299045719566446, 0.41090873710614584, 0.40918321012945635, 0.40772012185470863, 0.4063709261219973, 0.40558319849106533, 0.4051312765836534, 0.4046987775728945, 0.40389701612693213, 0.40269831719287524, 0.40108626078420495, 0.39933891001592225, 0.3974485978391656, 0.3952606991973918, 0.39308911996372997, 0.3906036910082513, 0.3880233740814149, 0.3859825705989239, 0.3838746910524452, 0.38187971621091543, 0.3794314287451679, 0.3769589002047684, 0.3750035207357019, 0.3736572536246522, 0.3727852753360613, 0.37206134089133613, 0.37162567607212205, 0.3711880906515897, 0.3708077476205061, 0.37016986006573677, 0.36945776314782236, 0.3690059351903922, 0.36873225771719303, 0.3683004792865875, 0.36778815395688685, 0.3670075173273132, 0.365973933010927, 0.36467300081181253, 0.36320305938281794, 0.36173466632008466, 0.3610208508464861, 0.3606484976289662, 0.3605500826157721, 0.3606933791710747, 0.3611699953579378, 0.3617989089020242, 0.3625860923222895, 0.363596405360491, 0.3646125312625779, 0.36543372330360335, 0.3659210257950265, 0.36617972188606535, 0.3659573792591875, 0.36523310374575974, 0.36387731382051824, 0.36182414133553625, 0.35939403067431397, 0.3566927832282697, 0.35411964066613744, 0.3517283324418761, 0.3497030337202546, 0.34781345185820745, 0.3459890623992827, 0.34415846841241365, 0.3426706423936906, 0.34172583163432646, 0.34140708822060084, 0.34149595348933515, 0.34189880552131136, 0.3424104047218725, 0.3432863263760601, 0.3444542865045114, 0.3457681175987855, 0.34691585318161167, 0.3481347714254392, 0.34933901483035623, 0.3503614375409322, 0.35090889372955286, 0.35120842429224836, 0.35108974281556826, 0.3507611182392123, 0.35028078563936627, 0.34963766590925394, 0.3488737862969755, 0.3483076787164689, 0.34782658461260374, 0.34712088277340597, 0.34625510584068653, 0.3454429792682934, 0.3451893170937552, 0.3454610914680207, 0.34589937029157725, 0.3462363412013535, 0.3465053704944494, 0.34656580611282367, 0.3463854662645959, 0.34606092340508826, 0.3453641707320491, 0.34459550452441434, 0.34364988973835364, 0.34269419104775295, 0.34150997624677165, 0.3402780291192202, 0.339407354051517, 0.33899457031230396, 0.338659611149544, 0.33817852583505664, 0.3375163836745787, 0.3364685212591833, 0.33492169919989184, 0.3331691067301913, 0.3311714698892581, 0.32937325418297414, 0.32754766817910314, 0.3257751254723224, 0.32411871876525583, 0.322407547836506, 0.3211348774463031, 0.32013172681611, 0.31903372337637903, 0.3182169581946812, 0.31769256973105275, 0.31774475487270293, 0.3178727485137359, 0.31749647820465726, 0.3164756287154516, 0.314803672090013, 0.31304854317090125, 0.3110313830369236, 0.308828387273796, 0.3072127209423763, 0.3062749638594752, 0.30610841993709725, 0.307377944045809, 0.30951175715368173, 0.31192227676340417, 0.31472474896133, 0.3177300057705264, 0.3207496323995753, 0.3244501489582192, 0.32773507513295785, 0.33127210906265514, 0.33537871635740435, 0.34002827420908643, 0.34478844993161106, 0.34947633006475665, 0.3536854524359437, 0.3581509543046581, 0.36260741538588404, 0.36672323794033096, 0.3704639538838368, 0.3737527960875148, 0.3769388593762746, 0.38025923297720154, 0.3834936586992848, 0.3864755010050823, 0.38907952912648147, 0.3912123693977506, 0.39270592020789313, 0.39342472181480853, 0.3931054250865709, 0.39246527348218585, 0.39179673094395284, 0.3914507362287273, 0.3911228031731855, 0.3903992084916191, 0.3894456855129887, 0.3883587494006009, 0.3868328890264001, 0.3851297386564298, 0.38371670862535323, 0.3826767904621986, 0.38150242560936437, 0.3808166462140482, 0.3804916224276346, 0.38014345048867615, 0.37950488658639553, 0.37863795955514873, 0.37813150700577125, 0.3776738094276843, 0.3779138010741358, 0.3788442351204101, 0.3800408738166491, 0.3814202197691701, 0.3827330727172939, 0.38381481076765306, 0.38475013805129804, 0.3854463787927256, 0.385959553642539, 0.38622305967425413, 0.38624462741989707, 0.3862907888967331, 0.38648407528896705, 0.3869126635825162, 0.38736342808619323, 0.38771499600865333, 0.38785635018555764, 0.38749981031881525, 0.38699800571259674, 0.38622828094851475, 0.3852716032849156, 0.38419936981734565, 0.3830411640985417, 0.3820840067373, 0.38137018631545005, 0.38066660844885913, 0.3801033020600551, 0.3793440809788569, 0.37858896472915243, 0.3779276525337598, 0.37759333980939663, 0.3780617910352334, 0.3791953466622577, 0.3810781485218002, 0.3833011300182264, 0.38550209829159526, 0.38764861799430167, 0.38925812046166103, 0.3900473477199204, 0.3906469213858197, 0.39080229472408734, 0.39096361164206095, 0.39134388676684473, 0.3917039475753862, 0.3918733394714927, 0.3918323844853633, 0.39162994143650176, 0.3913040559168979, 0.3916553700374878, 0.39250348051806344, 0.3936671360587509, 0.3946951191587, 0.395455094344761, 0.39614272347028223, 0.3963956758550894, 0.39622811249655826, 0.3956744300293812, 0.394935652746116, 0.3937559074370929, 0.39223184360620034, 0.390219230701064, 0.38816641744341984, 0.3862426796962991, 0.3843808176107072, 0.38298544077426233, 0.38194846734712895, 0.3806128851591642, 0.3784385913912927, 0.37597300456362626, 0.37343798935261463, 0.3708191277150429, 0.3682637582519329, 0.36579130439077245, 0.36357726175778904, 0.361554318586205, 0.35977023810228753, 0.35841433192696026, 0.3574119094026338, 0.3565580826338569, 0.3558429703469942, 0.35505709118867457, 0.3542498186422992, 0.3533227242555036, 0.35214778528860347, 0.3508347591799029, 0.34941762233371504, 0.34827506054246055, 0.34691345135562857, 0.3455603751280976, 0.3441806315563897, 0.3429167725442223, 0.3415189105363585, 0.3401326324174615, 0.338998217192347, 0.33811396817752, 0.33740438594797084, 0.3369894052477071, 0.33673027745230477, 0.3365950627603105, 0.3365362524576305, 0.3366627203796534, 0.33753692664565255, 0.3388938012573961, 0.3409475223233864, 0.34403874126272627, 0.34902213671734306, 0.35653948498788846, 0.364843671628589, 0.37317975397738884, 0.3807108344345479, 0.38782859879423615, 0.3941039141254656, 0.3992002498947229, 0.40344903362078277, 0.4081025689363676, 0.4130274363511839, 0.41804824305225974, 0.4227249530307652, 0.4272370275241263, 0.4316659817887408, 0.4358157725918195, 0.4394762680300094, 0.4427432885828786, 0.4457490640320074, 0.4479848893830873, 0.44996185036857494, 0.4521738392138605, 0.45430480298235, 0.45659748764891583, 0.4591539683803963, 0.46235330870015395, 0.4655798082048104, 0.4690262646433001, 0.47175697092783436, 0.4733124087442458, 0.4736220995230363, 0.47345113794693533, 0.4731953968281479, 0.47270409131174684, 0.47154258606049865, 0.4696183319935378, 0.46722505796063596, 0.46488333429014794, 0.46236712598392266, 0.4601037002619276, 0.4584147849805959, 0.4570010570650843, 0.4555539056074717, 0.45433050044395873, 0.45340747512214813, 0.45245166906957246, 0.45157160945699903, 0.4510687705393771, 0.45100030821279957, 0.4508944217711087, 0.4507119051414645, 0.450594280343756, 0.4505900776270356, 0.4511686591675743, 0.452129257961938, 0.4529833636263243, 0.4538811485576124, 0.4548225569355274, 0.4564560303960485, 0.45819035083849813, 0.45970351966102774, 0.46054495141666385, 0.4604242050973547, 0.45924475446235247, 0.45729643400616005, 0.4553274317214625, 0.4532003789353361, 0.4511590112726447, 0.44873576815497446, 0.44611496538890283, 0.444120502381509, 0.44237992947912125, 0.4412744333080028, 0.44075178820567906, 0.4408348746706895, 0.4416952350063745, 0.44344403953638545, 0.44538829201246044, 0.4477736395379938, 0.4495051777658575, 0.45025711414537284, 0.4507800666842453, 0.4515510380839274, 0.4525616924874091, 0.4536443077215428, 0.45502571205739517, 0.4560988102803742, 0.45690801622146365, 0.4580866282065692, 0.45905497290423136, 0.46015898589910087, 0.46130630625808056, 0.46302851698084, 0.4649354361258663, 0.4666275741113787, 0.4682301506465373, 0.46924612377500374, 0.4690427020347177, 0.46779838800365026, 0.4660636468331266, 0.46424521541479247, 0.4627172792903622, 0.46120298939342935, 0.4597258625208027, 0.458223303508725, 0.45696268767396575, 0.4556303167547201, 0.45460239389224505, 0.45385631846940855, 0.45353287805487646, 0.4531615668732714, 0.4526713442144814, 0.4517982726210677, 0.45068675998329155, 0.44922104615692876, 0.44750058212236765, 0.44558934838545333, 0.4435254656961518, 0.4414386396568572, 0.43933934715959405, 0.43744431040096265, 0.4353080281909609, 0.43172595173079, 0.42656741489984046, 0.4207884664505309, 0.4152919588971843, 0.4102984134201205, 0.4059608560141725, 0.40208464971547486, 0.39843612418685415, 0.3950165630247025, 0.39220480284171805, 0.3900470870104881, 0.3882773602404993, 0.3871673490175114, 0.38633737912950894, 0.38592059296342063, 0.38565097595979975, 0.38544472766714083, 0.3853538115478743, 0.38581677806589965, 0.3866572520684086, 0.388240387186385, 0.39008107516594953, 0.39235277812024977, 0.3947497892467855, 0.39725058482603043, 0.39936365421597697, 0.40124645833683203, 0.40285779842078817, 0.4042892252639203, 0.4054868007508442, 0.4064441793952185, 0.40697778838173515, 0.4073202330057506, 0.4073140909887625, 0.40726206602776993, 0.4075225298397213, 0.40785138263445625, 0.4081380360338822, 0.4086733700146631, 0.4097981036040897, 0.4113793531875286, 0.41346729074643823, 0.41561609676877526, 0.4177125833148668, 0.42000216225962306, 0.42221312550246987, 0.42463985597937093, 0.4270316626770811, 0.4296294597890917, 0.4321801332133123, 0.43438361339633763, 0.43623777019575255, 0.438006084602049, 0.4398787898287749, 0.4418806406336392, 0.44428831379308475, 0.4472295446238519, 0.4503866572059085, 0.45320938750919354, 0.4561335549828249, 0.4588086477470658, 0.46107435316390666, 0.4637181369248336, 0.46654964786676256, 0.4694242393618356, 0.4721445171918547, 0.47469359882257245, 0.47804623155824544, 0.4817708697763462, 0.4862933602461865, 0.4911673995044614, 0.49618174148217453, 0.5010361168488773, 0.5055788694626329, 0.5098619819762987, 0.5138407109434775, 0.5178476659857506, 0.5225121476768063, 0.5275286877646314, 0.5327252233909432, 0.5375730440760443, 0.5421483406820413, 0.5467314383071722, 0.5512012975782558, 0.5553814950478179, 0.5592516295609543, 0.5631938405769463, 0.5677149168399349, 0.5737959142962564, 0.5801583356033905, 0.5867081167319299, 0.5940810946463342, 0.602664683544461, 0.6118410201145792, 0.6208684612825244, 0.6304010810354714, 0.6415760452083403, 0.6529412447407943, 0.6647080039358834, 0.6787559954116038, 0.6938446651580209, 0.7107945456939082, 0.7267115986432952, 0.741983882862263, 0.7536428824529017, 0.7642711637104643, 0.7724921759548379, 0.7783011922254823, 0.7834711878264248, 0.7907413252241635, 0.7983618522682863, 0.8054583012750467, 0.8121786244524632, 0.8185241419806762, 0.8249597679729473, 0.8315293724493615, 0.8383129719626067, 0.8452579165894392, 0.8518830031421183, 0.8587689422494512, 0.8646765559137316, 0.8701415421302778, 0.8745126890558823, 0.8782714704163546, 0.8808791896091499, 0.8821344549257679, 0.8806583330586765, 0.8781185741088752, 0.8751710648519618, 0.8712108505978629, 0.8676179218174359, 0.8662733059610921, 0.8662028189010408, 0.8664478262040267, 0.8685703058030144, 0.8733665486877336, 0.8798271595205218, 0.8877942187623741, 0.8953827606686399, 0.9008036966543048, 0.9048257140140641, 0.9074037751308897, 0.9087867927962625, 0.9100951959356848, 0.9109468823198981, 0.9111672562519838, 0.9100324195769816, 0.9083253125840005, 0.9060822522068281, 0.9026182368647405, 0.8987047600107598, 0.8945316502035285, 0.8906421433061175, 0.8872142679852845, 0.882644520067211, 0.8771309757870398, 0.8721482893257337, 0.8692388886775563, 0.8679237247552135, 0.8678183941536548, 0.8693636204793755, 0.8720838549473575, 0.8752253497106002, 0.8787873375620815, 0.8828325136021086, 0.8887528099873524, 0.896735060627038, 0.9061311732175475, 0.9148412666610835, 0.9232117648127974, 0.9302850958413085, 0.9353970284733027, 0.9407564204289436, 0.9454543758904568, 0.9497635438629811, 0.955201167353217, 0.9611263221713686, 0.967853920374188, 0.9749513695400798, 0.9816652164416223, 0.9879994668994824, 0.9938922418557248, 0.9989091347313839, 1.0038678291715089, 1.008502468814562, 1.0130533738941996, 1.017067313758425, 1.0207653551324563, 1.0251761610958428, 1.0285964217984502, 1.0318684136264686, 1.0351092358548013, 1.0384203388779927, 1.0410741883829482, 1.0421097821221292, 1.0423913613673943, 1.0430952057131195, 1.0437610342882304, 1.0440048726238558, 1.04478433174488, 1.046017751415822, 1.0471067101899956, 1.049252651181192, 1.0508124856641934, 1.0529537802961466, 1.0543226211556807, 1.0542696097920403, 1.0530020696298668, 1.0528807553186639, 1.053464643909721, 1.0537409777959752, 1.0543642764207908, 1.05450502090779, 1.0553759318153582, 1.0569051884785945, 1.0597502218323778, 1.0628861459177241, 1.0667412307709652, 1.0698263295315327, 1.0717650707007875, 1.0737979446834858, 1.075496052236086, 1.0758560729205178, 1.0768621670011533, 1.0783997285922846, 1.079746369703958, 1.0805901089703194, 1.0811023605793606, 1.0795575914720457, 1.078174478549891, 1.076647783831758, 1.075670482943363, 1.073605662251351, 1.0715091901434306, 1.0708162066614861, 1.0704575579946807, 1.0701692871352595, 1.0704335260761342, 1.070496908306765, 1.0715477044014263, 1.0725636024680532, 1.0745142911748677, 1.0770923789480291, 1.0827490367483097, 1.0904117899287187, 1.0998914250353158, 1.1100755964691431, 1.121155063413469, 1.1318394978666633, 1.1433608300918046, 1.1571111159584924, 1.1724278820028537, 1.1881547127597285, 1.2061154932578106, 1.2244159994339545, 1.2404546523474407, 1.2549778943028342, 1.2670809605935411, 1.27719686577679, 1.2854167075679965, 1.2931203468639945, 1.3022733501327535, 1.312622935787617, 1.3251834704561578, 1.3394038789382006, 1.3561165861389664, 1.3735154534010006, 1.3893439363317508, 1.404159898084344, 1.4176099254365973, 1.4298992850546646, 1.4384599543839602, 1.4463903213107132, 1.4555208868960365, 1.4646902444565906, 1.4732849302795534, 1.483855424746841, 1.4944404524564519, 1.5027679353874657, 1.5127138393202115, 1.5260920447852657, 1.5410611891119461];
-var buyMarkers = [{"date": "20210917", "price": 0.3292, "reason": "\u5468\u7ebfJ=11.76, \u91d1\u989d=1000", "amount": 1000}, {"date": "20210924", "price": 0.3322, "reason": "\u5468\u7ebfJ=5.94, \u91d1\u989d=1000", "amount": 1000}, {"date": "20210930", "price": 0.3232, "reason": "\u5468\u7ebfJ=-7.65, \u91d1\u989d=1000", "amount": 1000}, {"date": "20211008", "price": 0.3279, "reason": "\u5468\u7ebfJ=-3.52, \u91d1\u989d=1000", "amount": 1000}, {"date": "20211015", "price": 0.3289, "reason": "\u5468\u7ebfJ=2.91, \u91d1\u989d=1000", "amount": 1000}, {"date": "20211022", "price": 0.3232, "reason": "\u5468\u7ebfJ=-2.83, \u91d1\u989d=1000", "amount": 1000}, {"date": "20220211", "price": 0.3346, "reason": "\u5468\u7ebfJ=-14.99, \u91d1\u989d=1000", "amount": 1000}, {"date": "20220218", "price": 0.3432, "reason": "\u5468\u7ebfJ=0.98, \u91d1\u989d=1000", "amount": 1000}, {"date": "20220408", "price": 0.2912, "reason": "\u5468\u7ebfJ=6.16, \u91d1\u989d=4000", "amount": 4000}, {"date": "20220415", "price": 0.2732, "reason": "\u5468\u7ebfJ=-1.15, \u91d1\u989d=4000", "amount": 4000}, {"date": "20220422", "price": 0.2656, "reason": "\u5468\u7ebfJ=-4.42, \u91d1\u989d=2000", "amount": 2000}, {"date": "20220429", "price": 0.2632, "reason": "\u5468\u7ebfJ=8.73, \u91d1\u989d=2000", "amount": 2000}, {"date": "20220923", "price": 0.2796, "reason": "\u5468\u7ebfJ=-14.84, \u91d1\u989d=1000", "amount": 1000}, {"date": "20220930", "price": 0.2719, "reason": "\u5468\u7ebfJ=-20.46, \u91d1\u989d=1000", "amount": 1000}, {"date": "20221014", "price": 0.2829, "reason": "\u5468\u7ebfJ=2.32, \u91d1\u989d=1000", "amount": 1000}, {"date": "20221223", "price": 0.2649, "reason": "\u5468\u7ebfJ=5.74, \u91d1\u989d=1000", "amount": 1000}, {"date": "20230825", "price": 0.3482, "reason": "\u5468\u7ebfJ=-20.13, \u91d1\u989d=1000", "amount": 1000}, {"date": "20230901", "price": 0.3685, "reason": "\u5468\u7ebfJ=-2.54, \u91d1\u989d=1000", "amount": 1000}, {"date": "20230908", "price": 0.3615, "reason": "\u5468\u7ebfJ=2.40, \u91d1\u989d=1000", "amount": 1000}, {"date": "20230915", "price": 0.3545, "reason": "\u5468\u7ebfJ=0.36, \u91d1\u989d=1000", "amount": 1000}, {"date": "20231020", "price": 0.3389, "reason": "\u5468\u7ebfJ=11.11, \u91d1\u989d=2000", "amount": 2000}, {"date": "20231027", "price": 0.3339, "reason": "\u5468\u7ebfJ=12.70, \u91d1\u989d=1000", "amount": 1000}, {"date": "20240112", "price": 0.3106, "reason": "\u5468\u7ebfJ=3.75, \u91d1\u989d=4000", "amount": 4000}, {"date": "20240119", "price": 0.3166, "reason": "\u5468\u7ebfJ=11.97, \u91d1\u989d=2000", "amount": 2000}, {"date": "20240202", "price": 0.2876, "reason": "\u5468\u7ebfJ=11.41, \u91d1\u989d=4000", "amount": 4000}, {"date": "20240802", "price": 0.3625, "reason": "\u5468\u7ebfJ=2.76, \u91d1\u989d=1000", "amount": 1000}, {"date": "20240809", "price": 0.3466, "reason": "\u5468\u7ebfJ=-5.44, \u91d1\u989d=1000", "amount": 1000}, {"date": "20240816", "price": 0.3549, "reason": "\u5468\u7ebfJ=0.71, \u91d1\u989d=1000", "amount": 1000}, {"date": "20240823", "price": 0.3466, "reason": "\u5468\u7ebfJ=-2.95, \u91d1\u989d=1000", "amount": 1000}, {"date": "20240830", "price": 0.3436, "reason": "\u5468\u7ebfJ=6.26, \u91d1\u989d=1000", "amount": 1000}, {"date": "20240906", "price": 0.3262, "reason": "\u5468\u7ebfJ=-1.37, \u91d1\u989d=2000", "amount": 2000}, {"date": "20240913", "price": 0.3392, "reason": "\u5468\u7ebfJ=9.58, \u91d1\u989d=1000", "amount": 1000}, {"date": "20250328", "price": 0.4219, "reason": "\u5468\u7ebfJ=-1.38, \u91d1\u989d=1000", "amount": 1000}, {"date": "20250403", "price": 0.4112, "reason": "\u5468\u7ebfJ=-10.23, \u91d1\u989d=1000", "amount": 1000}, {"date": "20250411", "price": 0.3755, "reason": "\u5468\u7ebfJ=5.70, \u91d1\u989d=2000", "amount": 2000}];
-var sellMarkers = [{"date": "20211112", "price": 0.3605, "reason": "\u5468\u7ebfJ=102.15>=93", "amount": 2202.39}, {"date": "20220111", "price": 0.3605, "reason": "\u6536\u76d8\u4ef7(0.3605)<\u77e5\u884c\u591a\u7a7a\u7ebf(0.3627)", "amount": 2202.39}, {"date": "20220128", "price": 0.3359, "reason": "\u65e5\u7ebf\u77e5\u884c\u591a\u7a7a\u6b7b\u53c9(\u5168\u6e05\u5269\u4f59)", "amount": 2051.76}, {"date": "20220610", "price": 0.2896, "reason": "\u5468\u7ebfJ=100.88>=93", "amount": 4768.68}, {"date": "20220712", "price": 0.2939, "reason": "\u6536\u76d8\u4ef7(0.2939)<\u77e5\u884c\u591a\u7a7a\u7ebf(0.2968)", "amount": 4840.02}, {"date": "20220922", "price": 0.2856, "reason": "\u65e5\u7ebf\u77e5\u884c\u591a\u7a7a\u6b7b\u53c9(\u5168\u6e05\u5269\u4f59)", "amount": 4702.83}, {"date": "20230203", "price": 0.2976, "reason": "\u5468\u7ebfJ=98.88>=93", "amount": 1444.61}, {"date": "20230427", "price": 0.3442, "reason": "\u6536\u76d8\u4ef7(0.3442)<\u77e5\u884c\u591a\u7a7a\u7ebf(0.3465)", "amount": 1671.09}, {"date": "20230818", "price": 0.3619, "reason": "\u65e5\u7ebf\u77e5\u884c\u591a\u7a7a\u6b7b\u53c9(\u5168\u6e05\u5269\u4f59)", "amount": 1756.82}, {"date": "20240301", "price": 0.3839, "reason": "\u5468\u7ebfJ=109.77>=93", "amount": 6804.2}, {"date": "20240410", "price": 0.3642, "reason": "\u6536\u76d8\u4ef7(0.3642)<\u77e5\u884c\u591a\u7a7a\u7ebf(0.3695)", "amount": 6455.72}, {"date": "20240730", "price": 0.3689, "reason": "\u65e5\u7ebf\u77e5\u884c\u591a\u7a7a\u6b7b\u53c9(\u5168\u6e05\u5269\u4f59)", "amount": 6538.41}, {"date": "20240930", "price": 0.4322, "reason": "\u5468\u7ebfJ=111.60>=93", "amount": 3361.96}, {"date": "20241125", "price": 0.4369, "reason": "\u6536\u76d8\u4ef7(0.4369)<\u77e5\u884c\u591a\u7a7a\u7ebf(0.4385)", "amount": 3398.25}, {"date": "20250317", "price": 0.4528, "reason": "\u65e5\u7ebf\u77e5\u884c\u591a\u7a7a\u6b7b\u53c9(\u5168\u6e05\u5269\u4f59)", "amount": 3522.67}, {"date": "20250606", "price": 0.4349, "reason": "\u5468\u7ebfJ=108.35>=93", "amount": 1468.08}, {"date": "20251121", "price": 0.8184, "reason": "\u6536\u76d8\u4ef7(0.8184)<\u77e5\u884c\u591a\u7a7a\u7ebf(0.8376)", "amount": 2762.91}];
 var deadCross = [{"date": "20210924", "price": 0.33222259246917696}, {"date": "20220128", "price": 0.33588803732089306}, {"date": "20220922", "price": 0.2855714761746085}, {"date": "20230818", "price": 0.36187937354215266}, {"date": "20240730", "price": 0.3688770409863379}, {"date": "20250317", "price": 0.45284905031656114}];
 var dChart = echarts.init(document.getElementById('daily_chart'));
 
@@ -648,7 +1010,7 @@ var mainSeries = {
     markPoint: {
         symbol: 'pin', symbolSize: 40, animation: false,
         label: { show: true, fontSize: 10, color: '#fff' },
-        data: [{xAxis: '20210917', yAxis: 0.3292, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20210924', yAxis: 0.3322, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20210930', yAxis: 0.3232, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20211008', yAxis: 0.3279, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20211015', yAxis: 0.3289, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20211022', yAxis: 0.3232, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20211112', yAxis: 0.3605, name: '卖出', itemStyle: {color: '#2ecc71'}, label: {formatter: '卖', color: '#fff', fontSize: 10}},{xAxis: '20220111', yAxis: 0.3605, name: '卖出', itemStyle: {color: '#2ecc71'}, label: {formatter: '卖', color: '#fff', fontSize: 10}},{xAxis: '20220128', yAxis: 0.3359, name: '卖出', itemStyle: {color: '#2ecc71'}, label: {formatter: '卖', color: '#fff', fontSize: 10}},{xAxis: '20220211', yAxis: 0.3346, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20220218', yAxis: 0.3432, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20220408', yAxis: 0.2912, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20220415', yAxis: 0.2732, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20220422', yAxis: 0.2656, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20220429', yAxis: 0.2632, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20220610', yAxis: 0.2896, name: '卖出', itemStyle: {color: '#2ecc71'}, label: {formatter: '卖', color: '#fff', fontSize: 10}},{xAxis: '20220712', yAxis: 0.2939, name: '卖出', itemStyle: {color: '#2ecc71'}, label: {formatter: '卖', color: '#fff', fontSize: 10}},{xAxis: '20220922', yAxis: 0.2856, name: '卖出', itemStyle: {color: '#2ecc71'}, label: {formatter: '卖', color: '#fff', fontSize: 10}},{xAxis: '20220923', yAxis: 0.2796, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20220930', yAxis: 0.2719, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20221014', yAxis: 0.2829, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20221223', yAxis: 0.2649, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20230203', yAxis: 0.2976, name: '卖出', itemStyle: {color: '#2ecc71'}, label: {formatter: '卖', color: '#fff', fontSize: 10}},{xAxis: '20230427', yAxis: 0.3442, name: '卖出', itemStyle: {color: '#2ecc71'}, label: {formatter: '卖', color: '#fff', fontSize: 10}},{xAxis: '20230818', yAxis: 0.3619, name: '卖出', itemStyle: {color: '#2ecc71'}, label: {formatter: '卖', color: '#fff', fontSize: 10}},{xAxis: '20230825', yAxis: 0.3482, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20230901', yAxis: 0.3685, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20230908', yAxis: 0.3615, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20230915', yAxis: 0.3545, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20231020', yAxis: 0.3389, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20231027', yAxis: 0.3339, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20240112', yAxis: 0.3106, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20240119', yAxis: 0.3166, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20240202', yAxis: 0.2876, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20240301', yAxis: 0.3839, name: '卖出', itemStyle: {color: '#2ecc71'}, label: {formatter: '卖', color: '#fff', fontSize: 10}},{xAxis: '20240410', yAxis: 0.3642, name: '卖出', itemStyle: {color: '#2ecc71'}, label: {formatter: '卖', color: '#fff', fontSize: 10}},{xAxis: '20240730', yAxis: 0.3689, name: '卖出', itemStyle: {color: '#2ecc71'}, label: {formatter: '卖', color: '#fff', fontSize: 10}},{xAxis: '20240802', yAxis: 0.3625, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20240809', yAxis: 0.3466, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20240816', yAxis: 0.3549, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20240823', yAxis: 0.3466, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20240830', yAxis: 0.3436, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20240906', yAxis: 0.3262, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20240913', yAxis: 0.3392, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20240930', yAxis: 0.4322, name: '卖出', itemStyle: {color: '#2ecc71'}, label: {formatter: '卖', color: '#fff', fontSize: 10}},{xAxis: '20241125', yAxis: 0.4369, name: '卖出', itemStyle: {color: '#2ecc71'}, label: {formatter: '卖', color: '#fff', fontSize: 10}},{xAxis: '20250317', yAxis: 0.4528, name: '卖出', itemStyle: {color: '#2ecc71'}, label: {formatter: '卖', color: '#fff', fontSize: 10}},{xAxis: '20250328', yAxis: 0.4219, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20250403', yAxis: 0.4112, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20250411', yAxis: 0.3755, name: '买入', itemStyle: {color: '#e74c3c'}, label: {formatter: '买', color: '#fff', fontSize: 10}},{xAxis: '20250606', yAxis: 0.4349, name: '卖出', itemStyle: {color: '#2ecc71'}, label: {formatter: '卖', color: '#fff', fontSize: 10}},{xAxis: '20251121', yAxis: 0.8184, name: '卖出', itemStyle: {color: '#2ecc71'}, label: {formatter: '卖', color: '#fff', fontSize: 10}}]
+        data: [{xAxis: '20210917', yAxis: 0.3292, name: 'R1买', itemStyle: {color: '#e74c3c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R1买', color: '#fff', fontSize: 9}},{xAxis: '20210924', yAxis: 0.3322, name: 'R1买', itemStyle: {color: '#e74c3c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R1买', color: '#fff', fontSize: 9}},{xAxis: '20210930', yAxis: 0.3232, name: 'R1买', itemStyle: {color: '#e74c3c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R1买', color: '#fff', fontSize: 9}},{xAxis: '20211008', yAxis: 0.3279, name: 'R1买', itemStyle: {color: '#e74c3c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R1买', color: '#fff', fontSize: 9}},{xAxis: '20211015', yAxis: 0.3289, name: 'R1买', itemStyle: {color: '#e74c3c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R1买', color: '#fff', fontSize: 9}},{xAxis: '20211022', yAxis: 0.3232, name: 'R1买', itemStyle: {color: '#e74c3c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R1买', color: '#fff', fontSize: 9}},{xAxis: '20211112', yAxis: 0.3605, name: 'R1卖', itemStyle: {color: '#7f2921'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R1卖', color: '#fff', fontSize: 9}},{xAxis: '20211206', yAxis: 0.3635, name: 'R1卖', itemStyle: {color: '#7f2921'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R1卖', color: '#fff', fontSize: 9}},{xAxis: '20220111', yAxis: 0.3605, name: 'R1卖', itemStyle: {color: '#7f2921'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R1卖', color: '#fff', fontSize: 9}},{xAxis: '20220121', yAxis: 0.3519, name: 'R2买', itemStyle: {color: '#3498db'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R2买', color: '#fff', fontSize: 9}},{xAxis: '20220128', yAxis: 0.3359, name: 'R2买', itemStyle: {color: '#3498db'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R2买', color: '#fff', fontSize: 9}},{xAxis: '20220211', yAxis: 0.3346, name: 'R2买', itemStyle: {color: '#3498db'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R2买', color: '#fff', fontSize: 9}},{xAxis: '20220218', yAxis: 0.3432, name: 'R2买', itemStyle: {color: '#3498db'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R2买', color: '#fff', fontSize: 9}},{xAxis: '20220225', yAxis: 0.3479, name: 'R2买', itemStyle: {color: '#3498db'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R2买', color: '#fff', fontSize: 9}},{xAxis: '20220408', yAxis: 0.2912, name: 'R2买', itemStyle: {color: '#3498db'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R2买', color: '#fff', fontSize: 9}},{xAxis: '20220415', yAxis: 0.2732, name: 'R2买', itemStyle: {color: '#3498db'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R2买', color: '#fff', fontSize: 9}},{xAxis: '20220422', yAxis: 0.2656, name: 'R2买', itemStyle: {color: '#3498db'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R2买', color: '#fff', fontSize: 9}},{xAxis: '20220429', yAxis: 0.2632, name: 'R2买', itemStyle: {color: '#3498db'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R2买', color: '#fff', fontSize: 9}},{xAxis: '20220610', yAxis: 0.2896, name: 'R2卖', itemStyle: {color: '#1c5378'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R2卖', color: '#fff', fontSize: 9}},{xAxis: '20220711', yAxis: 0.3002, name: 'R2卖', itemStyle: {color: '#1c5378'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R2卖', color: '#fff', fontSize: 9}},{xAxis: '20220712', yAxis: 0.2939, name: 'R2卖', itemStyle: {color: '#1c5378'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R2卖', color: '#fff', fontSize: 9}},{xAxis: '20220916', yAxis: 0.2926, name: 'R3买', itemStyle: {color: '#9b59b6'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R3买', color: '#fff', fontSize: 9}},{xAxis: '20220923', yAxis: 0.2796, name: 'R3买', itemStyle: {color: '#9b59b6'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R3买', color: '#fff', fontSize: 9}},{xAxis: '20220930', yAxis: 0.2719, name: 'R3买', itemStyle: {color: '#9b59b6'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R3买', color: '#fff', fontSize: 9}},{xAxis: '20221014', yAxis: 0.2829, name: 'R3买', itemStyle: {color: '#9b59b6'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R3买', color: '#fff', fontSize: 9}},{xAxis: '20221021', yAxis: 0.2872, name: 'R3买', itemStyle: {color: '#9b59b6'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R3买', color: '#fff', fontSize: 9}},{xAxis: '20221216', yAxis: 0.2776, name: 'R3卖', itemStyle: {color: '#553064'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R3卖', color: '#fff', fontSize: 9}},{xAxis: '20221223', yAxis: 0.2649, name: 'R4买', itemStyle: {color: '#e67e22'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R4买', color: '#fff', fontSize: 9}},{xAxis: '20221230', yAxis: 0.2742, name: 'R4买', itemStyle: {color: '#e67e22'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R4买', color: '#fff', fontSize: 9}},{xAxis: '20230203', yAxis: 0.2976, name: 'R4卖', itemStyle: {color: '#7e4512'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R4卖', color: '#fff', fontSize: 9}},{xAxis: '20230316', yAxis: 0.3146, name: 'R3卖', itemStyle: {color: '#553064'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R3卖', color: '#fff', fontSize: 9}},{xAxis: '20230316', yAxis: 0.3146, name: 'R4卖', itemStyle: {color: '#7e4512'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R4卖', color: '#fff', fontSize: 9}},{xAxis: '20230427', yAxis: 0.3442, name: 'R3卖', itemStyle: {color: '#553064'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R3卖', color: '#fff', fontSize: 9}},{xAxis: '20230427', yAxis: 0.3442, name: 'R4卖', itemStyle: {color: '#7e4512'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R4卖', color: '#fff', fontSize: 9}},{xAxis: '20230811', yAxis: 0.3782, name: 'R5买', itemStyle: {color: '#1abc9c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R5买', color: '#fff', fontSize: 9}},{xAxis: '20230818', yAxis: 0.3619, name: 'R5买', itemStyle: {color: '#1abc9c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R5买', color: '#fff', fontSize: 9}},{xAxis: '20230825', yAxis: 0.3482, name: 'R5买', itemStyle: {color: '#1abc9c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R5买', color: '#fff', fontSize: 9}},{xAxis: '20230901', yAxis: 0.3685, name: 'R5买', itemStyle: {color: '#1abc9c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R5买', color: '#fff', fontSize: 9}},{xAxis: '20230908', yAxis: 0.3615, name: 'R5买', itemStyle: {color: '#1abc9c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R5买', color: '#fff', fontSize: 9}},{xAxis: '20230915', yAxis: 0.3545, name: 'R5买', itemStyle: {color: '#1abc9c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R5买', color: '#fff', fontSize: 9}},{xAxis: '20231020', yAxis: 0.3389, name: 'R5买', itemStyle: {color: '#1abc9c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R5买', color: '#fff', fontSize: 9}},{xAxis: '20231027', yAxis: 0.3339, name: 'R5买', itemStyle: {color: '#1abc9c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R5买', color: '#fff', fontSize: 9}},{xAxis: '20231222', yAxis: 0.3316, name: 'R5卖', itemStyle: {color: '#0e6755'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R5卖', color: '#fff', fontSize: 9}},{xAxis: '20240112', yAxis: 0.3106, name: 'R6买', itemStyle: {color: '#f39c12'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R6买', color: '#fff', fontSize: 9}},{xAxis: '20240119', yAxis: 0.3166, name: 'R6买', itemStyle: {color: '#f39c12'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R6买', color: '#fff', fontSize: 9}},{xAxis: '20240126', yAxis: 0.3206, name: 'R6买', itemStyle: {color: '#f39c12'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R6买', color: '#fff', fontSize: 9}},{xAxis: '20240301', yAxis: 0.3839, name: 'R6卖', itemStyle: {color: '#855509'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R6卖', color: '#fff', fontSize: 9}},{xAxis: '20240326', yAxis: 0.3842, name: 'R5卖', itemStyle: {color: '#0e6755'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R5卖', color: '#fff', fontSize: 9}},{xAxis: '20240326', yAxis: 0.3842, name: 'R6卖', itemStyle: {color: '#855509'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R6卖', color: '#fff', fontSize: 9}},{xAxis: '20240410', yAxis: 0.3642, name: 'R5卖', itemStyle: {color: '#0e6755'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R5卖', color: '#fff', fontSize: 9}},{xAxis: '20240410', yAxis: 0.3642, name: 'R6卖', itemStyle: {color: '#855509'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R6卖', color: '#fff', fontSize: 9}},{xAxis: '20240802', yAxis: 0.3625, name: 'R7买', itemStyle: {color: '#2ecc71'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R7买', color: '#fff', fontSize: 9}},{xAxis: '20240809', yAxis: 0.3466, name: 'R7买', itemStyle: {color: '#2ecc71'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R7买', color: '#fff', fontSize: 9}},{xAxis: '20240816', yAxis: 0.3549, name: 'R7买', itemStyle: {color: '#2ecc71'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R7买', color: '#fff', fontSize: 9}},{xAxis: '20240823', yAxis: 0.3466, name: 'R7买', itemStyle: {color: '#2ecc71'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R7买', color: '#fff', fontSize: 9}},{xAxis: '20240830', yAxis: 0.3436, name: 'R7买', itemStyle: {color: '#2ecc71'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R7买', color: '#fff', fontSize: 9}},{xAxis: '20240906', yAxis: 0.3262, name: 'R7买', itemStyle: {color: '#2ecc71'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R7买', color: '#fff', fontSize: 9}},{xAxis: '20240913', yAxis: 0.3392, name: 'R7买', itemStyle: {color: '#2ecc71'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R7买', color: '#fff', fontSize: 9}},{xAxis: '20240930', yAxis: 0.4322, name: 'R7卖', itemStyle: {color: '#19703e'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R7卖', color: '#fff', fontSize: 9}},{xAxis: '20241115', yAxis: 0.4635, name: 'R7卖', itemStyle: {color: '#19703e'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R7卖', color: '#fff', fontSize: 9}},{xAxis: '20241125', yAxis: 0.4369, name: 'R7卖', itemStyle: {color: '#19703e'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R7卖', color: '#fff', fontSize: 9}},{xAxis: '20250103', yAxis: 0.4272, name: 'R8买', itemStyle: {color: '#e84393'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R8买', color: '#fff', fontSize: 9}},{xAxis: '20250110', yAxis: 0.4192, name: 'R8买', itemStyle: {color: '#e84393'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R8买', color: '#fff', fontSize: 9}},{xAxis: '20250117', yAxis: 0.4479, name: 'R8买', itemStyle: {color: '#e84393'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R8买', color: '#fff', fontSize: 9}},{xAxis: '20250221', yAxis: 0.4902, name: 'R8卖', itemStyle: {color: '#7f2450'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R8卖', color: '#fff', fontSize: 9}},{xAxis: '20250227', yAxis: 0.4665, name: 'R8卖', itemStyle: {color: '#7f2450'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R8卖', color: '#fff', fontSize: 9}},{xAxis: '20250228', yAxis: 0.4425, name: 'R8卖', itemStyle: {color: '#7f2450'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R8卖', color: '#fff', fontSize: 9}},{xAxis: '20250328', yAxis: 0.4219, name: 'R9买', itemStyle: {color: '#00b894'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R9买', color: '#fff', fontSize: 9}},{xAxis: '20250403', yAxis: 0.4112, name: 'R9买', itemStyle: {color: '#00b894'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R9买', color: '#fff', fontSize: 9}},{xAxis: '20250411', yAxis: 0.3755, name: 'R9买', itemStyle: {color: '#00b894'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R9买', color: '#fff', fontSize: 9}},{xAxis: '20250418', yAxis: 0.3792, name: 'R9买', itemStyle: {color: '#00b894'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R9买', color: '#fff', fontSize: 9}},{xAxis: '20250606', yAxis: 0.4349, name: 'R9卖', itemStyle: {color: '#006551'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R9卖', color: '#fff', fontSize: 9}},{xAxis: '20251013', yAxis: 0.8660, name: 'R9卖', itemStyle: {color: '#006551'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R9卖', color: '#fff', fontSize: 9}},{xAxis: '20251121', yAxis: 0.8184, name: 'R9卖', itemStyle: {color: '#006551'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R9卖', color: '#fff', fontSize: 9}},{xAxis: '20251121', yAxis: 0.8184, name: 'R10买', itemStyle: {color: '#6c5ce7'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R10买', color: '#fff', fontSize: 9}},{xAxis: '20251128', yAxis: 0.8914, name: 'R10买', itemStyle: {color: '#6c5ce7'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R10买', color: '#fff', fontSize: 9}},{xAxis: '20251226', yAxis: 1.0343, name: 'R10卖', itemStyle: {color: '#3b327f'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R10卖', color: '#fff', fontSize: 9}},{xAxis: '20260120', yAxis: 1.0187, name: 'R10卖', itemStyle: {color: '#3b327f'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R10卖', color: '#fff', fontSize: 9}},{xAxis: '20260317', yAxis: 1.0240, name: 'R10卖', itemStyle: {color: '#3b327f'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R10卖', color: '#fff', fontSize: 9}}]
     }
 };
 

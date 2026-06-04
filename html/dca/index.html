@@ -26,6 +26,14 @@
             font-size: 13px;
             font-weight: 600;
         }
+        .action-badge-sm {
+            display: inline-flex;
+            align-items: center;
+            padding: 3px 10px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+        }
         .metric-pill {
             display: inline-block;
             padding: 4px 10px;
@@ -66,6 +74,20 @@
             0% { background-position: -200% 0; }
             100% { background-position: 200% 0; }
         }
+        .pos-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 8px 10px;
+            border-radius: 8px;
+            margin-top: 6px;
+            background: #f9fafb;
+        }
+        .pos-row .pos-meta {
+            font-size: 11px;
+            color: #9ca3af;
+            margin-top: 2px;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen">
@@ -103,10 +125,11 @@
         function renderCard(etf) {
             var color = etf.action_color || '#95a5a6';
             var bgColor = color + '15';
-            var actionText = etf.action_label || '未知';
             var hasPosition = etf.shares && etf.shares > 0;
             var returnColor = etf.return_pct >= 0 ? 'text-red-600' : 'text-green-600';
             var returnSign = etf.return_pct >= 0 ? '+' : '';
+            var positions = etf.positions || [];
+            var multiPos = positions.length > 1;
 
             var metricsHtml = '';
             metricsHtml += '<span class="metric-pill">J=' + (etf.weekly_j || 0).toFixed(1) + '</span>';
@@ -123,9 +146,54 @@
             var positionHtml = '';
             if (hasPosition) {
                 positionHtml = '<div class="flex items-center gap-4 mt-3 text-sm text-gray-600">'
-                    + '<span>持仓: ' + etf.shares.toFixed(0) + '份</span>'
+                    + '<span>总持仓: ' + etf.shares.toFixed(0) + '份</span>'
                     + (etf.avg_cost ? '<span>成本: ' + etf.avg_cost.toFixed(4) + '</span>' : '')
                     + '</div>';
+            }
+
+            // 标签区域：多仓位时显示每个仓位的独立标签
+            var badgesHtml = '';
+            if (multiPos) {
+                // 多仓位：每个仓位一个标签 + 详情
+                for (var i = 0; i < positions.length; i++) {
+                    var p = positions[i];
+                    var pColor = p.action_color || '#95a5a6';
+                    var pBgColor = pColor + '15';
+                    var pLabel = p.action_label || ('R' + p.round_id);
+                    var pDetail = p.action_detail || '';
+                    var pShares = p.shares ? p.shares.toFixed(0) + '份' : '';
+                    var pCost = p.avg_cost ? '成本' + p.avg_cost.toFixed(4) : '';
+
+                    badgesHtml += '<div class="pos-row">'
+                        + '<span class="action-badge-sm" style="background:' + pBgColor + ';color:' + pColor + ';">'
+                        + '<span class="pulse-dot" style="background:' + pColor + ';"></span>'
+                        + pLabel
+                        + '</span>'
+                        + '<div class="flex-1 min-w-0">'
+                        + '<div class="text-xs text-gray-600">' + pDetail + '</div>'
+                        + '<div class="pos-meta">' + pShares + (pCost ? ' · ' + pCost : '') + '</div>'
+                        + '</div>'
+                        + '</div>';
+                }
+            } else if (positions.length === 1) {
+                // 单仓位：显示主标签
+                var p0 = positions[0];
+                badgesHtml = '<div class="mb-3">'
+                    + '<span class="action-badge" style="background:' + bgColor + ';color:' + color + ';">'
+                    + '<span class="pulse-dot" style="background:' + color + ';"></span>'
+                    + (p0.action_label || etf.action_label || '未知')
+                    + '</span>'
+                    + '</div>'
+                    + '<p class="text-sm text-gray-500 leading-relaxed">' + (p0.action_detail || etf.action_detail || '') + '</p>';
+            } else {
+                // 空仓
+                badgesHtml = '<div class="mb-3">'
+                    + '<span class="action-badge" style="background:' + bgColor + ';color:' + color + ';">'
+                    + '<span class="pulse-dot" style="background:' + color + ';"></span>'
+                    + (etf.action_label || '未知')
+                    + '</span>'
+                    + '</div>'
+                    + '<p class="text-sm text-gray-500 leading-relaxed">' + (etf.action_detail || '') + '</p>';
             }
 
             var totalReturnHtml = '<div class="flex items-center justify-between mt-4 pt-3 border-t border-gray-100">'
@@ -150,13 +218,7 @@
                 + '<div class="text-xl font-bold text-gray-800">' + (etf.last_price || 0).toFixed(4) + '</div>'
                 + '</div>'
                 + '</div>'
-                + '<div class="mb-3">'
-                + '<span class="action-badge" style="background:' + bgColor + ';color:' + color + ';">'
-                + '<span class="pulse-dot" style="background:' + color + ';"></span>'
-                + actionText
-                + '</span>'
-                + '</div>'
-                + '<p class="text-sm text-gray-500 leading-relaxed">' + (etf.action_detail || '') + '</p>'
+                + badgesHtml
                 + '<div class="flex flex-wrap gap-1 mt-2">' + metricsHtml + '</div>'
                 + positionHtml
                 + totalReturnHtml
@@ -179,7 +241,7 @@
                 }
 
                 var sorted = data.etf_list.slice().sort(function(a, b) {
-                    var order = { buy: 0, sell_third: 1, wait_price_below_dk: 2, wait_dead_cross: 3, wait_golden: 4, hold: 5, wait: 6 };
+                    var order = { buy: 0, sell_third: 1, sell_third_pullback: 2, wait_price_below_dk: 3, wait_price_below_mid: 4, wait_dead_cross: 5, wait_golden: 6, hold: 7, wait: 8 };
                     return (order[a.action] || 9) - (order[b.action] || 9);
                 });
 

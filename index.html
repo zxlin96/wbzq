@@ -21,7 +21,7 @@
         </div>
 
         <!-- 统计卡片 -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
             <div class="bg-white rounded-xl shadow-lg p-6">
                 <div class="flex items-center">
                     <div class="p-3 bg-blue-100 rounded-full mr-4">
@@ -45,6 +45,19 @@
                     <div>
                         <div class="text-sm text-gray-500">C154最优组合</div>
                         <div class="text-2xl font-bold text-orange-600" id="c154Stocks">-</div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <div class="flex items-center">
+                    <div class="p-3 bg-teal-100 rounded-full mr-4">
+                        <svg class="w-8 h-8 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="text-sm text-gray-500">C432最优组合</div>
+                        <div class="text-2xl font-bold text-teal-600" id="c432Stocks">-</div>
                     </div>
                 </div>
             </div>
@@ -104,6 +117,7 @@
                             <th class="px-6 py-3">日期</th>
                             <th class="px-6 py-3">选股结果</th>
                             <th class="px-6 py-3">C154最优组合</th>
+                            <th class="px-6 py-3">C432最优组合</th>
                             <th class="px-6 py-3">行业趋势</th>
                             <th class="px-6 py-3">J13趋势</th>
                             <th class="px-6 py-3">情绪反弹策略</th>
@@ -111,7 +125,7 @@
                     </thead>
                     <tbody class="divide-y divide-gray-200" id="reportList">
                         <tr>
-                            <td colspan="6" class="px-6 py-8 text-center text-gray-500">
+                            <td colspan="7" class="px-6 py-8 text-center text-gray-500">
                                 加载中...
                             </td>
                         </tr>
@@ -137,6 +151,7 @@
                 document.getElementById('lastUpdate').textContent = data.lastUpdate;
                 document.getElementById('totalStocks').textContent = data.totalStocks;
                 document.getElementById('c154Stocks').textContent = data.c154Stocks || 0;
+                document.getElementById('c432Stocks').textContent = data.c432Stocks || 0;
                 document.getElementById('totalReports').textContent = data.reports.length;
                 document.getElementById('latestDate').textContent = data.latestDate;
                 
@@ -155,6 +170,14 @@
                                 ? `<a href="${report.c154Html}" target="_blank" class="text-orange-600 hover:text-orange-800 font-medium">📊 查看报告</a>`
                                 : report.c154Result 
                                     ? `<a href="${report.c154Result}" target="_blank" class="text-orange-600 hover:text-orange-800 font-medium">C154结果</a>`
+                                    : `<span class="text-gray-400">暂无</span>`
+                            }
+                        </td>
+                        <td class="px-6 py-4">
+                            ${report.c432Html 
+                                ? `<a href="${report.c432Html}" target="_blank" class="text-teal-600 hover:text-teal-800 font-medium">📊 查看报告</a>`
+                                : report.c432Result 
+                                    ? `<a href="${report.c432Result}" target="_blank" class="text-teal-600 hover:text-teal-800 font-medium">C432结果</a>`
                                     : `<span class="text-gray-400">暂无</span>`
                             }
                         </td>
@@ -182,7 +205,7 @@
             } catch (error) {
                 document.getElementById('reportList').innerHTML = `
                     <tr>
-                        <td colspan="6" class="px-6 py-8 text-center text-red-500">
+                        <td colspan="7" class="px-6 py-8 text-center text-red-500">
                             加载报告列表失败: ${error.message}
                         </td>
                     </tr>

@@ -34,6 +34,8 @@ def generate_reports_json():
         j13_trend_file = date_dir / "first_j13_step_daily_count.html"
         c154_csv_file = Path(f"c154_result_{date_str}.csv")
         c154_html_file = date_dir / f"c154_selection_{date_str}.html"
+        c432_csv_file = Path(f"c432_result_{date_str}.csv")
+        c432_html_file = date_dir / f"c432_selection_{date_str}.html"
         sentiment_rebound_file = date_dir / "sentiment_rebound_strategy.html"
         
         # 添加所有日期（包括没有选股的）
@@ -44,6 +46,8 @@ def generate_reports_json():
             'j13Trend': f"html/{date_str}/first_j13_step_daily_count.html" if j13_trend_file.exists() else None,
             'c154Result': f"c154_result_{date_str}.csv" if c154_csv_file.exists() else None,
             'c154Html': f"html/{date_str}/c154_selection_{date_str}.html" if c154_html_file.exists() else None,
+            'c432Result': f"c432_result_{date_str}.csv" if c432_csv_file.exists() else None,
+            'c432Html': f"html/{date_str}/c432_selection_{date_str}.html" if c432_html_file.exists() else None,
             'sentimentRebound': f"html/{date_str}/sentiment_rebound_strategy.html" if sentiment_rebound_file.exists() else None,
         })
     
@@ -64,6 +68,34 @@ def generate_reports_json():
                 'sentimentRebound': f"html/{date_str}/sentiment_rebound_strategy.html" if sentiment_rebound_path.exists() else None,
             })
             existing_dates.add(date_str)
+
+    # 扫描根目录下的 c432_result_*.csv，补充 c432 数据
+    for csv_file in sorted(Path('.').glob('c432_result_*.csv'), reverse=True):
+        date_str = csv_file.stem.replace('c432_result_', '')
+        c432_html_path = html_base_dir / date_str / f"c432_selection_{date_str}.html"
+        if date_str in existing_dates:
+            # 更新已有记录
+            for r in reports:
+                if r['date'] == date_str:
+                    if not r.get('c432Result'):
+                        r['c432Result'] = str(csv_file)
+                    if not r.get('c432Html') and c432_html_path.exists():
+                        r['c432Html'] = f"html/{date_str}/c432_selection_{date_str}.html"
+                    break
+        else:
+            sentiment_rebound_path = html_base_dir / date_str / "sentiment_rebound_strategy.html"
+            reports.append({
+                'date': date_str,
+                'stockSelection': None,
+                'industryTrend': None,
+                'j13Trend': None,
+                'c154Result': None,
+                'c154Html': None,
+                'c432Result': str(csv_file),
+                'c432Html': f"html/{date_str}/c432_selection_{date_str}.html" if c432_html_path.exists() else None,
+                'sentimentRebound': f"html/{date_str}/sentiment_rebound_strategy.html" if sentiment_rebound_path.exists() else None,
+            })
+            existing_dates.add(date_str)
     
     # 按日期降序重新排序
     reports.sort(key=lambda x: x['date'], reverse=True)
@@ -71,6 +103,7 @@ def generate_reports_json():
     # 统计信息
     total_stocks = 0
     c154_stocks = 0
+    c432_stocks = 0
     if reports:
         try:
             latest_report = reports[0]
@@ -96,6 +129,17 @@ def generate_reports_json():
                     c154_stocks = max(0, len(rows) - 1)
         except:
             pass
+        try:
+            latest_report = reports[0]
+            c432_file = latest_report.get('c432Result')
+            if c432_file and os.path.exists(c432_file):
+                import csv
+                with open(c432_file, 'r', encoding='utf-8-sig') as f:
+                    reader = csv.reader(f)
+                    rows = list(reader)
+                    c432_stocks = max(0, len(rows) - 1)
+        except:
+            pass
     
     latest_date = reports[0]['date'] if reports else '-'
     
@@ -103,6 +147,7 @@ def generate_reports_json():
         'lastUpdate': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
         'totalStocks': total_stocks,
         'c154Stocks': c154_stocks,
+        'c432Stocks': c432_stocks,
         'totalReports': len(reports),
         'latestDate': latest_date,
         'reports': reports
@@ -116,6 +161,7 @@ def generate_reports_json():
     print(f"   - 报告数量: {len(reports)}")
     print(f"   - 最新日期: {latest_date}")
     print(f"   - 选股总数: {total_stocks}")
+    print(f"   - C154: {c154_stocks} 只, C432: {c432_stocks} 只")
 
 
 if __name__ == '__main__':

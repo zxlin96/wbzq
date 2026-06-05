@@ -188,14 +188,14 @@ def apply_c432_filter(df, end_date, basic):
 
     # C432 条件
     cond = (
-        df_filtered['first_j13_step'] &                          # 1. 阶梯放量+J13低吸
-        (df_filtered['pct_chg'].fillna(-100) >= 0) &             # 2. 不跌
-        df_filtered['has_bottom_violent_k'] &                    # 3. 底部暴力K
-        (df_filtered['macd_dif_qfq'].fillna(0) > 0) &           # 4. MACD多头
-        near_mid_cond &                                          # 5. 近中期线2%
-        (df_filtered['kdj_qfq'].fillna(100) < -5) &            # 6. J < -5
-        df_filtered['shrink'].fillna(False) &                    # 7. 缩量
-        df_filtered['has_am_in_period']                          # 8. 异动
+        df_filtered['first_j13_step'].fillna(False) &                # 1. 阶梯放量+J13低吸
+        (df_filtered['pct_chg'].fillna(-100) >= 0) &                 # 2. 不跌
+        df_filtered['has_bottom_violent_k'].fillna(False) &          # 3. 底部暴力K
+        (df_filtered['macd_dif_qfq'].fillna(0) > 0) &                # 4. MACD多头
+        near_mid_cond &                                              # 5. 近中期线2%
+        (df_filtered['kdj_qfq'].fillna(100) < -5) &                  # 6. J < -5
+        df_filtered['shrink'].fillna(False) &                        # 7. 缩量
+        df_filtered['has_am_in_period'].fillna(False)                # 8. 异动
     )
 
     latest = df_filtered[cond & (df_filtered['trade_date'] == end_date)]
@@ -290,14 +290,14 @@ def print_c432_stage_statistics(df, result, args):
     total = df['ts_code'].nunique()
     print(f'0) 全市场（{args.days} 天内）: {total:>5} 只')
 
-    has_step = df.groupby('ts_code')['first_j13_step'].max().astype(bool).sum()
+    has_step = df['first_j13_step'].fillna(False).groupby(df['ts_code']).max().astype(bool).sum()
     print(f'1) 出现过阶梯放量+J13低吸: {has_step:>5} 只')
 
-    c1 = df['first_j13_step'] & (df['pct_chg'].fillna(-100) >= 0)
+    c1 = df['first_j13_step'].fillna(False) & (df['pct_chg'].fillna(-100) >= 0)
     not_falling_cnt = df[c1]['ts_code'].nunique()
     print(f'2) +不跌: {not_falling_cnt:>5} 只')
 
-    c2 = c1 & df['has_bottom_violent_k']
+    c2 = c1 & df['has_bottom_violent_k'].fillna(False)
     bvk_cnt = df[c2]['ts_code'].nunique()
     print(f'3) +底部暴力K: {bvk_cnt:>5} 只')
 
@@ -321,7 +321,7 @@ def print_c432_stage_statistics(df, result, args):
     shrink_cnt = df[c6]['ts_code'].nunique()
     print(f'7) +缩量: {shrink_cnt:>5} 只')
 
-    c7 = c6 & df['has_am_in_period']
+    c7 = c6 & df['has_am_in_period'].fillna(False)
     am_cnt = df[c7]['ts_code'].nunique()
     print(f'8) +异动: {am_cnt:>5} 只')
 
@@ -353,7 +353,10 @@ def main():
         logging.info("最近交易日: %s", end_date)
 
         # 获取数据
-        start_dt = datetime.strptime(end_date, '%Y%m%d') - timedelta(days=args.days * 2)
+        # 回看窗口需要足够长，以保证策略标记（阶梯放量、底部暴力K、异动等）能正确判定
+        # 使用 days*2+200 天的回看数据（参考 backtest_c432_score.py）
+        lookback_days = args.days * 2 + 200
+        start_dt = datetime.strptime(end_date, '%Y%m%d') - timedelta(days=lookback_days)
         start_date = start_dt.strftime('%Y%m%d')
 
         trade_dates_range = data_manager.get_trade_dates(start_date, end_date)
@@ -363,16 +366,18 @@ def main():
 
         backtest_dates = trade_dates_range[-args.days:]
         actual_start = backtest_dates[0]
-        logging.info("回测区间: %s ~ %s (%d 个交易日)", actual_start, end_date, len(backtest_dates))
+        logging.info("回测区间: %s ~ %s (%d 个交易日，回看窗口 %d 天)",
+                     actual_start, end_date, len(backtest_dates), lookback_days)
 
-        # 获取并准备数据
+        # 获取并准备数据（与 backtest_c432_score.py 保持一致）
         df_full = fetch_and_prepare_data(data_manager, trade_dates_range)
         if df_full.empty:
             logging.error("未获取到数据")
             return
 
+        # 先截断到回测区间，再计算策略标记（与 backtest_c432_score.py 流程一致）
         df = df_full[df_full['trade_date'] >= actual_start].copy()
-        logging.info("数据筛选后: %d 条", len(df))
+        logging.info("数据截断后: %d 条", len(df))
 
         # 获取股票基本信息
         basic_info = data_manager.get_stock_basic_info()
@@ -415,8 +420,8 @@ def main():
         industry_count = result['industry_name'].value_counts().to_dict()
 
         # 计算漏斗统计
-        c1 = df['first_j13_step'] & (df['pct_chg'].fillna(-100) >= 0)
-        c2 = c1 & df['has_bottom_violent_k']
+        c1 = df['first_j13_step'].fillna(False) & (df['pct_chg'].fillna(-100) >= 0)
+        c2 = c1 & df['has_bottom_violent_k'].fillna(False)
         c3 = c2 & (df['macd_dif_qfq'].fillna(0) > 0)
         zhixing_mid = df['zhixing_mid_duokong']
         close = df['close_qfq']
@@ -424,11 +429,11 @@ def main():
         c4 = c3 & near_mid
         c5 = c4 & (df['kdj_qfq'].fillna(100) < -5)
         c6 = c5 & df['shrink'].fillna(False)
-        c7 = c6 & df['has_am_in_period']
+        c7 = c6 & df['has_am_in_period'].fillna(False)
 
         funnel_stats = {
             '全市场': df['ts_code'].nunique(),
-            '阶梯放量+J13': int(df.groupby('ts_code')['first_j13_step'].max().astype(bool).sum()),
+            '阶梯放量+J13': int(df['first_j13_step'].fillna(False).groupby(df['ts_code']).max().astype(bool).sum()),
             '不跌': int(df[c1]['ts_code'].nunique()),
             '底部暴力K': int(df[c2]['ts_code'].nunique()),
             'MACD多头': int(df[c3]['ts_code'].nunique()),

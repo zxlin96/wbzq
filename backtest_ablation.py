@@ -88,7 +88,7 @@ CONDITIONS = {
     "has_bvk": "底部暴力K",
     "no_dist": "无出货信号",
     "zhixing_ok": "知行多空线",
-    "zhixing_zone": "知行区间(多空≤价<中线)",
+    # "zhixing_zone": "知行区间(多空≤价<中线)",  # 消融实验确认有害，注释掉
 }
 
 CONDITION_KEYS = list(CONDITIONS.keys())
@@ -136,6 +136,60 @@ def build_condition_mask(df, condition_key: str, basic_ts_codes) -> pd.Series:
         )
     elif condition_key == "j_ultra_low":
         return df["kdj_qfq"].fillna(100) < 5
+    elif condition_key == "near_duokong_1pct":
+        # 收盘价接近知行多空线（偏离 ≤ 1%）
+        return (
+            (df["zhixing_duokong"] > 0)
+            & ((df["close_qfq"] - df["zhixing_duokong"]).abs() / df["zhixing_duokong"] <= 0.01)
+        )
+    elif condition_key == "near_duokong_2pct":
+        # 收盘价接近知行多空线（偏离 ≤ 2%）
+        return (
+            (df["zhixing_duokong"] > 0)
+            & ((df["close_qfq"] - df["zhixing_duokong"]).abs() / df["zhixing_duokong"] <= 0.02)
+        )
+    elif condition_key == "near_duokong_3pct":
+        # 收盘价接近知行多空线（偏离 ≤ 3%）
+        return (
+            (df["zhixing_duokong"] > 0)
+            & ((df["close_qfq"] - df["zhixing_duokong"]).abs() / df["zhixing_duokong"] <= 0.03)
+        )
+    elif condition_key == "near_mid_1pct":
+        # 收盘价接近知行中期线（偏离 ≤ 1%）
+        return (
+            (df["zhixing_mid_duokong"] > 0)
+            & ((df["close_qfq"] - df["zhixing_mid_duokong"]).abs() / df["zhixing_mid_duokong"] <= 0.01)
+        )
+    elif condition_key == "near_mid_2pct":
+        # 收盘价接近知行中期线（偏离 ≤ 2%）
+        return (
+            (df["zhixing_mid_duokong"] > 0)
+            & ((df["close_qfq"] - df["zhixing_mid_duokong"]).abs() / df["zhixing_mid_duokong"] <= 0.02)
+        )
+    elif condition_key == "near_mid_3pct":
+        # 收盘价接近知行中期线（偏离 ≤ 3%）
+        return (
+            (df["zhixing_mid_duokong"] > 0)
+            & ((df["close_qfq"] - df["zhixing_mid_duokong"]).abs() / df["zhixing_mid_duokong"] <= 0.03)
+        )
+    elif condition_key == "near_either_2pct":
+        # 收盘价接近知行多空线 OR 中期线（任一偏离 ≤ 2%）
+        return (
+            (df["zhixing_duokong"] > 0)
+            & (df["zhixing_mid_duokong"] > 0)
+            & (
+                ((df["close_qfq"] - df["zhixing_duokong"]).abs() / df["zhixing_duokong"] <= 0.02)
+                | ((df["close_qfq"] - df["zhixing_mid_duokong"]).abs() / df["zhixing_mid_duokong"] <= 0.02)
+            )
+        )
+    elif condition_key == "near_both_3pct":
+        # 收盘价同时接近知行多空线 AND 中期线（均偏离 ≤ 3%）
+        return (
+            (df["zhixing_duokong"] > 0)
+            & (df["zhixing_mid_duokong"] > 0)
+            & ((df["close_qfq"] - df["zhixing_duokong"]).abs() / df["zhixing_duokong"] <= 0.03)
+            & ((df["close_qfq"] - df["zhixing_mid_duokong"]).abs() / df["zhixing_mid_duokong"] <= 0.03)
+        )
     elif condition_key == "vol_ratio>1":
         return df["volume_ratio"].fillna(0) > 1
     elif condition_key == "close>MA5":
@@ -306,10 +360,14 @@ def run_single_day_backtest_fast(
     if next_idx is None:
         return pd.DataFrame()
 
-    end_idx = min(next_idx + hold_days, len(trade_date_sorted_list) - 1)
-    hold_dates = trade_date_sorted_list[next_idx:end_idx + 1]
+    end_idx = min(next_idx + max(hold_days, 1) - 1, len(trade_date_sorted_list) - 1)
+    # hold_days=0 表示当天买卖(开盘买收盘卖)，hold_dates 仅含买入日
+    if hold_days == 0:
+        hold_dates = [next_date]
+    else:
+        hold_dates = trade_date_sorted_list[next_idx:end_idx + 1]
 
-    if len(hold_dates) < 2:
+    if len(hold_dates) < 1:
         return pd.DataFrame()
 
     buy_day_data = price_lookup.get(next_date)
@@ -343,7 +401,7 @@ def run_single_day_backtest_fast(
                 final_price = close
             valid_days += 1
 
-        if final_price is None or valid_days < 2:
+        if final_price is None or valid_days < 1:
             continue
 
         gain_pct = round((final_price - buy_price) / buy_price * 100, 2)
@@ -612,26 +670,26 @@ def run_ablation_backtest(
             for _, row in trades.iterrows():
                 held_positions.add(row["ts_code"])
 
-        expired = set()
-        for code in list(held_positions):
-            buy_idx = trade_date_idx_map.get(None)
+        # 清理已过期的持仓：买入日距今超过 hold_days 的释放
+        if hold_days == 0:
+            # hold_days=0 当天买卖，次日即可重新买入
+            held_positions.clear()
+        elif hold_days > 0 and all_trades:
+            expired = set()
             sig_idx = trade_date_idx_map.get(signal_date)
-            if sig_idx is None:
-                continue
-            expire_threshold = sig_idx - hold_days
-            found = False
-            for t in all_trades[-hold_days:]:
-                if code in t["ts_code"].values:
-                    code_rows = t[t["ts_code"] == code]
-                    if not code_rows.empty:
-                        bd = code_rows["buy_date"].iloc[0]
-                        bi = trade_date_idx_map.get(bd)
-                        if bi is not None and bi < expire_threshold:
-                            found = True
-                            break
-            if found:
-                expired.add(code)
-        held_positions -= expired
+            if sig_idx is not None:
+                expire_threshold = sig_idx - hold_days
+                for code in list(held_positions):
+                    for t in all_trades[-hold_days:]:
+                        if code in t["ts_code"].values:
+                            code_rows = t[t["ts_code"] == code]
+                            if not code_rows.empty:
+                                bd = code_rows["buy_date"].iloc[0]
+                                bi = trade_date_idx_map.get(bd)
+                                if bi is not None and bi < expire_threshold:
+                                    expired.add(code)
+                                    break
+            held_positions -= expired
 
     if all_trades:
         all_trades_df = pd.concat(all_trades, ignore_index=True)
@@ -669,42 +727,56 @@ def run_part_a(df, trade_dates_list, data_manager, hold_days, price_lookup=None,
         all_trades_map[label] = trades
 
     # 新增条件：candidate_keys 中不在 CONDITION_KEYS 的条件（避免重复计算）
+    # 已去除重复：zhixing_zone(与A13重复)、j_ultra_low(与j<-5重复)
+    # 已注释：J阈值扫描条件(j<-10到j<20)，如需恢复取消注释即可
     candidate_keys = [
         "close>MA20",
         "not_falling",
-        "j_ultra_low",
         "close>MA5",
-        "zhixing_mid_up",
-        "zhixing_zone",
-        "j<-10",
-        "j<-5",
-        "j<0",
-        "j<3",
-        "j<8",
-        "j<10",
-        "j<15",
-        "j<20",
+        # "zhixing_mid_up",  # 消融实验确认有害，注释掉
+        # "j<-10",
+        # "j<-5",
+        # "j<0",
+        # "j<3",
+        # "j<8",
+        # "j<10",
+        # "j<15",
+        # "j<20",
         "no_long_upper_shadow",
         "no_long_upper_shadow_and_rise",
+        "near_duokong_1pct",
+        "near_duokong_2pct",
+        "near_duokong_3pct",
+        "near_mid_1pct",
+        "near_mid_2pct",
+        "near_mid_3pct",
+        "near_either_2pct",
+        "near_both_3pct",
     ]
 
     key_short = {
         "close>MA20": ">MA20",
         "not_falling": "不跌",
-        "j_ultra_low": "J<-5",
         "close>MA5": ">MA5",
-        "zhixing_mid_up": "知行中>多空",
-        "zhixing_zone": "知行区间",
-        "j<-10": "J<-10",
-        "j<-5": "J<-5",
-        "j<0": "J<0",
-        "j<3": "J<3",
-        "j<8": "J<8",
-        "j<10": "J<10",
-        "j<15": "J<15",
-        "j<20": "J<20",
+        # "zhixing_mid_up": "知行中>多空",
+        # "j<-10": "J<-10",
+        # "j<-5": "J<-5",
+        # "j<0": "J<0",
+        # "j<3": "J<3",
+        # "j<8": "J<8",
+        # "j<10": "J<10",
+        # "j<15": "J<15",
+        # "j<20": "J<20",
         "no_long_upper_shadow": "非长上影",
         "no_long_upper_shadow_and_rise": "非长上影+上涨",
+        "near_duokong_1pct": "近多空线1%",
+        "near_duokong_2pct": "近多空线2%",
+        "near_duokong_3pct": "近多空线3%",
+        "near_mid_1pct": "近中期线1%",
+        "near_mid_2pct": "近中期线2%",
+        "near_mid_3pct": "近中期线3%",
+        "near_either_2pct": "近任一线2%",
+        "near_both_3pct": "近双线3%",
     }
 
     next_idx = len(other_keys) + 1
@@ -757,29 +829,30 @@ def run_part_c(df, trade_dates_list, data_manager, hold_days, price_lookup=None,
     base_key = "first_j13_step"
     # Top 10 最佳贡献条件（基于 Part A 基准递增实验结果）
     candidate_keys = [
-        "not_falling",      # Top1: 不跌，涨幅+0.25%
-        "amount_top",       # Top2: 成交额前60%，涨幅+0.11%
-        "no_dist",          # Top3: 无出货信号，涨幅+0.10%
-        "has_bvk",          # Top4: 底部暴力K，涨幅+0.08%
-        "macd_dif>0",       # Top5: MACD多头，涨幅+0.07%
-        "ma60_upward",      # Top6: MA60向上，涨幅+0.06%
-        "j<-5",             # Top7: J<-5（原J<5改为更严格）
-        "shrink",           # Top8: 缩量回调，涨幅+0.03%
-        "has_am",           # Top9: 周期内异动，涨幅+0.03%
-        "close>MA5",        # Top10: >MA5，涨幅+0.02%
+        "not_falling",      # Top1: 不跌，涨幅+0.07
+        "near_mid_1pct",    # Top2: 近中期线1%，涨幅+0.42（全场最强）
+        "no_dist",          # Top3: 无出货信号，涨幅+0.03
+        "has_bvk",          # Top4: 底部暴力K，涨幅+0.06
+        "macd_dif>0",       # Top5: MACD多头，涨幅+0.14
+        "near_mid_2pct",    # Top6: 近中期线2%，涨幅+0.25
+        "j<-5",             # must_have: J<-5
+        "shrink",           # Top8: 缩量回调，接近中性
+        "has_am",           # Top9: 周期内异动，接近中性
+        "candle_ok",        # Top10: K线形态可接受，胜率+1.9
+        # 已移除: ma60_upward(有害-0.37), close>MA5(有害-0.46), amount_top(无贡献0.00)
     ]
 
     key_short = {
         "not_falling": "不跌",
-        "amount_top": "成交额",
+        "near_mid_1pct": "近中期1%",
         "no_dist": "无出货",
         "has_bvk": "暴力K",
         "macd_dif>0": "MACD",
-        "ma60_upward": "MA60↑",
+        "near_mid_2pct": "近中期2%",
         "j<-5": "J<-5",
         "shrink": "缩量",
         "has_am": "异动",
-        "close>MA5": ">MA5",
+        "candle_ok": "K线",
     }
 
     combo_groups = [{"label": "C0-基准(J<13 only)", "keys": [base_key]}]
@@ -936,6 +1009,9 @@ def main():
                 if ck in CONDITIONS or ck in {
                     "j_ultra_low", "vol_ratio>1", "close>MA5", "close>MA20",
                     "not_falling", "turnover>2",
+                    "near_duokong_1pct", "near_duokong_2pct", "near_duokong_3pct",
+                    "near_mid_1pct", "near_mid_2pct", "near_mid_3pct",
+                    "near_either_2pct", "near_both_3pct",
                 } or ck.startswith("j<"):
                     all_condition_keys.add(ck)
 

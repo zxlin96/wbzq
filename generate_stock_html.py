@@ -984,3 +984,460 @@ def generate_c154_html(result, df, end_date, funnel_stats, industry_count):
     print(f"  C154 HTML 报告: {filename}")
 
 
+def generate_c432_html(result, df, end_date, funnel_stats, industry_count):
+    """生成 C432 最优组合选股结果的交互式 HTML 报告"""
+    import os, json
+    html_dir = os.path.join('html', end_date)
+    os.makedirs(html_dir, exist_ok=True)
+
+    if result.empty:
+        html_content = f"""<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C432 最优组合选股 - {end_date}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>body {{ font-family: Inter, sans-serif; }}</style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="max-w-5xl mx-auto px-4 py-8">
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+            <h1 class="text-2xl font-bold text-purple-600">🏆 C432 最优组合选股</h1>
+            <p class="text-gray-500 mt-1">日期: {end_date} | 无符合条件的股票</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm p-6 text-center text-gray-500">
+            今天没有股票同时满足 C432 的全部8个条件。
+        </div>
+    </div>
+</body>
+</html>"""
+        filename = os.path.join(html_dir, f"c432_selection_{end_date}.html")
+        with open(filename, 'w', encoding='utf-8') as f:
+            f.write(html_content)
+        print(f"  C432 报告(空): {filename}")
+        return
+
+    table_data = []
+    stock_charts = {}
+    stock_details = {}
+    for _, row in result.iterrows():
+        ts_code = row['ts_code']
+        name = row['name']
+        stock_history = df[df['ts_code'] == ts_code].copy()
+        chart_data = generate_stock_charts(stock_history, ts_code, name)
+        if chart_data:
+            stock_charts[ts_code] = chart_data
+        bvk_count = 0
+        if 'bottom_violent_k' in df.columns:
+            bvk_count = df[(df['ts_code'] == ts_code) & df['bottom_violent_k']].shape[0]
+        am_count = 0
+        if 'has_am_in_period' in df.columns:
+            am_count = df[(df['ts_code'] == ts_code) & df['has_am_in_period']].shape[0]
+        j_val = float(row['kdj_qfq'])
+        j_class = 'text-red-700' if j_val < -8 else 'text-red-600' if j_val < -5 else 'text-orange-600'
+        pct_val = float(row['pct_chg'])
+        pct_class = 'text-red-600' if pct_val > 0 else 'text-green-600'
+        ma60_val = float(row['ma_qfq_60']) if pd.notna(row.get('ma_qfq_60')) else 0
+        ma60_up = bool(row.get('ma60_upward', False))
+        close_val = float(row['close_qfq'])
+        above_ma60 = close_val >= ma60_val if ma60_val > 0 else False
+        # 知行中期线距离
+        mid_val = float(row.get('zhixing_mid_duokong', 0)) if pd.notna(row.get('zhixing_mid_duokong')) else 0
+        mid_dist = (close_val - mid_val) / mid_val * 100 if mid_val > 0 else 99.0
+        macd_dif = float(row.get('macd_dif_qfq', 0)) if pd.notna(row.get('macd_dif_qfq')) else 0
+        macd_bull = macd_dif > 0
+        is_shrinking = bool(row.get('shrink', False))
+        near_mid = mid_dist <= 2.0 and mid_val > 0
+        has_step = bool(row.get('first_j13_step', False))
+        has_bvk = bool(row.get('has_bottom_violent_k', False))
+        has_am = bool(row.get('has_am_in_period', False))
+        score_val = float(row.get('score', 0)) if pd.notna(row.get('score')) else 0
+        score_level = str(row.get('score_level', 'D')) if pd.notna(row.get('score_level')) else 'D'
+        level_colors = {'A': 'bg-red-100 text-red-700', 'B': 'bg-orange-100 text-orange-700',
+                        'C': 'bg-yellow-100 text-yellow-700', 'D': 'bg-gray-100 text-gray-500'}
+        score_color = 'text-red-600' if score_val >= 80 else 'text-orange-600' if score_val >= 65 else 'text-yellow-600' if score_val >= 50 else 'text-gray-500'
+
+        stock_details[ts_code] = {
+            'name': name,
+            'industry': row.get('industry_name', '未知'),
+            'close': f"{close_val:.2f}",
+            'pct': f"{pct_val:.2f}%",
+            'ma60': f"{ma60_val:.2f}",
+            'above_ma60': above_ma60,
+            'ma60_up': ma60_up,
+            'j_val': f"{j_val:.2f}",
+            'macd_dif': f"{macd_dif:.4f}",
+            'amount': f"{row['amount']/10000:.2f}万",
+            'has_step': has_step,
+            'has_bvk': has_bvk,
+            'bvk_count': bvk_count,
+            'has_am': has_am,
+            'am_count': am_count,
+            'macd_bull': macd_bull,
+            'is_shrinking': is_shrinking,
+            'near_mid': near_mid,
+            'mid_dist': f"{mid_dist:.2f}%",
+            'score': f"{score_val:.0f}",
+            'score_level': score_level,
+            'score_color': score_color,
+            'level_color': level_colors.get(score_level, 'bg-gray-100 text-gray-500'),
+            'turnover': f"{row.get('turnover_rate', 0):.1f}%" if pd.notna(row.get('turnover_rate')) else '-',
+            'volume_ratio': f"{row.get('volume_ratio', 0):.2f}" if pd.notna(row.get('volume_ratio')) else '-',
+            'body_ratio': f"{row.get('body_ratio', 0):.2f}" if pd.notna(row.get('body_ratio')) else '-',
+            'total_mv': f"{row.get('total_mv', 0)/10000:.0f}万" if pd.notna(row.get('total_mv')) else '-',
+        }
+        table_data.append({
+            '代码': ts_code,
+            '名称': name,
+            '行业': row.get('industry_name', '未知'),
+            '收盘价': f"{close_val:.2f}",
+            '涨跌幅': f"{pct_val:.2f}%",
+            '涨跌幅样式': pct_class,
+            'J值': f"{j_val:.2f}",
+            'J值样式': j_class,
+            '距中线': f"{mid_dist:.2f}%",
+            'MACD-DIF': f"{macd_dif:.4f}",
+            '评分': f"{score_val:.0f}",
+            '评分样式': score_color,
+            '等级': score_level,
+            '等级样式': level_colors.get(score_level, 'bg-gray-100 text-gray-500'),
+            '成交额万': f"{row['amount']/10000:.2f}",
+            '暴力K次数': bvk_count,
+            '异动次数': am_count,
+        })
+
+    csv_data = pd.DataFrame(table_data).to_csv(index=False, encoding='utf-8-sig')
+    industry_items = ''.join([
+        f'<div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">'
+        f'<span class="text-sm text-gray-600">{ind}</span>'
+        f'<span class="text-sm font-bold text-purple-600">{cnt}只</span></div>'
+        for ind, cnt in industry_count.items()
+    ])
+    charts_json = json.dumps(stock_charts, ensure_ascii=False, default=str)
+    details_json = json.dumps(stock_details, ensure_ascii=False, default=str)
+    sel_codes = json.dumps([row['ts_code'].replace('.SH', '').replace('.SZ', '') for _, row in result.iterrows()], ensure_ascii=False)
+
+    stage_labels = [
+        ('全市场', '全市场（250天内）'),
+        ('阶梯放量+J13', '阶梯放量+J13低吸'),
+        ('不跌', '+不跌'),
+        ('底部暴力K', '+底部暴力K'),
+        ('MACD多头', '+MACD多头'),
+        ('近中期线2%', '+近中期线2%'),
+        ('J<-5', '+J<-5'),
+        ('缩量', '+缩量'),
+        ('异动', '+异动'),
+        ('最终', '最终满足条件（当日）'),
+    ]
+    funnel_rows = ''.join([
+        f'<div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">'
+        f'<span class="text-sm text-gray-600 w-48">{label}</span>'
+        f'<span class="font-bold text-purple-600 text-lg">{funnel_stats.get(key, "-")} 只</span></div>'
+        for key, label in stage_labels
+    ])
+
+    table_rows = ''.join([
+        f'<tr class="hover:bg-gray-50 cursor-pointer" onclick="showChart(&apos;{r["代码"]}&apos;, &apos;{r["名称"]}&apos;)">'
+        f'<td class="px-4 py-3 font-medium text-blue-600 hover:text-blue-800">{r["代码"]}</td>'
+        f'<td class="px-4 py-3 font-medium">{r["名称"]}</td>'
+        f'<td class="px-4 py-3"><span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">{r["行业"]}</span></td>'
+        f'<td class="px-4 py-3">{r["收盘价"]}</td>'
+        f'<td class="px-4 py-3 font-semibold {r["涨跌幅样式"]}">{r["涨跌幅"]}</td>'
+        f'<td class="px-4 py-3 font-bold {r["J值样式"]}">{r["J值"]}</td>'
+        f'<td class="px-4 py-3">{r["距中线"]}</td>'
+        f'<td class="px-4 py-3">{r["MACD-DIF"]}</td>'
+        f'<td class="px-4 py-3 font-bold {r["评分样式"]}">{r["评分"]}</td>'
+        f'<td class="px-4 py-3"><span class="px-2 py-1 {r["等级样式"]} rounded-full text-xs font-bold">{r["等级"]}</span></td>'
+        f'<td class="px-4 py-3">{r["成交额万"]}</td>'
+        f'<td class="px-4 py-3">{r["暴力K次数"]}次</td>'
+        f'<td class="px-4 py-3">{r["异动次数"]}次</td></tr>'
+        for r in table_data
+    ])
+
+    avg_j = result["kdj_qfq"].mean()
+    avg_pct = result["pct_chg"].mean()
+    n = len(result)
+    n_ind = len(industry_count)
+
+    has_score = 'score' in result.columns and 'score_level' in result.columns
+    if has_score:
+        level_counts = result['score_level'].value_counts().to_dict()
+        n_a = level_counts.get('A', 0)
+        n_b = level_counts.get('B', 0)
+        n_ab = n_a + n_b
+        score_cards = f'''
+            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">B级以上(推荐)</div><div class="text-2xl font-bold text-red-600">{n_ab}只</div></div>
+            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">A级</div><div class="text-2xl font-bold text-red-600">{n_a}只</div></div>
+            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">B级</div><div class="text-2xl font-bold text-orange-600">{n_b}只</div></div>
+            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">C级</div><div class="text-2xl font-bold text-yellow-600">{level_counts.get("C", 0)}只</div></div>
+            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">D级</div><div class="text-2xl font-bold text-gray-400">{level_counts.get("D", 0)}只</div></div>
+            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">平均J值</div><div class="text-2xl font-bold text-red-600">{avg_j:.2f}</div></div>
+            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">平均涨幅</div><div class="text-2xl font-bold text-blue-600">{avg_pct:.2f}%</div></div>
+            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">涉及行业</div><div class="text-2xl font-bold text-green-600">{n_ind}</div></div>
+        '''
+    else:
+        score_cards = f'''
+            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">选股总数</div><div class="text-2xl font-bold text-purple-600">{n}</div></div>
+            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">涉及行业</div><div class="text-2xl font-bold text-green-600">{n_ind}</div></div>
+            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">平均J值</div><div class="text-2xl font-bold text-red-600">{avg_j:.2f}</div></div>
+            <div class="bg-white rounded-xl shadow-sm p-4"><div class="text-sm text-gray-500">平均涨幅</div><div class="text-2xl font-bold text-blue-600">{avg_pct:.2f}%</div></div>
+        '''
+
+    html_content = f"""<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C432 最优组合选股 - {end_date}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {{ font-family: Inter, sans-serif; }}
+        .sortable th {{ cursor: pointer; user-select: none; }}
+        .sortable th:hover {{ background-color: #f3f4f6; }}
+        .sort-asc::after {{ content: " ▲"; }}
+        .sort-desc::after {{ content: " ▼"; }}
+        .chart-container {{ height: 400px; }}
+        .modal {{ display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }}
+        .modal-content {{ background-color: #fefefe; margin: 2% auto; padding: 20px; border-radius: 12px; width: 90%; max-width: 1200px; max-height: 90vh; overflow-y: auto; }}
+        .close {{ color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }}
+        .close:hover {{ color: black; }}
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+            <div class="flex justify-between items-center flex-wrap gap-4">
+                <div>
+                    <h1 class="text-2xl font-bold text-purple-600">🏆 C432 最优组合选股</h1>
+                    <p class="text-gray-500 mt-1">日期: {end_date} | 共选出 <span class="text-purple-600 font-bold text-xl">{n}</span> 只股票</p>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="downloadCSV()" class="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        下载 CSV
+                    </button>
+                    <button onclick="downloadSEL()" class="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        导入同花顺 (.sel)
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-200 rounded-xl p-5 mb-6">
+            <h2 class="text-sm font-semibold text-purple-700 mb-3">📋 C432 条件组合（全部 AND）</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                <span class="px-2 py-1 bg-red-100 text-red-700 rounded text-xs font-medium">1. 阶梯放量+J13低吸</span>
+                <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs font-medium">2. 不跌 (pct_chg≥0)</span>
+                <span class="px-2 py-1 bg-purple-100 text-purple-700 rounded text-xs font-medium">3. 底部暴力K</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-medium">4. MACD多头 (DIF>0)</span>
+                <span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs font-medium">5. 近中期线≤2%</span>
+                <span class="px-2 py-1 bg-pink-100 text-pink-700 rounded text-xs font-medium">6. J&lt;-5</span>
+                <span class="px-2 py-1 bg-indigo-100 text-indigo-700 rounded text-xs font-medium">7. 缩量回调</span>
+                <span class="px-2 py-1 bg-cyan-100 text-cyan-700 rounded text-xs font-medium">8. 周期内异动</span>
+            </div>
+            <p class="text-xs text-gray-500 mt-3">回测（250交易日）：样本181，平均涨幅1.03%，胜率59.7%，盈亏比1.15 | 打分侧重胜率(60%)+涨幅(40%)</p>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm p-5 mb-6">
+            <h2 class="text-lg font-semibold text-gray-800 mb-4">🔽 选股漏斗</h2>
+            <div class="space-y-2">{funnel_rows}</div>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 mb-6">
+            {score_cards}
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden mb-6">
+            <div class="px-6 py-4 border-b border-gray-200"><h2 class="text-lg font-semibold text-gray-900">📋 选股明细（点击代码查看图表）</h2></div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left sortable" id="stockTable">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3" onclick="sortTable(0)">代码</th>
+                            <th class="px-4 py-3" onclick="sortTable(1)">名称</th>
+                            <th class="px-4 py-3" onclick="sortTable(2)">行业</th>
+                            <th class="px-4 py-3" onclick="sortTable(3)">收盘价</th>
+                            <th class="px-4 py-3" onclick="sortTable(4)">涨跌幅</th>
+                            <th class="px-4 py-3" onclick="sortTable(5)">J值</th>
+                            <th class="px-4 py-3" onclick="sortTable(6)">距中线%</th>
+                            <th class="px-4 py-3" onclick="sortTable(7)">MACD-DIF</th>
+                            <th class="px-4 py-3" onclick="sortTable(8)">评分</th>
+                            <th class="px-4 py-3" onclick="sortTable(9)">等级</th>
+                            <th class="px-4 py-3" onclick="sortTable(10)">成交额(万)</th>
+                            <th class="px-4 py-3" onclick="sortTable(11)">暴力K</th>
+                            <th class="px-4 py-3" onclick="sortTable(12)">异动</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">{table_rows}</tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm p-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">📊 行业分布</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">{industry_items}</div>
+        </div>
+    </div>
+
+    <div id="chartModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle" class="text-xl font-bold mb-4"></h2>
+            <div id="stockInfoPanel" class="bg-gray-50 rounded-lg p-4 mb-4">
+                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3" id="stockInfoGrid"></div>
+                <div class="grid grid-cols-3 md:grid-cols-6 gap-2 mt-3" id="stockSignalGrid"></div>
+            </div>
+            <div id="klineChart" class="chart-container mb-4"></div>
+            <div id="volumeChart" class="chart-container mb-4" style="height:150px;"></div>
+            <div id="kdjChart" class="chart-container" style="height:200px;"></div>
+        </div>
+    </div>
+
+    <script>
+    const stockCharts = {charts_json};
+    const stockDetails = {details_json};
+    const stockCSV = `{csv_data}`;
+    const selCodes = {sel_codes};
+
+    function downloadSEL() {{
+        if(selCodes.length===0){{alert('无股票数据');return;}}
+        const buf = new ArrayBuffer(2 + selCodes.length * 8);
+        const view = new DataView(buf);
+        view.setUint16(0, selCodes.length, true);
+        let offset = 2;
+        selCodes.forEach(code => {{
+            const market = (code[0]==='6'||code[0]==='9') ? 0x11 : 0x21;
+            view.setUint8(offset, 0x07);
+            view.setUint8(offset + 1, market);
+            for(let i = 0; i < 6; i++) {{
+                view.setUint8(offset + 2 + i, code.charCodeAt(i));
+            }}
+            offset += 8;
+        }});
+        const blob = new Blob([buf], {{type: 'application/octet-stream'}});
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'c432_selection_{end_date}.sel';
+        link.click();
+    }}
+
+    function downloadCSV() {{
+        const blob = new Blob(['\\uFEFF' + stockCSV], {{ type: 'text/csv;charset=utf-8;' }});
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'c432_selection_{end_date}.csv';
+        link.click();
+    }}
+
+    let sortDir = {{}};
+    function sortTable(col) {{
+        const tbl = document.getElementById('stockTable');
+        const rows = Array.from(tbl.querySelector('tbody').querySelectorAll('tr'));
+        sortDir[col] = !sortDir[col];
+        tbl.querySelectorAll('th').forEach((th,i) => {{ th.classList.remove('sort-asc','sort-desc'); if(i===col) th.classList.add(sortDir[col]?'sort-desc':'sort-asc'); }});
+        rows.sort((a,b) => {{
+            const av=a.cells[col].textContent.trim(), bv=b.cells[col].textContent.trim();
+            const an=parseFloat(av), bn=parseFloat(bv);
+            if(!isNaN(an)&&!isNaN(bn)) return sortDir[col]?bn-an:an-bn;
+            return sortDir[col]?bv.localeCompare(av):av.localeCompare(bv);
+        }});
+        rows.forEach(r => tbl.querySelector('tbody').appendChild(r));
+    }}
+
+    let kc,vc,kdjc;
+    function showChart(ts,nm) {{
+        const d=stockCharts[ts]; if(!d){{alert('暂无图表');return;}}
+        document.getElementById('modalTitle').textContent=nm+' ('+ts+') - C432 技术分析';
+        document.getElementById('chartModal').style.display='block';
+        const info=stockDetails[ts];
+        if(info){{
+            document.getElementById('stockInfoGrid').innerHTML=`<div class="bg-white rounded p-2"><div class="text-xs text-gray-500">行业</div><div class="font-bold text-blue-600">${{info.industry}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">收盘价</div><div class="font-bold">${{info.close}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">涨跌幅</div><div class="font-bold ${{info.pct.startsWith('-')?'text-green-600':'text-red-600'}}">${{info.pct}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">J值</div><div class="font-bold text-red-700">${{info.j_val}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">距中期线</div><div class="font-bold">${{info.mid_dist}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">评分</div><div class="font-bold ${{info.score_color}}">${{info.score}}分</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">等级</div><div class="font-bold"><span class="px-2 py-1 ${{info.level_color}} rounded-full text-xs">${{info.score_level}}</span></div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">MACD-DIF</div><div class="font-bold">${{info.macd_dif}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">成交额</div><div class="font-bold">${{info.amount}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">换手率</div><div class="font-bold">${{info.turnover}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">量比</div><div class="font-bold">${{info.volume_ratio}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">实体比</div><div class="font-bold">${{info.body_ratio}}</div></div><div class="bg-white rounded p-2"><div class="text-xs text-gray-500">总市值</div><div class="font-bold">${{info.total_mv}}</div></div>`;
+            document.getElementById('stockSignalGrid').innerHTML=`<div class="text-center p-1 rounded text-xs ${{info.has_step?'bg-green-100 text-green-700':'bg-gray-100 text-gray-400'}}">${{info.has_step?'✅ J13阶梯':'❌ J13阶梯'}}</div><div class="text-center p-1 rounded text-xs ${{info.has_bvk?'bg-green-100 text-green-700':'bg-gray-100 text-gray-400'}}">${{info.has_bvk?'✅ 暴力K('+info.bvk_count+'次)':'❌ 暴力K'}}</div><div class="text-center p-1 rounded text-xs ${{info.macd_bull?'bg-green-100 text-green-700':'bg-red-100 text-red-700'}}">${{info.macd_bull?'✅ MACD多头':'❌ MACD多头'}}</div><div class="text-center p-1 rounded text-xs ${{info.near_mid?'bg-green-100 text-green-700':'bg-gray-100 text-gray-400'}}">${{info.near_mid?'✅ 近中期线':'❌ 近中期线'}}</div><div class="text-center p-1 rounded text-xs ${{info.is_shrinking?'bg-green-100 text-green-700':'bg-gray-100 text-gray-400'}}">${{info.is_shrinking?'✅ 缩量':'❌ 缩量'}}</div><div class="text-center p-1 rounded text-xs ${{info.has_am?'bg-green-100 text-green-700':'bg-gray-100 text-gray-400'}}">${{info.has_am?'✅ 异动('+info.am_count+'次)':'❌ 异动'}}</div>`;
+        }}
+        if(kc)kc.dispose(); if(vc)vc.dispose(); if(kdjc)kdjc.dispose();
+        kc=echarts.init(document.getElementById('klineChart'));
+        const cd=d.candlestick.map(c=>({{value:[c[1],c[2],c[3],c[4]],itemStyle:{{color:c[2]>=c[1]?'#ef4444':'#22c55e',color0:c[2]>=c[1]?'#ef4444':'#22c55e',borderColor:c[2]>=c[1]?'#ef4444':'#22c55e',borderColor0:c[2]>=c[1]?'#ef4444':'#22c55e'}}}}));
+        kc.setOption({{
+            title:{{text:'K线 + MA60 + 知行多空 + 中期线',left:'center',textStyle:{{fontSize:14}}}},
+            tooltip:{{trigger:'axis',axisPointer:{{type:'cross'}},
+                formatter:function(params){{
+                    let r=params[0].axisValue+'<br/>';
+                    params.forEach(p=>{{
+                        if(p.seriesType==='candlestick'){{
+                            const i=p.dataIndex;const ch=d.price_change[i];const cc=ch>=0?'#ef4444':'#22c55e';const cs=ch>=0?'+':'';
+                            const raw=d.candlestick[i];
+                            r+='涨跌幅: <span style="color:'+cc+'">'+cs+ch+'%</span><br/>开盘: '+raw[1]+' 收盘: '+raw[2]+'<br/>最高: '+raw[3]+' 最低: '+raw[4]+'<br/>';
+                        }} else if(p.seriesName==='MA60'){{r+='MA60: '+p.data+'<br/>';
+                        }} else if(p.seriesName==='知行多空'){{r+='知行多空: '+p.data+'<br/>';
+                        }} else if(p.seriesName==='知行中'){{r+='知行中: <b>'+p.data+'</b><br/>';}}
+                    }});
+                    return r;
+                }}
+            }},
+            legend:{{data:['K线','MA60','知行多空','知行中'],bottom:0}},
+            grid:{{left:'8%',right:'8%',top:'40px',bottom:'80px'}},
+            xAxis:{{type:'category',data:d.dates}},
+            yAxis:{{type:'value',scale:true}},
+            dataZoom:[{{type:'inside'}},{{type:'slider',start:70,end:100}}],
+            series:[
+                {{type:'candlestick',data:cd,name:'K线'}},
+                {{type:'line',data:d.ma60,name:'MA60',smooth:true,lineStyle:{{color:'#f59e0b',width:2}},symbol:'none'}},
+                {{type:'line',data:d.zhixing_duokong,name:'知行多空',smooth:true,lineStyle:{{color:'#3b82f6',width:1,type:'dashed'}},symbol:'none'}},
+                {{type:'line',data:d.zhixing_mid_duokong,name:'知行中',smooth:true,lineStyle:{{color:'#8b5cf6',width:2,type:'solid'}},symbol:'none'}}
+            ]
+        }});
+        vc=echarts.init(document.getElementById('volumeChart'));
+        const vd=d.volume.map(v=>({{value:v.value,itemStyle:v.itemStyle}}));
+        vc.setOption({{
+            title:{{text:'成交额（万元）- 黄色=倍量上涨 紫色=倍量下跌',left:'center',textStyle:{{fontSize:12}}}},
+            tooltip:{{trigger:'axis',
+                formatter:function(params){{
+                    const i=params[0].dataIndex;const vol=d.volume[i];
+                    return params[0].axisValue+'<br/>成交额: '+params[0].value.toFixed(2)+' 万元<br/>是否倍量: '+(vol.is_double?'是':'否');
+                }}
+            }},
+            grid:{{left:'8%',right:'8%',top:'40px',bottom:'30px'}},
+            xAxis:{{type:'category',data:d.dates,show:false}},
+            yAxis:{{type:'value'}},
+            series:[{{type:'bar',data:vd}}]
+        }});
+        kdjc=echarts.init(document.getElementById('kdjChart'));
+        kdjc.setOption({{
+            title:{{text:'KDJ指标（关注J值< -5区域）',left:'center',textStyle:{{fontSize:14}}}},
+            tooltip:{{trigger:'axis',
+                formatter:function(params){{
+                    let r=params[0].axisValue+'<br/>';params.forEach(p=>{{r+=p.seriesName+': '+p.data.toFixed(2)+'<br/>';}});
+                    return r;
+                }}
+            }},
+            legend:{{data:['K','D','J'],bottom:0}},
+            grid:{{left:'10%',right:'10%',top:'40px',bottom:'40px'}},
+            xAxis:{{type:'category',data:d.dates}},
+            yAxis:{{type:'value'}},
+            series:[
+                {{type:'line',data:d.kdj_k,name:'K',smooth:true,lineStyle:{{color:'#3b82f6'}}}},
+                {{type:'line',data:d.kdj_d,name:'D',smooth:true,lineStyle:{{color:'#f59e0b'}}}},
+                {{type:'line',data:d.kdj_j,name:'J',smooth:true,lineStyle:{{color:'#ef4444',width:2}},
+                    markLine:{{silent:true,lineStyle:{{color:'#ef4444',type:'dashed',width:1}},data:[{{yAxis:-5,label:{{formatter:'J=-5',position:'end'}}}}]}}
+                }}
+            ]
+        }});
+        window.addEventListener('resize',()=>{{kc.resize();vc.resize();kdjc.resize();}});
+    }}
+    function closeModal(){{document.getElementById('chartModal').style.display='none';}}
+    window.onclick=function(e){{if(e.target==document.getElementById('chartModal'))document.getElementById('chartModal').style.display='none';}}
+    </script>
+</body>
+</html>"""
+
+    filename = os.path.join(html_dir, f"c432_selection_{end_date}.html")
+    with open(filename, 'w', encoding='utf-8') as f:
+        f.write(html_content)
+    print(f"  C432 HTML 报告: {filename}")
+
+

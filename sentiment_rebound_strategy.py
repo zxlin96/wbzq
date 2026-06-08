@@ -9,8 +9,8 @@
 - 投资金额阶梯：2000、4000、8000、16000
 
 卖出逻辑（砖型图方案）：
-- 方案1：红柱4根卖一半，红转绿后全卖
-- 方案2：未到4根红柱，红转绿也全卖
+- 红柱满4根 → 卖一半
+- 连续3根绿柱 → 全卖（容忍2天回调）
 """
 
 import os
@@ -54,6 +54,7 @@ class SentimentReboundStrategy:
         self.position_cost = 0  # 持仓成本
         self.investment_level_idx = 0  # 当前投资级别索引
         self.red_bar_count = 0  # 连续红柱计数
+        self.green_bar_count = 0  # 连续绿柱计数
         self.last_signal = None  # 上次信号
         self.last_trade_date = None  # 上次交易日期
         
@@ -74,6 +75,7 @@ class SentimentReboundStrategy:
                 self.position_cost = state.get('position_cost', 0)
                 self.investment_level_idx = state.get('investment_level_idx', 0)
                 self.red_bar_count = state.get('red_bar_count', 0)
+                self.green_bar_count = state.get('green_bar_count', 0)
                 self.last_trade_date = state.get('last_trade_date')
                 self.trades = state.get('trades', [])
                 
@@ -103,6 +105,7 @@ class SentimentReboundStrategy:
             'position_cost': float(self.position_cost),
             'investment_level_idx': int(self.investment_level_idx),
             'red_bar_count': int(self.red_bar_count),
+            'green_bar_count': int(self.green_bar_count),
             'last_trade_date': self.last_trade_date,
             'trades': convert_to_serializable(self.trades),
             'saved_at': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -182,63 +185,66 @@ class SentimentReboundStrategy:
         
         return signal
     
-    def generate_sell_signal(self, 
-                            brick_data: pd.DataFrame, 
+    def generate_sell_signal(self,
+                            brick_data: pd.DataFrame,
                             current_date: str,
                             current_price: float) -> Optional[Dict]:
         """
         生成卖出信号（基于砖型图）
-        
+
+        卖出逻辑：
+          - 红柱满4根 → 卖一半
+          - 连续3根绿柱 → 全卖（容忍2天回调）
+
         Args:
             brick_data: 包含砖型图指标的DataFrame
             current_date: 当前日期
             current_price: 当前价格
-            
+
         Returns:
             卖出信号字典或None
         """
         if brick_data.empty or 'zhixing_brick_rising' not in brick_data.columns:
             return None
-        
-        # 需要至少2条数据来判断红转绿
+
+        # 需要至少2条数据来判断红/绿
         if len(brick_data) < 2:
             return None
-        
+
         # 获取最近两天的数据
         latest = brick_data.iloc[-1]
-        previous = brick_data.iloc[-2]
         is_rising = latest['zhixing_brick_rising']
-        was_rising = previous['zhixing_brick_rising']
-        
+
         signal = None
-        
-        # 红柱计数
+
+        # 红绿柱计数
         if is_rising:
             self.red_bar_count += 1
+            self.green_bar_count = 0
         else:
-            # 红转绿：前一天是红柱，今天是绿柱
-            if was_rising and self.position > 0:
-                # 方案2：未到4根红柱，红转绿也全卖
-                if self.red_bar_count < 4:
-                    signal = {
-                        'date': current_date,
-                        'action': 'SELL',
-                        'type': '全卖',
-                        'ratio': 1.0,
-                        'red_bars': self.red_bar_count,
-                        'price': current_price,
-                        'reason': f"红转绿，连续红柱{self.red_bar_count}根（未满4根）"
-                    }
-                    # 更新持仓 - 全卖
-                    self.position = 0
-                    self.position_cost = 0
-                    self.red_bar_count = 0
-                    self.investment_level_idx = 0  # 重置投资级别
-                    self.save_state()
-            # 重置红柱计数（因为是绿柱）
+            self.green_bar_count += 1
+
+        # 连续3根绿柱 → 全卖
+        if self.green_bar_count >= 3 and self.position > 0:
+            signal = {
+                'date': current_date,
+                'action': 'SELL',
+                'type': '全卖',
+                'ratio': 1.0,
+                'green_bars': self.green_bar_count,
+                'red_bars_before': self.red_bar_count,
+                'price': current_price,
+                'reason': f"连续{self.green_bar_count}根绿柱，确认趋势反转"
+            }
+            # 全卖后重置所有状态
+            self.position = 0
+            self.position_cost = 0
             self.red_bar_count = 0
-        
-        # 方案1：红柱4根卖一半
+            self.green_bar_count = 0
+            self.investment_level_idx = 0  # 重置投资级别
+            self.save_state()
+
+        # 红柱满4根 → 卖一半
         if self.red_bar_count == 4 and self.position > 0:
             signal = {
                 'date': current_date,
@@ -249,11 +255,16 @@ class SentimentReboundStrategy:
                 'price': current_price,
                 'reason': "连续红柱达到4根，卖出一半"
             }
-            # 更新持仓 - 卖一半
+            # 卖一半后重置红柱计数（后续继续观察绿柱）
             self.position = self.position * 0.5
             self.red_bar_count = 0
+            self.green_bar_count = 0  # 卖一半后绿柱计数也重置
             self.save_state()
-        
+
+        # 绿柱时重置红柱计数
+        if not is_rising:
+            self.red_bar_count = 0
+
         return signal
     
     def generate_current_signal(self,
@@ -392,6 +403,7 @@ class SentimentReboundStrategy:
             'cost': self.position_cost,
             'investment_level': self.investment_level_idx,
             'red_bar_count': self.red_bar_count,
+            'green_bar_count': self.green_bar_count,
             'total_trades': len(self.trades)
         }
     
@@ -401,6 +413,7 @@ class SentimentReboundStrategy:
         self.position_cost = 0
         self.investment_level_idx = 0
         self.red_bar_count = 0
+        self.green_bar_count = 0
         self.last_signal = None
         self.trades = []
 
@@ -655,9 +668,9 @@ def generate_strategy_report(strategy: SentimentReboundStrategy,
                 <div>
                     <h3 class="font-semibold text-red-700 mb-2">卖出逻辑（砖型图）</h3>
                     <ul class="text-gray-600 space-y-1 text-sm">
-                        <li>• 方案1: 红柱4根卖一半，红转绿全卖</li>
-                        <li>• 方案2: 未满4根红柱，红转绿也全卖</li>
-                        <li>• 当前红柱: {position_summary['red_bar_count']} 根</li>
+                        <li>• 红柱满4根 → 卖一半</li>
+                        <li>• 连续3根绿柱 → 全卖（容忍2天回调）</li>
+                        <li>• 当前红柱: {position_summary['red_bar_count']} 根 | 绿柱: {position_summary['green_bar_count']} 根</li>
                         <li>• 持仓状态: {'有持仓' if position_summary['position'] > 0 else '空仓'}</li>
                     </ul>
                 </div>

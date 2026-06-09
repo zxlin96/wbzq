@@ -1,10 +1,22 @@
 {
-  "lastUpdate": "2026-06-05 13:16:34",
-  "totalStocks": 1,
-  "c154Stocks": 16,
-  "totalReports": 61,
-  "latestDate": "20260605",
+  "lastUpdate": "2026-06-08 13:51:19",
+  "totalStocks": 0,
+  "c154Stocks": 0,
+  "c432Stocks": 0,
+  "totalReports": 62,
+  "latestDate": "20260608",
   "reports": [
+    {
+      "date": "20260608",
+      "stockSelection": null,
+      "industryTrend": "html/20260608/industry_total_amount_trend.html",
+      "j13Trend": "html/20260608/first_j13_step_daily_count.html",
+      "c154Result": null,
+      "c154Html": "html/20260608/c154_selection_20260608.html",
+      "c432Result": null,
+      "c432Html": "html/20260608/c432_selection_20260608.html",
+      "sentimentRebound": "html/20260608/sentiment_rebound_strategy.html"
+    },
     {
       "date": "20260605",
       "stockSelection": "html/20260605/stock_selection_20260605.html",
@@ -12,6 +24,8 @@
       "j13Trend": "html/20260605/first_j13_step_daily_count.html",
       "c154Result": "c154_result_20260605.csv",
       "c154Html": "html/20260605/c154_selection_20260605.html",
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260605/sentiment_rebound_strategy.html"
     },
     {
@@ -21,6 +35,8 @@
       "j13Trend": "html/20260604/first_j13_step_daily_count.html",
       "c154Result": "c154_result_20260604.csv",
       "c154Html": "html/20260604/c154_selection_20260604.html",
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260604/sentiment_rebound_strategy.html"
     },
     {
@@ -30,6 +46,8 @@
       "j13Trend": "html/20260603/first_j13_step_daily_count.html",
       "c154Result": "c154_result_20260603.csv",
       "c154Html": "html/20260603/c154_selection_20260603.html",
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260603/sentiment_rebound_strategy.html"
     },
     {
@@ -39,6 +57,8 @@
       "j13Trend": "html/20260602/first_j13_step_daily_count.html",
       "c154Result": "c154_result_20260602.csv",
       "c154Html": "html/20260602/c154_selection_20260602.html",
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260602/sentiment_rebound_strategy.html"
     },
     {
@@ -48,6 +68,8 @@
       "j13Trend": "html/20260601/first_j13_step_daily_count.html",
       "c154Result": "c154_result_20260601.csv",
       "c154Html": "html/20260601/c154_selection_20260601.html",
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260601/sentiment_rebound_strategy.html"
     },
     {
@@ -57,6 +79,8 @@
       "j13Trend": "html/20260529/first_j13_step_daily_count.html",
       "c154Result": "c154_result_20260529.csv",
       "c154Html": "html/20260529/c154_selection_20260529.html",
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260529/sentiment_rebound_strategy.html"
     },
     {
@@ -66,6 +90,8 @@
       "j13Trend": "html/20260528/first_j13_step_daily_count.html",
       "c154Result": "c154_result_20260528.csv",
       "c154Html": "html/20260528/c154_selection_20260528.html",
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260528/sentiment_rebound_strategy.html"
     },
     {
@@ -75,6 +101,8 @@
       "j13Trend": "html/20260527/first_j13_step_daily_count.html",
       "c154Result": "c154_result_20260527.csv",
       "c154Html": "html/20260527/c154_selection_20260527.html",
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260527/sentiment_rebound_strategy.html"
     },
     {
@@ -84,6 +112,8 @@
       "j13Trend": "html/20260526/first_j13_step_daily_count.html",
       "c154Result": "c154_result_20260526.csv",
       "c154Html": "html/20260526/c154_selection_20260526.html",
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260526/sentiment_rebound_strategy.html"
     },
     {
@@ -93,6 +123,8 @@
       "j13Trend": "html/20260525/first_j13_step_daily_count.html",
       "c154Result": "c154_result_20260525.csv",
       "c154Html": "html/20260525/c154_selection_20260525.html",
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260525/sentiment_rebound_strategy.html"
     },
     {
@@ -102,6 +134,8 @@
       "j13Trend": "html/20260522/first_j13_step_daily_count.html",
       "c154Result": "c154_result_20260522.csv",
       "c154Html": "html/20260522/c154_selection_20260522.html",
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260522/sentiment_rebound_strategy.html"
     },
     {
@@ -111,6 +145,8 @@
       "j13Trend": "html/20260521/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260521/sentiment_rebound_strategy.html"
     },
     {
@@ -120,6 +156,8 @@
       "j13Trend": "html/20260520/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260520/sentiment_rebound_strategy.html"
     },
     {
@@ -129,6 +167,8 @@
       "j13Trend": "html/20260519/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260519/sentiment_rebound_strategy.html"
     },
     {
@@ -138,6 +178,8 @@
       "j13Trend": "html/20260518/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260518/sentiment_rebound_strategy.html"
     },
     {
@@ -147,6 +189,8 @@
       "j13Trend": "html/20260515/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260515/sentiment_rebound_strategy.html"
     },
     {
@@ -156,6 +200,8 @@
       "j13Trend": "html/20260514/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260514/sentiment_rebound_strategy.html"
     },
     {
@@ -165,6 +211,8 @@
       "j13Trend": "html/20260513/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260513/sentiment_rebound_strategy.html"
     },
     {
@@ -174,6 +222,8 @@
       "j13Trend": "html/20260512/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260512/sentiment_rebound_strategy.html"
     },
     {
@@ -183,6 +233,8 @@
       "j13Trend": "html/20260511/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260511/sentiment_rebound_strategy.html"
     },
     {
@@ -192,6 +244,8 @@
       "j13Trend": "html/20260508/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260508/sentiment_rebound_strategy.html"
     },
     {
@@ -201,6 +255,8 @@
       "j13Trend": "html/20260507/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260507/sentiment_rebound_strategy.html"
     },
     {
@@ -210,6 +266,8 @@
       "j13Trend": "html/20260506/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260506/sentiment_rebound_strategy.html"
     },
     {
@@ -219,6 +277,8 @@
       "j13Trend": "html/20260430/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260430/sentiment_rebound_strategy.html"
     },
     {
@@ -228,6 +288,8 @@
       "j13Trend": "html/20260429/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260429/sentiment_rebound_strategy.html"
     },
     {
@@ -237,6 +299,8 @@
       "j13Trend": "html/20260428/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260428/sentiment_rebound_strategy.html"
     },
     {
@@ -246,6 +310,8 @@
       "j13Trend": "html/20260427/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260427/sentiment_rebound_strategy.html"
     },
     {
@@ -255,6 +321,8 @@
       "j13Trend": "html/20260424/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260424/sentiment_rebound_strategy.html"
     },
     {
@@ -264,6 +332,8 @@
       "j13Trend": "html/20260423/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260423/sentiment_rebound_strategy.html"
     },
     {
@@ -273,6 +343,8 @@
       "j13Trend": "html/20260422/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260422/sentiment_rebound_strategy.html"
     },
     {
@@ -282,6 +354,8 @@
       "j13Trend": "html/20260421/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260421/sentiment_rebound_strategy.html"
     },
     {
@@ -291,6 +365,8 @@
       "j13Trend": "html/20260420/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260420/sentiment_rebound_strategy.html"
     },
     {
@@ -300,6 +376,8 @@
       "j13Trend": "html/20260417/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260417/sentiment_rebound_strategy.html"
     },
     {
@@ -309,6 +387,8 @@
       "j13Trend": "html/20260409/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260409/sentiment_rebound_strategy.html"
     },
     {
@@ -318,6 +398,8 @@
       "j13Trend": "html/20260407/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": null
     },
     {
@@ -327,6 +409,8 @@
       "j13Trend": "html/20260403/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": null
     },
     {
@@ -336,6 +420,8 @@
       "j13Trend": "html/20260402/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260402/sentiment_rebound_strategy.html"
     },
     {
@@ -345,6 +431,8 @@
       "j13Trend": "html/20260401/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": null
     },
     {
@@ -354,6 +442,8 @@
       "j13Trend": "html/20260331/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260331/sentiment_rebound_strategy.html"
     },
     {
@@ -363,6 +453,8 @@
       "j13Trend": "html/20260330/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260330/sentiment_rebound_strategy.html"
     },
     {
@@ -372,6 +464,8 @@
       "j13Trend": "html/20260327/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260327/sentiment_rebound_strategy.html"
     },
     {
@@ -381,6 +475,8 @@
       "j13Trend": "html/20260326/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260326/sentiment_rebound_strategy.html"
     },
     {
@@ -390,6 +486,8 @@
       "j13Trend": "html/20260325/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260325/sentiment_rebound_strategy.html"
     },
     {
@@ -399,6 +497,8 @@
       "j13Trend": "html/20260324/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260324/sentiment_rebound_strategy.html"
     },
     {
@@ -408,6 +508,8 @@
       "j13Trend": "html/20260323/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260323/sentiment_rebound_strategy.html"
     },
     {
@@ -417,6 +519,8 @@
       "j13Trend": "html/20260320/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260320/sentiment_rebound_strategy.html"
     },
     {
@@ -426,6 +530,8 @@
       "j13Trend": "html/20260319/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20260319/sentiment_rebound_strategy.html"
     },
     {
@@ -435,6 +541,8 @@
       "j13Trend": "html/20260318/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": null
     },
     {
@@ -444,6 +552,8 @@
       "j13Trend": "html/20260317/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": null
     },
     {
@@ -453,6 +563,8 @@
       "j13Trend": "html/20260316/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": null
     },
     {
@@ -462,6 +574,8 @@
       "j13Trend": "html/20260313/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": null
     },
     {
@@ -471,6 +585,8 @@
       "j13Trend": "html/20260312/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": null
     },
     {
@@ -480,6 +596,8 @@
       "j13Trend": "html/20260311/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": null
     },
     {
@@ -489,6 +607,8 @@
       "j13Trend": "html/20260310/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": null
     },
     {
@@ -498,6 +618,8 @@
       "j13Trend": "html/20260309/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": null
     },
     {
@@ -507,6 +629,8 @@
       "j13Trend": "html/20260306/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": null
     },
     {
@@ -516,6 +640,8 @@
       "j13Trend": "html/20251112/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20251112/sentiment_rebound_strategy.html"
     },
     {
@@ -525,6 +651,8 @@
       "j13Trend": "html/20250804/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20250804/sentiment_rebound_strategy.html"
     },
     {
@@ -534,6 +662,8 @@
       "j13Trend": "html/20250723/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20250723/sentiment_rebound_strategy.html"
     },
     {
@@ -543,6 +673,8 @@
       "j13Trend": "html/20250620/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20250620/sentiment_rebound_strategy.html"
     },
     {
@@ -552,6 +684,8 @@
       "j13Trend": "html/20250508/first_j13_step_daily_count.html",
       "c154Result": null,
       "c154Html": null,
+      "c432Result": null,
+      "c432Html": null,
       "sentimentRebound": "html/20250508/sentiment_rebound_strategy.html"
     }
   ]

@@ -329,6 +329,41 @@ def print_c432_stage_statistics(df, result, args):
     print(f'9) 最终满足条件（当日）: {final_cnt:>5} 只')
 
 
+def compute_c432_funnel_stats(df, result):
+    """计算 C432 策略漏斗统计数据（供外部调用）
+
+    Args:
+        df: 含所有策略标记的 DataFrame
+        result: C432 筛选结果 DataFrame
+
+    Returns:
+        dict: 各阶段股票数量统计
+    """
+    c1 = df['first_j13_step'].fillna(False) & (df['pct_chg'].fillna(-100) >= 0)
+    c2 = c1 & df['has_bottom_violent_k'].fillna(False)
+    c3 = c2 & (df['macd_dif_qfq'].fillna(0) > 0)
+    zhixing_mid = df['zhixing_mid_duokong']
+    close = df['close_qfq']
+    near_mid = (zhixing_mid > 0) & ((close - zhixing_mid).abs() / zhixing_mid <= 0.02)
+    c4 = c3 & near_mid
+    c5 = c4 & (df['kdj_qfq'].fillna(100) < -5)
+    c6 = c5 & df['shrink'].fillna(False)
+    c7 = c6 & df['has_am_in_period'].fillna(False)
+
+    return {
+        '全市场': df['ts_code'].nunique(),
+        '阶梯放量+J13': int(df['first_j13_step'].fillna(False).groupby(df['ts_code']).max().astype(bool).sum()),
+        '不跌': int(df[c1]['ts_code'].nunique()),
+        '底部暴力K': int(df[c2]['ts_code'].nunique()),
+        'MACD多头': int(df[c3]['ts_code'].nunique()),
+        '近中期线2%': int(df[c4]['ts_code'].nunique()),
+        'J<-5': int(df[c5]['ts_code'].nunique()),
+        '缩量': int(df[c6]['ts_code'].nunique()),
+        '异动': int(df[c7]['ts_code'].nunique()),
+        '最终': int(result['ts_code'].nunique()),
+    }
+
+
 def main():
     import sys, io
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')

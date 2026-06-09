@@ -338,6 +338,28 @@ def print_c154_stage_statistics(df, result, args):
     print(f'7) 最终满足条件（当日）: {final_cnt:>5} 只')
 
 
+def compute_c154_funnel_stats(df, result):
+    """计算 C154 策略漏斗统计数据（供外部调用）
+
+    Args:
+        df: 含所有策略标记的 DataFrame
+        result: C154 筛选结果 DataFrame
+
+    Returns:
+        dict: 各阶段股票数量统计
+    """
+    return {
+        '全市场': df['ts_code'].nunique(),
+        '阶梯放量+J13': int(df.groupby('ts_code')['first_j13_step'].max().astype(bool).sum()),
+        '不跌': int(df[df['first_j13_step'] & (df['pct_chg'].fillna(-100) >= 0)]['ts_code'].nunique()),
+        '无出货': int(df[df['first_j13_step'] & (df['pct_chg'].fillna(-100) >= 0) & ~df['has_distribution_signal'] & ~df['has_distribution_signal_v2'] & ~df['has_distribution_signal_v3']]['ts_code'].nunique()),
+        '底部暴力K': int(df[df['first_j13_step'] & (df['pct_chg'].fillna(-100) >= 0) & ~df['has_distribution_signal'] & ~df['has_distribution_signal_v2'] & ~df['has_distribution_signal_v3'] & df['has_bottom_violent_k']]['ts_code'].nunique()),
+        'J<5': int(df[df['first_j13_step'] & (df['pct_chg'].fillna(-100) >= 0) & ~df['has_distribution_signal'] & ~df['has_distribution_signal_v2'] & ~df['has_distribution_signal_v3'] & df['has_bottom_violent_k'] & (df['kdj_qfq'].fillna(100) < 5)]['ts_code'].nunique()),
+        '异动': int(df[df['first_j13_step'] & (df['pct_chg'].fillna(-100) >= 0) & ~df['has_distribution_signal'] & ~df['has_distribution_signal_v2'] & ~df['has_distribution_signal_v3'] & df['has_bottom_violent_k'] & (df['kdj_qfq'].fillna(100) < 5) & df['has_am_in_period']]['ts_code'].nunique()),
+        '最终': int(result['ts_code'].nunique()),
+    }
+
+
 def main():
     args = parse_args()
     data_manager = DataManager()

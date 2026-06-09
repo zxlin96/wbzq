@@ -42,41 +42,17 @@ jobs:
         echo "today=$(date +'%Y%m%d')" >> $GITHUB_OUTPUT
         echo " Trading date: $(date +'%Y-%m-%d %H:%M:%S')"
     
-    - name: 运行股票策略
+    - name: 运行全部股票策略
       env:
         TUSHARE_TOKEN: ${{ secrets.TUSHARE_TOKEN }}
         DB_PATH: ${{ github.workspace }}/stock_strategy.db
         CACHE_DIR: ${{ github.workspace }}/data_cache
       run: |
         echo "========================================"
-        echo "开始执行股票策略分析"
+        echo "开始执行统一策略管道 (main_par2 + main_par3 + main_par4)"
         echo "日期: ${{ steps.date.outputs.today }}"
         echo "========================================"
-        python main_par2.py --date ${{ steps.date.outputs.today }} --backtest --hold-days 3
-    
-    - name: 运行 C154 最优组合策略
-      env:
-        TUSHARE_TOKEN: ${{ secrets.TUSHARE_TOKEN }}
-        DB_PATH: ${{ github.workspace }}/stock_strategy.db
-        CACHE_DIR: ${{ github.workspace }}/data_cache
-      run: |
-        echo "========================================"
-        echo "开始执行 C154 最优组合策略"
-        echo "日期: ${{ steps.date.outputs.today }}"
-        echo "========================================"
-        python main_par3.py --date ${{ steps.date.outputs.today }}
-    
-    - name: 运行 C432 最优组合策略
-      env:
-        TUSHARE_TOKEN: ${{ secrets.TUSHARE_TOKEN }}
-        DB_PATH: ${{ github.workspace }}/stock_strategy.db
-        CACHE_DIR: ${{ github.workspace }}/data_cache
-      run: |
-        echo "========================================"
-        echo "开始执行 C432 最优组合策略"
-        echo "日期: ${{ steps.date.outputs.today }}"
-        echo "========================================"
-        python main_par4.py --date ${{ steps.date.outputs.today }}
+        python run_all_strategies.py --date ${{ steps.date.outputs.today }} --backtest --hold-days 3
 
     - name: 运行ETF定投回测
       env:

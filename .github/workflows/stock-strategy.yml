@@ -16,7 +16,9 @@ permissions:
 jobs:
   run-strategy:
     runs-on: ubuntu-latest
-    
+    outputs:
+      today: ${{ steps.date.outputs.today }}
+
     steps:
     - name: 检出代码
       uses: actions/checkout@v4
@@ -66,7 +68,24 @@ jobs:
 
     - name: 生成报告索引
       run: python generate_reports_json.py
-    
+
+    - name: 生成邮件报告
+      run: |
+        python generate_email_report.py \
+          --status "${{ job.status }}" \
+          --repo "${{ github.repository }}" \
+          --ref "${{ github.ref }}" \
+          --run-url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+      if: always()
+
+    - name: 上传邮件报告
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: email-report-${{ steps.date.outputs.today }}
+        path: email_report.html
+        retention-days: 7
+
     - name: 提交生成的文件到仓库
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
@@ -103,8 +122,14 @@ jobs:
     needs: run-strategy
     runs-on: ubuntu-latest
     if: always()  # 无论成功失败都通知
-    
+
     steps:
+    - name: 下载邮件报告
+      uses: actions/download-artifact@v4
+      with:
+        name: email-report-${{ needs.run-strategy.outputs.today || 'placeholder' }}
+      continue-on-error: true
+
     - name: 发送邮件通知
       uses: dawidd6/action-send-mail@v3
       with:
@@ -116,16 +141,4 @@ jobs:
         subject: "📊 股票策略执行完成 - ${{ needs.run-strategy.result }}"
         to: ${{ secrets.EMAIL_RECIPIENTS }}
         from: GitHub Actions <${{ secrets.EMAIL_USERNAME }}>
-        html_body: |
-          <h2>📊 股票策略执行通知</h2>
-          <p><strong>执行状态:</strong> ${{ needs.run-strategy.result }}</p>
-          <p><strong>执行时间:</strong> ${{ github.event.repository.updated_at }}</p>
-          <p><strong>仓库:</strong> ${{ github.repository }}</p>
-          <p><strong>分支:</strong> ${{ github.ref }}</p>
-          <hr>
-          <p>📈 <a href="https://zxlin96.github.io/wbzq/">查看选股报告</a></p>
-          <p>🏆 <a href="https://zxlin96.github.io/wbzq/">查看 C154 最优组合结果</a></p>
-          <p>🎯 <a href="https://zxlin96.github.io/wbzq/">查看 C432 最优组合结果</a></p>
-          <p>🔍 <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">查看执行详情</a></p>
-          <hr>
-          <p style="color: #666; font-size: 12px;">此邮件由 GitHub Actions 自动发送</p>
+        html_body: file://email_report.html

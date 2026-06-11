@@ -123,8 +123,16 @@ def generate_stock_table(df, label):
     </table>"""
 
 
+def _position_loss_pct(position, last_price):
+    """计算单轮持仓的浮盈浮亏"""
+    avg_cost = position.get("avg_cost")
+    if not avg_cost or avg_cost <= 0:
+        return 0
+    return (last_price - avg_cost) / avg_cost * 100
+
+
 def generate_dca_section(dca_summary):
-    """生成 ETF 定投汇总 HTML"""
+    """生成 ETF 定投汇总 HTML（支持多轮持仓）"""
     if not dca_summary:
         return "<p>暂无 ETF 定投数据</p>"
 
@@ -132,29 +140,70 @@ def generate_dca_section(dca_summary):
     if not etf_list:
         return "<p>暂无 ETF 定投数据</p>"
 
-    # 操作颜色映射
-    action_colors = {
-        "buy": "#e74c3c",
-        "sell": "#27ae60",
-        "hold": "#f39c12",
-    }
-
     rows = ""
     for etf in etf_list:
-        action = etf.get("action", "hold")
-        color = action_colors.get(action, "#333")
-        label = etf.get("action_label", "")
+        positions = etf.get("positions", [])
+        name = escape_html(etf.get("name", ""))
+        ts_code = escape_html(etf.get("ts_code", ""))
         ret_pct = etf.get("return_pct", 0) or 0
         invested = etf.get("total_invested", 0) or 0
+        last_price = etf.get("last_price", 0) or 0
+
         ret_str = f"+{ret_pct:.2f}%" if ret_pct > 0 else f"{ret_pct:.2f}%"
         ret_color = "#27ae60" if ret_pct >= 0 else "#e74c3c"
 
-        rows += f"""
+        if not positions:
+            # 空仓 — 单行显示
+            rows += f"""
             <tr>
-                <td><strong>{escape_html(etf.get('name', ''))}</strong></td>
-                <td style="color:{color};font-weight:bold">{escape_html(label)}</td>
+                <td><strong>{name}</strong><br><span style="color:#999;font-size:11px">{ts_code}</span></td>
+                <td style="color:#95a5a6;font-weight:bold">空仓等待</td>
                 <td style="color:{ret_color};font-weight:bold">{ret_str}</td>
                 <td>{invested:.0f}元</td>
+            </tr>"""
+        elif len(positions) == 1:
+            # 单轮 — 单行显示
+            pos = positions[0]
+            color = pos.get("action_color", "#333")
+            label = escape_html(pos.get("action_label", ""))
+            pos_ret = _position_loss_pct(pos, last_price)
+            pos_ret_str = f"+{pos_ret:.2f}%" if pos_ret > 0 else f"{pos_ret:.2f}%"
+            pos_ret_color = "#27ae60" if pos_ret >= 0 else "#e74c3c"
+
+            rows += f"""
+            <tr>
+                <td><strong>{name}</strong><br><span style="color:#999;font-size:11px">{ts_code}</span></td>
+                <td style="color:{color};font-weight:bold">{label}</td>
+                <td style="color:{pos_ret_color};font-weight:bold">{pos_ret_str}</td>
+                <td>{invested:.0f}元</td>
+            </tr>"""
+        else:
+            # 多轮 — 汇总行 + 每轮子行
+            # 汇总行：ETF名称 + 总收益率 + 总投入
+            rows += f"""
+            <tr>
+                <td><strong>{name}</strong><br><span style="color:#999;font-size:11px">{ts_code}</span></td>
+                <td style="color:#666;font-size:12px">{len(positions)}轮持仓</td>
+                <td style="color:{ret_color};font-weight:bold">{ret_str}</td>
+                <td>{invested:.0f}元</td>
+            </tr>"""
+            # 每轮子行
+            for pos in positions:
+                round_id = pos.get("round_id", "")
+                color = pos.get("action_color", "#333")
+                label = escape_html(pos.get("action_label", ""))
+                shares = pos.get("shares", 0)
+                pos_ret = _position_loss_pct(pos, last_price)
+                pos_ret_str = f"+{pos_ret:.2f}%" if pos_ret > 0 else f"{pos_ret:.2f}%"
+                pos_ret_color = "#27ae60" if pos_ret >= 0 else "#e74c3c"
+                avg_cost = pos.get("avg_cost", 0) or 0
+
+                rows += f"""
+            <tr style="background:#fafafa">
+                <td style="padding-left:24px;color:#888;font-size:12px">↳ R{round_id} | {shares:.0f}份 | 成本{avg_cost:.3f}</td>
+                <td style="color:{color};font-size:12px">{label}</td>
+                <td style="color:{pos_ret_color};font-size:12px">{pos_ret_str}</td>
+                <td style="font-size:12px;color:#999">—</td>
             </tr>"""
 
     return f"""

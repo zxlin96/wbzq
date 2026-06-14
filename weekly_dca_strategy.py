@@ -827,6 +827,16 @@ class WeeklyDCAStrategy:
             }
             pos_loss = pos.get_current_loss_pct(last_price)
             pos_profit = -pos_loss
+
+            # 计算每轮收益率：当前市值 + 已卖出金额 - 投入金额) / 投入金额
+            if pos.total_invested > 0:
+                pos_market_value = pos.shares * last_price
+                pos_total_return = pos_market_value + pos.total_sell_amount - pos.total_invested
+                pos_return_pct = round(pos_total_return / pos.total_invested * 100, 2)
+                pos_info['total_invested'] = round(pos.total_invested, 2)
+                pos_info['total_return'] = round(pos_total_return, 2)
+                pos_info['return_pct'] = pos_return_pct
+                pos_info['loss_pct'] = round(pos_profit * 100, 2)
             invest_amount = pos.get_invest_amount(last_price)
             multiplier = int(invest_amount / self.base_amount) if self.base_amount > 0 else 1
 

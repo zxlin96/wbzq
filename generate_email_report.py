@@ -123,12 +123,20 @@ def generate_stock_table(df, label):
     </table>"""
 
 
-def _position_loss_pct(position, last_price):
-    """计算单轮持仓的浮盈浮亏"""
+def _position_return_info(position, etf_last_price=0):
+    """获取单轮持仓的累计收益率、投入金额、持有市值"""
+    return_pct = position.get("return_pct")
+    total_invested = position.get("total_invested", 0) or 0
+    shares = position.get("shares", 0) or 0
+    last_price = etf_last_price or position.get("last_price", 0)
+    holding_value = round(shares * last_price, 2) if shares > 0 and last_price > 0 else 0
+    if return_pct is not None:
+        return float(return_pct), total_invested, holding_value
+    # 兼容旧数据：没有 return_pct 时用浮盈浮亏
     avg_cost = position.get("avg_cost")
-    if not avg_cost or avg_cost <= 0:
-        return 0
-    return (last_price - avg_cost) / avg_cost * 100
+    if avg_cost and avg_cost > 0 and last_price > 0:
+        return (last_price - avg_cost) / avg_cost * 100, total_invested, holding_value
+    return 0, total_invested, holding_value
 
 
 def generate_dca_section(dca_summary):
@@ -158,15 +166,15 @@ def generate_dca_section(dca_summary):
             <tr>
                 <td><strong>{name}</strong><br><span style="color:#999;font-size:11px">{ts_code}</span></td>
                 <td style="color:#95a5a6;font-weight:bold">空仓等待</td>
-                <td style="color:{ret_color};font-weight:bold">{ret_str}</td>
-                <td>{invested:.0f}元</td>
+                <td>—</td>
+                <td>—</td>
             </tr>"""
         elif len(positions) == 1:
             # 单轮 — 单行显示
             pos = positions[0]
             color = pos.get("action_color", "#333")
             label = escape_html(pos.get("action_label", ""))
-            pos_ret = _position_loss_pct(pos, last_price)
+            pos_ret, pos_invested, pos_remaining = _position_return_info(pos, last_price)
             pos_ret_str = f"+{pos_ret:.2f}%" if pos_ret > 0 else f"{pos_ret:.2f}%"
             pos_ret_color = "#27ae60" if pos_ret >= 0 else "#e74c3c"
 
@@ -175,17 +183,19 @@ def generate_dca_section(dca_summary):
                 <td><strong>{name}</strong><br><span style="color:#999;font-size:11px">{ts_code}</span></td>
                 <td style="color:{color};font-weight:bold">{label}</td>
                 <td style="color:{pos_ret_color};font-weight:bold">{pos_ret_str}</td>
-                <td>{invested:.0f}元</td>
+                <td>{pos_remaining:.0f}元</td>
             </tr>"""
         else:
             # 多轮 — 汇总行 + 每轮子行
-            # 汇总行：ETF名称 + 总收益率 + 总投入
+            total_remaining = sum(
+                _position_return_info(pos, last_price)[2] for pos in positions
+            )
             rows += f"""
             <tr>
                 <td><strong>{name}</strong><br><span style="color:#999;font-size:11px">{ts_code}</span></td>
                 <td style="color:#666;font-size:12px">{len(positions)}轮持仓</td>
-                <td style="color:{ret_color};font-weight:bold">{ret_str}</td>
-                <td>{invested:.0f}元</td>
+                <td>—</td>
+                <td>{total_remaining:.0f}元</td>
             </tr>"""
             # 每轮子行
             for pos in positions:
@@ -193,7 +203,7 @@ def generate_dca_section(dca_summary):
                 color = pos.get("action_color", "#333")
                 label = escape_html(pos.get("action_label", ""))
                 shares = pos.get("shares", 0)
-                pos_ret = _position_loss_pct(pos, last_price)
+                pos_ret, pos_invested, pos_remaining = _position_return_info(pos, last_price)
                 pos_ret_str = f"+{pos_ret:.2f}%" if pos_ret > 0 else f"{pos_ret:.2f}%"
                 pos_ret_color = "#27ae60" if pos_ret >= 0 else "#e74c3c"
                 avg_cost = pos.get("avg_cost", 0) or 0
@@ -203,7 +213,7 @@ def generate_dca_section(dca_summary):
                 <td style="padding-left:24px;color:#888;font-size:12px">↳ R{round_id} | {shares:.0f}份 | 成本{avg_cost:.3f}</td>
                 <td style="color:{color};font-size:12px">{label}</td>
                 <td style="color:{pos_ret_color};font-size:12px">{pos_ret_str}</td>
-                <td style="font-size:12px;color:#999">—</td>
+                <td style="font-size:12px;color:#666">{pos_remaining:.0f}元</td>
             </tr>"""
 
     return f"""
@@ -212,7 +222,7 @@ def generate_dca_section(dca_summary):
             <th style="padding:6px 8px;border:1px solid #ddd;text-align:left">ETF</th>
             <th style="padding:6px 8px;border:1px solid #ddd;text-align:left">操作建议</th>
             <th style="padding:6px 8px;border:1px solid #ddd;text-align:right">收益率</th>
-            <th style="padding:6px 8px;border:1px solid #ddd;text-align:right">累计投入</th>
+            <th style="padding:6px 8px;border:1px solid #ddd;text-align:right">持有市值</th>
         </tr>
         {rows}
     </table>"""

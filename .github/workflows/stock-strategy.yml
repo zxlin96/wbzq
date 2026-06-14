@@ -15,6 +15,10 @@ permissions:
   pages: write
   id-token: write
 
+env:
+  # 强制所有 JavaScript actions 使用 Node.js 24，避免 Node.js 20 废弃警告
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   run-strategy:
     runs-on: ubuntu-latest
@@ -109,15 +113,6 @@ jobs:
           *.json
           stock_strategy.db
         retention-days: 30  # 保留30天
-    
-    - name: 上传日志文件
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: strategy-logs-${{ steps.date.outputs.today }}
-        path: |
-          *.log
-        retention-days: 7
 
   # 邮件通知
   notify:

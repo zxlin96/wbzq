@@ -15,6 +15,8 @@ logs/
 
 # 生成的结果文件（排除 HTML 和 JSON，这些需要提交用于 GitHub Pages）
 *.csv
+!c154_result_*.csv
+!c432_result_*.csv
 !*.html
 !*.json
 *.pkl

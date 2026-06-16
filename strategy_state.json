@@ -4,7 +4,7 @@
   "investment_level_idx": 0,
   "red_bar_count": 0,
   "green_bar_count": 0,
-  "last_trade_date": "20260615",
+  "last_trade_date": "20260616",
   "trades": [
     {
       "date": "20260319",
@@ -85,5 +85,5 @@
       "reason": "红转绿，连续红柱1根（未满4根）"
     }
   ],
-  "saved_at": "2026-06-15 17:29:53"
+  "saved_at": "2026-06-16 14:12:36"
 }

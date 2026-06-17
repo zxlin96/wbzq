@@ -1,11 +1,22 @@
 {
-  "lastUpdate": "2026-06-16 14:12:57",
-  "totalStocks": 1,
-  "c154Stocks": 4,
+  "lastUpdate": "2026-06-17 13:41:20",
+  "totalStocks": 3,
+  "c154Stocks": 6,
   "c432Stocks": 0,
-  "totalReports": 68,
-  "latestDate": "20260616",
+  "totalReports": 69,
+  "latestDate": "20260617",
   "reports": [
+    {
+      "date": "20260617",
+      "stockSelection": "html/20260617/stock_selection_20260617.html",
+      "industryTrend": "html/20260617/industry_total_amount_trend.html",
+      "j13Trend": "html/20260617/first_j13_step_daily_count.html",
+      "c154Result": "c154_result_20260617.csv",
+      "c154Html": "html/20260617/c154_selection_20260617.html",
+      "c432Result": null,
+      "c432Html": null,
+      "sentimentRebound": "html/20260617/sentiment_rebound_strategy.html"
+    },
     {
       "date": "20260616",
       "stockSelection": "html/20260616/stock_selection_20260616.html",

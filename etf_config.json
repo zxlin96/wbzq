@@ -76,6 +76,27 @@
       "target": "nonferrous_metals",
       "strategy": "v2",
       "enabled": true
+    },
+    {
+      "ts_code": "159819.SZ",
+      "name": "人工智能",
+      "target": "ai",
+      "strategy": "v2",
+      "enabled": true
+    },
+    {
+      "ts_code": "159387.SZ",
+      "name": "创业板新能源",
+      "target": "cyb_new_energy",
+      "strategy": "v2",
+      "enabled": true
+    },
+    {
+      "ts_code": "562500.SH",
+      "name": "机器人",
+      "target": "robot",
+      "strategy": "v2",
+      "enabled": true
     }
   ],
   "base_amount": 1000,

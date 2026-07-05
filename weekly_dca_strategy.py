@@ -863,7 +863,7 @@ class WeeklyDCAStrategy:
                 pos_info['return_pct'] = pos_return_pct
                 pos_info['loss_pct'] = round(pos_profit * 100, 2)
             invest_amount = pos.get_invest_amount(last_price)
-            multiplier = int(invest_amount / self.base_amount) if self.base_amount > 0 else 1
+            multiplier = max(1, round(invest_amount / self.base_amount)) if self.base_amount > 0 else 1
 
             if pos.sell_stage == 0:
                 # 回撤止盈

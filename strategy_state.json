@@ -2,9 +2,9 @@
   "position": 1,
   "position_cost": 2000.0,
   "investment_level_idx": 0,
-  "red_bar_count": 2,
+  "red_bar_count": 3,
   "green_bar_count": 0,
-  "last_trade_date": "20260722",
+  "last_trade_date": "20260723",
   "trades": [
     {
       "date": "20260319",
@@ -115,5 +115,5 @@
       "reason": "J13数量(2682)超过90%分位数(2579.3)"
     }
   ],
-  "saved_at": "2026-07-22 12:54:12"
+  "saved_at": "2026-07-23 12:58:56"
 }

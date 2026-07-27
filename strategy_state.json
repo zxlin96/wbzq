@@ -4,7 +4,7 @@
   "investment_level_idx": 0,
   "red_bar_count": 0,
   "green_bar_count": 0,
-  "last_trade_date": "20260724",
+  "last_trade_date": "20260727",
   "trades": [
     {
       "date": "20260319",
@@ -124,5 +124,5 @@
       "reason": "连续红柱达到4根，卖出一半"
     }
   ],
-  "saved_at": "2026-07-26 10:52:50"
+  "saved_at": "2026-07-27 13:26:46"
 }

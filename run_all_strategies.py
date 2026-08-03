@@ -3,13 +3,8 @@
 """
 统一策略管道 (run_all_strategies.py)
 
-将 main_par2 / main_par3 / main_par4 合并为一次执行，
+将 main_par2 / main_par5 合并为一次执行，
 共享数据获取和策略标记计算，避免重复调用 API 和重复计算。
-
-核心优化：
-  - fetch_and_prepare_data() 只执行 1 次（原先执行 3 次）
-  - apply_strategy_marks() 只执行 1 次（原先执行 3 次）
-  - 预计运行时间从 ~30min 降至 ~10-12min
 
 使用方式：
     python run_all_strategies.py --date 20260609 --backtest --hold-days 3
@@ -17,8 +12,7 @@
 
 各脚本仍可独立运行：
     python main_par2.py --date 20260609 --backtest --hold-days 3
-    python main_par3.py --date 20260609
-    python main_par4.py --date 20260609
+    python main_par5.py --date 20260609
 """
 
 import argparse
@@ -60,28 +54,17 @@ from main_par2 import (
     apply_final_filter,
 )
 
-# main_par3 的 C154 策略函数
-from main_par3 import (
-    apply_c154_filter,
-    calculate_c154_score,
-    compute_c154_funnel_stats,
-    print_c154_results,
-    print_c154_stage_statistics,
-    save_c154_result,
-)
-
-# main_par4 的 C432 策略函数
-from main_par4 import (
-    apply_c432_filter,
-    calculate_c432_score,
-    compute_c432_funnel_stats,
-    print_c432_results,
-    print_c432_stage_statistics,
-    save_c432_result,
+# main_par5 的 MACD 策略函数
+from main_par5 import (
+    apply_macd_filter,
+    compute_macd_funnel_stats,
+    print_macd_results,
+    print_macd_stage_statistics,
+    save_macd_result,
 )
 
 # HTML 报告生成
-from generate_stock_html import generate_c154_html, generate_c432_html
+from generate_stock_html import generate_macd_html
 
 logging.basicConfig(level=logging.INFO, format="[%(asctime)s] %(levelname)s | %(message)s")
 
@@ -99,7 +82,7 @@ def parse_args():
     parser.add_argument("--date", type=str, default=None,
                         help="目标日期，格式 YYYYMMDD，默认今天")
     parser.add_argument("--days", type=int, default=250,
-                        help="回测天数，默认250（兼顾 C154/C432 回测需求）")
+                        help="回测天数，默认250（兼顾 MACD 回看需求）")
     parser.add_argument("--debug", type=str, default="",
                         help="调试模式，传入股票代码（逗号分隔）")
     parser.add_argument("--backtest", action="store_true",
@@ -116,10 +99,9 @@ def prepare_unified_trade_dates(args, data_manager):
 
     取各策略的最大回看窗口，确保数据覆盖所有策略需求：
     - main_par2: days + 114(MA) + 60(buffer) = ~424 天回看
-    - main_par3: days * 2 回看
-    - main_par4: days * 2 + 200 回看（最大）
+    - main_par5: days * 2 + 200 回看（MACD + 黄白线计算）
 
-    使用 main_par4 的回看窗口（最大），保证所有策略都能正确计算。
+    使用 main_par5 的回看窗口（最大），保证所有策略都能正确计算。
     """
     if args.date:
         end_date = args.date
@@ -128,7 +110,7 @@ def prepare_unified_trade_dates(args, data_manager):
         end_date = get_nearest_trade_date(data_manager)
         today = datetime.strptime(end_date, "%Y%m%d")
 
-    # main_par4 的回看窗口最大：days*2 + 200
+    # main_par5 的回看窗口：days*2 + 200
     # 再加 MA 最大周期 114 + 60 缓冲
     lookback_days = args.days * 2 + 200 + 114 + 60
     lookback_start_dt = today - timedelta(days=lookback_days)
@@ -197,7 +179,7 @@ def main():
 
         print("共享数据准备完成，共 %d 只股票，%d 条记录" % (df['ts_code'].nunique(), len(df)))
 
-        # 第二阶段：分别应用三套筛选策略
+        # 第二阶段：分别应用两套筛选策略
 
         # 策略 1：主策略 (原 main_par2)
         print("\n" + "=" * 70)
@@ -207,39 +189,20 @@ def main():
         print_results(result_par2, df, end_date, df_chart)
         print_stage_statistics(df, result_par2, args)
 
-        # 策略 2：C154 最优组合
+        # 策略 2：MACD 零轴金叉 + 黄白线接近
         print("\n" + "=" * 70)
-        print("策略2：C154 最优组合筛选")
+        print("策略2：MACD 零轴金叉筛选")
         print("=" * 70)
-        result_c154 = apply_c154_filter(df, end_date, basic)
-        if not result_c154.empty:
-            result_c154 = calculate_c154_score(result_c154, df)
-        print_c154_results(result_c154, df, end_date)
-        save_c154_result(result_c154, end_date)
-        print_c154_stage_statistics(df, result_c154, args)
+        result_macd = apply_macd_filter(df, end_date, basic)
+        print_macd_results(result_macd, df, end_date)
+        save_macd_result(result_macd, end_date)
+        print_macd_stage_statistics(df, result_macd, args, end_date)
 
-        # 生成 C154 HTML 报告
-        if not result_c154.empty:
-            industry_count_c154 = result_c154['industry_name'].value_counts().to_dict()
-            funnel_c154 = compute_c154_funnel_stats(df, result_c154)
-            generate_c154_html(result_c154, df, end_date, funnel_c154, industry_count_c154)
-
-        # 策略 3：C432 最优组合
-        print("\n" + "=" * 70)
-        print("策略3：C432 最优组合筛选")
-        print("=" * 70)
-        result_c432 = apply_c432_filter(df, end_date, basic)
-        if not result_c432.empty:
-            result_c432 = calculate_c432_score(result_c432, df)
-        print_c432_results(result_c432, df, end_date)
-        save_c432_result(result_c432, end_date)
-        print_c432_stage_statistics(df, result_c432, args)
-
-        # 生成 C432 HTML 报告
-        if not result_c432.empty:
-            industry_count_c432 = result_c432['industry_name'].value_counts().to_dict()
-            funnel_c432 = compute_c432_funnel_stats(df, result_c432)
-            generate_c432_html(result_c432, df, end_date, funnel_c432, industry_count_c432)
+        # 生成 MACD HTML 报告
+        if not result_macd.empty:
+            industry_count_macd = result_macd['industry_name'].value_counts().to_dict()
+            funnel_macd = compute_macd_funnel_stats(df, result_macd, end_date)
+            generate_macd_html(result_macd, df, end_date, funnel_macd, industry_count_macd)
 
         # 第三阶段：回测 + 可视化
 
@@ -249,8 +212,7 @@ def main():
             if buy_date:
                 strategies = [
                     ("主策略 Stock Selection", result_par2),
-                    ("C154 最优组合", result_c154),
-                    ("C432 最优组合", result_c432),
+                    ("MACD 零轴金叉", result_macd),
                 ]
                 for name, result in strategies:
                     if not result.empty:

@@ -74,6 +74,11 @@ def generate_stock_charts(stock_data, ts_code, name):
     zhixing_duokong_data = stock_data['zhixing_duokong'].ffill().tolist() if 'zhixing_duokong' in stock_data.columns else []
     zhixing_mid_duokong_data = stock_data['zhixing_mid_duokong'].ffill().tolist() if 'zhixing_mid_duokong' in stock_data.columns else []
     
+    # MACD数据
+    macd_dif = stock_data['macd_dif_qfq'].fillna(0).tolist() if 'macd_dif_qfq' in stock_data.columns else [0] * len(dates)
+    macd_dea = stock_data['macd_dea_qfq'].fillna(0).tolist() if 'macd_dea_qfq' in stock_data.columns else [0] * len(dates)
+    macd_bar = stock_data['macd_qfq'].fillna(0).tolist() if 'macd_qfq' in stock_data.columns else [0] * len(dates)
+
     chart_config = {
         'ts_code': ts_code,
         'name': name,
@@ -86,7 +91,10 @@ def generate_stock_charts(stock_data, ts_code, name):
         'kdj_j': [float(x) for x in j_data],
         'ma60': [float(x) for x in ma60_data] if ma60_data else [],
         'zhixing_duokong': [float(x) for x in zhixing_duokong_data] if zhixing_duokong_data else [],
-        'zhixing_mid_duokong': [float(x) for x in zhixing_mid_duokong_data] if zhixing_mid_duokong_data else []
+        'zhixing_mid_duokong': [float(x) for x in zhixing_mid_duokong_data] if zhixing_mid_duokong_data else [],
+        'macd_dif': [float(x) for x in macd_dif],
+        'macd_dea': [float(x) for x in macd_dea],
+        'macd_bar': [float(x) for x in macd_bar],
     }
     
     return chart_config
@@ -1439,5 +1447,279 @@ def generate_c432_html(result, df, end_date, funnel_stats, industry_count):
     with open(filename, 'w', encoding='utf-8') as f:
         f.write(html_content)
     print(f"  C432 HTML 报告: {filename}")
+
+
+def generate_macd_html(result, df, end_date, funnel_stats, industry_count):
+    """生成 MACD 零轴金叉选股结果的交互式 HTML 报告"""
+    import os, json
+    html_dir = os.path.join('html', end_date)
+    os.makedirs(html_dir, exist_ok=True)
+
+    if result.empty:
+        html_content = f"""<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MACD零轴金叉选股 - {end_date}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>body {{ font-family: Inter, sans-serif; }}</style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="max-w-5xl mx-auto px-4 py-8">
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+            <h1 class="text-2xl font-bold text-blue-600">MACD 零轴金叉选股</h1>
+            <p class="text-gray-500 mt-1">日期: {end_date} | 无符合条件的股票</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm p-6 text-center text-gray-500">
+            今天没有股票满足 MACD 零轴金叉条件。
+        </div>
+    </div>
+</body>
+</html>"""
+        filename = os.path.join(html_dir, f"macd_selection_{end_date}.html")
+        with open(filename, 'w', encoding='utf-8') as f:
+            f.write(html_content)
+        print(f"  MACD 报告(空): {filename}")
+        return
+
+    table_data = []
+    stock_charts = {}
+    stock_details = {}
+    for _, row in result.iterrows():
+        ts_code = row['ts_code']
+        name = row['name']
+        stock_history = df[df['ts_code'] == ts_code].copy()
+        chart_data = generate_stock_charts(stock_history, ts_code, name)
+        if chart_data:
+            stock_charts[ts_code] = chart_data
+        zx_duokong = row['zhixing_duokong']
+        zx_mid = row['zhixing_mid_duokong']
+        close = row['close_qfq']
+        line_diff = abs(zx_duokong - zx_mid)
+        line_diff_pct = line_diff / close * 100 if close > 0 else 0
+        detail = (
+            f'<tr><td class="font-medium">知行多空线(黄)</td><td>{zx_duokong:.4f}</td></tr>'
+            f'<tr><td class="font-medium">知行中期多空线(白)</td><td>{zx_mid:.4f}</td></tr>'
+            f'<tr><td class="font-medium">|黄-白|差值</td><td>{line_diff:.4f}</td></tr>'
+            f'<tr><td class="font-medium">|黄-白|/收盘价</td><td>{line_diff_pct:.3f}%</td></tr>'
+            f'<tr><td class="font-medium">MACD DIF</td><td>{row["macd_dif_qfq"]:.4f}</td></tr>'
+            f'<tr><td class="font-medium">涨跌幅</td><td>{row["pct_chg"]:.2f}%</td></tr>'
+            f'<tr><td class="font-medium">成交额</td><td>{row["amount"]:.0f}</td></tr>'
+            f'<tr><td class="font-medium">换手率</td><td>{row.get("turnover_rate", 0):.1f}%</td></tr>'
+            f'<tr><td class="font-medium">量比</td><td>{row.get("volume_ratio", 0):.2f}</td></tr>'
+            f'<tr><td class="font-medium">PE-TTM</td><td>{row.get("pe_ttm", "N/A")}</td></tr>'
+            f'<tr><td class="font-medium">PB</td><td>{row.get("pb", "N/A")}</td></tr>'
+            f'<tr><td class="font-medium">总市值</td><td>{row.get("total_mv", 0) / 10000:.1f}亿</td></tr>'
+            f'<tr><td class="font-medium">流通市值</td><td>{row.get("circ_mv", 0) / 10000:.1f}亿</td></tr>'
+        )
+        stock_details[ts_code] = detail
+
+        row_items = [
+            f'<a href="javascript:void(0)" onclick="openChart(\'{ts_code}\')" class="text-blue-600 hover:underline">{ts_code}</a>',
+            name,
+            row.get('industry_name', '未知'),
+            f'{close:.2f}',
+            f'{zx_duokong:.4f}',
+            f'{zx_mid:.4f}',
+            f'{line_diff:.4f}',
+            f'{line_diff_pct:.3f}%',
+            f'{row["macd_dif_qfq"]:.4f}',
+            f'{row["pct_chg"]:.2f}%',
+        ]
+        table_data.append(row_items)
+
+    # 漏斗统计
+    funnel_rows = ''.join(
+        f'<div class="flex items-center gap-2"><span class="text-gray-600 min-w-[120px]">{k}</span>'
+        f'<div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-blue-500 rounded-full h-2" style="width:{v / max(funnel_stats.values()) * 100}%"></div></div>'
+        f'<span class="font-semibold min-w-[40px] text-right">{v}</span></div>'
+        for k, v in funnel_stats.items()
+    )
+
+    # 行业分布
+    max_industry = max(industry_count.values()) if industry_count else 1
+    industry_rows = ''.join(
+        f'<div class="flex items-center gap-2"><span class="text-gray-600 min-w-[100px]">{k}</span>'
+        f'<div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-indigo-500 rounded-full h-2" style="width:{v / max_industry * 100}%"></div></div>'
+        f'<span class="font-semibold min-w-[30px] text-right">{v}</span></div>'
+        for k, v in sorted(industry_count.items(), key=lambda x: -x[1])
+    )
+
+    # 表格行
+    table_rows = ''.join(
+        '<tr>' + ''.join(f'<td class="px-3 py-2 border-b">{cell}</td>' for cell in row) + '</tr>'
+        for row in table_data
+    )
+
+    # 图表数据
+    charts_json = json.dumps(stock_charts, ensure_ascii=False)
+    details_json = json.dumps(stock_details, ensure_ascii=False)
+
+    html_content = f"""<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MACD零轴金叉选股 - {end_date}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {{ font-family: Inter, sans-serif; }}
+        .modal {{ display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }}
+        .modal-content {{ background: #fff; margin: 2% auto; width: 92%; max-width: 1100px; border-radius: 12px; max-height: 90vh; overflow-y: auto; }}
+        .close {{ float: right; font-size: 28px; cursor: pointer; padding: 8px 16px; }}
+        .chart-container {{ width: 100%; height: 400px; }}
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <!-- 标题 -->
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+            <h1 class="text-2xl font-bold text-blue-600">MACD 零轴金叉选股</h1>
+            <p class="text-gray-500 mt-1">日期: {end_date} | 条件: 前一天DIF&lt;0 &amp; 当天DIF&gt;0 &amp; |黄(多空)-白(中期)|/收盘价&le;0.3% | 共 {len(result)} 只</p>
+        </div>
+
+        <!-- 漏斗统计 -->
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+            <h2 class="text-lg font-semibold mb-3">漏斗统计</h2>
+            {funnel_rows}
+        </div>
+
+        <!-- 行业分布 -->
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+            <h2 class="text-lg font-semibold mb-3">行业分布</h2>
+            {industry_rows}
+        </div>
+
+        <!-- 结果表格 -->
+        <div class="bg-white rounded-xl shadow-sm p-6 overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead>
+                        <tr class="bg-gray-100">
+                            <th class="px-3 py-2 text-left">代码</th>
+                            <th class="px-3 py-2 text-left">名称</th>
+                            <th class="px-3 py-2 text-left">行业</th>
+                            <th class="px-3 py-2 text-right">收盘价</th>
+                            <th class="px-3 py-2 text-right">黄线(多空)</th>
+                            <th class="px-3 py-2 text-right">白线(中期)</th>
+                            <th class="px-3 py-2 text-right">|黄-白|</th>
+                            <th class="px-3 py-2 text-right">偏差%</th>
+                            <th class="px-3 py-2 text-right">DIF</th>
+                            <th class="px-3 py-2 text-right">涨跌幅</th>
+                        </tr>
+                    </thead>
+                <tbody>
+                    {table_rows}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 模态框 -->
+    <div id="chartModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center p-4 border-b">
+                <h2 class="text-lg font-bold" id="modalTitle">股票图表</h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div id="modalBody" class="p-4">
+                <div id="detailTable" class="mb-4"></div>
+                <div id="klineChart" class="chart-container mb-4"></div>
+                <div id="volumeChart" class="chart-container mb-4" style="height: 150px;"></div>
+                <div id="macdChart" class="chart-container" style="height: 200px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    const chartsData = {charts_json};
+    const detailsData = {details_json};
+    let kc, vc, mc;
+
+    function openChart(tsCode) {{
+        const d = chartsData[tsCode];
+        if (!d) return;
+        document.getElementById('modalTitle').textContent = tsCode + ' - ' + d.name;
+        document.getElementById('detailTable').innerHTML = '<table class="w-full text-sm mb-4"><tbody>' + (detailsData[tsCode] || '') + '</tbody></table>';
+        document.getElementById('chartModal').style.display = 'block';
+
+        setTimeout(() => {{
+            // K线图
+            if (kc) kc.dispose();
+            kc = echarts.init(document.getElementById('klineChart'));
+            const cd = d.candlestick.map(c => ({{value: [c[1],c[2],c[3],c[4]], itemStyle: {{color: c[2]>=c[1]?'#ef4444':'#22c55e', color0: c[2]>=c[1]?'#ef4444':'#22c55e', borderColor: c[2]>=c[1]?'#ef4444':'#22c55e', borderColor0: c[2]>=c[1]?'#ef4444':'#22c55e'}}}}));
+            kc.setOption({{
+                title: {{ text: 'K线图', left: 'center', textStyle: {{ fontSize: 14 }} }},
+                tooltip: {{ trigger: 'axis', axisPointer: {{ type: 'cross' }} }},
+                grid: {{ left: '8%', right: '8%', top: '50px', bottom: '30px' }},
+                xAxis: {{ type: 'category', data: d.dates, axisTick: {{ alignWithLabel: true }} }},
+                yAxis: {{ type: 'value', scale: true }},
+                series: [{{
+                    type: 'candlestick',
+                    data: cd,
+                    itemStyle: {{ color: '#ef4444', color0: '#22c55e', borderColor: '#ef4444', borderColor0: '#22c55e' }}
+                }}]
+            }});
+
+            // 成交额
+            if (vc) vc.dispose();
+            const vd = d.volume.map((v, i) => ({{
+                value: v.amount, itemStyle: {{ color: v.is_double ? '#a855f7' : '#3b82f6' }}
+            }}));
+            vc = echarts.init(document.getElementById('volumeChart'));
+            vc.setOption({{
+                tooltip: {{ trigger: 'axis', formatter: function(params) {{
+                    const i = params[0].dataIndex;
+                    const vol = d.volume[i];
+                    return params[0].axisValue + '<br/>成交额: ' + params[0].value.toFixed(2) + ' 万元<br/>是否倍量: ' + (vol.is_double ? '是' : '否');
+                }}}},
+                grid: {{ left: '8%', right: '8%', top: '40px', bottom: '30px' }},
+                xAxis: {{ type: 'category', data: d.dates, show: false }},
+                yAxis: {{ type: 'value' }},
+                series: [{{ type: 'bar', data: vd }}]
+            }});
+
+            // MACD 图
+            if (mc) mc.dispose();
+            mc = echarts.init(document.getElementById('macdChart'));
+            mc.setOption({{
+                title: {{ text: 'MACD指标（DIF/DEA/柱）', left: 'center', textStyle: {{ fontSize: 14 }} }},
+                tooltip: {{ trigger: 'axis',
+                    formatter: function(params) {{
+                        let r = params[0].axisValue + '<br/>';
+                        params.forEach(p => {{ r += p.seriesName + ': ' + p.data.toFixed(4) + '<br/>'; }});
+                        return r;
+                    }}
+                }},
+                legend: {{ data: ['DIF', 'DEA', 'MACD'], bottom: 0 }},
+                grid: {{ left: '10%', right: '10%', top: '40px', bottom: '40px' }},
+                xAxis: {{ type: 'category', data: d.dates }},
+                yAxis: {{ type: 'value' }},
+                series: [
+                    {{ type: 'line', data: d.macd_dif, name: 'DIF', smooth: true, lineStyle: {{ color: '#3b82f6', width: 2 }} }},
+                    {{ type: 'line', data: d.macd_dea, name: 'DEA', smooth: true, lineStyle: {{ color: '#f59e0b', width: 2 }} }},
+                    {{ type: 'bar', data: d.macd_bar, name: 'MACD', itemStyle: {{
+                        color: function(params) {{ return params.value >= 0 ? '#ef4444' : '#22c55e'; }}
+                    }} }}
+                ]
+            }});
+
+            window.addEventListener('resize', () => {{ kc.resize(); vc.resize(); mc.resize(); }});
+        }}, 100);
+    }}
+
+    function closeModal() {{ document.getElementById('chartModal').style.display = 'none'; }}
+    window.onclick = function(e) {{ if (e.target == document.getElementById('chartModal')) document.getElementById('chartModal').style.display = 'none'; }}
+    </script>
+</body>
+</html>"""
+
+    filename = os.path.join(html_dir, f"macd_selection_{end_date}.html")
+    with open(filename, 'w', encoding='utf-8') as f:
+        f.write(html_content)
+    print(f"  MACD HTML 报告: {filename}")
 
 

@@ -1494,6 +1494,9 @@ def generate_macd_html(result, df, end_date, funnel_stats, industry_count):
         chart_data = generate_stock_charts(stock_history, ts_code, name)
         if chart_data:
             stock_charts[ts_code] = chart_data
+        # 判断白线是否曾>黄线
+        has_white_gt_yellow = (stock_history['zhixing_mid_duokong'] > stock_history['zhixing_duokong']).any()
+        white_gt_yellow_badge = '<span class="text-green-600 font-bold">✓ 是</span>' if has_white_gt_yellow else '<span class="text-red-400">✗ 否</span>'
         zx_duokong = row['zhixing_duokong']
         zx_mid = row['zhixing_mid_duokong']
         close = row['close_qfq']
@@ -1504,6 +1507,7 @@ def generate_macd_html(result, df, end_date, funnel_stats, industry_count):
             f'<tr><td class="font-medium">知行中期多空线(白)</td><td>{zx_mid:.4f}</td></tr>'
             f'<tr><td class="font-medium">|黄-白|差值</td><td>{line_diff:.4f}</td></tr>'
             f'<tr><td class="font-medium">|黄-白|/收盘价</td><td>{line_diff_pct:.3f}%</td></tr>'
+            f'<tr><td class="font-medium">白线曾>黄线(历史)</td><td>{white_gt_yellow_badge}</td></tr>'
             f'<tr><td class="font-medium">MACD DIF</td><td>{row["macd_dif_qfq"]:.4f}</td></tr>'
             f'<tr><td class="font-medium">涨跌幅</td><td>{row["pct_chg"]:.2f}%</td></tr>'
             f'<tr><td class="font-medium">成交额</td><td>{row["amount"]:.0f}</td></tr>'
@@ -1652,15 +1656,31 @@ def generate_macd_html(result, df, end_date, funnel_stats, industry_count):
             kc = echarts.init(document.getElementById('klineChart'));
             const cd = d.candlestick.map(c => ({{value: [c[1],c[2],c[3],c[4]], itemStyle: {{color: c[2]>=c[1]?'#ef4444':'#22c55e', color0: c[2]>=c[1]?'#ef4444':'#22c55e', borderColor: c[2]>=c[1]?'#ef4444':'#22c55e', borderColor0: c[2]>=c[1]?'#ef4444':'#22c55e'}}}}));
             kc.setOption({{
-                title: {{ text: 'K线图', left: 'center', textStyle: {{ fontSize: 14 }} }},
+                title: {{ text: 'K线图 - 黄线(多空) 白线(中期)', left: 'center', textStyle: {{ fontSize: 14 }} }},
                 tooltip: {{ trigger: 'axis', axisPointer: {{ type: 'cross' }} }},
-                grid: {{ left: '8%', right: '8%', top: '50px', bottom: '30px' }},
+                legend: {{ data: ['K线', '黄线(多空)', '白线(中期)'], bottom: 0, left: 'center' }},
+                grid: {{ left: '8%', right: '8%', top: '50px', bottom: '50px' }},
                 xAxis: {{ type: 'category', data: d.dates, axisTick: {{ alignWithLabel: true }} }},
                 yAxis: {{ type: 'value', scale: true }},
                 series: [{{
                     type: 'candlestick',
+                    name: 'K线',
                     data: cd,
                     itemStyle: {{ color: '#ef4444', color0: '#22c55e', borderColor: '#ef4444', borderColor0: '#22c55e' }}
+                }}, {{
+                    type: 'line',
+                    name: '黄线(多空)',
+                    data: d.zhixing_duokong,
+                    smooth: true,
+                    lineStyle: {{ color: '#f59e0b', width: 2 }},
+                    symbol: 'none'
+                }}, {{
+                    type: 'line',
+                    name: '白线(中期)',
+                    data: d.zhixing_mid_duokong,
+                    smooth: true,
+                    lineStyle: {{ color: '#06b6d4', width: 2 }},
+                    symbol: 'none'
                 }}]
             }});
 

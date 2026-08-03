@@ -9,7 +9,8 @@ MACD零轴金叉选股策略 (main_par5.py)
     1. 前一天 MACD DIF < 0（零轴下方）
     2. 当天 MACD DIF > 0（上穿零轴）
     3. 黄白线（知行多空线与知行中期多空线）很接近，偏差 <= 0.3%（相对收盘价）
-    4. 非次新股（上市>=180天）
+    4. 回测周期内出现过中期多空线(白) > 知行多空线(黄)（黄线需从下方上穿）
+    5. 非次新股（上市>=180天）
 
 使用方式：
     python main_par5.py                              # 默认今天，250天回测
@@ -58,13 +59,14 @@ def parse_args():
 
 
 def apply_macd_filter(df, end_date, basic):
-    """应用 MACD 零轴金叉 + 黄白线接近 筛选条件
+    """应用 MACD 零轴金叉 + 黄白线接近 + 白线曾上穿黄线 筛选条件
 
     条件（全部 AND）：
     1. 前一天 MACD DIF < 0
     2. 当天 MACD DIF > 0
     3. 黄白线接近：|知行多空线(黄) - 知行中期多空线(白)| / 收盘价 <= 0.3%
-    4. 非次新股（上市>=180天）
+    4. 回测周期内出现过中期多空线(白) > 知行多空线(黄)
+    5. 非次新股（上市>=180天）
 
     Args:
         df: 含所有策略标记的 DataFrame
@@ -101,6 +103,13 @@ def apply_macd_filter(df, end_date, basic):
         'kdj_qfq', 'ma_qfq_60', 'open_qfq', 'high_qfq', 'low_qfq',
     ]].sort_values('macd_dif_qfq', ascending=False)
 
+    # 条件4: 回测周期内出现过中期多空线(白) > 知行多空线(黄)
+    if not result.empty:
+        df_filtered['mid_gt_duokong'] = df_filtered['zhixing_mid_duokong'] > df_filtered['zhixing_duokong']
+        stocks_with_cross = df_filtered.groupby('ts_code')['mid_gt_duokong'].max()
+        valid_stocks = stocks_with_cross[stocks_with_cross].index
+        result = result[result['ts_code'].isin(valid_stocks)]
+
     return result
 
 
@@ -116,7 +125,7 @@ def save_macd_result(result, end_date):
 def print_macd_results(result, df, end_date):
     """打印 MACD 策略筛选结果"""
     print('\n========== MACD 零轴金叉选股结果 ==========')
-    print('条件: 前一天DIF<0 & 当天DIF>0 & |黄(知行多空)-白(中期多空)|/收盘价<=0.3%')
+    print('条件: 前一天DIF<0 & 当天DIF>0 & |黄-白|/收盘价<=0.3% & 白线曾>黄线(历史)')
     print()
 
     if result.empty:
@@ -187,8 +196,19 @@ def print_macd_stage_statistics(df, result, args, end_date):
     near_cnt = c3.sum()
     print(f'3) +|黄-白|/收盘价<=0.3%: {near_cnt:>5} 只')
 
+    # 条件4: 回测周期内出现过中期多空线(白) > 知行多空线(黄)
+    # 对当天满足条件的股票，检查其历史数据
+    c4_stocks = today[c3]['ts_code'].unique()
+    if len(c4_stocks) > 0:
+        df['mid_gt_duokong'] = df['zhixing_mid_duokong'] > df['zhixing_duokong']
+        cross_check = df[df['ts_code'].isin(c4_stocks)].groupby('ts_code')['mid_gt_duokong'].max()
+        c4_cnt = cross_check.sum()
+    else:
+        c4_cnt = 0
+    print(f'4) +白线曾>黄线(历史): {c4_cnt:>5} 只')
+
     final_cnt = result['ts_code'].nunique()
-    print(f'4) 最终满足条件: {final_cnt:>5} 只')
+    print(f'5) 最终满足条件: {final_cnt:>5} 只')
 
 
 def compute_macd_funnel_stats(df, result, end_date):
@@ -210,11 +230,21 @@ def compute_macd_funnel_stats(df, result, end_date):
     c3 = c2 & ((today['zhixing_duokong'] - today['zhixing_mid_duokong']).abs()
                    / today['close_qfq'].replace(0, np.nan) * 100 <= 0.3)
 
+    # 条件4: 回测周期内出现过中期多空线(白) > 知行多空线(黄)
+    c4_stocks = today[c3]['ts_code'].unique()
+    if len(c4_stocks) > 0:
+        df['mid_gt_duokong'] = df['zhixing_mid_duokong'] > df['zhixing_duokong']
+        cross_check = df[df['ts_code'].isin(c4_stocks)].groupby('ts_code')['mid_gt_duokong'].max()
+        c4_cnt = int(cross_check.sum())
+    else:
+        c4_cnt = 0
+
     return {
         '全市场': df['ts_code'].nunique(),
         '前一天DIF<0': int(c1.sum()),
         '+当天DIF>0': int(c2.sum()),
         '+|黄-白|/收盘价<=0.3%': int(c3.sum()),
+        '+白线曾>黄线(历史)': c4_cnt,
         '最终': int(result['ts_code'].nunique()),
     }
 

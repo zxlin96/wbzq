@@ -1579,7 +1579,7 @@ def generate_macd_html(result, df, end_date, funnel_stats, industry_count):
         <!-- 标题 -->
         <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
             <h1 class="text-2xl font-bold text-blue-600">MACD 零轴金叉选股</h1>
-            <p class="text-gray-500 mt-1">日期: {end_date} | 条件: 前一天DIF&lt;0 &amp; 当天DIF&gt;0 &amp; |黄(多空)-白(中期)|/收盘价&le;0.3% | 共 {len(result)} 只</p>
+            <p class="text-gray-500 mt-1">日期: {end_date} | 条件: 前一天DIF&lt;0 &amp; 当天DIF&gt;0 &amp; |黄(多空)-白(中期)|/收盘价&le;0.3% &amp; 白线曾&gt;黄线(历史) | 共 {len(result)} 只</p>
         </div>
 
         <!-- 漏斗统计 -->

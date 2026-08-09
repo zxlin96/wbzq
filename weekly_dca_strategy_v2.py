@@ -174,6 +174,8 @@ class Position:
         self.round_periods = round_periods
         self.buy_count = 0  # 本轮已买期数
         self.dca_exited = False  # 是否已触发过 J>13 退出（一把投入剩余预算）
+        self.dca_exit_date = ''  # J回升投完预算的日期，用于生成"本周预算打完"提示
+        self.dca_exit_amount = 0.0  # J回升时一次性投入的剩余预算金额
         # 仓位状态
         self.shares = 0.0
         self.total_cost = 0.0
@@ -290,6 +292,8 @@ class Position:
         self.price_below_dk_sold = False
         self.buy_count = 0
         self.dca_exited = False
+        self.dca_exit_date = ''
+        self.dca_exit_amount = 0.0
 
     def to_dict(self) -> dict:
         return {
@@ -309,6 +313,8 @@ class Position:
             'round_periods': self.round_periods,
             'buy_count': self.buy_count,
             'dca_exited': self.dca_exited,
+            'dca_exit_date': self.dca_exit_date,
+            'dca_exit_amount': self.dca_exit_amount,
             'trades': self.trades,
             'week_invested': list(self.week_invested),
         }
@@ -344,6 +350,8 @@ class Position:
         p.price_below_dk_sold = data.get('price_below_dk_sold', False)
         p.buy_count = data.get('buy_count', 0)
         p.dca_exited = data.get('dca_exited', False)
+        p.dca_exit_date = data.get('dca_exit_date', '')
+        p.dca_exit_amount = data.get('dca_exit_amount', 0.0)
         p.trades = data.get('trades', [])
         p.week_invested = set(data.get('week_invested', []))
         return p
@@ -608,6 +616,8 @@ class WeeklyDCAStrategy:
                         dca_pos.buy(trade_date, price, remaining,
                                     f"J回升={weekly_j:.2f}, 剩余预算投入={remaining:.0f}")
                         dca_pos.week_invested.add(trade_date)
+                        dca_pos.dca_exit_date = trade_date
+                        dca_pos.dca_exit_amount = remaining
                         logging.info(f"[{self.name}] R{dca_pos.round_id} {trade_date} "
                                      f"J回升投入剩余预算: 价格={price:.4f}, 金额={remaining:.0f}")
                     dca_pos.dca_exited = True
@@ -795,6 +805,8 @@ class WeeklyDCAStrategy:
                 'sell_stage': pos.sell_stage,
                 'j_peak': round(pos.j_peak, 2),
                 'dca_active': pos.dca_active,
+                'round_budget': round(pos.round_budget, 2),
+                'budget_remaining': round(pos.get_budget_remaining(), 2),
             }
             pos_loss = pos.get_current_loss_pct(last_price)
             pos_profit = -pos_loss
@@ -832,10 +844,40 @@ class WeeklyDCAStrategy:
                         f"建议买入{invest_amount:.0f}元({multiplier}x)"
                     )
                 elif pos.dca_active:
-                    pos_info['action'] = 'hold'
-                    pos_info['action_label'] = f'R{pos.round_id} 定投暂停·持有观望'
-                    pos_info['action_color'] = '#f39c12'
-                    pos_info['action_detail'] = f"R{pos.round_id} J={weekly_j:.2f}，等卖出或买入信号"
+                    if pos.dca_exited or pos.get_budget_remaining() <= 0:
+                        # 预算已投完/超预算，J>13
+                        if pos.buy_count < pos.round_periods:
+                            # 预算期内刚投完，判断是否当周投入
+                            if pos.dca_exit_date == last_date and pos.dca_exit_amount > 0:
+                                pos_info['action'] = 'invest_remaining'
+                                exit_amount = pos.dca_exit_amount
+                                pos_info['action_label'] = f'R{pos.round_id} 建议投入剩余预算{exit_amount:.0f}元'
+                                pos_info['action_color'] = '#e74c3c'
+                                pos_info['action_detail'] = (
+                                    f"R{pos.round_id} J回升至{weekly_j:.2f}，"
+                                    f"已定投{pos.buy_count-1}期，建议一次性投入剩余预算{exit_amount:.0f}元"
+                                )
+                            else:
+                                pos_info['action'] = 'hold_fully_invested'
+                                pos_info['action_label'] = f'R{pos.round_id} 预算已投完·持有等卖'
+                                pos_info['action_color'] = '#3498db'
+                                pos_info['action_detail'] = (
+                                    f"R{pos.round_id} 预算已全部投入({pos.total_invested:.0f}元)，"
+                                    f"J={weekly_j:.2f}，等J>={self.j_sell_half_threshold}或回撤止盈卖出"
+                                )
+                        else:
+                            pos_info['action'] = 'hold_fully_invested'
+                            pos_info['action_label'] = f'R{pos.round_id} 超预算·持有等卖'
+                            pos_info['action_color'] = '#3498db'
+                            pos_info['action_detail'] = (
+                                f"R{pos.round_id} 已投入{pos.total_invested:.0f}元(超预算)，"
+                                f"J={weekly_j:.2f}，等J回落继续定投或等卖出信号"
+                            )
+                    else:
+                        pos_info['action'] = 'hold'
+                        pos_info['action_label'] = f'R{pos.round_id} 定投暂停·持有观望'
+                        pos_info['action_color'] = '#f39c12'
+                        pos_info['action_detail'] = f"R{pos.round_id} J={weekly_j:.2f}，等卖出或买入信号"
                 elif pos.shares > 0:
                     pos_info['action'] = 'hold'
                     pos_info['action_label'] = f'R{pos.round_id} 持有观望'

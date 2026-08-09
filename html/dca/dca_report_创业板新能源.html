@@ -15,9 +15,9 @@ h2 { color: #333; font-size: 18px; margin: 15px 0 10px; }
 .card { background: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
 .card-label { color: #666; font-size: 12px; margin-bottom: 5px; }
 .card-value { font-size: 20px; font-weight: bold; color: #333; }
-.action-box { background: white; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 5px solid #3498db; }
+.action-box { background: white; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 5px solid #f39c12; }
 .action-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-.action-label { font-size: 22px; font-weight: bold; color: #3498db; }
+.action-label { font-size: 22px; font-weight: bold; color: #f39c12; }
 .action-date { color: #999; font-size: 13px; }
 .action-detail { font-size: 14px; color: #555; line-height: 1.8; padding: 10px; background: #fafafa; border-radius: 4px; }
 .action-metrics { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 12px; }
@@ -43,25 +43,28 @@ h2 { color: #333; font-size: 18px; margin: 15px 0 10px; }
 <body>
 <div class="container">
 <h1>周线KDJ定投策略回测报告</h1>
-<div class="subtitle">创业板新能源 | 基础金额: 1000 | J&lt;=13定投 | J&gt;=93卖1/3 | 回撤止盈(peak&gt;=50,回落&gt;=20) | 收盘<中期线:中期>多空卖1/3,中期<多空全清 | 已卖2/3后收盘<多空线全清</div>
+<div class="subtitle">创业板新能源 | 基础金额: 1000 | "
+    f"J<=13定投 | J>=93卖1/3 | "
+    f"回撤止盈(peak>=50,回落>=20) | "
+    f"收盘<中期线:中期>多空卖1/3,中期<多空全清 | 已卖2/3后收盘<多空线全清</div>
 <div class="action-box">
 <div class="action-header">
-    <div class="action-label">下一交易日: R1 超预算·持有等卖</div>
+    <div class="action-label">下一交易日: R1 定投暂停·持有观望</div>
     <div class="action-date">数据截至: 20260807 收盘价: 0.7600</div>
 </div>
-<div class="action-detail">R1 已投入11000元(超预算)，J=19.25，等J回落继续定投或等卖出信号</div>
+<div class="action-detail">R1 J=19.25，等卖出或买入信号</div>
 <div class="action-metrics">
     <div class="action-metric">周线K=21.01</div>
     <div class="action-metric">周线D=21.89</div>
     <div class="action-metric">周线J=19.25</div>
     <div class='action-metric'>中期=0.7308 多空=0.7923 (空头)</div>
-    <div class='action-metric'>持仓=14831.44份 成本=0.7417 浮盈=2.47%</div>
+    <div class='action-metric'>持仓=6699.84份 成本=0.7463 浮盈=1.84%</div>
 </div>
 </div>
 <div class="summary">
 <div class="card">
     <div class="card-label">总投入</div>
-    <div class="card-value">11000.00</div>
+    <div class="card-value">5000.00</div>
 </div>
 <div class="card">
     <div class="card-label">总卖出</div>
@@ -69,7 +72,7 @@ h2 { color: #333; font-size: 18px; margin: 15px 0 10px; }
 </div>
 <div class="card">
     <div class="card-label">剩余持仓</div>
-    <div class="card-value">14831.4430 份</div>
+    <div class="card-value">6699.8366 份</div>
 </div>
 <div class="card">
     <div class="card-label">交易次数</div>
@@ -88,10 +91,10 @@ h2 { color: #333; font-size: 18px; margin: 15px 0 10px; }
         <span class="pos-round" style="background: #e74c3c;">R1</span>
         <span class="pos-stage">定投中</span>
     </div>
-    <div class="pos-detail">R1 超预算·持有等卖</div>
+    <div class="pos-detail">R1 定投暂停·持有观望</div>
     <div class="pos-metrics">
-        <span>持仓: 14831.44份</span>
-        <span>成本: 0.7417</span>
+        <span>持仓: 6699.84份</span>
+        <span>成本: 0.7463</span>
         <span>J峰值: 19.25</span>
     </div>
 </div>
@@ -113,58 +116,58 @@ h2 { color: #333; font-size: 18px; margin: 15px 0 10px; }
     <th>原因</th><th>持仓</th><th>盈亏</th>
 </tr>
 <tr>
-    <td>20260706</td>
+    <td>20260703</td>
     <td><span class="round-tag" style="background: #e74c3c;">R1</span></td>
     <td><span class="buy-tag">买入</span></td>
-    <td>0.8700</td>
+    <td>0.8640</td>
     <td>1000.00</td>
-    <td>1149.4253</td>
+    <td>1157.4074</td>
     <td>周线J=0.33, 金额=1000</td>
-    <td>1149.4253</td>
+    <td>1157.4074</td>
     <td>-</td>
 </tr>
 <tr>
-    <td>20260713</td>
+    <td>20260710</td>
     <td><span class="round-tag" style="background: #e74c3c;">R1</span></td>
     <td><span class="buy-tag">买入</span></td>
-    <td>0.7800</td>
-    <td>4000.00</td>
-    <td>5128.2051</td>
-    <td>周线J=-12.10, 金额=4000</td>
-    <td>6277.6304</td>
-    <td>-</td>
-</tr>
-<tr>
-    <td>20260720</td>
-    <td><span class="round-tag" style="background: #e74c3c;">R1</span></td>
-    <td><span class="buy-tag">买入</span></td>
-    <td>0.6970</td>
-    <td>4000.00</td>
-    <td>5738.8809</td>
-    <td>周线J=-17.04, 金额=4000</td>
-    <td>12016.5113</td>
-    <td>-</td>
-</tr>
-<tr>
-    <td>20260727</td>
-    <td><span class="round-tag" style="background: #e74c3c;">R1</span></td>
-    <td><span class="buy-tag">买入</span></td>
-    <td>0.7120</td>
+    <td>0.7760</td>
     <td>1000.00</td>
-    <td>1404.4944</td>
+    <td>1288.6598</td>
+    <td>周线J=-12.10, 金额=1000</td>
+    <td>2446.0672</td>
+    <td>-</td>
+</tr>
+<tr>
+    <td>20260717</td>
+    <td><span class="round-tag" style="background: #e74c3c;">R1</span></td>
+    <td><span class="buy-tag">买入</span></td>
+    <td>0.6950</td>
+    <td>1000.00</td>
+    <td>1438.8489</td>
+    <td>周线J=-17.04, 金额=1000</td>
+    <td>3884.9161</td>
+    <td>-</td>
+</tr>
+<tr>
+    <td>20260724</td>
+    <td><span class="round-tag" style="background: #e74c3c;">R1</span></td>
+    <td><span class="buy-tag">买入</span></td>
+    <td>0.7100</td>
+    <td>1000.00</td>
+    <td>1408.4507</td>
     <td>周线J=-7.79, 金额=1000</td>
-    <td>13421.0057</td>
+    <td>5293.3668</td>
     <td>-</td>
 </tr>
 <tr>
-    <td>20260803</td>
+    <td>20260731</td>
     <td><span class="round-tag" style="background: #e74c3c;">R1</span></td>
     <td><span class="buy-tag">买入</span></td>
-    <td>0.7090</td>
+    <td>0.7110</td>
     <td>1000.00</td>
-    <td>1410.4372</td>
+    <td>1406.4698</td>
     <td>周线J=0.07, 金额=1000</td>
-    <td>14831.4430</td>
+    <td>6699.8366</td>
     <td>-</td>
 </tr>
 </table>
@@ -208,7 +211,7 @@ var mainSeries = {
     markPoint: {
         symbol: 'pin', symbolSize: 40, animation: false,
         label: { show: true, fontSize: 10, color: '#fff' },
-        data: [{xAxis: '20260706', yAxis: 0.8700, name: 'R1买', itemStyle: {color: '#e74c3c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R1买', color: '#fff', fontSize: 9}},{xAxis: '20260713', yAxis: 0.7800, name: 'R1买', itemStyle: {color: '#e74c3c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R1买', color: '#fff', fontSize: 9}},{xAxis: '20260720', yAxis: 0.6970, name: 'R1买', itemStyle: {color: '#e74c3c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R1买', color: '#fff', fontSize: 9}},{xAxis: '20260727', yAxis: 0.7120, name: 'R1买', itemStyle: {color: '#e74c3c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R1买', color: '#fff', fontSize: 9}},{xAxis: '20260803', yAxis: 0.7090, name: 'R1买', itemStyle: {color: '#e74c3c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R1买', color: '#fff', fontSize: 9}}]
+        data: [{xAxis: '20260703', yAxis: 0.8640, name: 'R1买', itemStyle: {color: '#e74c3c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R1买', color: '#fff', fontSize: 9}},{xAxis: '20260710', yAxis: 0.7760, name: 'R1买', itemStyle: {color: '#e74c3c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R1买', color: '#fff', fontSize: 9}},{xAxis: '20260717', yAxis: 0.6950, name: 'R1买', itemStyle: {color: '#e74c3c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R1买', color: '#fff', fontSize: 9}},{xAxis: '20260724', yAxis: 0.7100, name: 'R1买', itemStyle: {color: '#e74c3c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R1买', color: '#fff', fontSize: 9}},{xAxis: '20260731', yAxis: 0.7110, name: 'R1买', itemStyle: {color: '#e74c3c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R1买', color: '#fff', fontSize: 9}}]
     }
 };
 

@@ -49,10 +49,10 @@
       "name": "沪深300",
       "ts_code": "510300.SH",
       "report_file": "dca_report_沪深300.html",
-      "action_label": "R13 定投暂停·持有观望",
-      "action_color": "#f39c12",
-      "action": "hold",
-      "action_detail": "R13 J=21.64，等卖出或买入信号",
+      "action_label": "R13 预算已投完·持有等卖",
+      "action_color": "#3498db",
+      "action": "hold_fully_invested",
+      "action_detail": "R13 预算已全部投入(5000元)，J=21.64，等J>=93或回撤止盈卖出",
       "positions": [
         {
           "round_id": 13,
@@ -61,10 +61,12 @@
           "sell_stage": 0,
           "j_peak": 21.64,
           "dca_active": true,
-          "action": "hold",
-          "action_label": "R13 定投暂停·持有观望",
-          "action_color": "#f39c12",
-          "action_detail": "R13 J=21.64，等卖出或买入信号"
+          "round_budget": 5000,
+          "budget_remaining": 0.0,
+          "action": "hold_fully_invested",
+          "action_label": "R13 预算已投完·持有等卖",
+          "action_color": "#3498db",
+          "action_detail": "R13 预算已全部投入(5000元)，J=21.64，等J>=93或回撤止盈卖出"
         }
       ],
       "last_date": "20260807",
@@ -143,10 +145,10 @@
       "name": "中证2000",
       "ts_code": "563300.SH",
       "report_file": "dca_report_中证2000.html",
-      "action_label": "R4 定投暂停·持有观望",
-      "action_color": "#f39c12",
-      "action": "hold",
-      "action_detail": "R4 J=27.26，等卖出或买入信号",
+      "action_label": "R4 预算已投完·持有等卖",
+      "action_color": "#3498db",
+      "action": "hold_fully_invested",
+      "action_detail": "R4 预算已全部投入(5000元)，J=27.26，等J>=93或回撤止盈卖出",
       "positions": [
         {
           "round_id": 4,
@@ -155,10 +157,12 @@
           "sell_stage": 0,
           "j_peak": 27.26,
           "dca_active": true,
-          "action": "hold",
-          "action_label": "R4 定投暂停·持有观望",
-          "action_color": "#f39c12",
-          "action_detail": "R4 J=27.26，等卖出或买入信号"
+          "round_budget": 5000,
+          "budget_remaining": 0.0,
+          "action": "hold_fully_invested",
+          "action_label": "R4 预算已投完·持有等卖",
+          "action_color": "#3498db",
+          "action_detail": "R4 预算已全部投入(5000元)，J=27.26，等J>=93或回撤止盈卖出"
         }
       ],
       "last_date": "20260807",
@@ -190,6 +194,8 @@
           "sell_stage": 0,
           "j_peak": 3.58,
           "dca_active": true,
+          "round_budget": 5000,
+          "budget_remaining": 1000.0,
           "action": "buy",
           "action_label": "R12 建议定投(1x)",
           "action_color": "#e74c3c",
@@ -213,10 +219,10 @@
       "name": "创新药",
       "ts_code": "516080.SH",
       "report_file": "dca_report_创新药.html",
-      "action_label": "R13 定投暂停·持有观望",
-      "action_color": "#f39c12",
-      "action": "hold",
-      "action_detail": "R13 J=91.61，等卖出或买入信号",
+      "action_label": "R13 预算已投完·持有等卖",
+      "action_color": "#3498db",
+      "action": "hold_fully_invested",
+      "action_detail": "R13 预算已全部投入(5000元)，J=91.61，等J>=93或回撤止盈卖出",
       "positions": [
         {
           "round_id": 13,
@@ -225,10 +231,12 @@
           "sell_stage": 0,
           "j_peak": 91.61,
           "dca_active": true,
-          "action": "hold",
-          "action_label": "R13 定投暂停·持有观望",
-          "action_color": "#f39c12",
-          "action_detail": "R13 J=91.61，等卖出或买入信号"
+          "round_budget": 5000,
+          "budget_remaining": 0.0,
+          "action": "hold_fully_invested",
+          "action_label": "R13 预算已投完·持有等卖",
+          "action_color": "#3498db",
+          "action_detail": "R13 预算已全部投入(5000元)，J=91.61，等J>=93或回撤止盈卖出"
         }
       ],
       "last_date": "20260807",
@@ -248,10 +256,10 @@
       "name": "电力",
       "ts_code": "159611.SZ",
       "report_file": "dca_report_电力.html",
-      "action_label": "R8 定投暂停·持有观望",
-      "action_color": "#f39c12",
-      "action": "hold",
-      "action_detail": "R8 J=30.27，等卖出或买入信号",
+      "action_label": "R8 超预算·持有等卖",
+      "action_color": "#3498db",
+      "action": "hold_fully_invested",
+      "action_detail": "R8 已投入5000元(超预算)，J=30.27，等J回落继续定投或等卖出信号",
       "positions": [
         {
           "round_id": 8,
@@ -260,10 +268,12 @@
           "sell_stage": 0,
           "j_peak": 30.27,
           "dca_active": true,
-          "action": "hold",
-          "action_label": "R8 定投暂停·持有观望",
-          "action_color": "#f39c12",
-          "action_detail": "R8 J=30.27，等卖出或买入信号"
+          "round_budget": 5000,
+          "budget_remaining": 0.0,
+          "action": "hold_fully_invested",
+          "action_label": "R8 超预算·持有等卖",
+          "action_color": "#3498db",
+          "action_detail": "R8 已投入5000元(超预算)，J=30.27，等J回落继续定投或等卖出信号"
         }
       ],
       "last_date": "20260807",
@@ -283,10 +293,10 @@
       "name": "科创半导体",
       "ts_code": "588170.SH",
       "report_file": "dca_report_科创半导体.html",
-      "action_label": "R3 定投暂停·持有观望",
-      "action_color": "#f39c12",
-      "action": "hold",
-      "action_detail": "R3 J=15.68，等卖出或买入信号",
+      "action_label": "R3 预算已投完·持有等卖",
+      "action_color": "#3498db",
+      "action": "hold_fully_invested",
+      "action_detail": "R3 预算已全部投入(5000元)，J=15.68，等J>=93或回撤止盈卖出",
       "positions": [
         {
           "round_id": 3,
@@ -295,10 +305,12 @@
           "sell_stage": 0,
           "j_peak": 15.68,
           "dca_active": true,
-          "action": "hold",
-          "action_label": "R3 定投暂停·持有观望",
-          "action_color": "#f39c12",
-          "action_detail": "R3 J=15.68，等卖出或买入信号"
+          "round_budget": 5000,
+          "budget_remaining": 0.0,
+          "action": "hold_fully_invested",
+          "action_label": "R3 预算已投完·持有等卖",
+          "action_color": "#3498db",
+          "action_detail": "R3 预算已全部投入(5000元)，J=15.68，等J>=93或回撤止盈卖出"
         }
       ],
       "last_date": "20260807",
@@ -318,10 +330,10 @@
       "name": "卫星ETF富国",
       "ts_code": "563230.SH",
       "report_file": "dca_report_卫星ETF富国.html",
-      "action_label": "R2 定投暂停·持有观望",
-      "action_color": "#f39c12",
-      "action": "hold",
-      "action_detail": "R2 J=23.83，等卖出或买入信号",
+      "action_label": "R2 预算已投完·持有等卖",
+      "action_color": "#3498db",
+      "action": "hold_fully_invested",
+      "action_detail": "R2 预算已全部投入(5000元)，J=23.83，等J>=93或回撤止盈卖出",
       "positions": [
         {
           "round_id": 2,
@@ -330,10 +342,12 @@
           "sell_stage": 0,
           "j_peak": 23.83,
           "dca_active": true,
-          "action": "hold",
-          "action_label": "R2 定投暂停·持有观望",
-          "action_color": "#f39c12",
-          "action_detail": "R2 J=23.83，等卖出或买入信号"
+          "round_budget": 5000,
+          "budget_remaining": 0.0,
+          "action": "hold_fully_invested",
+          "action_label": "R2 预算已投完·持有等卖",
+          "action_color": "#3498db",
+          "action_detail": "R2 预算已全部投入(5000元)，J=23.83，等J>=93或回撤止盈卖出"
         }
       ],
       "last_date": "20260807",
@@ -353,10 +367,10 @@
       "name": "有色金属",
       "ts_code": "512400.SH",
       "report_file": "dca_report_有色金属.html",
-      "action_label": "R12 定投暂停·持有观望",
-      "action_color": "#f39c12",
-      "action": "hold",
-      "action_detail": "R12 J=58.99，等卖出或买入信号",
+      "action_label": "R12 预算已投完·持有等卖",
+      "action_color": "#3498db",
+      "action": "hold_fully_invested",
+      "action_detail": "R12 预算已全部投入(5000元)，J=58.99，等J>=93或回撤止盈卖出",
       "positions": [
         {
           "round_id": 12,
@@ -365,10 +379,12 @@
           "sell_stage": 0,
           "j_peak": 58.99,
           "dca_active": true,
-          "action": "hold",
-          "action_label": "R12 定投暂停·持有观望",
-          "action_color": "#f39c12",
-          "action_detail": "R12 J=58.99，等卖出或买入信号"
+          "round_budget": 5000,
+          "budget_remaining": 0.0,
+          "action": "hold_fully_invested",
+          "action_label": "R12 预算已投完·持有等卖",
+          "action_color": "#3498db",
+          "action_detail": "R12 预算已全部投入(5000元)，J=58.99，等J>=93或回撤止盈卖出"
         }
       ],
       "last_date": "20260807",
@@ -388,10 +404,10 @@
       "name": "人工智能",
       "ts_code": "159819.SZ",
       "report_file": "dca_report_人工智能.html",
-      "action_label": "R12 定投暂停·持有观望",
-      "action_color": "#f39c12",
-      "action": "hold",
-      "action_detail": "R12 J=13.85，等卖出或买入信号",
+      "action_label": "R12 预算已投完·持有等卖",
+      "action_color": "#3498db",
+      "action": "hold_fully_invested",
+      "action_detail": "R12 预算已全部投入(5000元)，J=13.85，等J>=93或回撤止盈卖出",
       "positions": [
         {
           "round_id": 12,
@@ -400,10 +416,12 @@
           "sell_stage": 0,
           "j_peak": 13.85,
           "dca_active": true,
-          "action": "hold",
-          "action_label": "R12 定投暂停·持有观望",
-          "action_color": "#f39c12",
-          "action_detail": "R12 J=13.85，等卖出或买入信号"
+          "round_budget": 5000,
+          "budget_remaining": 0.0,
+          "action": "hold_fully_invested",
+          "action_label": "R12 预算已投完·持有等卖",
+          "action_color": "#3498db",
+          "action_detail": "R12 预算已全部投入(5000元)，J=13.85，等J>=93或回撤止盈卖出"
         }
       ],
       "last_date": "20260807",
@@ -423,10 +441,10 @@
       "name": "创业板新能源",
       "ts_code": "159387.SZ",
       "report_file": "dca_report_创业板新能源.html",
-      "action_label": "R1 定投暂停·持有观望",
-      "action_color": "#f39c12",
-      "action": "hold",
-      "action_detail": "R1 J=19.25，等卖出或买入信号",
+      "action_label": "R1 超预算·持有等卖",
+      "action_color": "#3498db",
+      "action": "hold_fully_invested",
+      "action_detail": "R1 已投入5000元(超预算)，J=19.25，等J回落继续定投或等卖出信号",
       "positions": [
         {
           "round_id": 1,
@@ -435,10 +453,12 @@
           "sell_stage": 0,
           "j_peak": 19.25,
           "dca_active": true,
-          "action": "hold",
-          "action_label": "R1 定投暂停·持有观望",
-          "action_color": "#f39c12",
-          "action_detail": "R1 J=19.25，等卖出或买入信号"
+          "round_budget": 5000,
+          "budget_remaining": 0.0,
+          "action": "hold_fully_invested",
+          "action_label": "R1 超预算·持有等卖",
+          "action_color": "#3498db",
+          "action_detail": "R1 已投入5000元(超预算)，J=19.25，等J回落继续定投或等卖出信号"
         }
       ],
       "last_date": "20260807",
@@ -458,10 +478,10 @@
       "name": "机器人",
       "ts_code": "562500.SH",
       "report_file": "dca_report_机器人.html",
-      "action_label": "R11 定投暂停·持有观望",
-      "action_color": "#f39c12",
-      "action": "hold",
-      "action_detail": "R11 J=15.53，等卖出或买入信号",
+      "action_label": "R11 预算已投完·持有等卖",
+      "action_color": "#3498db",
+      "action": "hold_fully_invested",
+      "action_detail": "R11 预算已全部投入(5000元)，J=15.53，等J>=93或回撤止盈卖出",
       "positions": [
         {
           "round_id": 11,
@@ -470,10 +490,12 @@
           "sell_stage": 0,
           "j_peak": 15.53,
           "dca_active": true,
-          "action": "hold",
-          "action_label": "R11 定投暂停·持有观望",
-          "action_color": "#f39c12",
-          "action_detail": "R11 J=15.53，等卖出或买入信号"
+          "round_budget": 5000,
+          "budget_remaining": 0.0,
+          "action": "hold_fully_invested",
+          "action_label": "R11 预算已投完·持有等卖",
+          "action_color": "#3498db",
+          "action_detail": "R11 预算已全部投入(5000元)，J=15.53，等J>=93或回撤止盈卖出"
         }
       ],
       "last_date": "20260807",

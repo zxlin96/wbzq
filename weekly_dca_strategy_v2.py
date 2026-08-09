@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-周线KDJ定投策略 - 纳斯达克指数 & 红利低波指数
+周线KDJ定投策略 V2 - 卖出策略优化版
 
 策略逻辑：
-1. 周线 J < 13 时，开始每周定投
-2. 亏损达到 5% 时，定投金额翻倍（基础金额 → 2倍 → 4倍）
-3. 亏损达到 10% 时，定投金额再翻倍
-4. 周线 J > 100 时，卖出半仓
-5. 日线知行多空线死叉（中期多空线下穿多空线）时，全部卖出
+1. 周线 J < 13 时，开始每周定投（预算制：每轮5000元/5期）
+2. 亏损达到 5% 时，定投金额翻倍；亏损达到 10% 时，再翻倍
+3. 周线 J >= 93 或 J峰值回撤止盈时，卖出1/3
+4. 已卖1/3后：监控收盘<中期线，中期>多空卖1/3，中期<多空全清
+5. 已卖2/3后：收盘<多空线时全部卖出
 
-数据源：
-- 纳斯达克100ETF：Tushare fund_daily（513100.SH）
-- 红利低波ETF：Tushare fund_daily（512890.SH）
+与V1区别：
+- 阶段0/1触发：收盘<多空线 → 收盘<中期线（更早触发卖出）
+- 阶段1/2全清：死叉(中期下穿多空) → 收盘<多空线（更直接判断）
+
+数据源：Tushare fund_daily
 """
 
 import os
@@ -32,14 +34,6 @@ try:
 except ImportError:
     ts = None
     logging.warning("tushare 未安装，数据获取将不可用")
-
-# V6 策略（V6 = V5无倍投 + V4止损），用于 etf_config.json 中 strategy='v6'
-from weekly_dca_strategy_v6 import (
-    WeeklyDCAStrategyV6,
-)
-from weekly_dca_strategy_v2 import (
-    generate_backtest_report as generate_backtest_report_v6,
-)
 
 
 def get_nasdaq_data(years: int = 5) -> pd.DataFrame:
@@ -180,8 +174,6 @@ class Position:
         self.round_periods = round_periods
         self.buy_count = 0  # 本轮已买期数
         self.dca_exited = False  # 是否已触发过 J>13 退出（一把投入剩余预算）
-        self.dca_exit_date = ''  # J回升投完预算的日期，用于生成"本周预算打完"提示
-        self.dca_exit_amount = 0.0  # J回升时一次性投入的剩余预算金额
         # 仓位状态
         self.shares = 0.0
         self.total_cost = 0.0
@@ -222,7 +214,7 @@ class Position:
         """预算制计算买入金额:
         - 预算期内(< round_periods): 动态均摊剩余预算
         - 超过预算期(>= round_periods): 按 round_budget/round_periods 基础金额
-        - 亏损加码照常，超过预算也继续定投
+        - 亏损加码照常，但受剩余预算约束
         """
         base_per_period = self.round_budget / self.round_periods if self.round_periods > 0 else self.base_amount
         if self.buy_count < self.round_periods:
@@ -230,9 +222,6 @@ class Position:
             remaining = max(self.round_budget - self.total_invested, 0)
             remaining_periods = max(self.round_periods - self.buy_count, 1)
             base = remaining / remaining_periods
-            # 预算已超时，用基础金额继续定投
-            if base <= 0:
-                base = base_per_period
         else:
             # 超过预算期：固定基础金额，不受budget上限
             base = base_per_period
@@ -243,6 +232,10 @@ class Position:
                 base = base * 4
             elif loss_pct >= self.loss_threshold_1:
                 base = base * 2
+        # 预算期内受剩余预算约束
+        if self.buy_count < self.round_periods:
+            remaining = max(self.round_budget - self.total_invested, 0)
+            base = min(base, remaining)
         return max(base, 0)
 
     def get_budget_remaining(self) -> float:
@@ -316,8 +309,6 @@ class Position:
             'round_periods': self.round_periods,
             'buy_count': self.buy_count,
             'dca_exited': self.dca_exited,
-            'dca_exit_date': self.dca_exit_date,
-            'dca_exit_amount': self.dca_exit_amount,
             'trades': self.trades,
             'week_invested': list(self.week_invested),
         }
@@ -353,8 +344,6 @@ class Position:
         p.price_below_dk_sold = data.get('price_below_dk_sold', False)
         p.buy_count = data.get('buy_count', 0)
         p.dca_exited = data.get('dca_exited', False)
-        p.dca_exit_date = data.get('dca_exit_date', '')
-        p.dca_exit_amount = data.get('dca_exit_amount', 0.0)
         p.trades = data.get('trades', [])
         p.week_invested = set(data.get('week_invested', []))
         return p
@@ -372,7 +361,6 @@ class WeeklyDCAStrategy:
                  j_pullback: float = 20,
                  round_budget: float = 5000,
                  round_periods: int = 5,
-                 sell_version: str = 'v1',
                  state_file: str = None):
         self.name = name
         self.base_amount = base_amount
@@ -384,7 +372,6 @@ class WeeklyDCAStrategy:
         self.j_pullback = j_pullback
         self.round_budget = round_budget
         self.round_periods = round_periods
-        self.sell_version = sell_version
         self.state_file = state_file or f'dca_state_{name}.json'
         # 多仓位管理
         self.positions: List[Position] = []
@@ -473,8 +460,6 @@ class WeeklyDCAStrategy:
                 self.next_round_id = state.get('next_round_id', 1)
                 self.total_sell_amount = state.get('total_sell_amount', 0)
                 self.trades = state.get('trades', [])
-                if 'sell_version' in state:
-                    self.sell_version = state['sell_version']
                 self.positions = []
                 for pd_data in state.get('positions', []):
                     p = Position.from_dict(
@@ -509,7 +494,6 @@ class WeeklyDCAStrategy:
             'total_sell_amount': self.total_sell_amount,
             'trades': self.trades,
             'positions': [p.to_dict() for p in self.positions],
-            'sell_version': self.sell_version,
         }
         try:
             with open(self.state_file, 'w', encoding='utf-8') as f:
@@ -525,12 +509,8 @@ class WeeklyDCAStrategy:
         logging.info(f"  亏损翻倍阈值: {self.loss_threshold_1*100}% / {self.loss_threshold_2*100}%")
         logging.info(f"  周线 J<={self.j_buy_threshold} 定投, J>={self.j_sell_half_threshold} 卖1/3")
         logging.info(f"  J峰值回撤>={self.j_pullback}(peak>={self.j_peak_min}) 卖1/3")
-        if self.sell_version == 'v1':
-            logging.info(f"  [V1] 收盘<多空线: 中期>多空卖1/3, 中期<多空全清")
-            logging.info(f"  [V1] 死叉全清")
-        else:
-            logging.info(f"  [V2] 收盘<中期线: 中期>多空卖1/3, 中期<多空全清")
-            logging.info(f"  [V2] 已卖2/3后: 收盘<多空线全清")
+        logging.info(f"  收盘<中期线: 中期>多空卖1/3, 中期<多空全清")
+        logging.info(f"  已卖2/3后: 收盘<多空线全清")
         logging.info(f"  多仓位独立管理: 每轮定投/卖出独立跟踪")
         if backtest_start:
             logging.info(f"  预热后回测起始: {backtest_start}")
@@ -539,16 +519,6 @@ class WeeklyDCAStrategy:
         daily_dict = {}
         for _, row in daily_with_duokong.iterrows():
             daily_dict[row['trade_date']] = row.to_dict()
-
-        # 构建次日开盘价查找表：信号当天 → 次日开盘价
-        all_dates_sorted = sorted(daily_dict.keys())
-        next_day_open_map = {}
-        for i in range(len(all_dates_sorted) - 1):
-            today = all_dates_sorted[i]
-            next_day = all_dates_sorted[i + 1]
-            next_open = daily_dict[next_day].get('open_qfq', 0)
-            if next_open > 0:
-                next_day_open_map[today] = {'next_date': next_day, 'next_open': next_open}
         weekly_kdj = calc_kdj(weekly_df)
         dead_cross_dates = set()
         golden_cross_dates = set()
@@ -598,10 +568,6 @@ class WeeklyDCAStrategy:
                 continue
             daily_row = daily_dict[trade_date]
             price = daily_row['close_qfq']
-            # 次日开盘价用于买卖成交（信号当天无法操作，次日开盘买入/卖出）
-            next_info = next_day_open_map.get(trade_date)
-            trade_price = next_info['next_open'] if next_info else price
-            trade_date_actual = next_info['next_date'] if next_info else trade_date
             dk_val_today = daily_row.get('zhixing_duokong')
             mid_val_today = daily_row.get('zhixing_mid')
             week_key = daily_to_weekly.get(trade_date)
@@ -627,27 +593,23 @@ class WeeklyDCAStrategy:
                     logging.info(f"[{self.name}] R{dca_pos.round_id} {trade_date} "
                                  f"周线J={weekly_j:.2f}<={self.j_buy_threshold}, 启动定投")
                 if is_new_week and trade_date not in dca_pos.week_invested:
-                    invest_amount = dca_pos.get_invest_amount(trade_price)
+                    invest_amount = dca_pos.get_invest_amount(price)
                     if invest_amount > 0:
-                        dca_pos.buy(trade_date_actual, trade_price, invest_amount,
+                        dca_pos.buy(trade_date, price, invest_amount,
                                     f"周线J={weekly_j:.2f}, 金额={invest_amount:.0f}")
                         dca_pos.week_invested.add(trade_date)
-                        logging.info(f"[{self.name}] R{dca_pos.round_id} {trade_date_actual} 买入: "
-                                     f"价格={trade_price:.4f}(次日开盘), 金额={invest_amount:.0f}")
+                        logging.info(f"[{self.name}] R{dca_pos.round_id} {trade_date} 买入: "
+                                     f"价格={price:.4f}, 金额={invest_amount:.0f}")
             else:
-                # J > 买入阈值：预算期内投入剩余预算，超过预算期则暂停等J回落
+                # J > 买入阈值：检查是否有定投仓位需要投入剩余预算
                 if dca_pos is not None and not dca_pos.dca_exited:
-                    if dca_pos.buy_count < dca_pos.round_periods:
-                        # 预算期内：一把投入剩余预算
-                        remaining = dca_pos.get_budget_remaining()
-                        if remaining > 0:
-                            dca_pos.buy(trade_date_actual, trade_price, remaining,
-                                        f"J回升={weekly_j:.2f}, 剩余预算投入={remaining:.0f}")
-                            dca_pos.week_invested.add(trade_date)
-                            dca_pos.dca_exit_date = trade_date
-                            dca_pos.dca_exit_amount = remaining
-                            logging.info(f"[{self.name}] R{dca_pos.round_id} {trade_date_actual} "
-                                         f"J回升投入剩余预算: 价格={trade_price:.4f}(次日开盘), 金额={remaining:.0f}")
+                    remaining = dca_pos.get_budget_remaining()
+                    if remaining > 0:
+                        dca_pos.buy(trade_date, price, remaining,
+                                    f"J回升={weekly_j:.2f}, 剩余预算投入={remaining:.0f}")
+                        dca_pos.week_invested.add(trade_date)
+                        logging.info(f"[{self.name}] R{dca_pos.round_id} {trade_date} "
+                                     f"J回升投入剩余预算: 价格={price:.4f}, 金额={remaining:.0f}")
                     dca_pos.dca_exited = True
 
             # ===== 遍历每个活跃仓位，独立判断卖出 =====
@@ -663,15 +625,14 @@ class WeeklyDCAStrategy:
                     pos.golden_confirmed = True
                     pos.price_below_dk_sold = False
                     logging.info(f"[{self.name}] R{pos.round_id} {trade_date} "
-                                 f"日线知行多空金叉，监控收盘<多空线或等死叉" if self.sell_version == 'v1'
-                                 else f"日线知行多空金叉，监控收盘<中期线或等收盘<多空线")
+                                 f"日线知行多空金叉，监控收盘<中期线或等收盘<多空线")
 
                 if pos.sell_stage == 0:
                     # 回撤止盈
                     if (pos.shares > 0 and not pos.pullback_sold
                             and pos.j_peak >= self.j_peak_min
                             and weekly_j <= pos.j_peak - self.j_pullback):
-                        pos.sell(trade_date_actual, trade_price, 1.0 / 3,
+                        pos.sell(trade_date, price, 1.0 / 3,
                                  f"R{pos.round_id} J峰值回撤(J_peak={pos.j_peak:.2f}, "
                                  f"J={weekly_j:.2f}, 回撤={pos.j_peak - weekly_j:.2f})")
                         pos.sell_stage = 1
@@ -683,9 +644,7 @@ class WeeklyDCAStrategy:
                             pos.golden_confirmed = True
                             pos.waiting_golden = False
                             logging.info(f"[{self.name}] R{pos.round_id} {trade_date} "
-                                         + ("回撤止盈卖1/3，多头区间，监控收盘<多空线"
-                                            if self.sell_version == 'v1'
-                                            else "回撤止盈卖1/3，多头区间，监控收盘<中期线"))
+                                         f"回撤止盈卖1/3，多头区间，监控收盘<中期线")
                         else:
                             pos.golden_confirmed = False
                             logging.info(f"[{self.name}] R{pos.round_id} {trade_date} "
@@ -695,7 +654,7 @@ class WeeklyDCAStrategy:
                     # J≥93 卖1/3
                     elif (pos.shares > 0 and weekly_j >= self.j_sell_half_threshold
                             and pos.sell_stage == 0):
-                        pos.sell(trade_date_actual, trade_price, 1.0 / 3,
+                        pos.sell(trade_date, price, 1.0 / 3,
                                  f"R{pos.round_id} 周线J={weekly_j:.2f}"
                                  f">={self.j_sell_half_threshold}")
                         pos.sell_stage = 1
@@ -706,59 +665,40 @@ class WeeklyDCAStrategy:
                             pos.golden_confirmed = True
                             pos.waiting_golden = False
                             logging.info(f"[{self.name}] R{pos.round_id} {trade_date} "
-                                         + ("卖1/3，多头区间，监控收盘<多空线"
-                                            if self.sell_version == 'v1'
-                                            else "卖1/3，多头区间，监控收盘<中期线"))
+                                         f"卖1/3，多头区间，监控收盘<中期线")
                         else:
                             pos.golden_confirmed = False
                             logging.info(f"[{self.name}] R{pos.round_id} {trade_date} "
                                          f"卖1/3，空头区间，等金叉")
 
-                # 收盘<多空线(V1) 或 收盘<中期线(V2)：双空全清 vs 多头回调
-                trigger_price = dk_val_today if self.sell_version == 'v1' else mid_val_today
-                trigger_name = "多空线" if self.sell_version == 'v1' else "中期线"
+                # 收盘<中期线：双空全清 vs 多头回调
                 if (pos.shares > 0 and pos.golden_confirmed
                         and not pos.price_below_dk_sold
-                        and pd.notna(trigger_price) and price < trigger_price):
-                    mid_below_dk = (pd.notna(mid_val_today) and mid_val_today < dk_val_today)
+                        and pd.notna(mid_val_today) and price < mid_val_today):
+                    mid_below_dk = (pd.notna(mid_val_today) and pd.notna(dk_val_today) and mid_val_today < dk_val_today)
                     if mid_below_dk:
-                        pos.sell(trade_date_actual, trade_price, 1.0,
+                        pos.sell(trade_date, price, 1.0,
                                  f"R{pos.round_id} 双空全清: "
-                                 f"收盘({price:.4f})<{trigger_name}({trigger_price:.4f}) "
-                                 f"且中期({mid_val_today:.4f})<多空线")
+                                 f"收盘({price:.4f})<中期线({mid_val_today:.4f}) "
+                                 f"且中期({mid_val_today:.4f})<多空线({dk_val_today:.4f})")
                         logging.info(f"[{self.name}] R{pos.round_id} {trade_date} 双空全清")
                     else:
-                        pos.sell(trade_date_actual, trade_price, 0.5,
+                        pos.sell(trade_date, price, 0.5,
                                  f"R{pos.round_id} 多头回调: "
-                                 f"收盘({price:.4f})<{trigger_name}({trigger_price:.4f}), "
-                                 f"中期({mid_val_today:.4f})>多空线")
+                                 f"收盘({price:.4f})<中期线({mid_val_today:.4f}), "
+                                 f"中期({mid_val_today:.4f})>多空线({dk_val_today:.4f})")
                         pos.sell_stage = 2
                         pos.price_below_dk_sold = True
-                        if self.sell_version == 'v1':
-                            logging.info(f"[{self.name}] R{pos.round_id} {trade_date} "
-                                         f"多头回调卖1/3，等死叉全清")
-                        else:
-                            logging.info(f"[{self.name}] R{pos.round_id} {trade_date} "
-                                         f"多头回调卖1/3，等收盘<多空线全清")
+                        logging.info(f"[{self.name}] R{pos.round_id} {trade_date} "
+                                     f"多头回调卖1/3，等收盘<多空线全清")
 
-                # V1: 死叉全清 | V2: 收盘<多空线全清
-                if self.sell_version == 'v1':
-                    clear_cond = (pos.shares > 0 and pos.golden_confirmed
-                                  and pos.price_below_dk_sold
-                                  and trade_date in dead_cross_dates)
-                else:
-                    clear_cond = (pos.shares > 0 and pos.golden_confirmed
-                                  and pos.price_below_dk_sold
-                                  and pd.notna(dk_val_today) and price < dk_val_today)
-                if clear_cond:
-                    if self.sell_version == 'v1':
-                        pos.sell(trade_date_actual, trade_price, 1.0,
-                                 f"R{pos.round_id} 日线知行多空死叉(全清剩余)")
-                        logging.info(f"[{self.name}] R{pos.round_id} {trade_date} 死叉全清")
-                    else:
-                        pos.sell(trade_date_actual, trade_price, 1.0,
-                                 f"R{pos.round_id} 收盘({price:.4f})<多空线({dk_val_today:.4f})全清")
-                        logging.info(f"[{self.name}] R{pos.round_id} {trade_date} 收盘<多空线全清")
+                # 收盘<多空线全清（替代原死叉全清）
+                if (pos.shares > 0 and pos.golden_confirmed
+                        and pos.price_below_dk_sold
+                        and pd.notna(dk_val_today) and price < dk_val_today):
+                    pos.sell(trade_date, price, 1.0,
+                             f"R{pos.round_id} 收盘({price:.4f})<多空线({dk_val_today:.4f})全清")
+                    logging.info(f"[{self.name}] R{pos.round_id} {trade_date} 收盘<多空线全清")
 
             # 更新汇总卖出金额和交易记录
             total_sell = 0
@@ -855,23 +795,11 @@ class WeeklyDCAStrategy:
                 'sell_stage': pos.sell_stage,
                 'j_peak': round(pos.j_peak, 2),
                 'dca_active': pos.dca_active,
-                'round_budget': round(pos.round_budget, 2),
-                'budget_remaining': round(pos.get_budget_remaining(), 2),
             }
             pos_loss = pos.get_current_loss_pct(last_price)
             pos_profit = -pos_loss
-
-            # 计算每轮收益率：当前市值 + 已卖出金额 - 投入金额) / 投入金额
-            if pos.total_invested > 0:
-                pos_market_value = pos.shares * last_price
-                pos_total_return = pos_market_value + pos.total_sell_amount - pos.total_invested
-                pos_return_pct = round(pos_total_return / pos.total_invested * 100, 2)
-                pos_info['total_invested'] = round(pos.total_invested, 2)
-                pos_info['total_return'] = round(pos_total_return, 2)
-                pos_info['return_pct'] = pos_return_pct
-                pos_info['loss_pct'] = round(pos_profit * 100, 2)
             invest_amount = pos.get_invest_amount(last_price)
-            multiplier = max(1, round(invest_amount / self.base_amount)) if self.base_amount > 0 else 1
+            multiplier = int(invest_amount / self.base_amount) if self.base_amount > 0 else 1
 
             if pos.sell_stage == 0:
                 # 回撤止盈
@@ -904,51 +832,10 @@ class WeeklyDCAStrategy:
                         f"建议买入{invest_amount:.0f}元({multiplier}x)"
                     )
                 elif pos.dca_active:
-                    if pos.dca_exited or pos.get_budget_remaining() <= 0:
-                        # 预算已超，但J<=13仍继续定投
-                        if weekly_j <= self.j_buy_threshold:
-                            pos_info['action'] = 'buy'
-                            pos_info['action_label'] = f'R{pos.round_id} 建议定投({multiplier}x)·超预算'
-                            pos_info['action_color'] = '#e74c3c'
-                            pnl_label = "浮盈" if pos_profit > 0 else "浮亏"
-                            pos_info['action_detail'] = (
-                                f"R{pos.round_id} 超预算定投中，{pnl_label}{abs(pos_profit)*100:.2f}%，"
-                                f"J={weekly_j:.2f}，建议买入{invest_amount:.0f}元({multiplier}x)"
-                            )
-                        elif pos.buy_count < pos.round_periods:
-                            # 预算期内刚投完，判断是否当周
-                            is_this_week = (pos.dca_exit_date == last_date)
-                            if is_this_week:
-                                pos_info['action'] = 'invest_remaining'
-                                exit_amount = pos.dca_exit_amount
-                                buy_count = pos.buy_count
-                                pos_info['action_label'] = f'R{pos.round_id} 建议投入剩余预算{exit_amount:.0f}元'
-                                pos_info['action_color'] = '#e74c3c'
-                                pos_info['action_detail'] = (
-                                    f"R{pos.round_id} J回升至{weekly_j:.2f}，"
-                                    f"已定投{buy_count-1}期，建议一次性投入剩余预算{exit_amount:.0f}元"
-                                )
-                            else:
-                                pos_info['action'] = 'hold_fully_invested'
-                                pos_info['action_label'] = f'R{pos.round_id} 预算已投完·持有等卖'
-                                pos_info['action_color'] = '#3498db'
-                                pos_info['action_detail'] = (
-                                    f"R{pos.round_id} 预算已全部投入({pos.total_invested:.0f}元)，"
-                                    f"J={weekly_j:.2f}，等J>={self.j_sell_half_threshold}或回撤止盈卖出"
-                                )
-                        else:
-                            pos_info['action'] = 'hold_fully_invested'
-                            pos_info['action_label'] = f'R{pos.round_id} 超预算·持有等卖'
-                            pos_info['action_color'] = '#3498db'
-                            pos_info['action_detail'] = (
-                                f"R{pos.round_id} 已投入{pos.total_invested:.0f}元(超预算)，"
-                                f"J={weekly_j:.2f}，等J回落继续定投或等卖出信号"
-                            )
-                    else:
-                        pos_info['action'] = 'hold'
-                        pos_info['action_label'] = f'R{pos.round_id} 定投暂停·持有观望'
-                        pos_info['action_color'] = '#f39c12'
-                        pos_info['action_detail'] = f"R{pos.round_id} J={weekly_j:.2f}，等卖出或买入信号"
+                    pos_info['action'] = 'hold'
+                    pos_info['action_label'] = f'R{pos.round_id} 定投暂停·持有观望'
+                    pos_info['action_color'] = '#f39c12'
+                    pos_info['action_detail'] = f"R{pos.round_id} J={weekly_j:.2f}，等卖出或买入信号"
                 elif pos.shares > 0:
                     pos_info['action'] = 'hold'
                     pos_info['action_label'] = f'R{pos.round_id} 持有观望'
@@ -963,34 +850,18 @@ class WeeklyDCAStrategy:
                 else:
                     dk_v = dk_val if pd.notna(dk_val) else 0
                     mid_v = mid_val if pd.notna(mid_val) else 0
-                    if self.sell_version == 'v1':
-                        pos_info['action'] = 'wait_price_below_dk'
-                        pos_info['action_label'] = f'R{pos.round_id} 已卖1/3·等收盘<多空线'
-                        pos_info['action_color'] = '#e67e22'
-                        pos_info['action_detail'] = (
-                            f"R{pos.round_id} 监控收盘<多空线({dk_v:.4f})，"
-                            f"中期>多空卖1/3，中期<多空全清"
-                        )
-                    else:
-                        pos_info['action'] = 'wait_price_below_mid'
-                        pos_info['action_label'] = f'R{pos.round_id} 已卖1/3·等收盘<中期线'
-                        pos_info['action_color'] = '#e67e22'
-                        pos_info['action_detail'] = (
-                            f"R{pos.round_id} 监控收盘<中期线({mid_v:.4f})，"
-                            f"中期>多空卖1/3，中期<多空全清"
-                        )
+                    pos_info['action'] = 'wait_price_below_mid'
+                    pos_info['action_label'] = f'R{pos.round_id} 已卖1/3·等收盘<中期线'
+                    pos_info['action_color'] = '#e67e22'
+                    pos_info['action_detail'] = (
+                        f"R{pos.round_id} 监控收盘<中期线({mid_v:.4f})，"
+                        f"中期>多空卖1/3，中期<多空全清"
+                    )
             elif pos.sell_stage == 2:
-                if self.sell_version == 'v1':
-                    pos_info['action'] = 'wait_dead_cross'
-                    pos_info['action_label'] = f'R{pos.round_id} 已卖2/3·等死叉'
-                    pos_info['action_color'] = '#f39c12'
-                    pos_info['action_detail'] = f"R{pos.round_id} 等死叉全清"
-                else:
-                    dk_v = dk_val if pd.notna(dk_val) else 0
-                    pos_info['action'] = 'wait_price_below_dk'
-                    pos_info['action_label'] = f'R{pos.round_id} 已卖2/3·等收盘<多空线'
-                    pos_info['action_color'] = '#f39c12'
-                    pos_info['action_detail'] = f"R{pos.round_id} 等收盘<多空线全清"
+                pos_info['action'] = 'wait_price_below_dk'
+                pos_info['action_label'] = f'R{pos.round_id} 已卖2/3·等收盘<多空线'
+                pos_info['action_color'] = '#f39c12'
+                pos_info['action_detail'] = f"R{pos.round_id} 等收盘<多空线全清"
             else:
                 pos_info['action'] = 'unknown'
                 pos_info['action_label'] = f'R{pos.round_id} 未知'
@@ -1173,9 +1044,6 @@ def generate_backtest_report(strategy: WeeklyDCAStrategy,
         <span>J峰值: {pos_j_peak:.2f}</span>
     </div>
 </div>"""
-    sell_desc = ("收盘<多空线:中期>多空卖1/3,中期<多空全清 | 死叉全清"
-                 if strategy.sell_version == 'v1'
-                 else "收盘<中期线:中期>多空卖1/3,中期<多空全清 | 已卖2/3后收盘<多空线全清")
     html = f"""<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -1221,7 +1089,10 @@ h2 {{ color: #333; font-size: 18px; margin: 15px 0 10px; }}
 <body>
 <div class="container">
 <h1>周线KDJ定投策略回测报告</h1>
-<div class="subtitle">{strategy.name} | 基础金额: {strategy.base_amount} | J&lt;={strategy.j_buy_threshold}定投 | J&gt;={strategy.j_sell_half_threshold}卖1/3 | 回撤止盈(peak&gt;={strategy.j_peak_min},回落&gt;={strategy.j_pullback}) | {sell_desc}</div>
+<div class="subtitle">{strategy.name} | 基础金额: {strategy.base_amount} | "
+    f"J<={strategy.j_buy_threshold}定投 | J>={strategy.j_sell_half_threshold}卖1/3 | "
+    f"回撤止盈(peak>={strategy.j_peak_min},回落>={strategy.j_pullback}) | "
+    f"收盘<中期线:中期>多空卖1/3,中期<多空全清 | 已卖2/3后收盘<多空线全清</div>
 <div class="action-box">
 <div class="action-header">
     <div class="action-label">下一交易日: {na['action_label']}</div>
@@ -1394,8 +1265,7 @@ def run_backtest(target: str = 'all',
                  years: int = 5,
                  output_dir: str = 'html/dca',
                  custom_ts_code: str = None,
-                 custom_name: str = None,
-                 sell_version: str = None):
+                 custom_name: str = None):
     os.makedirs(output_dir, exist_ok=True)
     backtest_start = (datetime.now() - timedelta(days=years * 365)).strftime('%Y%m%d')
     results = {}
@@ -1499,11 +1369,9 @@ def run_backtest(target: str = 'all',
                     data_years = (datetime.now() - pd.to_datetime(actual_data_start)).days / 365
                     logging.info(f"  {cfg['name']} 数据起始: {actual_data_start} ({data_years:.1f}年), "
                                  f"预热{warmup_weeks_needed}周后回测起始: {effective_start}")
-            sv = sell_version or ('v1' if tgt == 'nasdaq' else 'v2')
             strategy = WeeklyDCAStrategy(
                 name=cfg['name'],
                 base_amount=base_amount,
-                sell_version=sv,
             )
             strategy.backtest(daily_warmup, weekly,
                               backtest_start=effective_start)
@@ -1654,7 +1522,6 @@ def _generate_dca_summary(results: dict, output_dir: str) -> dict:
                 'action_color': action_info.get('action_color', '#95a5a6'),
                 'action': action_info.get('action', 'unknown'),
                 'action_detail': action_info.get('action_detail', ''),
-                'positions': action_info.get('positions', []),
                 'last_date': action_info.get('last_date', last_date),
                 'last_price': action_info.get('last_price', 0),
                 'weekly_j': action_info.get('weekly_j', 0),
@@ -1731,33 +1598,16 @@ def run_backtest_from_config(config_path: str = 'etf_config.json',
                              f"预热{WARMUP_WEEKS}周后回测起始: {effective_start}")
             else:
                 logging.info(f"  [{name}] 数据充足, 回测起始: {effective_start}")
-            strat_version = etf.get('strategy', 'v6')
-            if strat_version == 'v1':
-                strategy = WeeklyDCAStrategy(
-                    name=name,
-                    base_amount=base_amount,
-                    sell_version='v1',
-                )
-                report_func = generate_backtest_report
-            elif strat_version == 'v6':
-                strategy = WeeklyDCAStrategyV6(
-                    name=name,
-                    base_amount=base_amount,
-                )
-                report_func = generate_backtest_report_v6
-            else:
-                strategy = WeeklyDCAStrategy(
-                    name=name,
-                    base_amount=base_amount,
-                    sell_version=strat_version,
-                )
-                report_func = generate_backtest_report
+            strategy = WeeklyDCAStrategy(
+                name=name,
+                base_amount=base_amount,
+            )
             strategy.backtest(daily_warmup, weekly, backtest_start=effective_start)
             strategy._nav_curve = strategy.calc_nav_curve(daily_warmup)
             strategy._daily_df = daily_warmup
             strategy._weekly_df = weekly
             report_file = os.path.join(output_dir, f"dca_report_{name}.html")
-            report_func(strategy, daily_warmup, weekly, report_file)
+            generate_backtest_report(strategy, daily_warmup, weekly, report_file)
             all_results[name] = strategy
         except Exception as e:
             logging.error(f"[{name}]回测失败: {e}")

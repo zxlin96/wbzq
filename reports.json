@@ -1,16 +1,25 @@
 {
-  "lastUpdate": "2026-08-13 12:38:10",
-  "totalStocks": 3,
-  "macdStocks": 1,
-  "totalReports": 109,
-  "latestDate": "20260813",
+  "lastUpdate": "2026-08-14 12:41:33",
+  "totalStocks": 2,
+  "macdStocks": 0,
+  "totalReports": 110,
+  "latestDate": "20260814",
   "reports": [
+    {
+      "date": "20260814",
+      "stockSelection": "html/20260814/stock_selection_20260814.html",
+      "industryTrend": "html/20260814/industry_total_amount_trend.html",
+      "j13Trend": "html/20260814/first_j13_step_daily_count.html",
+      "macdResult": null,
+      "macdHtml": null,
+      "sentimentRebound": "html/20260814/sentiment_rebound_strategy.html"
+    },
     {
       "date": "20260813",
       "stockSelection": "html/20260813/stock_selection_20260813.html",
       "industryTrend": "html/20260813/industry_total_amount_trend.html",
       "j13Trend": "html/20260813/first_j13_step_daily_count.html",
-      "macdResult": "macd_result_20260813.csv",
+      "macdResult": null,
       "macdHtml": "html/20260813/macd_selection_20260813.html",
       "sentimentRebound": "html/20260813/sentiment_rebound_strategy.html"
     },

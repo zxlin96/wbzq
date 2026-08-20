@@ -204,6 +204,19 @@ def main():
             funnel_macd = compute_macd_funnel_stats(df, result_macd, end_date)
             generate_macd_html(result_macd, df, end_date, funnel_macd, industry_count_macd)
 
+        # 策略 3：多指标联合选股 + 行业 ETF 提示
+        print("\n" + "=" * 70)
+        print("策略3：多指标联合选股 + 行业 ETF 提示")
+        print("=" * 70)
+        result_multi = pd.DataFrame()
+        try:
+            from multi_indicator_pick import run_multi_indicator_strategy
+            result_multi, funnel_multi, hints_multi = run_multi_indicator_strategy(
+                df, end_date, basic, ST
+            )
+        except Exception as e:
+            logging.error("策略3（多指标联合选股）执行失败: %s", e)
+
         # 第三阶段：回测 + 可视化
 
         # 回测
@@ -213,6 +226,7 @@ def main():
                 strategies = [
                     ("主策略 Stock Selection", result_par2),
                     ("MACD 零轴金叉", result_macd),
+                    ("多指标联合选股", result_multi),
                 ]
                 for name, result in strategies:
                     if not result.empty:

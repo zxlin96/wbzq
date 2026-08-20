@@ -1743,3 +1743,300 @@ def generate_macd_html(result, df, end_date, funnel_stats, industry_count):
     print(f"  MACD HTML 报告: {filename}")
 
 
+def generate_multi_indicator_html(result, df, end_date, funnel_stats, industry_count, industry_hints):
+    """生成多指标联合选股结果的交互式 HTML 报告（含超阈值行业提示板块）。
+
+    Args:
+        result: 入选股票 DataFrame
+        df: 含全部策略标记的共享数据 DataFrame
+        end_date: 目标交易日
+        funnel_stats: 漏斗统计 dict
+        industry_count: 行业分布 dict
+        industry_hints: 超阈值行业提示列表（每条含 industry/count）
+    """
+    import html as html_mod
+    import os
+    import numpy as np
+
+    html_dir = os.path.join('html', end_date)
+    os.makedirs(html_dir, exist_ok=True)
+
+    # ---------- 空结果 ----------
+    if result.empty:
+        html_content = f"""<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多指标联合选股 - {end_date}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>body {{ font-family: Inter, sans-serif; }}</style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="max-w-5xl mx-auto px-4 py-8">
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+            <h1 class="text-2xl font-bold text-blue-600">多指标联合选股</h1>
+            <p class="text-gray-500 mt-1">日期: {end_date} | 无符合条件的股票</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm p-6 text-center text-gray-500">
+            今天没有股票满足多指标联合筛选条件。
+        </div>
+    </div>
+</body>
+</html>"""
+        filename = os.path.join(html_dir, f"multi_indicator_selection_{end_date}.html")
+        with open(filename, 'w', encoding='utf-8') as f:
+            f.write(html_content)
+        print(f"  多指标联合选股报告(空): {filename}")
+        return
+
+    # ---------- 构建表格数据与单股图表 ----------
+    table_data = []
+    stock_charts = {}
+    stock_details = {}
+    for _, row in result.iterrows():
+        ts_code = row['ts_code']
+        name = html_mod.escape(str(row['name']))
+        industry = html_mod.escape(str(row.get('industry_name', '未知行业')))
+        stock_history = df[df['ts_code'] == ts_code].copy()
+        chart_data = generate_stock_charts(stock_history, ts_code, str(row['name']))
+        if chart_data:
+            stock_charts[ts_code] = chart_data
+
+        close = row['close_qfq']
+        ma60 = row.get('ma_qfq_60', 0)
+        kdj_j = row['kdj_qfq']
+        macd_dif = row['macd_dif_qfq']
+        pct_chg = row.get('pct_chg', 0)
+        amount = row.get('amount', 0)
+        total_mv = row.get('total_mv', 0)
+        # 振幅
+        high_qfq = row.get('high_qfq', np.nan) if 'high_qfq' in row else np.nan
+        low_qfq = row.get('low_qfq', np.nan) if 'low_qfq' in row else np.nan
+        pre_close = row.get('pre_close', np.nan) if 'pre_close' in row else np.nan
+        if pd.notna(high_qfq) and pd.notna(low_qfq) and pd.notna(pre_close) and pre_close != 0:
+            amplitude = (high_qfq - low_qfq) / pre_close * 100
+        else:
+            amplitude = 0
+
+        detail = (
+            f'<tr><td class="font-medium">KDJ-J</td><td>{kdj_j:.2f}</td></tr>'
+            f'<tr><td class="font-medium">MACD-DIF</td><td>{macd_dif:.4f}</td></tr>'
+            f'<tr><td class="font-medium">收盘价</td><td>{close:.2f}</td></tr>'
+            f'<tr><td class="font-medium">60日均线</td><td>{ma60:.2f}</td></tr>'
+            f'<tr><td class="font-medium">涨跌幅</td><td>{pct_chg:.2f}%</td></tr>'
+            f'<tr><td class="font-medium">成交额</td><td>{amount:.0f}</td></tr>'
+            f'<tr><td class="font-medium">总市值</td><td>{total_mv / 10000:.1f}亿</td></tr>'
+            f'<tr><td class="font-medium">振幅</td><td>{amplitude:.2f}%</td></tr>'
+        )
+        stock_details[ts_code] = detail
+
+        row_items = [
+            f'<a href="javascript:void(0)" onclick="openChart(\'{ts_code}\')" class="text-blue-600 hover:underline">{ts_code}</a>',
+            name,
+            industry,
+            f'{close:.2f}',
+            f'{ma60:.2f}',
+            f'{kdj_j:.2f}',
+            f'{macd_dif:.4f}',
+            f'{pct_chg:.2f}%',
+            f'{amount / 10000:.0f}万',
+            f'{total_mv / 10000:.1f}',
+            f'{amplitude:.2f}%',
+        ]
+        table_data.append(row_items)
+
+    # ---------- 漏斗统计 ----------
+    funnel_max = max(funnel_stats.values()) if funnel_stats else 1
+    funnel_rows = ''.join(
+        f'<div class="flex items-center gap-2"><span class="text-gray-600 min-w-[120px]">{html_mod.escape(str(k))}</span>'
+        f'<div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-blue-500 rounded-full h-2" style="width:{v / funnel_max * 100}%"></div></div>'
+        f'<span class="font-semibold min-w-[40px] text-right">{v}</span></div>'
+        for k, v in funnel_stats.items()
+    )
+
+    # ---------- 行业分布 ----------
+    max_industry = max(industry_count.values()) if industry_count else 1
+    industry_rows = ''.join(
+        f'<div class="flex items-center gap-2"><span class="text-gray-600 min-w-[100px]">{html_mod.escape(str(k))}</span>'
+        f'<div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-indigo-500 rounded-full h-2" style="width:{v / max_industry * 100}%"></div></div>'
+        f'<span class="font-semibold min-w-[30px] text-right">{v}</span></div>'
+        for k, v in sorted(industry_count.items(), key=lambda x: -x[1])
+    )
+
+    # ---------- 超阈值行业提示板块 ----------
+    if industry_hints:
+        industry_table_rows = ''.join(
+            f'<tr>'
+            f'<td class="px-3 py-2 border-b">{html_mod.escape(str(h["industry"]))}</td>'
+            f'<td class="px-3 py-2 border-b text-right">{h["count"]}</td>'
+            f'</tr>'
+            for h in industry_hints
+        )
+        industry_section = f"""
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+            <h2 class="text-lg font-semibold mb-3 text-amber-600">超阈值行业提示（入选数量 &gt; 阈值）</h2>
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="px-3 py-2 text-left">行业</th>
+                        <th class="px-3 py-2 text-right">入选数量</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {industry_table_rows}
+                </tbody>
+            </table>
+        </div>"""
+    else:
+        industry_section = """
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+            <h2 class="text-lg font-semibold mb-3 text-amber-600">超阈值行业提示</h2>
+            <p class="text-gray-500">暂无超阈值行业。</p>
+        </div>"""
+
+    # ---------- 结果表格 ----------
+    table_rows = ''.join(
+        '<tr>' + ''.join(f'<td class="px-3 py-2 border-b">{cell}</td>' for cell in row) + '</tr>'
+        for row in table_data
+    )
+
+    charts_json = json.dumps(stock_charts, ensure_ascii=False)
+    details_json = json.dumps(stock_details, ensure_ascii=False)
+
+    html_content = f"""<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多指标联合选股 - {end_date}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {{ font-family: Inter, sans-serif; }}
+        .modal {{ display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }}
+        .modal-content {{ background: #fff; margin: 2% auto; width: 92%; max-width: 1100px; border-radius: 12px; max-height: 90vh; overflow-y: auto; }}
+        .close {{ float: right; font-size: 28px; cursor: pointer; padding: 8px 16px; }}
+        .chart-container {{ width: 100%; height: 400px; }}
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <!-- 标题 -->
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+            <h1 class="text-2xl font-bold text-blue-600">多指标联合选股</h1>
+            <p class="text-gray-500 mt-1">日期: {end_date} | 条件: KDJ-J&lt;13 &amp; MACD-DIF&gt;0 &amp; 非ST &amp; 收盘&gt;MA60 &amp; 涨跌幅∈(-3%,3%) &amp; 成交额前60% &amp; 市值&gt;50亿 &amp; 振幅&lt;7% | 共 {len(result)} 只</p>
+        </div>
+
+        <!-- 漏斗统计 -->
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+            <h2 class="text-lg font-semibold mb-3">漏斗统计</h2>
+            {funnel_rows}
+        </div>
+
+        <!-- 行业分布 -->
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+            <h2 class="text-lg font-semibold mb-3">行业分布</h2>
+            {industry_rows}
+        </div>
+
+        {industry_section}
+
+        <!-- 结果表格 -->
+        <div class="bg-white rounded-xl shadow-sm p-6 overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="px-3 py-2 text-left">代码</th>
+                        <th class="px-3 py-2 text-left">名称</th>
+                        <th class="px-3 py-2 text-left">行业</th>
+                        <th class="px-3 py-2 text-right">收盘价</th>
+                        <th class="px-3 py-2 text-right">MA60</th>
+                        <th class="px-3 py-2 text-right">KDJ-J</th>
+                        <th class="px-3 py-2 text-right">MACD-DIF</th>
+                        <th class="px-3 py-2 text-right">涨跌幅</th>
+                        <th class="px-3 py-2 text-right">成交额</th>
+                        <th class="px-3 py-2 text-right">总市值(亿)</th>
+                        <th class="px-3 py-2 text-right">振幅(%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {table_rows}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 模态框 -->
+    <div id="chartModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center p-4 border-b">
+                <h2 class="text-lg font-bold" id="modalTitle">股票图表</h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div id="modalBody" class="p-4">
+                <div id="detailTable" class="mb-4"></div>
+                <div id="klineChart" class="chart-container mb-4"></div>
+                <div id="volumeChart" class="chart-container mb-4" style="height: 150px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    const chartsData = {charts_json};
+    const detailsData = {details_json};
+    let kc, vc;
+
+    function openChart(tsCode) {{
+        const d = chartsData[tsCode];
+        if (!d) return;
+        document.getElementById('modalTitle').textContent = tsCode + ' - ' + d.name;
+        document.getElementById('detailTable').innerHTML = '<table class="w-full text-sm mb-4"><tbody>' + (detailsData[tsCode] || '') + '</tbody></table>';
+        document.getElementById('chartModal').style.display = 'block';
+
+        setTimeout(() => {{
+            if (kc) kc.dispose();
+            const cd = d.candlestick.map(c => ({{value: [c[1],c[2],c[3],c[4]], itemStyle: {{color: c[2]>=c[1]?'#ef4444':'#22c55e', color0: c[2]>=c[1]?'#ef4444':'#22c55e', borderColor: c[2]>=c[1]?'#ef4444':'#22c55e', borderColor0: c[2]>=c[1]?'#ef4444':'#22c55e'}}}}));
+            kc = echarts.init(document.getElementById('klineChart'));
+            kc.setOption({{
+                title: {{ text: 'K线图', left: 'center', textStyle: {{ fontSize: 14 }} }},
+                tooltip: {{ trigger: 'axis', axisPointer: {{ type: 'cross' }} }},
+                grid: {{ left: '8%', right: '8%', top: '50px', bottom: '30px' }},
+                xAxis: {{ type: 'category', data: d.dates, axisTick: {{ alignWithLabel: true }} }},
+                yAxis: {{ type: 'value', scale: true }},
+                series: [{{ type: 'candlestick', name: 'K线', data: cd, itemStyle: {{ color: '#ef4444', color0: '#22c55e', borderColor: '#ef4444', borderColor0: '#22c55e' }} }}]
+            }});
+
+            if (vc) vc.dispose();
+            const vd = d.volume.map(v => ({{ value: v.amount, itemStyle: {{ color: v.is_double ? '#a855f7' : '#3b82f6' }} }})));
+            vc = echarts.init(document.getElementById('volumeChart'));
+            vc.setOption({{
+                tooltip: {{ trigger: 'axis', formatter: function(params) {{
+                    const i = params[0].dataIndex;
+                    const vol = d.volume[i];
+                    return params[0].axisValue + '<br/>成交额: ' + params[0].value.toFixed(2) + ' 万元<br/>是否倍量: ' + (vol.is_double ? '是' : '否');
+                }}}},
+                grid: {{ left: '8%', right: '8%', top: '40px', bottom: '30px' }},
+                xAxis: {{ type: 'category', data: d.dates, show: false }},
+                yAxis: {{ type: 'value' }},
+                series: [{{ type: 'bar', data: vd }}]
+            }});
+
+            window.addEventListener('resize', () => {{ kc.resize(); vc.resize(); }});
+        }}, 100);
+    }}
+
+    function closeModal() {{ document.getElementById('chartModal').style.display = 'none'; }}
+    window.onclick = function(e) {{ if (e.target == document.getElementById('chartModal')) document.getElementById('chartModal').style.display = 'none'; }}
+    </script>
+</body>
+</html>"""
+
+    filename = os.path.join(html_dir, f"multi_indicator_selection_{end_date}.html")
+    with open(filename, 'w', encoding='utf-8') as f:
+        f.write(html_content)
+    print(f"  多指标联合选股 HTML 报告: {filename}")
+
+

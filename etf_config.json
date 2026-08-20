@@ -100,5 +100,15 @@
     }
   ],
   "base_amount": 1000,
-  "years": 5
+  "years": 5,
+  "industry_etf_map": {
+    "通信": { "ts_code": "515880.SH", "name": "通信", "enabled": true },
+    "电力": { "ts_code": "159611.SZ", "name": "电力", "enabled": true },
+    "有色金属": { "ts_code": "512400.SH", "name": "有色金属", "enabled": true },
+    "机器人": { "ts_code": "562500.SH", "name": "机器人", "enabled": true },
+    "人工智能": { "ts_code": "159819.SZ", "name": "人工智能", "enabled": true },
+    "创新药": { "ts_code": "516080.SH", "name": "创新药", "enabled": true },
+    "科创半导体": { "ts_code": "588170.SH", "name": "科创半导体", "enabled": true },
+    "创业板新能源": { "ts_code": "159387.SZ", "name": "创业板新能源", "enabled": true }
+  }
 }

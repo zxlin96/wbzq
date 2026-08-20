@@ -10,6 +10,7 @@
   - macd_result_*.csv       → MACD 零轴金叉结果
   - html/dca/dca_summary.json → ETF 定投汇总
   - strategy_state.json     → 情绪反弹策略状态
+  - multi_indicator_hints_*.json → 策略3 超阈值行业提示
 
 使用方式：
     python generate_email_report.py
@@ -21,6 +22,7 @@ import argparse
 import json
 import os
 import glob
+import logging
 import pandas as pd
 
 
@@ -62,6 +64,28 @@ def load_csv_result(pattern):
         return df
     except Exception:
         return pd.DataFrame()
+
+
+def load_multi_indicator_hints():
+    """加载最新的超阈值行业提示 JSON 文件。
+
+    Returns:
+        list: 提示清单 list[dict]；文件缺失或损坏时返回 []。
+    """
+    files = sorted(glob.glob("multi_indicator_hints_*.json"))
+    if not files:
+        return []
+    latest = files[-1]
+    try:
+        with open(latest, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except (json.JSONDecodeError, OSError) as e:
+        logging.warning("加载超阈值行业提示失败 (%s): %s", latest, e)
+        return []
+    if not isinstance(data, list):
+        logging.warning("超阈值行业提示文件 %s 内容非 list 类型: %s", latest, type(data).__name__)
+        return []
+    return data
 
 
 def escape_html(text):
@@ -305,6 +329,38 @@ def generate_sentiment_section(state):
     </table>"""
 
 
+def generate_multi_indicator_hint_section(hints):
+    """生成策略3超阈值行业提示板块 HTML（不含 h3 标题）。
+
+    Args:
+        hints: 提示清单 list[dict]，每条含 {industry, count}
+
+    Returns:
+        str: HTML 片段字符串。
+    """
+    if not hints:
+        return '<p style="color:#999;font-size:13px">暂无超阈值行业</p>'
+
+    rows = ""
+    for h in hints:
+        industry = escape_html(h.get("industry", ""))
+        count = h.get("count", 0)
+        rows += f"""
+        <tr>
+            <td style="padding:6px 8px;border:1px solid #ddd;text-align:left">{industry}</td>
+            <td style="padding:6px 8px;border:1px solid #ddd;text-align:right">{count}</td>
+        </tr>"""
+
+    return f"""
+    <table style="border-collapse:collapse;width:100%;font-size:13px;margin-bottom:16px">
+        <tr style="background:#f5f5f5">
+            <th style="padding:6px 8px;border:1px solid #ddd;text-align:left">行业</th>
+            <th style="padding:6px 8px;border:1px solid #ddd;text-align:right">入选数量</th>
+        </tr>
+        {rows}
+    </table>"""
+
+
 def generate_email_report(status="success", repo="", ref="", run_url=""):
     """生成完整邮件 HTML"""
     # 加载数据
@@ -312,6 +368,7 @@ def generate_email_report(status="success", repo="", ref="", run_url=""):
     strategy_state = load_strategy_state()
     dca_summary = load_dca_summary()
     macd_df = load_csv_result("macd_result_*.csv")
+    multi_hints = load_multi_indicator_hints()
 
     # 状态图标和颜色
     status_map = {
@@ -379,6 +436,11 @@ def generate_email_report(status="success", repo="", ref="", run_url=""):
     📊 情绪反弹策略
 </h3>
 {generate_sentiment_section(strategy_state)}
+
+<h3 style="color:#2c3e50;border-left:4px solid #e67e22;padding-left:10px;margin-top:24px">
+    🏷️ 策略3 超阈值行业提示
+</h3>
+{generate_multi_indicator_hint_section(multi_hints)}
 
 <hr style="border:none;border-top:1px solid #ddd;margin:20px 0">
 <p style="font-size:13px">

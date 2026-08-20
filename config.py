@@ -119,6 +119,17 @@ class StrategyThresholds:
     DISTRIBUTION_V2_DROP_OTHER: float = 0.12  # V2创业板/科创板跌幅阈值
     DISTRIBUTION_V3_MIN_YIN_COUNT: int = 2    # V3最少放量长阴次数
 
+    # 多指标联合选股（策略3）阈值 — spec 6.1
+    MULTI_KDJ_J_MAX: float = 13.0                 # KDJ-J 上限，入选要求 J < 该值
+    MULTI_MACD_DIF_MIN: float = 0.0               # MACD-DIF 下限，入选要求 DIF > 该值
+    MULTI_MA_PERIOD: int = 60                     # 均线周期（对应 ma_qfq_60 字段）
+    MULTI_PCT_CHG_MAX: float = 3.0                # 涨跌幅上限（%），入选要求涨跌幅 < 该值
+    MULTI_PCT_CHG_MIN: float = -3.0               # 涨跌幅下限（%），入选要求涨跌幅 > 该值
+    MULTI_AMOUNT_TOP_PERCENT: float = 0.60        # 成交额排名分位，前 60%
+    MULTI_MV_MIN_BILLION: float = 50.0            # 总市值下限（亿元），入选要求总市值 > 该值
+    MULTI_AMPLITUDE_MAX: float = 7.0              # 振幅上限（%），入选要求振幅 < 该值
+    MULTI_INDUSTRY_COUNT_THRESHOLD: int = 10      # 行业入选数量阈值，超过该值触发 ETF 提示
+
 # ======== 回测配置 ========
 @dataclass
 class BacktestConfig:

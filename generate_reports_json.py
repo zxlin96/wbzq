@@ -37,6 +37,7 @@ def generate_reports_json():
         macd_csv_file = Path(f"macd_result_{date_str}.csv")
         macd_html_file = date_dir / f"macd_selection_{date_str}.html"
         sentiment_rebound_file = date_dir / "sentiment_rebound_strategy.html"
+        multi_indicator_file = date_dir / f"multi_indicator_selection_{date_str}.html"
         
         # 添加所有日期（包括没有选股的）
         reports.append({
@@ -47,6 +48,7 @@ def generate_reports_json():
             'macdResult': f"macd_result_{date_str}.csv" if macd_csv_file.exists() else None,
             'macdHtml': f"html/{date_str}/macd_selection_{date_str}.html" if macd_html_file.exists() else None,
             'sentimentRebound': f"html/{date_str}/sentiment_rebound_strategy.html" if sentiment_rebound_file.exists() else None,
+            'multiIndicator': f"html/{date_str}/multi_indicator_selection_{date_str}.html" if multi_indicator_file.exists() else None,
         })
     
     # 扫描根目录下的 macd_result_*.csv，补充 html 中没有对应目录的日期
@@ -64,6 +66,7 @@ def generate_reports_json():
                 'macdResult': str(csv_file),
                 'macdHtml': f"html/{date_str}/macd_selection_{date_str}.html" if macd_html_path.exists() else None,
                 'sentimentRebound': f"html/{date_str}/sentiment_rebound_strategy.html" if sentiment_rebound_path.exists() else None,
+                'multiIndicator': None,
             })
             existing_dates.add(date_str)
     

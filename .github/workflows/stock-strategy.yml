@@ -75,6 +75,10 @@ jobs:
     - name: 生成报告索引
       run: python generate_reports_json.py
 
+    - name: 生成多指标趋势汇总
+      run: python generate_multi_indicator_trend_html.py
+      continue-on-error: true
+
     - name: 生成邮件报告
       run: |
         python generate_email_report.py \
@@ -99,6 +103,7 @@ jobs:
         git add html/ reports.json index.html strategy_state.json c154_result_*.csv etf_config.json
         git add c432_result_*.csv 2>/dev/null || true
         git add macd_result_*.csv 2>/dev/null || true
+        git add html/multi_indicator_trend/ 2>/dev/null || true
         git diff --staged --quiet || git commit -m "Auto-commit: Update reports for ${{ steps.date.outputs.today }}"
         git pull --rebase https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref }} 2>/dev/null || true
         git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref }}

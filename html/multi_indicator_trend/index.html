@@ -28,25 +28,60 @@
                 <div class="text-xs text-gray-500 mt-1">历史交易日数</div>
             </div>
             <div class="bg-white rounded-xl shadow p-4 text-center">
-                <div class="text-2xl font-bold text-teal-600">0</div>
+                <div class="text-2xl font-bold text-teal-600">1</div>
                 <div class="text-xs text-gray-500 mt-1">行业总数</div>
             </div>
             <div class="bg-white rounded-xl shadow p-4 text-center">
-                <div class="text-2xl font-bold text-orange-600">0</div>
+                <div class="text-2xl font-bold text-orange-600">1</div>
                 <div class="text-xs text-gray-500 mt-1">最新超阈值数</div>
             </div>
             <div class="bg-white rounded-xl shadow p-4 text-center">
-                <div class="text-2xl font-bold text-purple-600">0</div>
+                <div class="text-2xl font-bold text-purple-600">1</div>
                 <div class="text-xs text-gray-500 mt-1">最长连续天数</div>
             </div>
         </div>
 
         
-        <div class="bg-white rounded-xl shadow-lg p-6 mb-6 text-center text-gray-500">
-            暂无超阈值行业数据
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">📈 每日超阈值行业总数趋势</h2>
+            <div id="chartLine" style="width:100%;height:350px;"></div>
+        </div>
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">📊 各行业入选数量变化（堆叠柱状图）</h2>
+            <div id="chartBar" style="width:100%;height:450px;"></div>
+        </div>
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">🔥 行业×日期入选数量热力图</h2>
+            <div id="chartHeatmap" style="width:100%;height:500px;"></div>
         </div>
 
         
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">🏆 持续超阈值行业</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3">行业</th>
+                            <th class="px-4 py-3 text-right">最新入选数</th>
+                            <th class="px-4 py-3 text-right">连续天数</th>
+                            <th class="px-4 py-3 text-center">首次超阈值日期</th>
+                            <th class="px-4 py-3 text-right">历史总天数</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        
+            <tr class="hover:bg-gray-50">
+                <td class="px-4 py-3 font-medium text-gray-900">软件服务</td>
+                <td class="px-4 py-3 text-right">11</td>
+                <td class="px-4 py-3 text-right font-semibold text-blue-600">1</td>
+                <td class="px-4 py-3 text-center">20260820</td>
+                <td class="px-4 py-3 text-right">1</td>
+            </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
         <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
             <h2 class="text-lg font-semibold text-gray-900 mb-4">🟢 新进入 / ⚪ 退出行业</h2>
@@ -66,7 +101,7 @@
     </div>
 
     <script>
-    const chartOptions = {"line": {"tooltip": {"trigger": "axis"}, "grid": {"left": "8%", "right": "5%", "top": "10%", "bottom": "15%"}, "xAxis": {"type": "category", "data": ["2026-08-20"], "axisLabel": {"rotate": 45}}, "yAxis": {"type": "value", "name": "入选总数"}, "series": [{"name": "超阈值行业总数", "type": "line", "data": [0], "smooth": true, "areaStyle": {"opacity": 0.3}}]}, "bar": {"tooltip": {"trigger": "axis", "axisPointer": {"type": "shadow"}}, "legend": {"data": [], "top": "5%", "type": "scroll"}, "grid": {"left": "8%", "right": "5%", "top": "20%", "bottom": "15%"}, "xAxis": {"type": "category", "data": ["2026-08-20"], "axisLabel": {"rotate": 45}}, "yAxis": {"type": "value", "name": "入选数量"}, "series": []}, "heatmap": {"tooltip": {"position": "top"}, "grid": {"left": "15%", "right": "5%", "top": "10%", "bottom": "20%"}, "xAxis": {"type": "category", "data": ["2026-08-20"], "axisLabel": {"rotate": 45}}, "yAxis": {"type": "category", "data": []}, "visualMap": {"min": 0, "max": 1, "calculable": true, "orient": "horizontal", "left": "center", "bottom": "5%"}, "series": [{"name": "入选数量", "type": "heatmap", "data": [], "label": {"show": false}}]}};
+    const chartOptions = {"line": {"tooltip": {"trigger": "axis"}, "grid": {"left": "8%", "right": "5%", "top": "10%", "bottom": "15%"}, "xAxis": {"type": "category", "data": ["2026-08-20"], "axisLabel": {"rotate": 45}}, "yAxis": {"type": "value", "name": "入选总数"}, "series": [{"name": "超阈值行业总数", "type": "line", "data": [11], "smooth": true, "areaStyle": {"opacity": 0.3}}]}, "bar": {"tooltip": {"trigger": "axis", "axisPointer": {"type": "shadow"}}, "legend": {"data": ["软件服务"], "top": "5%", "type": "scroll"}, "grid": {"left": "8%", "right": "5%", "top": "20%", "bottom": "15%"}, "xAxis": {"type": "category", "data": ["2026-08-20"], "axisLabel": {"rotate": 45}}, "yAxis": {"type": "value", "name": "入选数量"}, "series": [{"name": "软件服务", "type": "bar", "stack": "total", "data": [11]}]}, "heatmap": {"tooltip": {"position": "top"}, "grid": {"left": "15%", "right": "5%", "top": "10%", "bottom": "20%"}, "xAxis": {"type": "category", "data": ["2026-08-20"], "axisLabel": {"rotate": 45}}, "yAxis": {"type": "category", "data": ["软件服务"]}, "visualMap": {"min": 0, "max": 11, "calculable": true, "orient": "horizontal", "left": "center", "bottom": "5%"}, "series": [{"name": "入选数量", "type": "heatmap", "data": [[0, 0, 11]], "label": {"show": false}}]}};
     if (chartOptions.line && chartOptions.line.series && chartOptions.line.series.length > 0) {
         const cl = echarts.init(document.getElementById('chartLine'));
         cl.setOption(chartOptions.line);

@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2026-08-20 02:07:54",
+  "lastUpdate": "2026-08-20 06:18:59",
   "totalStocks": 0,
   "macdStocks": 0,
   "totalReports": 114,
@@ -12,7 +12,8 @@
       "j13Trend": "html/20260820/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260820/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260820/sentiment_rebound_strategy.html",
+      "multiIndicator": "html/20260820/multi_indicator_selection_20260820.html"
     },
     {
       "date": "20260819",
@@ -21,7 +22,8 @@
       "j13Trend": "html/20260819/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": "html/20260819/macd_selection_20260819.html",
-      "sentimentRebound": "html/20260819/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260819/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260818",
@@ -30,7 +32,8 @@
       "j13Trend": "html/20260818/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": "html/20260818/macd_selection_20260818.html",
-      "sentimentRebound": "html/20260818/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260818/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260817",
@@ -39,7 +42,8 @@
       "j13Trend": "html/20260817/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": "html/20260817/macd_selection_20260817.html",
-      "sentimentRebound": "html/20260817/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260817/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260814",
@@ -48,7 +52,8 @@
       "j13Trend": "html/20260814/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260814/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260814/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260813",
@@ -57,7 +62,8 @@
       "j13Trend": "html/20260813/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": "html/20260813/macd_selection_20260813.html",
-      "sentimentRebound": "html/20260813/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260813/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260812",
@@ -66,7 +72,8 @@
       "j13Trend": "html/20260812/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": "html/20260812/macd_selection_20260812.html",
-      "sentimentRebound": "html/20260812/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260812/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260811",
@@ -75,7 +82,8 @@
       "j13Trend": "html/20260811/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": "html/20260811/macd_selection_20260811.html",
-      "sentimentRebound": "html/20260811/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260811/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260810",
@@ -84,7 +92,8 @@
       "j13Trend": "html/20260810/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": "html/20260810/macd_selection_20260810.html",
-      "sentimentRebound": "html/20260810/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260810/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260807",
@@ -93,7 +102,8 @@
       "j13Trend": "html/20260807/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": "html/20260807/macd_selection_20260807.html",
-      "sentimentRebound": "html/20260807/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260807/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260806",
@@ -102,7 +112,8 @@
       "j13Trend": "html/20260806/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": "html/20260806/macd_selection_20260806.html",
-      "sentimentRebound": "html/20260806/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260806/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260805",
@@ -111,7 +122,8 @@
       "j13Trend": "html/20260805/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": "html/20260805/macd_selection_20260805.html",
-      "sentimentRebound": "html/20260805/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260805/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260804",
@@ -120,7 +132,8 @@
       "j13Trend": "html/20260804/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": "html/20260804/macd_selection_20260804.html",
-      "sentimentRebound": "html/20260804/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260804/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260803",
@@ -129,7 +142,8 @@
       "j13Trend": "html/20260803/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260803/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260803/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260731",
@@ -138,7 +152,8 @@
       "j13Trend": "html/20260731/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260731/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260731/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260730",
@@ -147,7 +162,8 @@
       "j13Trend": "html/20260730/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260730/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260730/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260729",
@@ -156,7 +172,8 @@
       "j13Trend": "html/20260729/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260729/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260729/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260728",
@@ -165,7 +182,8 @@
       "j13Trend": "html/20260728/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260728/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260728/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260727",
@@ -174,7 +192,8 @@
       "j13Trend": "html/20260727/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260727/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260727/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260724",
@@ -183,7 +202,8 @@
       "j13Trend": "html/20260724/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260724/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260724/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260723",
@@ -192,7 +212,8 @@
       "j13Trend": "html/20260723/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260723/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260723/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260722",
@@ -201,7 +222,8 @@
       "j13Trend": "html/20260722/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260722/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260722/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260721",
@@ -210,7 +232,8 @@
       "j13Trend": "html/20260721/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260721/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260721/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260720",
@@ -219,7 +242,8 @@
       "j13Trend": "html/20260720/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260720/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260720/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260717",
@@ -228,7 +252,8 @@
       "j13Trend": "html/20260717/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260717/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260717/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260716",
@@ -237,7 +262,8 @@
       "j13Trend": "html/20260716/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260716/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260716/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260715",
@@ -246,7 +272,8 @@
       "j13Trend": "html/20260715/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260715/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260715/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260714",
@@ -255,7 +282,8 @@
       "j13Trend": "html/20260714/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260714/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260714/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260713",
@@ -264,7 +292,8 @@
       "j13Trend": "html/20260713/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260713/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260713/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260710",
@@ -273,7 +302,8 @@
       "j13Trend": "html/20260710/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260710/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260710/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260709",
@@ -282,7 +312,8 @@
       "j13Trend": "html/20260709/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260709/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260709/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260708",
@@ -291,7 +322,8 @@
       "j13Trend": "html/20260708/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260708/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260708/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260707",
@@ -300,7 +332,8 @@
       "j13Trend": "html/20260707/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260707/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260707/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260706",
@@ -309,7 +342,8 @@
       "j13Trend": "html/20260706/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260706/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260706/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260703",
@@ -318,7 +352,8 @@
       "j13Trend": "html/20260703/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260703/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260703/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260702",
@@ -327,7 +362,8 @@
       "j13Trend": "html/20260702/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260702/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260702/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260701",
@@ -336,7 +372,8 @@
       "j13Trend": "html/20260701/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260701/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260701/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260630",
@@ -345,7 +382,8 @@
       "j13Trend": "html/20260630/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260630/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260630/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260629",
@@ -354,7 +392,8 @@
       "j13Trend": "html/20260629/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260629/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260629/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260626",
@@ -363,7 +402,8 @@
       "j13Trend": "html/20260626/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260626/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260626/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260625",
@@ -372,7 +412,8 @@
       "j13Trend": "html/20260625/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260625/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260625/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260624",
@@ -381,7 +422,8 @@
       "j13Trend": "html/20260624/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260624/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260624/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260623",
@@ -390,7 +432,8 @@
       "j13Trend": "html/20260623/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260623/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260623/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260622",
@@ -399,7 +442,8 @@
       "j13Trend": "html/20260622/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260622/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260622/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260618",
@@ -408,7 +452,8 @@
       "j13Trend": "html/20260618/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260618/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260618/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260617",
@@ -417,7 +462,8 @@
       "j13Trend": "html/20260617/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260617/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260617/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260616",
@@ -426,7 +472,8 @@
       "j13Trend": "html/20260616/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260616/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260616/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260615",
@@ -435,7 +482,8 @@
       "j13Trend": "html/20260615/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260615/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260615/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260612",
@@ -444,7 +492,8 @@
       "j13Trend": "html/20260612/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260612/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260612/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260611",
@@ -453,7 +502,8 @@
       "j13Trend": "html/20260611/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260611/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260611/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260610",
@@ -462,7 +512,8 @@
       "j13Trend": "html/20260610/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260610/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260610/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260609",
@@ -471,7 +522,8 @@
       "j13Trend": "html/20260609/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260609/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260609/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260608",
@@ -480,7 +532,8 @@
       "j13Trend": "html/20260608/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260608/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260608/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260605",
@@ -489,7 +542,8 @@
       "j13Trend": "html/20260605/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260605/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260605/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260604",
@@ -498,7 +552,8 @@
       "j13Trend": "html/20260604/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260604/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260604/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260603",
@@ -507,7 +562,8 @@
       "j13Trend": "html/20260603/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260603/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260603/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260602",
@@ -516,7 +572,8 @@
       "j13Trend": "html/20260602/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260602/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260602/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260601",
@@ -525,7 +582,8 @@
       "j13Trend": "html/20260601/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260601/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260601/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260529",
@@ -534,7 +592,8 @@
       "j13Trend": "html/20260529/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260529/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260529/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260528",
@@ -543,7 +602,8 @@
       "j13Trend": "html/20260528/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260528/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260528/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260527",
@@ -552,7 +612,8 @@
       "j13Trend": "html/20260527/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260527/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260527/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260526",
@@ -561,7 +622,8 @@
       "j13Trend": "html/20260526/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260526/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260526/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260525",
@@ -570,7 +632,8 @@
       "j13Trend": "html/20260525/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260525/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260525/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260522",
@@ -579,7 +642,8 @@
       "j13Trend": "html/20260522/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260522/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260522/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260521",
@@ -588,7 +652,8 @@
       "j13Trend": "html/20260521/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260521/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260521/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260520",
@@ -597,7 +662,8 @@
       "j13Trend": "html/20260520/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260520/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260520/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260519",
@@ -606,7 +672,8 @@
       "j13Trend": "html/20260519/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260519/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260519/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260518",
@@ -615,7 +682,8 @@
       "j13Trend": "html/20260518/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260518/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260518/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260515",
@@ -624,7 +692,8 @@
       "j13Trend": "html/20260515/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260515/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260515/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260514",
@@ -633,7 +702,8 @@
       "j13Trend": "html/20260514/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260514/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260514/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260513",
@@ -642,7 +712,8 @@
       "j13Trend": "html/20260513/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260513/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260513/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260512",
@@ -651,7 +722,8 @@
       "j13Trend": "html/20260512/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260512/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260512/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260511",
@@ -660,7 +732,8 @@
       "j13Trend": "html/20260511/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260511/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260511/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260508",
@@ -669,7 +742,8 @@
       "j13Trend": "html/20260508/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260508/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260508/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260507",
@@ -678,7 +752,8 @@
       "j13Trend": "html/20260507/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260507/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260507/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260506",
@@ -687,7 +762,8 @@
       "j13Trend": "html/20260506/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260506/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260506/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260430",
@@ -696,7 +772,8 @@
       "j13Trend": "html/20260430/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260430/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260430/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260429",
@@ -705,7 +782,8 @@
       "j13Trend": "html/20260429/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260429/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260429/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260428",
@@ -714,7 +792,8 @@
       "j13Trend": "html/20260428/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260428/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260428/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260427",
@@ -723,7 +802,8 @@
       "j13Trend": "html/20260427/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260427/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260427/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260424",
@@ -732,7 +812,8 @@
       "j13Trend": "html/20260424/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260424/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260424/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260423",
@@ -741,7 +822,8 @@
       "j13Trend": "html/20260423/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260423/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260423/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260422",
@@ -750,7 +832,8 @@
       "j13Trend": "html/20260422/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260422/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260422/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260421",
@@ -759,7 +842,8 @@
       "j13Trend": "html/20260421/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260421/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260421/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260420",
@@ -768,7 +852,8 @@
       "j13Trend": "html/20260420/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260420/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260420/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260417",
@@ -777,7 +862,8 @@
       "j13Trend": "html/20260417/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260417/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260417/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260409",
@@ -786,7 +872,8 @@
       "j13Trend": "html/20260409/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260409/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260409/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260407",
@@ -795,7 +882,8 @@
       "j13Trend": "html/20260407/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": null
+      "sentimentRebound": null,
+      "multiIndicator": null
     },
     {
       "date": "20260403",
@@ -804,7 +892,8 @@
       "j13Trend": "html/20260403/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": null
+      "sentimentRebound": null,
+      "multiIndicator": null
     },
     {
       "date": "20260402",
@@ -813,7 +902,8 @@
       "j13Trend": "html/20260402/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260402/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260402/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260401",
@@ -822,7 +912,8 @@
       "j13Trend": "html/20260401/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": null
+      "sentimentRebound": null,
+      "multiIndicator": null
     },
     {
       "date": "20260331",
@@ -831,7 +922,8 @@
       "j13Trend": "html/20260331/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260331/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260331/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260330",
@@ -840,7 +932,8 @@
       "j13Trend": "html/20260330/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260330/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260330/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260327",
@@ -849,7 +942,8 @@
       "j13Trend": "html/20260327/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260327/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260327/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260326",
@@ -858,7 +952,8 @@
       "j13Trend": "html/20260326/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260326/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260326/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260325",
@@ -867,7 +962,8 @@
       "j13Trend": "html/20260325/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260325/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260325/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260324",
@@ -876,7 +972,8 @@
       "j13Trend": "html/20260324/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260324/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260324/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260323",
@@ -885,7 +982,8 @@
       "j13Trend": "html/20260323/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260323/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260323/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260320",
@@ -894,7 +992,8 @@
       "j13Trend": "html/20260320/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260320/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260320/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260319",
@@ -903,7 +1002,8 @@
       "j13Trend": "html/20260319/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20260319/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20260319/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20260318",
@@ -912,7 +1012,8 @@
       "j13Trend": "html/20260318/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": null
+      "sentimentRebound": null,
+      "multiIndicator": null
     },
     {
       "date": "20260317",
@@ -921,7 +1022,8 @@
       "j13Trend": "html/20260317/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": null
+      "sentimentRebound": null,
+      "multiIndicator": null
     },
     {
       "date": "20260316",
@@ -930,7 +1032,8 @@
       "j13Trend": "html/20260316/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": null
+      "sentimentRebound": null,
+      "multiIndicator": null
     },
     {
       "date": "20260313",
@@ -939,7 +1042,8 @@
       "j13Trend": "html/20260313/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": null
+      "sentimentRebound": null,
+      "multiIndicator": null
     },
     {
       "date": "20260312",
@@ -948,7 +1052,8 @@
       "j13Trend": "html/20260312/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": null
+      "sentimentRebound": null,
+      "multiIndicator": null
     },
     {
       "date": "20260311",
@@ -957,7 +1062,8 @@
       "j13Trend": "html/20260311/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": null
+      "sentimentRebound": null,
+      "multiIndicator": null
     },
     {
       "date": "20260310",
@@ -966,7 +1072,8 @@
       "j13Trend": "html/20260310/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": null
+      "sentimentRebound": null,
+      "multiIndicator": null
     },
     {
       "date": "20260309",
@@ -975,7 +1082,8 @@
       "j13Trend": "html/20260309/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": null
+      "sentimentRebound": null,
+      "multiIndicator": null
     },
     {
       "date": "20260306",
@@ -984,7 +1092,8 @@
       "j13Trend": "html/20260306/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": null
+      "sentimentRebound": null,
+      "multiIndicator": null
     },
     {
       "date": "20251112",
@@ -993,7 +1102,8 @@
       "j13Trend": "html/20251112/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20251112/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20251112/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20250804",
@@ -1002,7 +1112,8 @@
       "j13Trend": "html/20250804/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20250804/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20250804/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20250723",
@@ -1011,7 +1122,8 @@
       "j13Trend": "html/20250723/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20250723/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20250723/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20250620",
@@ -1020,7 +1132,8 @@
       "j13Trend": "html/20250620/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20250620/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20250620/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     },
     {
       "date": "20250508",
@@ -1029,7 +1142,8 @@
       "j13Trend": "html/20250508/first_j13_step_daily_count.html",
       "macdResult": null,
       "macdHtml": null,
-      "sentimentRebound": "html/20250508/sentiment_rebound_strategy.html"
+      "sentimentRebound": "html/20250508/sentiment_rebound_strategy.html",
+      "multiIndicator": null
     }
   ]
 }

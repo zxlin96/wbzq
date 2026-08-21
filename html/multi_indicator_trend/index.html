@@ -19,7 +19,7 @@
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-gray-900 mb-2">📊 多指标选股趋势汇总</h1>
             <p class="text-gray-600">超阈值行业历史趋势 · 持续强势识别 · 行业轮动信号</p>
-            <p class="text-sm text-gray-500 mt-1">最后更新: 20260820</p>
+            <p class="text-sm text-gray-500 mt-1">最后更新: 20260821</p>
         </div>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
@@ -75,7 +75,7 @@
                 <td class="px-4 py-3 font-medium text-gray-900">软件服务</td>
                 <td class="px-4 py-3 text-right">11</td>
                 <td class="px-4 py-3 text-right font-semibold text-blue-600">1</td>
-                <td class="px-4 py-3 text-center">20260820</td>
+                <td class="px-4 py-3 text-center">20260821</td>
                 <td class="px-4 py-3 text-right">1</td>
             </tr>
                     </tbody>
@@ -101,7 +101,7 @@
     </div>
 
     <script>
-    const chartOptions = {"line": {"tooltip": {"trigger": "axis"}, "grid": {"left": "8%", "right": "5%", "top": "10%", "bottom": "15%"}, "xAxis": {"type": "category", "data": ["2026-08-20"], "axisLabel": {"rotate": 45}}, "yAxis": {"type": "value", "name": "入选总数"}, "series": [{"name": "超阈值行业总数", "type": "line", "data": [11], "smooth": true, "areaStyle": {"opacity": 0.3}}]}, "bar": {"tooltip": {"trigger": "axis", "axisPointer": {"type": "shadow"}}, "legend": {"data": ["软件服务"], "top": "5%", "type": "scroll"}, "grid": {"left": "8%", "right": "5%", "top": "20%", "bottom": "15%"}, "xAxis": {"type": "category", "data": ["2026-08-20"], "axisLabel": {"rotate": 45}}, "yAxis": {"type": "value", "name": "入选数量"}, "series": [{"name": "软件服务", "type": "bar", "stack": "total", "data": [11]}]}, "heatmap": {"tooltip": {"position": "top"}, "grid": {"left": "15%", "right": "5%", "top": "10%", "bottom": "20%"}, "xAxis": {"type": "category", "data": ["2026-08-20"], "axisLabel": {"rotate": 45}}, "yAxis": {"type": "category", "data": ["软件服务"]}, "visualMap": {"min": 0, "max": 11, "calculable": true, "orient": "horizontal", "left": "center", "bottom": "5%"}, "series": [{"name": "入选数量", "type": "heatmap", "data": [[0, 0, 11]], "label": {"show": false}}]}};
+    const chartOptions = {"line": {"tooltip": {"trigger": "axis"}, "grid": {"left": "8%", "right": "5%", "top": "10%", "bottom": "15%"}, "xAxis": {"type": "category", "data": ["2026-08-21"], "axisLabel": {"rotate": 45}}, "yAxis": {"type": "value", "name": "入选总数"}, "series": [{"name": "超阈值行业总数", "type": "line", "data": [11], "smooth": true, "areaStyle": {"opacity": 0.3}}]}, "bar": {"tooltip": {"trigger": "axis", "axisPointer": {"type": "shadow"}}, "legend": {"data": ["软件服务"], "top": "5%", "type": "scroll"}, "grid": {"left": "8%", "right": "5%", "top": "20%", "bottom": "15%"}, "xAxis": {"type": "category", "data": ["2026-08-21"], "axisLabel": {"rotate": 45}}, "yAxis": {"type": "value", "name": "入选数量"}, "series": [{"name": "软件服务", "type": "bar", "stack": "total", "data": [11]}]}, "heatmap": {"tooltip": {"position": "top"}, "grid": {"left": "15%", "right": "5%", "top": "10%", "bottom": "20%"}, "xAxis": {"type": "category", "data": ["2026-08-21"], "axisLabel": {"rotate": 45}}, "yAxis": {"type": "category", "data": ["软件服务"]}, "visualMap": {"min": 0, "max": 11, "calculable": true, "orient": "horizontal", "left": "center", "bottom": "5%"}, "series": [{"name": "入选数量", "type": "heatmap", "data": [[0, 0, 11]], "label": {"show": false}}]}};
     if (chartOptions.line && chartOptions.line.series && chartOptions.line.series.length > 0) {
         const cl = echarts.init(document.getElementById('chartLine'));
         cl.setOption(chartOptions.line);

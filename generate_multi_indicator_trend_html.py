@@ -13,6 +13,7 @@ import json
 import glob
 import os
 import re
+import csv
 import html as html_mod
 import logging
 from pathlib import Path
@@ -248,13 +249,15 @@ def build_echarts_options(matrix_data: dict, metrics: dict) -> dict:
     return {"line": line_option, "bar": bar_option, "heatmap": heatmap_option}
 
 
-def render_trend_html(matrix_data: dict, metrics: dict, echarts_options: dict) -> str:
+def render_trend_html(matrix_data: dict, metrics: dict, echarts_options: dict,
+                      stock_details: list = None) -> str:
     """渲染完整 HTML 字符串。
 
     Args:
         matrix_data: build_trend_matrix 的返回值
         metrics: compute_trend_metrics 的返回值
         echarts_options: build_echarts_options 的返回值
+        stock_details: 最新日期入选个股列表 [{ts_code, name, industry}, ...]
 
     Returns:
         str: 完整 HTML 页面字符串
@@ -265,6 +268,7 @@ def render_trend_html(matrix_data: dict, metrics: dict, echarts_options: dict) -
     new_enter = metrics["new_enter"]
     new_exit = metrics["new_exit"]
     has_data = len(dates) > 0 and len(matrix_data["industries"]) > 0
+    stock_details = stock_details or []
 
     last_update = dates[-1] if dates else "无数据"
     options_json = json.dumps(echarts_options, ensure_ascii=False)
@@ -333,6 +337,61 @@ def render_trend_html(matrix_data: dict, metrics: dict, echarts_options: dict) -
             </div>
         </div>""" if has_data else ""
 
+    stock_rows = ""
+    for s in stock_details:
+        code = html_mod.escape(str(s.get("ts_code", "")))
+        name = html_mod.escape(str(s.get("name", "")))
+        ind = html_mod.escape(str(s.get("industry", "")))
+        stock_rows += f"""
+            <tr class="hover:bg-gray-50" data-industry="{ind}">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">{code}</td>
+                <td class="px-4 py-2 font-medium text-gray-900">{name}</td>
+                <td class="px-4 py-2 text-gray-700">{ind}</td>
+            </tr>"""
+
+    stock_industries = sorted(set(html_mod.escape(str(s.get("industry", ""))) for s in stock_details))
+    industry_options = '<option value="">全部行业</option>' + "".join(
+        f'<option value="{ind}">{ind}</option>' for ind in stock_industries
+    )
+
+    latest_date_label = f"{dates[-1][:4]}-{dates[-1][4:6]}-{dates[-1][6:]}" if dates else ""
+    stock_section = f"""
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+            <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+                <h2 class="text-lg font-semibold text-gray-900">📋 最新入选个股明细（{latest_date_label}，<span id="stockCount">{len(stock_details)}</span> / {len(stock_details)} 只）</h2>
+                <select id="industryFilter" onchange="filterStocks()" class="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    {industry_options}
+                </select>
+            </div>
+            <div class="overflow-x-auto" style="max-height:500px;overflow-y:auto;">
+                <table class="w-full text-sm text-left">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 sticky top-0">
+                        <tr>
+                            <th class="px-4 py-3">代码</th>
+                            <th class="px-4 py-3">名称</th>
+                            <th class="px-4 py-3">行业</th>
+                        </tr>
+                    </thead>
+                    <tbody id="stockBody" class="divide-y divide-gray-200">
+                        {stock_rows if stock_rows else '<tr><td colspan="3" class="px-4 py-6 text-center text-gray-400">暂无个股数据</td></tr>'}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <script>
+        function filterStocks() {{
+            const sel = document.getElementById('industryFilter').value;
+            const rows = document.querySelectorAll('#stockBody tr[data-industry]');
+            let visible = 0;
+            rows.forEach(r => {{
+                const show = !sel || r.getAttribute('data-industry') === sel;
+                r.style.display = show ? '' : 'none';
+                if (show) visible++;
+            }});
+            document.getElementById('stockCount').textContent = visible;
+        }}
+        </script>""" if stock_details else ""
+
     return f"""<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -392,6 +451,8 @@ def render_trend_html(matrix_data: dict, metrics: dict, echarts_options: dict) -
             </div>
         </div>
 
+        {stock_section}
+
         <div class="text-center mt-8 text-gray-500 text-sm">
             <p>多指标联合选股趋势汇总 · 自动生成</p>
         </div>
@@ -413,6 +474,42 @@ def render_trend_html(matrix_data: dict, metrics: dict, echarts_options: dict) -
 </html>"""
 
 
+def scan_result_csvs(base_dir: str = ".") -> list:
+    """扫描 multi_indicator_result_*.csv 文件并按日期升序排序。
+
+    Returns:
+        list[tuple[str, Path]]: [(date_str, file_path), ...] 按日期升序。
+    """
+    pattern = os.path.join(base_dir, "multi_indicator_result_*.csv")
+    results = []
+    for fpath in glob.glob(pattern):
+        fname = os.path.basename(fpath)
+        match = re.match(r"multi_indicator_result_(\d{8})\.csv", fname)
+        if not match:
+            continue
+        date_str = match.group(1)
+        results.append((date_str, Path(fpath)))
+    results.sort(key=lambda x: x[0])
+    return results
+
+
+def parse_result_csv(file_path) -> list:
+    """解析个股结果 CSV，返回 [{ts_code, name, industry}, ...]。"""
+    stocks = []
+    try:
+        with open(file_path, "r", encoding="utf-8-sig") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                stocks.append({
+                    "ts_code": row.get("ts_code", ""),
+                    "name": row.get("name", ""),
+                    "industry": row.get("industry_name", ""),
+                })
+    except Exception:
+        return []
+    return stocks
+
+
 def generate_multi_indicator_trend_html() -> None:
     """主入口：扫描 hints 文件 → 聚合计算 → 渲染汇总页面。
 
@@ -432,10 +529,18 @@ def generate_multi_indicator_trend_html() -> None:
 
     logging.info("扫描完成: %d 个文件, 有效 %d, 跳过 %d", len(files), len(valid_records), skipped)
 
+    stock_details = []
+    csv_files = scan_result_csvs()
+    if csv_files:
+        latest_csv_date, latest_csv_path = csv_files[-1]
+        stock_details = parse_result_csv(latest_csv_path)
+        logging.info("个股明细: %s, %d 只", latest_csv_date, len(stock_details))
+
     matrix_data = build_trend_matrix(valid_records)
     metrics = compute_trend_metrics(matrix_data)
     echarts_options = build_echarts_options(matrix_data, metrics)
-    html_content = render_trend_html(matrix_data, metrics, echarts_options)
+    html_content = render_trend_html(matrix_data, metrics, echarts_options,
+                                     stock_details=stock_details)
 
     output_dir = Path("html/multi_indicator_trend")
     output_dir.mkdir(parents=True, exist_ok=True)

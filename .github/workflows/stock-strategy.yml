@@ -104,6 +104,8 @@ jobs:
         git add c432_result_*.csv 2>/dev/null || true
         git add macd_result_*.csv 2>/dev/null || true
         git add html/multi_indicator_trend/ 2>/dev/null || true
+        git add multi_indicator_hints_*.json 2>/dev/null || true
+        git add multi_indicator_result_*.csv 2>/dev/null || true
         git diff --staged --quiet || git commit -m "Auto-commit: Update reports for ${{ steps.date.outputs.today }}"
         git pull --rebase https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref }} 2>/dev/null || true
         git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref }}

@@ -19,12 +19,12 @@
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-gray-900 mb-2">📊 多指标选股趋势汇总</h1>
             <p class="text-gray-600">超阈值行业历史趋势 · 持续强势识别 · 行业轮动信号</p>
-            <p class="text-sm text-gray-500 mt-1">最后更新: 20260825</p>
+            <p class="text-sm text-gray-500 mt-1">最后更新: 20260826</p>
         </div>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
             <div class="bg-white rounded-xl shadow p-4 text-center">
-                <div class="text-2xl font-bold text-blue-600">2</div>
+                <div class="text-2xl font-bold text-blue-600">3</div>
                 <div class="text-xs text-gray-500 mt-1">历史交易日数</div>
             </div>
             <div class="bg-white rounded-xl shadow p-4 text-center">
@@ -32,11 +32,11 @@
                 <div class="text-xs text-gray-500 mt-1">行业总数</div>
             </div>
             <div class="bg-white rounded-xl shadow p-4 text-center">
-                <div class="text-2xl font-bold text-orange-600">2</div>
+                <div class="text-2xl font-bold text-orange-600">0</div>
                 <div class="text-xs text-gray-500 mt-1">最新超阈值数</div>
             </div>
             <div class="bg-white rounded-xl shadow p-4 text-center">
-                <div class="text-2xl font-bold text-purple-600">1</div>
+                <div class="text-2xl font-bold text-purple-600">0</div>
                 <div class="text-xs text-gray-500 mt-1">最长连续天数</div>
             </div>
         </div>
@@ -73,15 +73,15 @@
                         
             <tr class="hover:bg-gray-50">
                 <td class="px-4 py-3 font-medium text-gray-900">化学制药</td>
-                <td class="px-4 py-3 text-right">14</td>
-                <td class="px-4 py-3 text-right font-semibold text-blue-600">1</td>
+                <td class="px-4 py-3 text-right">0</td>
+                <td class="px-4 py-3 text-right font-semibold text-blue-600">0</td>
                 <td class="px-4 py-3 text-center">20260825</td>
                 <td class="px-4 py-3 text-right">1</td>
             </tr>
             <tr class="hover:bg-gray-50">
                 <td class="px-4 py-3 font-medium text-gray-900">生物制药</td>
-                <td class="px-4 py-3 text-right">11</td>
-                <td class="px-4 py-3 text-right font-semibold text-blue-600">1</td>
+                <td class="px-4 py-3 text-right">0</td>
+                <td class="px-4 py-3 text-right font-semibold text-blue-600">0</td>
                 <td class="px-4 py-3 text-center">20260825</td>
                 <td class="px-4 py-3 text-right">1</td>
             </tr>
@@ -94,20 +94,20 @@
             <h2 class="text-lg font-semibold text-gray-900 mb-4">🟢 新进入 / ⚪ 退出行业</h2>
             <div class="mb-3">
                 <span class="text-sm font-medium text-gray-700 mr-2">新进入:</span>
-                <span class="inline-block bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full mr-2 mb-1">化学制药</span><span class="inline-block bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full mr-2 mb-1">生物制药</span>
+                <span class="text-gray-400 text-sm">无</span>
             </div>
             <div>
                 <span class="text-sm font-medium text-gray-700 mr-2">退出:</span>
-                <span class="text-gray-400 text-sm">无</span>
+                <span class="inline-block bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded-full mr-2 mb-1">化学制药</span><span class="inline-block bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded-full mr-2 mb-1">生物制药</span>
             </div>
         </div>
 
         
         <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
             <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
-                <h2 class="text-lg font-semibold text-gray-900">📋 最新入选个股明细（2026-08-25，<span id="stockCount">96</span> / 96 只）</h2>
+                <h2 class="text-lg font-semibold text-gray-900">📋 最新入选个股明细（2026-08-26，<span id="stockCount">70</span> / 70 只）</h2>
                 <select id="industryFilter" onchange="filterStocks()" class="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <option value="">全部行业</option><option value="IT设备">IT设备</option><option value="中成药">中成药</option><option value="互联网">互联网</option><option value="供气供热">供气供热</option><option value="元器件">元器件</option><option value="全国地产">全国地产</option><option value="农业综合">农业综合</option><option value="出版业">出版业</option><option value="化学制药">化学制药</option><option value="化工原料">化工原料</option><option value="医疗保健">医疗保健</option><option value="医药商业">医药商业</option><option value="半导体">半导体</option><option value="商贸代理">商贸代理</option><option value="多元金融">多元金融</option><option value="家用电器">家用电器</option><option value="小金属">小金属</option><option value="建筑工程">建筑工程</option><option value="摩托车">摩托车</option><option value="文教休闲">文教休闲</option><option value="旅游景点">旅游景点</option><option value="普钢">普钢</option><option value="服饰">服饰</option><option value="染料涂料">染料涂料</option><option value="水运">水运</option><option value="环境保护">环境保护</option><option value="生物制药">生物制药</option><option value="电器仪表">电器仪表</option><option value="电气设备">电气设备</option><option value="白酒">白酒</option><option value="百货">百货</option><option value="船舶">船舶</option><option value="证券">证券</option><option value="软件服务">软件服务</option><option value="通信设备">通信设备</option><option value="食品">食品</option>
+                    <option value="">全部行业</option><option value="中成药">中成药</option><option value="互联网">互联网</option><option value="供气供热">供气供热</option><option value="元器件">元器件</option><option value="全国地产">全国地产</option><option value="农业综合">农业综合</option><option value="出版业">出版业</option><option value="化学制药">化学制药</option><option value="化工原料">化工原料</option><option value="化纤">化纤</option><option value="区域地产">区域地产</option><option value="医疗保健">医疗保健</option><option value="医药商业">医药商业</option><option value="半导体">半导体</option><option value="建筑工程">建筑工程</option><option value="摩托车">摩托车</option><option value="普钢">普钢</option><option value="服饰">服饰</option><option value="水运">水运</option><option value="汽车配件">汽车配件</option><option value="环境保护">环境保护</option><option value="生物制药">生物制药</option><option value="电信运营">电信运营</option><option value="电器仪表">电器仪表</option><option value="电气设备">电气设备</option><option value="白酒">白酒</option><option value="百货">百货</option><option value="综合类">综合类</option><option value="软件服务">软件服务</option><option value="通信设备">通信设备</option><option value="食品">食品</option>
                 </select>
             </div>
             <div class="overflow-x-auto" style="max-height:500px;overflow-y:auto;">
@@ -121,84 +121,14 @@
                     </thead>
                     <tbody id="stockBody" class="divide-y divide-gray-200">
                         
-            <tr class="hover:bg-gray-50" data-industry="白酒">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">603369.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">今世缘</td>
-                <td class="px-4 py-2 text-gray-700">白酒</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="元器件">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">301051.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">信濠光电</td>
-                <td class="px-4 py-2 text-gray-700">元器件</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="化学制药">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">688073.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">毕得医药</td>
-                <td class="px-4 py-2 text-gray-700">化学制药</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="白酒">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">000596.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">古井贡酒</td>
-                <td class="px-4 py-2 text-gray-700">白酒</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="化学制药">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">600267.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">海正药业</td>
-                <td class="px-4 py-2 text-gray-700">化学制药</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="文教休闲">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">603466.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">风语筑</td>
-                <td class="px-4 py-2 text-gray-700">文教休闲</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="农业综合">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">000048.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">京基智农</td>
-                <td class="px-4 py-2 text-gray-700">农业综合</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="服饰">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">002832.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">比音勒芬</td>
-                <td class="px-4 py-2 text-gray-700">服饰</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="医疗保健">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">002219.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">新里程</td>
-                <td class="px-4 py-2 text-gray-700">医疗保健</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="化工原料">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">601678.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">滨化股份</td>
-                <td class="px-4 py-2 text-gray-700">化工原料</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="生物制药">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">688796.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">百奥赛图</td>
-                <td class="px-4 py-2 text-gray-700">生物制药</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="半导体">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">688469.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">芯联集成</td>
-                <td class="px-4 py-2 text-gray-700">半导体</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="通信设备">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">301165.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">锐捷网络</td>
-                <td class="px-4 py-2 text-gray-700">通信设备</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="医疗保健">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">600645.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">中源协和</td>
-                <td class="px-4 py-2 text-gray-700">医疗保健</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="半导体">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">300613.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">富瀚微</td>
-                <td class="px-4 py-2 text-gray-700">半导体</td>
+            <tr class="hover:bg-gray-50" data-industry="电气设备">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">002346.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">柘中股份</td>
+                <td class="px-4 py-2 text-gray-700">电气设备</td>
             </tr>
             <tr class="hover:bg-gray-50" data-industry="软件服务">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">300996.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">普联软件</td>
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">603039.SH</td>
+                <td class="px-4 py-2 font-medium text-gray-900">泛微网络</td>
                 <td class="px-4 py-2 text-gray-700">软件服务</td>
             </tr>
             <tr class="hover:bg-gray-50" data-industry="水运">
@@ -206,100 +136,30 @@
                 <td class="px-4 py-2 font-medium text-gray-900">中远海特</td>
                 <td class="px-4 py-2 text-gray-700">水运</td>
             </tr>
-            <tr class="hover:bg-gray-50" data-industry="半导体">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">688702.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">盛科通信</td>
-                <td class="px-4 py-2 text-gray-700">半导体</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="软件服务">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">600588.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">用友网络</td>
-                <td class="px-4 py-2 text-gray-700">软件服务</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="化学制药">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">600196.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">复星医药</td>
-                <td class="px-4 py-2 text-gray-700">化学制药</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="化学制药">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">688222.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">成都先导</td>
-                <td class="px-4 py-2 text-gray-700">化学制药</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="化工原料">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">002246.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">北化股份</td>
-                <td class="px-4 py-2 text-gray-700">化工原料</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="生物制药">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">301230.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">泓博医药</td>
-                <td class="px-4 py-2 text-gray-700">生物制药</td>
-            </tr>
             <tr class="hover:bg-gray-50" data-industry="电气设备">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">000533.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">顺钠股份</td>
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">000009.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">中国宝安</td>
                 <td class="px-4 py-2 text-gray-700">电气设备</td>
             </tr>
-            <tr class="hover:bg-gray-50" data-industry="生物制药">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">688235.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">百济神州</td>
-                <td class="px-4 py-2 text-gray-700">生物制药</td>
+            <tr class="hover:bg-gray-50" data-industry="化学制药">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">300363.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">博腾股份</td>
+                <td class="px-4 py-2 text-gray-700">化学制药</td>
             </tr>
-            <tr class="hover:bg-gray-50" data-industry="小金属">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">002428.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">云南锗业</td>
-                <td class="px-4 py-2 text-gray-700">小金属</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="中成药">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">600572.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">康恩贝</td>
-                <td class="px-4 py-2 text-gray-700">中成药</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="摩托车">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">301345.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">涛涛车业</td>
-                <td class="px-4 py-2 text-gray-700">摩托车</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="生物制药">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">688180.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">君实生物</td>
-                <td class="px-4 py-2 text-gray-700">生物制药</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="互联网">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">301171.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">易点天下</td>
-                <td class="px-4 py-2 text-gray-700">互联网</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="化工原料">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">688758.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">赛分科技</td>
-                <td class="px-4 py-2 text-gray-700">化工原料</td>
+            <tr class="hover:bg-gray-50" data-industry="半导体">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">600206.SH</td>
+                <td class="px-4 py-2 font-medium text-gray-900">有研新材</td>
+                <td class="px-4 py-2 text-gray-700">半导体</td>
             </tr>
             <tr class="hover:bg-gray-50" data-industry="通信设备">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">688002.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">睿创微纳</td>
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">301165.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">锐捷网络</td>
                 <td class="px-4 py-2 text-gray-700">通信设备</td>
             </tr>
-            <tr class="hover:bg-gray-50" data-industry="农业综合">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">002458.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">益生股份</td>
-                <td class="px-4 py-2 text-gray-700">农业综合</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="白酒">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">600809.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">山西汾酒</td>
-                <td class="px-4 py-2 text-gray-700">白酒</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="旅游景点">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">603099.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">长白山</td>
-                <td class="px-4 py-2 text-gray-700">旅游景点</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="医疗保健">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">300685.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">艾德生物</td>
-                <td class="px-4 py-2 text-gray-700">医疗保健</td>
+            <tr class="hover:bg-gray-50" data-industry="服饰">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">002832.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">比音勒芬</td>
+                <td class="px-4 py-2 text-gray-700">服饰</td>
             </tr>
             <tr class="hover:bg-gray-50" data-industry="互联网">
                 <td class="px-4 py-2 font-mono text-xs text-gray-600">002174.SZ</td>
@@ -307,164 +167,94 @@
                 <td class="px-4 py-2 text-gray-700">互联网</td>
             </tr>
             <tr class="hover:bg-gray-50" data-industry="化学制药">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">300363.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">博腾股份</td>
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">600267.SH</td>
+                <td class="px-4 py-2 font-medium text-gray-900">海正药业</td>
                 <td class="px-4 py-2 text-gray-700">化学制药</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="IT设备">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">000938.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">紫光股份</td>
-                <td class="px-4 py-2 text-gray-700">IT设备</td>
             </tr>
             <tr class="hover:bg-gray-50" data-industry="白酒">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">000568.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">泸州老窖</td>
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">603369.SH</td>
+                <td class="px-4 py-2 font-medium text-gray-900">今世缘</td>
                 <td class="px-4 py-2 text-gray-700">白酒</td>
             </tr>
-            <tr class="hover:bg-gray-50" data-industry="中成药">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">300181.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">佐力药业</td>
-                <td class="px-4 py-2 text-gray-700">中成药</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="生物制药">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">688293.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">奥浦迈</td>
-                <td class="px-4 py-2 text-gray-700">生物制药</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="供气供热">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">000593.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">德龙汇能</td>
-                <td class="px-4 py-2 text-gray-700">供气供热</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="农业综合">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">600201.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">生物股份</td>
-                <td class="px-4 py-2 text-gray-700">农业综合</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="证券">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">601108.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">财通证券</td>
-                <td class="px-4 py-2 text-gray-700">证券</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="化学制药">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">002653.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">海思科</td>
-                <td class="px-4 py-2 text-gray-700">化学制药</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="生物制药">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">300357.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">我武生物</td>
-                <td class="px-4 py-2 text-gray-700">生物制药</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="出版业">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">601858.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">中国科传</td>
-                <td class="px-4 py-2 text-gray-700">出版业</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="化学制药">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">300725.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">药石科技</td>
-                <td class="px-4 py-2 text-gray-700">化学制药</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="电气设备">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">300693.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">盛弘股份</td>
-                <td class="px-4 py-2 text-gray-700">电气设备</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="元器件">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">300939.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">秋田微</td>
-                <td class="px-4 py-2 text-gray-700">元器件</td>
-            </tr>
             <tr class="hover:bg-gray-50" data-industry="软件服务">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">300369.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">绿盟科技</td>
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">300996.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">普联软件</td>
                 <td class="px-4 py-2 text-gray-700">软件服务</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="化学制药">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">600196.SH</td>
+                <td class="px-4 py-2 font-medium text-gray-900">复星医药</td>
+                <td class="px-4 py-2 text-gray-700">化学制药</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="医疗保健">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">002219.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">新里程</td>
+                <td class="px-4 py-2 text-gray-700">医疗保健</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="医药商业">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">000950.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">重药控股</td>
+                <td class="px-4 py-2 text-gray-700">医药商业</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="通信设备">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">688002.SH</td>
+                <td class="px-4 py-2 font-medium text-gray-900">睿创微纳</td>
+                <td class="px-4 py-2 text-gray-700">通信设备</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="化工原料">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">601678.SH</td>
+                <td class="px-4 py-2 font-medium text-gray-900">滨化股份</td>
+                <td class="px-4 py-2 text-gray-700">化工原料</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="医药商业">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">301015.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">百洋医药</td>
+                <td class="px-4 py-2 text-gray-700">医药商业</td>
             </tr>
             <tr class="hover:bg-gray-50" data-industry="化工原料">
                 <td class="px-4 py-2 font-mono text-xs text-gray-600">688690.SH</td>
                 <td class="px-4 py-2 font-medium text-gray-900">纳微科技</td>
                 <td class="px-4 py-2 text-gray-700">化工原料</td>
             </tr>
+            <tr class="hover:bg-gray-50" data-industry="供气供热">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">000593.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">德龙汇能</td>
+                <td class="px-4 py-2 text-gray-700">供气供热</td>
+            </tr>
             <tr class="hover:bg-gray-50" data-industry="化学制药">
                 <td class="px-4 py-2 font-mono text-xs text-gray-600">600664.SH</td>
                 <td class="px-4 py-2 font-medium text-gray-900">哈药股份</td>
                 <td class="px-4 py-2 text-gray-700">化学制药</td>
             </tr>
-            <tr class="hover:bg-gray-50" data-industry="中成药">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">000989.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">九芝堂</td>
-                <td class="px-4 py-2 text-gray-700">中成药</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="生物制药">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">301207.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">华兰疫苗</td>
-                <td class="px-4 py-2 text-gray-700">生物制药</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="环境保护">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">300779.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">惠城环保</td>
-                <td class="px-4 py-2 text-gray-700">环境保护</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="家用电器">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">600839.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">四川长虹</td>
-                <td class="px-4 py-2 text-gray-700">家用电器</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="化学制药">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">600216.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">浙江医药</td>
-                <td class="px-4 py-2 text-gray-700">化学制药</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="化学制药">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">600521.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">华海药业</td>
-                <td class="px-4 py-2 text-gray-700">化学制药</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="半导体">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">301536.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">星宸科技</td>
-                <td class="px-4 py-2 text-gray-700">半导体</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="化学制药">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">002422.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">科伦药业</td>
-                <td class="px-4 py-2 text-gray-700">化学制药</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="化学制药">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">688578.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">艾力斯</td>
-                <td class="px-4 py-2 text-gray-700">化学制药</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="软件服务">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">600602.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">云赛智联</td>
-                <td class="px-4 py-2 text-gray-700">软件服务</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="白酒">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">603198.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">迎驾贡酒</td>
-                <td class="px-4 py-2 text-gray-700">白酒</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="生物制药">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">300009.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">安科生物</td>
-                <td class="px-4 py-2 text-gray-700">生物制药</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="电器仪表">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">603556.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">海兴电力</td>
-                <td class="px-4 py-2 text-gray-700">电器仪表</td>
+            <tr class="hover:bg-gray-50" data-industry="医疗保健">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">300685.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">艾德生物</td>
+                <td class="px-4 py-2 text-gray-700">医疗保健</td>
             </tr>
             <tr class="hover:bg-gray-50" data-industry="互联网">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">002517.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">恺英网络</td>
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">301171.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">易点天下</td>
                 <td class="px-4 py-2 text-gray-700">互联网</td>
             </tr>
-            <tr class="hover:bg-gray-50" data-industry="中成药">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">600518.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">康美药业</td>
-                <td class="px-4 py-2 text-gray-700">中成药</td>
+            <tr class="hover:bg-gray-50" data-industry="医疗保健">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">600645.SH</td>
+                <td class="px-4 py-2 font-medium text-gray-900">中源协和</td>
+                <td class="px-4 py-2 text-gray-700">医疗保健</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="元器件">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">301366.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">一博科技</td>
+                <td class="px-4 py-2 text-gray-700">元器件</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="医疗保健">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">300244.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">迪安诊断</td>
+                <td class="px-4 py-2 text-gray-700">医疗保健</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="出版业">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">601858.SH</td>
+                <td class="px-4 py-2 font-medium text-gray-900">中国科传</td>
+                <td class="px-4 py-2 text-gray-700">出版业</td>
             </tr>
             <tr class="hover:bg-gray-50" data-industry="元器件">
                 <td class="px-4 py-2 font-mono text-xs text-gray-600">300951.SZ</td>
@@ -476,130 +266,210 @@
                 <td class="px-4 py-2 font-medium text-gray-900">杭钢股份</td>
                 <td class="px-4 py-2 text-gray-700">普钢</td>
             </tr>
-            <tr class="hover:bg-gray-50" data-industry="建筑工程">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">600629.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">华建集团</td>
-                <td class="px-4 py-2 text-gray-700">建筑工程</td>
+            <tr class="hover:bg-gray-50" data-industry="全国地产">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">001979.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">招商蛇口</td>
+                <td class="px-4 py-2 text-gray-700">全国地产</td>
             </tr>
             <tr class="hover:bg-gray-50" data-industry="生物制药">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">600211.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">西藏药业</td>
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">300357.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">我武生物</td>
                 <td class="px-4 py-2 text-gray-700">生物制药</td>
             </tr>
-            <tr class="hover:bg-gray-50" data-industry="化学制药">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">688553.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">汇宇制药</td>
-                <td class="px-4 py-2 text-gray-700">化学制药</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="农业综合">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">002124.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">天邦食品</td>
-                <td class="px-4 py-2 text-gray-700">农业综合</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="商贸代理">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">601061.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">中信金属</td>
-                <td class="px-4 py-2 text-gray-700">商贸代理</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="软件服务">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">300895.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">铜牛信息</td>
-                <td class="px-4 py-2 text-gray-700">软件服务</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="通信设备">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">603236.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">移远通信</td>
-                <td class="px-4 py-2 text-gray-700">通信设备</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="多元金融">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">000415.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">渤海租赁</td>
-                <td class="px-4 py-2 text-gray-700">多元金融</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="元器件">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">002925.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">盈趣科技</td>
-                <td class="px-4 py-2 text-gray-700">元器件</td>
-            </tr>
-            <tr class="hover:bg-gray-50" data-industry="百货">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">000564.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">供销大集</td>
-                <td class="px-4 py-2 text-gray-700">百货</td>
+            <tr class="hover:bg-gray-50" data-industry="生物制药">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">688428.SH</td>
+                <td class="px-4 py-2 font-medium text-gray-900">诺诚健华</td>
+                <td class="px-4 py-2 text-gray-700">生物制药</td>
             </tr>
             <tr class="hover:bg-gray-50" data-industry="医药商业">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">301015.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">百洋医药</td>
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">603883.SH</td>
+                <td class="px-4 py-2 font-medium text-gray-900">老百姓</td>
                 <td class="px-4 py-2 text-gray-700">医药商业</td>
             </tr>
-            <tr class="hover:bg-gray-50" data-industry="化工原料">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">600309.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">万华化学</td>
-                <td class="px-4 py-2 text-gray-700">化工原料</td>
+            <tr class="hover:bg-gray-50" data-industry="软件服务">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">600602.SH</td>
+                <td class="px-4 py-2 font-medium text-gray-900">云赛智联</td>
+                <td class="px-4 py-2 text-gray-700">软件服务</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="半导体">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">688620.SH</td>
+                <td class="px-4 py-2 font-medium text-gray-900">安凯微</td>
+                <td class="px-4 py-2 text-gray-700">半导体</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="生物制药">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">688235.SH</td>
+                <td class="px-4 py-2 font-medium text-gray-900">百济神州</td>
+                <td class="px-4 py-2 text-gray-700">生物制药</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="综合类">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">600881.SH</td>
+                <td class="px-4 py-2 font-medium text-gray-900">亚泰集团</td>
+                <td class="px-4 py-2 text-gray-700">综合类</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="农业综合">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">002458.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">益生股份</td>
+                <td class="px-4 py-2 text-gray-700">农业综合</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="区域地产">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">000608.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">阳光股份</td>
+                <td class="px-4 py-2 text-gray-700">区域地产</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="元器件">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">002841.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">视源股份</td>
+                <td class="px-4 py-2 text-gray-700">元器件</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="医疗保健">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">603127.SH</td>
+                <td class="px-4 py-2 font-medium text-gray-900">昭衍新药</td>
+                <td class="px-4 py-2 text-gray-700">医疗保健</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="服饰">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">000026.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">飞亚达</td>
+                <td class="px-4 py-2 text-gray-700">服饰</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="元器件">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">002141.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">贤丰控股</td>
+                <td class="px-4 py-2 text-gray-700">元器件</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="白酒">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">600809.SH</td>
+                <td class="px-4 py-2 font-medium text-gray-900">山西汾酒</td>
+                <td class="px-4 py-2 text-gray-700">白酒</td>
             </tr>
             <tr class="hover:bg-gray-50" data-industry="摩托车">
                 <td class="px-4 py-2 font-mono text-xs text-gray-600">689009.SH</td>
                 <td class="px-4 py-2 font-medium text-gray-900">九号公司</td>
                 <td class="px-4 py-2 text-gray-700">摩托车</td>
             </tr>
-            <tr class="hover:bg-gray-50" data-industry="证券">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">601555.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">东吴证券</td>
-                <td class="px-4 py-2 text-gray-700">证券</td>
+            <tr class="hover:bg-gray-50" data-industry="白酒">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">000596.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">古井贡酒</td>
+                <td class="px-4 py-2 text-gray-700">白酒</td>
             </tr>
-            <tr class="hover:bg-gray-50" data-industry="通信设备">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">002194.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">武汉凡谷</td>
-                <td class="px-4 py-2 text-gray-700">通信设备</td>
+            <tr class="hover:bg-gray-50" data-industry="软件服务">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">300469.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">信息发展</td>
+                <td class="px-4 py-2 text-gray-700">软件服务</td>
             </tr>
-            <tr class="hover:bg-gray-50" data-industry="电气设备">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">605196.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">华通线缆</td>
-                <td class="px-4 py-2 text-gray-700">电气设备</td>
+            <tr class="hover:bg-gray-50" data-industry="医疗保健">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">603456.SH</td>
+                <td class="px-4 py-2 font-medium text-gray-900">九洲药业</td>
+                <td class="px-4 py-2 text-gray-700">医疗保健</td>
             </tr>
-            <tr class="hover:bg-gray-50" data-industry="生物制药">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">688105.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">诺唯赞</td>
-                <td class="px-4 py-2 text-gray-700">生物制药</td>
+            <tr class="hover:bg-gray-50" data-industry="电信运营">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">601728.SH</td>
+                <td class="px-4 py-2 font-medium text-gray-900">中国电信</td>
+                <td class="px-4 py-2 text-gray-700">电信运营</td>
             </tr>
-            <tr class="hover:bg-gray-50" data-industry="全国地产">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">600048.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">保利发展</td>
-                <td class="px-4 py-2 text-gray-700">全国地产</td>
+            <tr class="hover:bg-gray-50" data-industry="软件服务">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">300017.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">网宿科技</td>
+                <td class="px-4 py-2 text-gray-700">软件服务</td>
             </tr>
-            <tr class="hover:bg-gray-50" data-industry="化学制药">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">002262.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">恩华药业</td>
-                <td class="px-4 py-2 text-gray-700">化学制药</td>
+            <tr class="hover:bg-gray-50" data-industry="食品">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">600186.SH</td>
+                <td class="px-4 py-2 font-medium text-gray-900">莲花控股</td>
+                <td class="px-4 py-2 text-gray-700">食品</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="半导体">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">688120.SH</td>
+                <td class="px-4 py-2 font-medium text-gray-900">华海清科</td>
+                <td class="px-4 py-2 text-gray-700">半导体</td>
             </tr>
             <tr class="hover:bg-gray-50" data-industry="生物制药">
                 <td class="px-4 py-2 font-mono text-xs text-gray-600">688278.SH</td>
                 <td class="px-4 py-2 font-medium text-gray-900">特宝生物</td>
                 <td class="px-4 py-2 text-gray-700">生物制药</td>
             </tr>
-            <tr class="hover:bg-gray-50" data-industry="食品">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">002695.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">煌上煌</td>
-                <td class="px-4 py-2 text-gray-700">食品</td>
+            <tr class="hover:bg-gray-50" data-industry="化纤">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">002064.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">华峰化学</td>
+                <td class="px-4 py-2 text-gray-700">化纤</td>
             </tr>
-            <tr class="hover:bg-gray-50" data-industry="船舶">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">600482.SH</td>
-                <td class="px-4 py-2 font-medium text-gray-900">中国动力</td>
-                <td class="px-4 py-2 text-gray-700">船舶</td>
+            <tr class="hover:bg-gray-50" data-industry="软件服务">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">300369.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">绿盟科技</td>
+                <td class="px-4 py-2 text-gray-700">软件服务</td>
             </tr>
-            <tr class="hover:bg-gray-50" data-industry="染料涂料">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">002440.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">闰土股份</td>
-                <td class="px-4 py-2 text-gray-700">染料涂料</td>
+            <tr class="hover:bg-gray-50" data-industry="化学制药">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">603259.SH</td>
+                <td class="px-4 py-2 font-medium text-gray-900">药明康德</td>
+                <td class="px-4 py-2 text-gray-700">化学制药</td>
             </tr>
-            <tr class="hover:bg-gray-50" data-industry="医疗保健">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">300244.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">迪安诊断</td>
-                <td class="px-4 py-2 text-gray-700">医疗保健</td>
+            <tr class="hover:bg-gray-50" data-industry="中成药">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">300181.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">佐力药业</td>
+                <td class="px-4 py-2 text-gray-700">中成药</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="白酒">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">603198.SH</td>
+                <td class="px-4 py-2 font-medium text-gray-900">迎驾贡酒</td>
+                <td class="px-4 py-2 text-gray-700">白酒</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="通信设备">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">000815.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">美利云</td>
+                <td class="px-4 py-2 text-gray-700">通信设备</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="化学制药">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">002653.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">海思科</td>
+                <td class="px-4 py-2 text-gray-700">化学制药</td>
             </tr>
             <tr class="hover:bg-gray-50" data-industry="元器件">
-                <td class="px-4 py-2 font-mono text-xs text-gray-600">002745.SZ</td>
-                <td class="px-4 py-2 font-medium text-gray-900">木林森</td>
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">002913.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">奥士康</td>
                 <td class="px-4 py-2 text-gray-700">元器件</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="电器仪表">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">688583.SH</td>
+                <td class="px-4 py-2 font-medium text-gray-900">思看科技</td>
+                <td class="px-4 py-2 text-gray-700">电器仪表</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="汽车配件">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">002448.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">中原内配</td>
+                <td class="px-4 py-2 text-gray-700">汽车配件</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="化学制药">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">600216.SH</td>
+                <td class="px-4 py-2 font-medium text-gray-900">浙江医药</td>
+                <td class="px-4 py-2 text-gray-700">化学制药</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="化学制药">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">600521.SH</td>
+                <td class="px-4 py-2 font-medium text-gray-900">华海药业</td>
+                <td class="px-4 py-2 text-gray-700">化学制药</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="环境保护">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">300779.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">惠城环保</td>
+                <td class="px-4 py-2 text-gray-700">环境保护</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="通信设备">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">002396.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">星网锐捷</td>
+                <td class="px-4 py-2 text-gray-700">通信设备</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="建筑工程">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">600629.SH</td>
+                <td class="px-4 py-2 font-medium text-gray-900">华建集团</td>
+                <td class="px-4 py-2 text-gray-700">建筑工程</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="医药商业">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">600829.SH</td>
+                <td class="px-4 py-2 font-medium text-gray-900">人民同泰</td>
+                <td class="px-4 py-2 text-gray-700">医药商业</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="百货">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">600693.SH</td>
+                <td class="px-4 py-2 font-medium text-gray-900">东百集团</td>
+                <td class="px-4 py-2 text-gray-700">百货</td>
             </tr>
                     </tbody>
                 </table>
@@ -625,7 +495,7 @@
     </div>
 
     <script>
-    const chartOptions = {"line": {"tooltip": {"trigger": "axis"}, "grid": {"left": "8%", "right": "5%", "top": "10%", "bottom": "15%"}, "xAxis": {"type": "category", "data": ["2026-08-24", "2026-08-25"], "axisLabel": {"rotate": 45}}, "yAxis": {"type": "value", "name": "入选总数"}, "series": [{"name": "超阈值行业总数", "type": "line", "data": [0, 25], "smooth": true, "areaStyle": {"opacity": 0.3}}]}, "bar": {"tooltip": {"trigger": "axis", "axisPointer": {"type": "shadow"}}, "legend": {"data": ["化学制药", "生物制药"], "top": "5%", "type": "scroll"}, "grid": {"left": "8%", "right": "5%", "top": "20%", "bottom": "15%"}, "xAxis": {"type": "category", "data": ["2026-08-24", "2026-08-25"], "axisLabel": {"rotate": 45}}, "yAxis": {"type": "value", "name": "入选数量"}, "series": [{"name": "化学制药", "type": "bar", "stack": "total", "data": [0, 14]}, {"name": "生物制药", "type": "bar", "stack": "total", "data": [0, 11]}]}, "heatmap": {"tooltip": {"position": "top"}, "grid": {"left": "15%", "right": "5%", "top": "10%", "bottom": "20%"}, "xAxis": {"type": "category", "data": ["2026-08-24", "2026-08-25"], "axisLabel": {"rotate": 45}}, "yAxis": {"type": "category", "data": ["化学制药", "生物制药"]}, "visualMap": {"min": 0, "max": 14, "calculable": true, "orient": "horizontal", "left": "center", "bottom": "5%"}, "series": [{"name": "入选数量", "type": "heatmap", "data": [[0, 0, 0], [1, 0, 14], [0, 1, 0], [1, 1, 11]], "label": {"show": false}}]}};
+    const chartOptions = {"line": {"tooltip": {"trigger": "axis"}, "grid": {"left": "8%", "right": "5%", "top": "10%", "bottom": "15%"}, "xAxis": {"type": "category", "data": ["2026-08-24", "2026-08-25", "2026-08-26"], "axisLabel": {"rotate": 45}}, "yAxis": {"type": "value", "name": "入选总数"}, "series": [{"name": "超阈值行业总数", "type": "line", "data": [0, 25, 0], "smooth": true, "areaStyle": {"opacity": 0.3}}]}, "bar": {"tooltip": {"trigger": "axis", "axisPointer": {"type": "shadow"}}, "legend": {"data": ["化学制药", "生物制药"], "top": "5%", "type": "scroll"}, "grid": {"left": "8%", "right": "5%", "top": "20%", "bottom": "15%"}, "xAxis": {"type": "category", "data": ["2026-08-24", "2026-08-25", "2026-08-26"], "axisLabel": {"rotate": 45}}, "yAxis": {"type": "value", "name": "入选数量"}, "series": [{"name": "化学制药", "type": "bar", "stack": "total", "data": [0, 14, 0]}, {"name": "生物制药", "type": "bar", "stack": "total", "data": [0, 11, 0]}]}, "heatmap": {"tooltip": {"position": "top"}, "grid": {"left": "15%", "right": "5%", "top": "10%", "bottom": "20%"}, "xAxis": {"type": "category", "data": ["2026-08-24", "2026-08-25", "2026-08-26"], "axisLabel": {"rotate": 45}}, "yAxis": {"type": "category", "data": ["化学制药", "生物制药"]}, "visualMap": {"min": 0, "max": 14, "calculable": true, "orient": "horizontal", "left": "center", "bottom": "5%"}, "series": [{"name": "入选数量", "type": "heatmap", "data": [[0, 0, 0], [1, 0, 14], [2, 0, 0], [0, 1, 0], [1, 1, 11], [2, 1, 0]], "label": {"show": false}}]}};
     if (chartOptions.line && chartOptions.line.series && chartOptions.line.series.length > 0) {
         const cl = echarts.init(document.getElementById('chartLine'));
         cl.setOption(chartOptions.line);

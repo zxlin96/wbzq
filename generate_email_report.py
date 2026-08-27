@@ -7,7 +7,6 @@
 
 数据源：
   - reports.json            → 选股数量概览
-  - macd_result_*.csv       → MACD 零轴金叉结果
   - html/dca/dca_summary.json → ETF 定投汇总
   - strategy_state.json     → 情绪反弹策略状态
   - multi_indicator_hints_*.json → 策略3 超阈值行业提示
@@ -23,7 +22,6 @@ import json
 import os
 import glob
 import logging
-import pandas as pd
 
 
 def load_reports_json():
@@ -53,19 +51,6 @@ def load_dca_summary():
     return None
 
 
-def load_csv_result(pattern):
-    """加载最新的 CSV 结果文件"""
-    files = sorted(glob.glob(pattern))
-    if not files:
-        return pd.DataFrame()
-    latest = files[-1]
-    try:
-        df = pd.read_csv(latest, encoding="utf-8-sig")
-        return df
-    except Exception:
-        return pd.DataFrame()
-
-
 def load_multi_indicator_hints():
     """加载最新的超阈值行业提示 JSON 文件。
 
@@ -93,90 +78,6 @@ def escape_html(text):
     if not isinstance(text, str):
         text = str(text)
     return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-
-
-def generate_stock_table(df, label):
-    """生成股票表格 HTML（通用，支持带 score_level 和不带 score_level 的 CSV）"""
-    if df.empty:
-        return f"<p>暂无{label}数据</p>"
-
-    has_score = "score_level" in df.columns
-    if has_score:
-        filtered = df[df["score_level"].isin(["A", "B"])].copy()
-    else:
-        # 对于主策略或 MACD 结果，取前 10 只
-        filtered = df.head(10).copy()
-
-    if filtered.empty:
-        if has_score:
-            return f"<p>{label}：无 A/B 级股票（共 {len(df)} 只）</p>"
-        return f"<p>{label}：暂无数据</p>"
-
-    level_colors = {"A": "#e74c3c", "B": "#3498db", "C": "#95a5a6", "D": "#bdc3c7"}
-
-    rows = ""
-    for _, row in filtered.iterrows():
-        if has_score:
-            level = row.get("score_level", "")
-            color = level_colors.get(level, "#333")
-            rows += f"""
-            <tr>
-                <td>{escape_html(row.get('ts_code', ''))}</td>
-                <td><strong>{escape_html(row.get('name', ''))}</strong></td>
-                <td>{escape_html(row.get('industry_name', ''))}</td>
-                <td>{row.get('close_qfq', 0):.2f}</td>
-                <td>{row.get('pct_chg', 0):.2f}%</td>
-                <td style="color:{color};font-weight:bold">{level}</td>
-                <td>{row.get('score', 0):.0f}</td>
-            </tr>"""
-        else:
-            # MACD 结果：显示 DIF 和偏差 %
-            line_diff = abs(row.get('zhixing_duokong', 0) - row.get('zhixing_mid_duokong', 0))
-            close = row.get('close_qfq', 0)
-            line_pct = line_diff / close * 100 if close > 0 else 0
-            rows += f"""
-            <tr>
-                <td>{escape_html(row.get('ts_code', ''))}</td>
-                <td><strong>{escape_html(row.get('name', ''))}</strong></td>
-                <td>{escape_html(row.get('industry_name', ''))}</td>
-                <td>{row.get('close_qfq', 0):.2f}</td>
-                <td>{row.get('pct_chg', 0):.2f}%</td>
-                <td>{row.get('macd_dif_qfq', 0):.4f}</td>
-                <td>{line_pct:.3f}%</td>
-            </tr>"""
-
-    ab_count = len(filtered)
-    total_count = len(df)
-
-    if has_score:
-        header = f"<p><strong>{label}精选（A/B 级 {ab_count} 只，全部 {total_count} 只）</strong></p>"
-        headers = """
-            <th style="padding:6px 8px;border:1px solid #ddd;text-align:left">代码</th>
-            <th style="padding:6px 8px;border:1px solid #ddd;text-align:left">名称</th>
-            <th style="padding:6px 8px;border:1px solid #ddd;text-align:left">行业</th>
-            <th style="padding:6px 8px;border:1px solid #ddd;text-align:right">收盘价</th>
-            <th style="padding:6px 8px;border:1px solid #ddd;text-align:right">涨幅</th>
-            <th style="padding:6px 8px;border:1px solid #ddd;text-align:center">等级</th>
-            <th style="padding:6px 8px;border:1px solid #ddd;text-align:right">评分</th>"""
-    else:
-        header = f"<p><strong>{label}（前 {ab_count} 只，共 {total_count} 只）</strong></p>"
-        headers = """
-            <th style="padding:6px 8px;border:1px solid #ddd;text-align:left">代码</th>
-            <th style="padding:6px 8px;border:1px solid #ddd;text-align:left">名称</th>
-            <th style="padding:6px 8px;border:1px solid #ddd;text-align:left">行业</th>
-            <th style="padding:6px 8px;border:1px solid #ddd;text-align:right">收盘价</th>
-            <th style="padding:6px 8px;border:1px solid #ddd;text-align:right">涨幅</th>
-            <th style="padding:6px 8px;border:1px solid #ddd;text-align:right">DIF</th>
-            <th style="padding:6px 8px;border:1px solid #ddd;text-align:right">黄白偏差%</th>"""
-
-    return f"""
-    {header}
-    <table style="border-collapse:collapse;width:100%;font-size:13px;margin-bottom:16px">
-        <tr style="background:#f5f5f5">
-            {headers}
-        </tr>
-        {rows}
-    </table>"""
 
 
 def _position_return_info(position, etf_last_price=0):
@@ -284,8 +185,8 @@ def generate_dca_section(dca_summary):
     </table>"""
 
 
-def generate_sentiment_section(state):
-    """生成情绪反弹策略 HTML"""
+def generate_sentiment_section(state, latest_date=""):
+    """生成情绪反弹策略 HTML（仅在 BUY 发生当天给出买入提醒）"""
     if not state:
         return "<p>暂无情绪反弹策略数据</p>"
 
@@ -293,9 +194,16 @@ def generate_sentiment_section(state):
     level = state.get("investment_level_idx", 0)
     trades = state.get("trades", [])
 
+    # 默认投资阶梯（与 sentiment_rebound_strategy.py 保持一致）
+    investment_levels = [2000, 4000, 8000, 16000]
+    next_level_idx = min(level, len(investment_levels) - 1)
+    next_amount = investment_levels[next_level_idx]
+    next_level = next_level_idx + 1
+
     # 最近一笔交易
     last_trade = trades[-1] if trades else None
     last_trade_str = "无交易记录"
+    buy_alert = ""
     if last_trade:
         action = last_trade.get("action", "")
         date = last_trade.get("date", "")
@@ -306,10 +214,19 @@ def generate_sentiment_section(state):
         else:
             last_trade_str = f"{date} {action}（{reason}）"
 
+        # 仅在 BUY 发生当天（即交易日期等于报告最新日期）给出醒目提醒
+        if action == "BUY" and date == latest_date:
+            buy_alert = f"""
+        <tr>
+            <td colspan="2" style="padding:12px;background:#fff3cd;border:2px solid #ff9800;border-radius:6px;color:#e65100;font-size:15px;font-weight:bold;text-align:center">
+                ⚠️ 今日触发买入 · 明日请继续买入 ¥{next_amount:,}（第 {next_level} 级）· 请按计划执行
+            </td>
+        </tr>"""
+
     position_str = f"{position} 份" if position > 0 else "空仓"
 
     return f"""
-    <table style="border-collapse:collapse;font-size:13px;margin-bottom:16px">
+    <table style="border-collapse:collapse;font-size:13px;margin-bottom:16px;width:100%">
         <tr>
             <td style="padding:4px 12px"><strong>当前持仓:</strong></td>
             <td style="padding:4px 12px">{position_str}</td>
@@ -326,6 +243,7 @@ def generate_sentiment_section(state):
             <td style="padding:4px 12px"><strong>最近交易:</strong></td>
             <td style="padding:4px 12px">{escape_html(last_trade_str)}</td>
         </tr>
+        {buy_alert}
     </table>"""
 
 
@@ -367,7 +285,6 @@ def generate_email_report(status="success", repo="", ref="", run_url=""):
     reports = load_reports_json()
     strategy_state = load_strategy_state()
     dca_summary = load_dca_summary()
-    macd_df = load_csv_result("macd_result_*.csv")
     multi_hints = load_multi_indicator_hints()
 
     # 状态图标和颜色
@@ -381,7 +298,6 @@ def generate_email_report(status="success", repo="", ref="", run_url=""):
     # 概览数据
     latest_date = reports.get("latestDate", "") if reports else ""
     total_stocks = reports.get("totalStocks", 0) if reports else 0
-    macd_stocks = reports.get("macdStocks", 0) if reports else 0
 
     report_url = "https://zxlin96.github.io/wbzq/"
 
@@ -415,32 +331,23 @@ def generate_email_report(status="success", repo="", ref="", run_url=""):
             <div style="font-size:24px;font-weight:bold;color:#2980b9">{total_stocks}</div>
             <div style="font-size:12px;color:#666">主策略</div>
         </td>
-        <td style="padding:8px 16px;background:#fef9e7;text-align:center;border-radius:4px;margin:4px">
-            <div style="font-size:24px;font-weight:bold;color:#f39c12">{macd_stocks}</div>
-            <div style="font-size:12px;color:#666">MACD 零轴金叉</div>
-        </td>
     </tr>
 </table>
-
-<h3 style="color:#2c3e50;border-left:4px solid #f39c12;padding-left:10px;margin-top:24px">
-    🏆 MACD 零轴金叉
-</h3>
-{generate_stock_table(macd_df, "MACD")}
-
-<h3 style="color:#2c3e50;border-left:4px solid #27ae60;padding-left:10px;margin-top:24px">
-    💰 ETF 定投策略汇总
-</h3>
-{generate_dca_section(dca_summary)}
 
 <h3 style="color:#2c3e50;border-left:4px solid #9b59b6;padding-left:10px;margin-top:24px">
     📊 情绪反弹策略
 </h3>
-{generate_sentiment_section(strategy_state)}
+{generate_sentiment_section(strategy_state, latest_date)}
 
 <h3 style="color:#2c3e50;border-left:4px solid #e67e22;padding-left:10px;margin-top:24px">
     🏷️ 策略3 超阈值行业提示
 </h3>
 {generate_multi_indicator_hint_section(multi_hints)}
+
+<h3 style="color:#2c3e50;border-left:4px solid #27ae60;padding-left:10px;margin-top:24px">
+    💰 ETF 定投策略汇总
+</h3>
+{generate_dca_section(dca_summary)}
 
 <hr style="border:none;border-top:1px solid #ddd;margin:20px 0">
 <p style="font-size:13px">

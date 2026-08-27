@@ -3,7 +3,7 @@
 """
 统一策略管道 (run_all_strategies.py)
 
-将 main_par2 / main_par5 合并为一次执行，
+将主策略与多指标策略合并为一次执行，
 共享数据获取和策略标记计算，避免重复调用 API 和重复计算。
 
 使用方式：
@@ -54,24 +54,24 @@ from main_par2 import (
     apply_final_filter,
 )
 
-# main_par5 的 MACD 策略函数
-from main_par5 import (
-    apply_macd_filter,
-    compute_macd_funnel_stats,
-    print_macd_results,
-    print_macd_stage_statistics,
-    save_macd_result,
-)
+# main_par5 的 MACD 策略函数（暂时停用）
+# from main_par5 import (
+#     apply_macd_filter,
+#     compute_macd_funnel_stats,
+#     print_macd_results,
+#     print_macd_stage_statistics,
+#     save_macd_result,
+# )
 
-# HTML 报告生成
-from generate_stock_html import generate_macd_html
+# HTML 报告生成（暂时停用 MACD 报告）
+# from generate_stock_html import generate_macd_html
 
 logging.basicConfig(level=logging.INFO, format="[%(asctime)s] %(levelname)s | %(message)s")
 
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description="统一策略管道 — 一次计算，三套筛选",
+        description="统一策略管道 — 一次计算，两套筛选",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 示例:
@@ -189,20 +189,21 @@ def main():
         print_results(result_par2, df, end_date, df_chart)
         print_stage_statistics(df, result_par2, args)
 
-        # 策略 2：MACD 零轴金叉 + 黄白线接近
-        print("\n" + "=" * 70)
-        print("策略2：MACD 零轴金叉筛选")
-        print("=" * 70)
-        result_macd = apply_macd_filter(df, end_date, basic)
-        print_macd_results(result_macd, df, end_date)
-        save_macd_result(result_macd, end_date)
-        print_macd_stage_statistics(df, result_macd, args, end_date)
+        # 策略 2：MACD 零轴金叉 + 黄白线接近（暂时停用）
+        # print("\n" + "=" * 70)
+        # print("策略2：MACD 零轴金叉筛选")
+        # print("=" * 70)
+        # result_macd = apply_macd_filter(df, end_date, basic)
+        # print_macd_results(result_macd, df, end_date)
+        # save_macd_result(result_macd, end_date)
+        # print_macd_stage_statistics(df, result_macd, args, end_date)
 
         # 生成 MACD HTML 报告
-        if not result_macd.empty:
-            industry_count_macd = result_macd['industry_name'].value_counts().to_dict()
-            funnel_macd = compute_macd_funnel_stats(df, result_macd, end_date)
-            generate_macd_html(result_macd, df, end_date, funnel_macd, industry_count_macd)
+        # if not result_macd.empty:
+        #     industry_count_macd = result_macd['industry_name'].value_counts().to_dict()
+        #     funnel_macd = compute_macd_funnel_stats(df, result_macd, end_date)
+        #     generate_macd_html(result_macd, df, end_date, funnel_macd, industry_count_macd)
+        result_macd = pd.DataFrame()
 
         # 策略 3：多指标联合选股 + 行业 ETF 提示
         print("\n" + "=" * 70)
@@ -225,7 +226,7 @@ def main():
             if buy_date:
                 strategies = [
                     ("主策略 Stock Selection", result_par2),
-                    ("MACD 零轴金叉", result_macd),
+                    # ("MACD 零轴金叉", result_macd),
                     ("多指标联合选股", result_multi),
                 ]
                 for name, result in strategies:

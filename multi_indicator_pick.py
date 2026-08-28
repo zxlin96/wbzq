@@ -331,7 +331,7 @@ def save_multi_indicator_hints(hints, end_date):
     Returns:
         str: JSON 文件路径；写入失败时返回 ""。空清单仍落盘 []。
     """
-    json_path = f"multi_indicator_hints_{end_date}.json"
+    json_path = f"hints/multi_indicator_hints_{end_date}.json"
     try:
         with open(json_path, 'w', encoding='utf-8') as f:
             json.dump(hints, f, ensure_ascii=False, indent=2)

@@ -21,7 +21,7 @@ from pathlib import Path
 logging.basicConfig(level=logging.INFO, format="[%(asctime)s] %(levelname)s | %(message)s")
 
 
-def scan_hints_files(base_dir: str = ".") -> list:
+def scan_hints_files(base_dir: str = "hints") -> list:
     """扫描 multi_indicator_hints_*.json 文件并按日期升序排序。
 
     Args:

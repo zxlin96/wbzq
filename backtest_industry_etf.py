@@ -135,7 +135,7 @@ def load_backtest_config(config_path: Optional[str] = None) -> Dict[str, dict]:
 def load_hints(start_date: str, end_date: str) -> pd.DataFrame:
     """加载已有 hints 文件，限定在日期区间内。"""
     records = []
-    for fp in sorted(glob.glob("multi_indicator_hints_*.json")):
+    for fp in sorted(glob.glob("hints/multi_indicator_hints_*.json")):
         fname = os.path.basename(fp)
         date_str = fname.replace("multi_indicator_hints_", "").replace(".json", "")
         if not (start_date <= date_str <= end_date):
@@ -178,7 +178,7 @@ def generate_missing_hints(start_date: str, end_date: str):
 
         missing_dates = [
             d for d in target_dates
-            if not os.path.exists(f"multi_indicator_hints_{d}.json")
+            if not os.path.exists(f"hints/multi_indicator_hints_{d}.json")
         ]
         if not missing_dates:
             logging.info("无需生成 hints，所有日期已存在")
@@ -212,7 +212,7 @@ def generate_missing_hints(start_date: str, end_date: str):
         for date in missing_dates:
             result, _ = apply_multi_indicator_filter(df, date, basic, ST)
             hints = generate_industry_count_hints(result, ST.MULTI_INDUSTRY_COUNT_THRESHOLD, basic)
-            out_path = f"multi_indicator_hints_{date}.json"
+            out_path = f"hints/multi_indicator_hints_{date}.json"
             save_json(hints, out_path)
             logging.info("已生成 hints: %s (%d 条)", out_path, len(hints))
     finally:

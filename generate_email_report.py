@@ -9,7 +9,7 @@
   - reports.json            → 选股数量概览
   - html/dca/dca_summary.json → ETF 定投汇总
   - strategy_state.json     → 情绪反弹策略状态
-  - multi_indicator_hints_*.json → 策略3 超阈值行业提示
+  - hints/multi_indicator_hints_*.json → 策略3 超阈值行业提示
 
 使用方式：
     python generate_email_report.py
@@ -59,7 +59,7 @@ def load_multi_indicator_hints():
     Returns:
         list: 提示清单 list[dict]；文件缺失或损坏时返回 []。
     """
-    files = sorted(glob.glob("multi_indicator_hints_*.json"))
+    files = sorted(glob.glob("hints/multi_indicator_hints_*.json"))
     if not files:
         return []
     latest = files[-1]

@@ -1,0 +1,46 @@
+[
+  {
+    "industry": "电气设备",
+    "count": 54
+  },
+  {
+    "industry": "半导体",
+    "count": 27
+  },
+  {
+    "industry": "医疗保健",
+    "count": 23
+  },
+  {
+    "industry": "通信设备",
+    "count": 23
+  },
+  {
+    "industry": "小金属",
+    "count": 22
+  },
+  {
+    "industry": "中成药",
+    "count": 15
+  },
+  {
+    "industry": "化学制药",
+    "count": 15
+  },
+  {
+    "industry": "互联网",
+    "count": 12
+  },
+  {
+    "industry": "家用电器",
+    "count": 12
+  },
+  {
+    "industry": "生物制药",
+    "count": 12
+  },
+  {
+    "industry": "食品",
+    "count": 11
+  }
+]

@@ -1,0 +1,160 @@
+{
+  "说明": "行业→ETF 映射配置。优先使用对应行业 ETF，无法找到精确匹配时再使用宽基 ETF。",
+  "industry_etf_map": {
+    "半导体": {
+      "ts_code": "159801.SZ",
+      "name": "广发国证半导体芯片ETF",
+      "enabled": true
+    },
+    "通信": {
+      "ts_code": "515880.SH",
+      "name": "国泰中证全指通信设备ETF",
+      "enabled": true
+    },
+    "通信设备": {
+      "ts_code": "515880.SH",
+      "name": "国泰中证全指通信设备ETF",
+      "enabled": true
+    },
+    "电力": {
+      "ts_code": "159611.SZ",
+      "name": "广发中证全指电力公用事业ETF",
+      "enabled": true
+    },
+    "电气设备": {
+      "ts_code": "159611.SZ",
+      "name": "广发中证全指电力公用事业ETF",
+      "enabled": true
+    },
+    "有色金属": {
+      "ts_code": "512400.SH",
+      "name": "南方中证申万有色金属ETF",
+      "enabled": true
+    },
+    "小金属": {
+      "ts_code": "512400.SH",
+      "name": "南方中证申万有色金属ETF",
+      "enabled": true
+    },
+    "机器人": {
+      "ts_code": "562500.SH",
+      "name": "华夏中证机器人ETF",
+      "enabled": true
+    },
+    "专用机械": {
+      "ts_code": "562500.SH",
+      "name": "华夏中证机器人ETF",
+      "enabled": true
+    },
+    "汽车配件": {
+      "ts_code": "515250.SH",
+      "name": "富国中证智能汽车主题ETF",
+      "enabled": true
+    },
+    "人工智能": {
+      "ts_code": "159819.SZ",
+      "name": "易方达中证人工智能主题ETF",
+      "enabled": true
+    },
+    "软件服务": {
+      "ts_code": "515230.SH",
+      "name": "国泰中证全指软件ETF",
+      "enabled": true
+    },
+    "互联网": {
+      "ts_code": "512980.SH",
+      "name": "广发中证传媒ETF",
+      "enabled": true
+    },
+    "IT设备": {
+      "ts_code": "159997.SZ",
+      "name": "天弘中证电子ETF",
+      "enabled": true
+    },
+    "创新药": {
+      "ts_code": "516080.SH",
+      "name": "易方达中证创新药产业ETF",
+      "enabled": true
+    },
+    "医疗保健": {
+      "ts_code": "516080.SH",
+      "name": "易方达中证创新药产业ETF",
+      "enabled": true
+    },
+    "中成药": {
+      "ts_code": "516080.SH",
+      "name": "易方达中证创新药产业ETF",
+      "enabled": true
+    },
+    "化学制药": {
+      "ts_code": "516080.SH",
+      "name": "易方达中证创新药产业ETF",
+      "enabled": true
+    },
+    "生物制药": {
+      "ts_code": "516080.SH",
+      "name": "易方达中证创新药产业ETF",
+      "enabled": true
+    },
+    "科创半导体": {
+      "ts_code": "588170.SH",
+      "name": "华夏上证科创板半导体材料设备主题ETF",
+      "enabled": true
+    },
+    "创业板新能源": {
+      "ts_code": "159387.SZ",
+      "name": "创业板新能源",
+      "enabled": true
+    },
+    "银行": {
+      "ts_code": "512800.SH",
+      "name": "华宝中证银行ETF",
+      "enabled": true
+    },
+    "白酒": {
+      "ts_code": "512690.SH",
+      "name": "鹏华中证酒ETF",
+      "enabled": true
+    },
+    "证券": {
+      "ts_code": "512880.SH",
+      "name": "国泰中证全指证券公司ETF",
+      "enabled": true
+    },
+    "化工原料": {
+      "ts_code": "516020.SH",
+      "name": "华宝中证细分化工产业主题ETF",
+      "enabled": true
+    },
+    "煤炭开采": {
+      "ts_code": "515220.SH",
+      "name": "国泰中证煤炭ETF",
+      "enabled": true
+    },
+    "建筑工程": {
+      "ts_code": "516750.SH",
+      "name": "富国中证全指建筑材料ETF",
+      "enabled": true
+    },
+    "航空": {
+      "ts_code": "512660.SH",
+      "name": "国泰中证军工ETF",
+      "enabled": true
+    },
+    "家用电器": {
+      "ts_code": "159730.SZ",
+      "name": "博时国证龙头家电ETF",
+      "enabled": true
+    },
+    "食品": {
+      "ts_code": "515170.SH",
+      "name": "华夏中证细分食品饮料产业主题ETF",
+      "enabled": true
+    },
+    "元器件": {
+      "ts_code": "159997.SZ",
+      "name": "天弘中证电子ETF",
+      "enabled": true
+    }
+  }
+}

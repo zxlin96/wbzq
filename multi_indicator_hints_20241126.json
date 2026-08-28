@@ -1,0 +1,34 @@
+[
+  {
+    "industry": "半导体",
+    "count": 42
+  },
+  {
+    "industry": "软件服务",
+    "count": 35
+  },
+  {
+    "industry": "元器件",
+    "count": 32
+  },
+  {
+    "industry": "通信设备",
+    "count": 17
+  },
+  {
+    "industry": "建筑工程",
+    "count": 13
+  },
+  {
+    "industry": "IT设备",
+    "count": 11
+  },
+  {
+    "industry": "中成药",
+    "count": 11
+  },
+  {
+    "industry": "保险",
+    "count": 2
+  }
+]

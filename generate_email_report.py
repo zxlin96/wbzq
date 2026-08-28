@@ -23,6 +23,8 @@ import os
 import glob
 import logging
 
+HERE = os.path.dirname(os.path.abspath(__file__))
+
 
 def load_reports_json():
     """加载 reports.json"""
@@ -247,15 +249,22 @@ def generate_sentiment_section(state, latest_date=""):
     </table>"""
 
 
-def generate_multi_indicator_hint_section(hints):
+def generate_multi_indicator_hint_section(hints, etf_map=None):
     """生成策略3超阈值行业提示板块 HTML（不含 h3 标题）。
+
+    除行业与入选数量外，附加该行业对应的行业 ETF（名称 + 代码），
+    用于在出现信号时提醒用户具体可关注的相关 ETF。
 
     Args:
         hints: 提示清单 list[dict]，每条含 {industry, count}
+        etf_map: 行业→ETF 映射 dict（来自 backtest_industry_etf_config.json）
 
     Returns:
         str: HTML 片段字符串。
     """
+    if etf_map is None:
+        etf_map = load_backtest_etf_map()
+
     if not hints:
         return '<p style="color:#999;font-size:13px">暂无超阈值行业</p>'
 
@@ -263,10 +272,20 @@ def generate_multi_indicator_hint_section(hints):
     for h in hints:
         industry = escape_html(h.get("industry", ""))
         count = h.get("count", 0)
+        etf_info = etf_map.get(industry, {})
+        etf_name = etf_info.get("name", "")
+        ts_code = etf_info.get("ts_code", "")
+        if etf_name and ts_code:
+            etf_cell = f"{escape_html(etf_name)} <span style='color:#888'>({ts_code})</span>"
+        elif etf_name:
+            etf_cell = escape_html(etf_name)
+        else:
+            etf_cell = "<span style='color:#bbb'>暂无对应ETF</span>"
         rows += f"""
         <tr>
             <td style="padding:6px 8px;border:1px solid #ddd;text-align:left">{industry}</td>
             <td style="padding:6px 8px;border:1px solid #ddd;text-align:right">{count}</td>
+            <td style="padding:6px 8px;border:1px solid #ddd;text-align:left">{etf_cell}</td>
         </tr>"""
 
     return f"""
@@ -274,9 +293,112 @@ def generate_multi_indicator_hint_section(hints):
         <tr style="background:#f5f5f5">
             <th style="padding:6px 8px;border:1px solid #ddd;text-align:left">行业</th>
             <th style="padding:6px 8px;border:1px solid #ddd;text-align:right">入选数量</th>
+            <th style="padding:6px 8px;border:1px solid #ddd;text-align:left">相关行业ETF</th>
         </tr>
         {rows}
     </table>"""
+
+
+def load_backtest_etf_map():
+    """加载行业→ETF映射配置，供邮件提醒展示相关ETF。"""
+    try:
+        cfg_path = os.path.join(HERE, "backtest_industry_etf_config.json")
+        if os.path.exists(cfg_path):
+            with open(cfg_path, "r", encoding="utf-8") as f:
+                cfg = json.load(f)
+            # 配置结构：{"说明": ..., "industry_etf_map": {行业: {...}}}
+            if isinstance(cfg, dict) and "industry_etf_map" in cfg:
+                return cfg["industry_etf_map"]
+            return cfg
+    except Exception as e:
+        logging.warning("加载行业ETF映射失败: %s", e)
+    return {}
+
+
+def generate_backtest_c_section(start_date: str, end_date: str):
+    """生成行业ETF回测板块（策略C：no-repeat + 知行多空过滤）。
+
+    Args:
+        start_date: 回测起始日 YYYYMMDD
+        end_date: 回测结束日 YYYYMMDD
+
+    Returns:
+        str: HTML 片段；失败或无数据时返回空字符串/提示。
+    """
+    try:
+        import backtest_industry_etf as bie
+        import pandas as pd
+    except Exception as e:
+        logging.warning("导入 backtest_industry_etf 失败: %s", e)
+        return ""
+
+    try:
+        industry_etf_map = bie.load_backtest_config(bie.DEFAULT_CONFIG_PATH)
+        if not industry_etf_map:
+            return '<p style="color:#999;font-size:13px">行业ETF回测：未找到行业→ETF映射配置</p>'
+
+        signals = bie.load_hints(start_date, end_date)
+        if signals.empty:
+            return (f'<p style="color:#999;font-size:13px">行业ETF回测（知行多空过滤）：'
+                    f'{start_date}~{end_date} 区间内无超阈值信号</p>')
+
+        trades = bie.run_backtest(
+            signals, industry_etf_map, start_date, end_date,
+            no_repeat=True, filter_zhixing_ok=True,
+        )
+        if trades.empty:
+            return (f'<p style="color:#999;font-size:13px">行业ETF回测（知行多空过滤）：'
+                    f'{start_date}~{end_date} 区间内无可交易标的</p>')
+
+        stats = bie.compute_stats(trades)
+
+        rows = ""
+        for day in [1, 3, 5, 10]:
+            s = stats.get(day)
+            if not s:
+                continue
+            rows += f"""
+            <tr>
+                <td style="padding:6px 8px;border:1px solid #ddd">T+{day}</td>
+                <td style="padding:6px 8px;border:1px solid #ddd">{s['count']}</td>
+                <td style="padding:6px 8px;border:1px solid #ddd">{s['win_rate']:.1f}%</td>
+                <td style="padding:6px 8px;border:1px solid #ddd;color:{'#27ae60' if s['avg_return']>=0 else '#e74c3c'}">{s['avg_return']:+.2f}%</td>
+                <td style="padding:6px 8px;border:1px solid #ddd">{s['max_return']:+.2f}%</td>
+                <td style="padding:6px 8px;border:1px solid #ddd">{s['min_return']:+.2f}%</td>
+            </tr>"""
+
+        latest = trades.sort_values("signal_date").tail(3)
+        latest_items = ""
+        for _, r in latest.iterrows():
+            t1 = r.get("return_t1", float("nan"))
+            t1_str = f"{t1:+.2f}%" if pd.notna(t1) else "—"
+            latest_items += (
+                f"<li>{r['signal_date']} 信号 → {r['industry']} / "
+                f"{r['etf_name']}（买入日 {r['buy_date']}，T+1 {t1_str}）</li>"
+            )
+
+        return f"""
+        <p style="color:#666;font-size:13px;margin:4px 0">
+            规则：行业超阈值信号 → 次日开盘买入对应行业ETF；<b>同一ETF持仓期只首仓</b>，
+            且买入日需 <b>中期线&gt;多空线 且 收盘≥多空线</b>（仅参与多头趋势）。区间 {start_date}~{end_date}。
+        </p>
+        <table style="border-collapse:collapse;width:100%;max-width:680px;font-size:13px;margin-bottom:12px">
+            <tr style="background:#f5f5f5">
+                <th style="padding:6px 8px;border:1px solid #ddd">持有期</th>
+                <th style="padding:6px 8px;border:1px solid #ddd">笔数</th>
+                <th style="padding:6px 8px;border:1px solid #ddd">胜率</th>
+                <th style="padding:6px 8px;border:1px solid #ddd">平均收益</th>
+                <th style="padding:6px 8px;border:1px solid #ddd">最大</th>
+                <th style="padding:6px 8px;border:1px solid #ddd">最小</th>
+            </tr>
+            {rows}
+        </table>
+        <p style="color:#666;font-size:13px;margin:6px 0 2px"><b>最近信号：</b></p>
+        <ul style="color:#444;font-size:13px;margin:2px 0">{latest_items}</ul>
+        """
+    except Exception as e:
+        logging.warning("生成行业ETF回测板块失败: %s", e)
+        return ""
 
 
 def generate_email_report(status="success", repo="", ref="", run_url=""):
@@ -342,7 +464,7 @@ def generate_email_report(status="success", repo="", ref="", run_url=""):
 <h3 style="color:#2c3e50;border-left:4px solid #e67e22;padding-left:10px;margin-top:24px">
     🏷️ 策略3 超阈值行业提示
 </h3>
-{generate_multi_indicator_hint_section(multi_hints)}
+{generate_multi_indicator_hint_section(multi_hints, load_backtest_etf_map())}
 
 <h3 style="color:#2c3e50;border-left:4px solid #27ae60;padding-left:10px;margin-top:24px">
     💰 ETF 定投策略汇总

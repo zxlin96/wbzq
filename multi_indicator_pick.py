@@ -256,14 +256,20 @@ def compute_multi_indicator_funnel_stats(df, end_date, thresholds):
 # T3.1 超阈值行业提示
 # ============================================================================
 
-def generate_industry_count_hints(result, threshold):
-    """生成超阈值行业提示清单（spec 5.1.1）。
+def generate_industry_count_hints(result, threshold, basic=None):
+    """生成超阈值行业提示清单。
 
-    当某行业入选股票数量 > threshold 时，生成提示条目（不查找 ETF）。
+    规则：
+    - 保险：入选股票数量 >= 2 即触发。
+    - 其他行业（且 basic 提供行业总个股数）：行业总个股数 > 50 且
+      入选股票数量 > max(行业总个股数 * 10%, 10) 时触发。
+    - 未提供 basic 时退化为旧逻辑：入选股票数量 > threshold 触发。
+    - 未知行业不生成提示。
 
     Args:
         result: 入选股票 DataFrame（含 industry_name 列）
-        threshold: 行业入选数量阈值
+        threshold: 行业入选数量阈值（basic 缺失时的退化阈值）
+        basic: 股票基本信息 DataFrame（含 industry_name 列），可选
 
     Returns:
         list: 提示条目，每条含 {industry: str, count: int}，
@@ -280,14 +286,35 @@ def generate_industry_count_hints(result, threshold):
 
     industry_count = industry_series.value_counts()
 
+    # 计算各行业总个股数（用于百分比规则）
+    industry_total_counts = {}
+    if basic is not None and not basic.empty and 'industry_name' in basic.columns:
+        industry_total_counts = (
+            basic['industry_name'].fillna('未知行业').value_counts().to_dict()
+        )
+
     hints = []
     for industry, count in industry_count.items():
-        if count <= threshold:
+        if str(industry) == '未知行业':
             continue
-        hints.append({
-            'industry': str(industry),
-            'count': int(count),
-        })
+
+        # 保险特殊规则：2 只即触发
+        if str(industry) == '保险':
+            if count >= 2:
+                hints.append({'industry': str(industry), 'count': int(count)})
+            continue
+
+        # 提供 basic 时：总个股 > 50 且 入选数 > max(总个股*10%, 10)
+        if industry_total_counts:
+            total = industry_total_counts.get(industry, 0)
+            threshold_count = max(total * 0.1, 10)
+            if total > 50 and count > threshold_count:
+                hints.append({'industry': str(industry), 'count': int(count)})
+            continue
+
+        # 退化逻辑
+        if count > threshold:
+            hints.append({'industry': str(industry), 'count': int(count)})
 
     # 按 count 降序，count 相同时按 industry 字典序升序
     hints.sort(key=lambda x: (-x['count'], x['industry']))
@@ -368,7 +395,7 @@ def run_multi_indicator_strategy(df, end_date, basic, thresholds=None):
     result, funnel = apply_multi_indicator_filter(df, end_date, basic, thresholds)
 
     # 3. 超阈值行业提示
-    hints = generate_industry_count_hints(result, thresholds.MULTI_INDUSTRY_COUNT_THRESHOLD)
+    hints = generate_industry_count_hints(result, thresholds.MULTI_INDUSTRY_COUNT_THRESHOLD, basic)
 
     # 4. CSV 落盘
     save_multi_indicator_result(result, end_date)

@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2026-09-04",
+  "lastUpdate": "2026-09-06",
   "etf_list": [
     {
       "name": "红利低波",
@@ -403,8 +403,8 @@
       "avg_cost": 1.8503,
       "loss_pct": -7.85,
       "total_invested": 60000.0,
-      "total_return": 8303.54,
-      "return_pct": 13.84,
+      "total_return": 8292.81,
+      "return_pct": 13.82,
       "trade_count": 81
     },
     {

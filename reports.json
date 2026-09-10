@@ -1,10 +1,20 @@
 {
-  "lastUpdate": "2026-09-09 12:37:01",
-  "totalStocks": 2,
+  "lastUpdate": "2026-09-10 12:35:50",
+  "totalStocks": 4,
   "macdStocks": 0,
-  "totalReports": 128,
-  "latestDate": "20260909",
+  "totalReports": 129,
+  "latestDate": "20260910",
   "reports": [
+    {
+      "date": "20260910",
+      "stockSelection": "html/20260910/stock_selection_20260910.html",
+      "industryTrend": "html/20260910/industry_total_amount_trend.html",
+      "j13Trend": "html/20260910/first_j13_step_daily_count.html",
+      "macdResult": null,
+      "macdHtml": null,
+      "sentimentRebound": "html/20260910/sentiment_rebound_strategy.html",
+      "multiIndicator": "html/20260910/multi_indicator_selection_20260910.html"
+    },
     {
       "date": "20260909",
       "stockSelection": "html/20260909/stock_selection_20260909.html",

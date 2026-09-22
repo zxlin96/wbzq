@@ -1,10 +1,10 @@
 {
-  "position": 3,
+  "position": 1,
   "position_cost": 2000.0,
   "investment_level_idx": 0,
-  "red_bar_count": 3,
+  "red_bar_count": 0,
   "green_bar_count": 0,
-  "last_trade_date": "20260921",
+  "last_trade_date": "20260922",
   "trades": [
     {
       "date": "20260319",
@@ -161,7 +161,16 @@
       "j13_count": 2715,
       "threshold": 2592.6,
       "reason": "J13数量(2715)超过90%分位数(2592.6)"
+    },
+    {
+      "date": "20260922",
+      "action": "SELL",
+      "type": "卖一半",
+      "ratio": 0.5,
+      "red_bars": 4,
+      "price": 1.485,
+      "reason": "连续红柱达到4根，卖出一半"
     }
   ],
-  "saved_at": "2026-09-21 12:25:40"
+  "saved_at": "2026-09-22 12:27:57"
 }

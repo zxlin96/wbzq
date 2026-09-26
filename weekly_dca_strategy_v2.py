@@ -115,6 +115,10 @@ def resample_to_weekly(df: pd.DataFrame) -> pd.DataFrame:
     }).reset_index(drop=True)
     weekly = weekly.sort_values('date').reset_index(drop=True)
     weekly = weekly.dropna(subset=['open_qfq', 'high_qfq', 'low_qfq', 'close_qfq'])
+    # 标记本周"半成品"周线：bar日期==数据集最新日期 → 本周尚未收盘。
+    # 决策只应使用 week_completed=True 的bar，避免盘中J值漂移导致信号抖动。
+    latest_date = df['date'].max()
+    weekly['week_completed'] = weekly['date'] < latest_date
     return weekly
 
 
@@ -189,6 +193,10 @@ class Position:
         self.waiting_golden = False
         self.golden_confirmed = False
         self.price_below_dk_sold = False
+        # V4 卖出状态字段（V4 起经 getattr 读取；统一初始化并持久化，
+        # 避免断点续跑时丢失 J 门控与创新低止损锚点）
+        self.cycle_low = None      # 本轮买入周期最低收盘价（止损锚点）
+        self.j_high_done = False   # 周线J曾>j_operation_gate，解锁卖出
         # 交易记录
         self.trades = []
         self.week_invested = set()
@@ -315,6 +323,8 @@ class Position:
             'dca_exited': self.dca_exited,
             'dca_exit_date': self.dca_exit_date,
             'dca_exit_amount': self.dca_exit_amount,
+            'cycle_low': self.cycle_low,
+            'j_high_done': self.j_high_done,
             'trades': self.trades,
             'week_invested': list(self.week_invested),
         }
@@ -352,6 +362,8 @@ class Position:
         p.dca_exited = data.get('dca_exited', False)
         p.dca_exit_date = data.get('dca_exit_date', '')
         p.dca_exit_amount = data.get('dca_exit_amount', 0.0)
+        p.cycle_low = data.get('cycle_low', None)
+        p.j_high_done = data.get('j_high_done', False)
         p.trades = data.get('trades', [])
         p.week_invested = set(data.get('week_invested', []))
         return p
@@ -553,9 +565,19 @@ class WeeklyDCAStrategy:
         if not sorted_weekly_dates:
             logging.warning(f"[{self.name}] 无周线KDJ数据")
             return
+        # 决策只消费"已收盘周线"：周线bar以该周最后交易日为标签，
+        # 标签日期 < 最新交易日 的bar才是已完成周。本周半成品bar
+        # （标签==最新交易日）只用于展示预览，不参与买卖判断——
+        # 否则同一周内J值每日漂移，会出现"前一天卖出、后一天不卖"的信号抖动。
+        max_daily_date = all_dates[-1] if all_dates else None
+        decision_weekly_dates = [wd for wd in sorted_weekly_dates
+                                 if max_daily_date and wd < max_daily_date]
+        if len(decision_weekly_dates) < len(sorted_weekly_dates):
+            logging.info(f"[{self.name}] 本周周线尚未收盘，决策沿用 {decision_weekly_dates[-1] if decision_weekly_dates else '无'} 收盘周线"
+                         f"（跳过半成品bar: {sorted_weekly_dates[-1]}）")
         for d in all_dates:
             best_wd = None
-            for wd in sorted_weekly_dates:
+            for wd in decision_weekly_dates:
                 if wd <= d:
                     best_wd = wd
                 else:
@@ -764,12 +786,19 @@ class WeeklyDCAStrategy:
         daily_with_dk = calc_zhixing_duokong(daily_df)
         weekly_kdj = calc_kdj(weekly_df)
         last_daily = daily_with_dk.iloc[-1]
-        last_weekly = weekly_kdj.iloc[-1]
         last_price = last_daily['close_qfq']
         last_date = last_daily['trade_date']
+        # 决策只使用已收盘周线；本周半成品周线的J仅作为"盘中预览"展示，
+        # 避免建议随盘中数据每日漂移。
+        max_daily_date = str(daily_with_dk['trade_date'].max())
+        completed = weekly_kdj[weekly_kdj['trade_date'] < max_daily_date]
+        last_weekly = completed.iloc[-1] if not completed.empty else weekly_kdj.iloc[0]
+        forming = weekly_kdj[weekly_kdj['trade_date'] >= max_daily_date]
+        preview_j = forming.iloc[-1].get('J') if not forming.empty else None
         weekly_j = last_weekly.get('J')
         if weekly_j is None or pd.isna(weekly_j):
             weekly_j = 50.0
+        signal_week_date = str(last_weekly['trade_date'])
         mid_val = last_daily.get('zhixing_mid')
         dk_val = last_daily.get('zhixing_duokong')
         mid_above_dk = False
@@ -784,6 +813,10 @@ class WeeklyDCAStrategy:
             'weekly_j': round(float(weekly_j), 2),
             'weekly_k': round(float(last_weekly.get('K', 0)), 2),
             'weekly_d': round(float(last_weekly.get('D', 0)), 2),
+            'signal_week_date': signal_week_date,
+            'preview_weekly_j': (round(float(preview_j), 2)
+                                 if preview_j is not None and not pd.isna(preview_j)
+                                 else None),
             'mid_value': round(float(mid_val), 4) if pd.notna(mid_val) else None,
             'dk_value': round(float(dk_val), 4) if pd.notna(dk_val) else None,
             'mid_above_dk': mid_above_dk,

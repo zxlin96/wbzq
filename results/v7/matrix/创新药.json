@@ -1,0 +1,227 @@
+{
+  "etf": "创新药",
+  "ts_code": "516080.SH",
+  "backtest_start": "20210927",
+  "data_start": "20210223",
+  "data_end": "20260924",
+  "weekly_bars": 286,
+  "variants": {
+    "V6": {
+      "ann_ret": 0.002,
+      "max_dd": -0.1349,
+      "calmar": 0.015,
+      "end_nav": 1.0096,
+      "n_days": 1212,
+      "total_invested": 67000.0,
+      "total_profit": 642.03,
+      "buy_count": 52,
+      "sell_count": 30,
+      "rounds_opened": 14,
+      "is": {
+        "ann_ret": -0.0007,
+        "max_dd": -0.1349,
+        "calmar": -0.005,
+        "end_nav": 0.9975,
+        "n_days": 849
+      },
+      "oos": {
+        "ann_ret": 0.0083,
+        "max_dd": -0.0137,
+        "calmar": 0.611,
+        "end_nav": 1.0121,
+        "n_days": 364
+      },
+      "oos_start": "20250401"
+    },
+    "V7OFF": {
+      "ann_ret": 0.002,
+      "max_dd": -0.1349,
+      "calmar": 0.015,
+      "end_nav": 1.0096,
+      "n_days": 1212,
+      "total_invested": 67000.0,
+      "total_profit": 642.03,
+      "buy_count": 52,
+      "sell_count": 30,
+      "rounds_opened": 14,
+      "is": {
+        "ann_ret": -0.0007,
+        "max_dd": -0.1349,
+        "calmar": -0.005,
+        "end_nav": 0.9975,
+        "n_days": 849
+      },
+      "oos": {
+        "ann_ret": 0.0083,
+        "max_dd": -0.0137,
+        "calmar": 0.611,
+        "end_nav": 1.0121,
+        "n_days": 364
+      },
+      "oos_start": "20250401"
+    },
+    "T4A": {
+      "ann_ret": 0.0003,
+      "max_dd": -0.1302,
+      "calmar": 0.002,
+      "end_nav": 1.0014,
+      "n_days": 1212,
+      "total_invested": 67000.0,
+      "total_profit": 93.8,
+      "buy_count": 60,
+      "sell_count": 30,
+      "rounds_opened": 14,
+      "is": {
+        "ann_ret": -0.0032,
+        "max_dd": -0.1302,
+        "calmar": -0.025,
+        "end_nav": 0.9892,
+        "n_days": 849
+      },
+      "oos": {
+        "ann_ret": 0.0085,
+        "max_dd": -0.0121,
+        "calmar": 0.706,
+        "end_nav": 1.0123,
+        "n_days": 364
+      },
+      "oos_start": "20250401"
+    },
+    "T4B": {
+      "ann_ret": 0.001,
+      "max_dd": -0.1406,
+      "calmar": 0.007,
+      "end_nav": 1.005,
+      "n_days": 1212,
+      "total_invested": 67000.0,
+      "total_profit": 338.21,
+      "buy_count": 54,
+      "sell_count": 30,
+      "rounds_opened": 14,
+      "is": {
+        "ann_ret": -0.0023,
+        "max_dd": -0.1406,
+        "calmar": -0.017,
+        "end_nav": 0.9922,
+        "n_days": 849
+      },
+      "oos": {
+        "ann_ret": 0.009,
+        "max_dd": -0.0104,
+        "calmar": 0.86,
+        "end_nav": 1.013,
+        "n_days": 364
+      },
+      "oos_start": "20250401"
+    },
+    "T1freeze": {
+      "ann_ret": -0.0007,
+      "max_dd": -0.1302,
+      "calmar": -0.005,
+      "end_nav": 0.9968,
+      "n_days": 1212,
+      "total_invested": 32000.0,
+      "total_profit": -102.9,
+      "buy_count": 26,
+      "sell_count": 14,
+      "rounds_opened": 7,
+      "is": {
+        "ann_ret": -0.0009,
+        "max_dd": -0.1302,
+        "calmar": -0.007,
+        "end_nav": 0.997,
+        "n_days": 849
+      },
+      "oos": {
+        "ann_ret": -0.0002,
+        "max_dd": -0.0231,
+        "calmar": -0.007,
+        "end_nav": 0.9998,
+        "n_days": 364
+      },
+      "oos_start": "20250401"
+    },
+    "T1half": {
+      "ann_ret": -0.0,
+      "max_dd": -0.1302,
+      "calmar": -0.0,
+      "end_nav": 0.9999,
+      "n_days": 1212,
+      "total_invested": 49500.0,
+      "total_profit": -4.55,
+      "buy_count": 60,
+      "sell_count": 30,
+      "rounds_opened": 14,
+      "is": {
+        "ann_ret": -0.0026,
+        "max_dd": -0.1302,
+        "calmar": -0.02,
+        "end_nav": 0.9914,
+        "n_days": 849
+      },
+      "oos": {
+        "ann_ret": 0.0059,
+        "max_dd": -0.0146,
+        "calmar": 0.405,
+        "end_nav": 1.0086,
+        "n_days": 364
+      },
+      "oos_start": "20250401"
+    },
+    "T3": {
+      "ann_ret": -0.0031,
+      "max_dd": -0.1302,
+      "calmar": -0.024,
+      "end_nav": 0.9853,
+      "n_days": 1212,
+      "total_invested": 25000.0,
+      "total_profit": -368.67,
+      "buy_count": 21,
+      "sell_count": 11,
+      "rounds_opened": 5,
+      "is": {
+        "ann_ret": -0.0009,
+        "max_dd": -0.1302,
+        "calmar": -0.007,
+        "end_nav": 0.997,
+        "n_days": 849
+      },
+      "oos": {
+        "ann_ret": -0.0082,
+        "max_dd": -0.0157,
+        "calmar": -0.52,
+        "end_nav": 0.9882,
+        "n_days": 364
+      },
+      "oos_start": "20250401"
+    },
+    "T2full": {
+      "ann_ret": -0.0031,
+      "max_dd": -0.1302,
+      "calmar": -0.024,
+      "end_nav": 0.9853,
+      "n_days": 1212,
+      "total_invested": 25000.0,
+      "total_profit": -368.67,
+      "buy_count": 21,
+      "sell_count": 11,
+      "rounds_opened": 5,
+      "is": {
+        "ann_ret": -0.0009,
+        "max_dd": -0.1302,
+        "calmar": -0.007,
+        "end_nav": 0.997,
+        "n_days": 849
+      },
+      "oos": {
+        "ann_ret": -0.0082,
+        "max_dd": -0.0157,
+        "calmar": -0.52,
+        "end_nav": 0.9882,
+        "n_days": 364
+      },
+      "oos_start": "20250401"
+    }
+  },
+  "equivalence_v6_v7off": true
+}

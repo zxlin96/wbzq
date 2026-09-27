@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2026-09-26",
+  "lastUpdate": "2026-09-27",
   "etf_list": [
     {
       "name": "红利低波",
@@ -23,7 +23,8 @@
       "total_invested": 55000.0,
       "total_return": 3445.83,
       "return_pct": 6.27,
-      "trade_count": 70
+      "trade_count": 70,
+      "decision_source": "ledger"
     },
     {
       "name": "上证50",
@@ -62,7 +63,8 @@
       "total_invested": 56000.0,
       "total_return": -174.85,
       "return_pct": -0.31,
-      "trade_count": 61
+      "trade_count": 61,
+      "decision_source": "ledger"
     },
     {
       "name": "沪深300",
@@ -101,7 +103,8 @@
       "total_invested": 65000.0,
       "total_return": -191.17,
       "return_pct": -0.29,
-      "trade_count": 78
+      "trade_count": 78,
+      "decision_source": "ledger"
     },
     {
       "name": "NASDAQ100",
@@ -162,7 +165,8 @@
       "total_invested": 74000.0,
       "total_return": 12139.87,
       "return_pct": 16.41,
-      "trade_count": 80
+      "trade_count": 80,
+      "decision_source": "ledger"
     },
     {
       "name": "中证2000",
@@ -201,7 +205,8 @@
       "total_invested": 20000.0,
       "total_return": 1955.97,
       "return_pct": 9.78,
-      "trade_count": 23
+      "trade_count": 23,
+      "decision_source": "ledger"
     },
     {
       "name": "通信",
@@ -240,7 +245,8 @@
       "total_invested": 60000.0,
       "total_return": 16182.03,
       "return_pct": 26.97,
-      "trade_count": 74
+      "trade_count": 74,
+      "decision_source": "ledger"
     },
     {
       "name": "创新药",
@@ -279,7 +285,8 @@
       "total_invested": 68000.0,
       "total_return": 1231.32,
       "return_pct": 1.81,
-      "trade_count": 83
+      "trade_count": 83,
+      "decision_source": "ledger"
     },
     {
       "name": "电力",
@@ -318,7 +325,8 @@
       "total_invested": 40000.0,
       "total_return": -189.8,
       "return_pct": -0.47,
-      "trade_count": 47
+      "trade_count": 47,
+      "decision_source": "ledger"
     },
     {
       "name": "科创半导体",
@@ -357,7 +365,8 @@
       "total_invested": 15000.0,
       "total_return": 6289.77,
       "return_pct": 41.93,
-      "trade_count": 15
+      "trade_count": 15,
+      "decision_source": "ledger"
     },
     {
       "name": "卫星ETF富国",
@@ -396,7 +405,8 @@
       "total_invested": 10000.0,
       "total_return": -487.39,
       "return_pct": -4.87,
-      "trade_count": 9
+      "trade_count": 9,
+      "decision_source": "ledger"
     },
     {
       "name": "有色金属",
@@ -420,7 +430,8 @@
       "total_invested": 60000.0,
       "total_return": 1287.49,
       "return_pct": 2.15,
-      "trade_count": 76
+      "trade_count": 76,
+      "decision_source": "ledger"
     },
     {
       "name": "人工智能",
@@ -457,9 +468,10 @@
       "avg_cost": 1.8503,
       "loss_pct": -4.77,
       "total_invested": 60000.0,
-      "total_return": 8542.68,
-      "return_pct": 14.24,
-      "trade_count": 80
+      "total_return": 8556.4,
+      "return_pct": 14.26,
+      "trade_count": 80,
+      "decision_source": "ledger"
     },
     {
       "name": "创业板新能源",
@@ -498,7 +510,8 @@
       "total_invested": 10000.0,
       "total_return": -1038.03,
       "return_pct": -10.38,
-      "trade_count": 7
+      "trade_count": 7,
+      "decision_source": "ledger"
     },
     {
       "name": "机器人",
@@ -537,7 +550,8 @@
       "total_invested": 55000.0,
       "total_return": 7425.0,
       "return_pct": 13.5,
-      "trade_count": 65
+      "trade_count": 65,
+      "decision_source": "ledger"
     }
   ]
 }

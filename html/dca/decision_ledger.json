@@ -2,7 +2,7 @@
   "version": 1,
   "etfs": {
     "红利低波": {
-      "current_week": "20260924",
+      "current_week": "20260930",
       "weeks": {
         "20260918": {
           "signal_week": "20260918",
@@ -19,11 +19,19 @@
           "weekly_j": 56.12,
           "recorded_at": "2026-09-28 12:31:50",
           "source": "live"
+        },
+        "20260930": {
+          "signal_week": "20260930",
+          "action": "wait",
+          "action_label": "空仓等待",
+          "weekly_j": 61.3,
+          "recorded_at": "2026-10-08 12:29:11",
+          "source": "live"
         }
       }
     },
     "上证50": {
-      "current_week": "20260924",
+      "current_week": "20260930",
       "weeks": {
         "20260918": {
           "signal_week": "20260918",
@@ -40,11 +48,19 @@
           "weekly_j": 2.87,
           "recorded_at": "2026-09-28 12:31:50",
           "source": "live"
+        },
+        "20260930": {
+          "signal_week": "20260930",
+          "action": "buy",
+          "action_label": "R12 建议定投(1x)",
+          "weekly_j": 3.04,
+          "recorded_at": "2026-10-08 12:29:11",
+          "source": "live"
         }
       }
     },
     "沪深300": {
-      "current_week": "20260924",
+      "current_week": "20260930",
       "weeks": {
         "20260918": {
           "signal_week": "20260918",
@@ -61,11 +77,19 @@
           "weekly_j": 9.76,
           "recorded_at": "2026-09-28 12:31:50",
           "source": "live"
+        },
+        "20260930": {
+          "signal_week": "20260930",
+          "action": "buy",
+          "action_label": "R13 建议定投(0x)",
+          "weekly_j": 4.63,
+          "recorded_at": "2026-10-08 12:29:11",
+          "source": "live"
         }
       }
     },
     "NASDAQ100": {
-      "current_week": "20260924",
+      "current_week": "20260930",
       "weeks": {
         "20260918": {
           "signal_week": "20260918",
@@ -82,11 +106,19 @@
           "weekly_j": 93.84,
           "recorded_at": "2026-09-28 12:31:50",
           "source": "live"
+        },
+        "20260930": {
+          "signal_week": "20260930",
+          "action": "wait_dead_cross",
+          "action_label": "R10 已卖2/3·等死叉",
+          "weekly_j": 103.79,
+          "recorded_at": "2026-10-08 12:29:11",
+          "source": "live"
         }
       }
     },
     "中证2000": {
-      "current_week": "20260924",
+      "current_week": "20260930",
       "weeks": {
         "20260918": {
           "signal_week": "20260918",
@@ -103,11 +135,19 @@
           "weekly_j": 102.67,
           "recorded_at": "2026-09-28 12:31:50",
           "source": "live"
+        },
+        "20260930": {
+          "signal_week": "20260930",
+          "action": "wait",
+          "action_label": "空仓等待",
+          "weekly_j": 86.98,
+          "recorded_at": "2026-10-08 12:29:11",
+          "source": "live"
         }
       }
     },
     "通信": {
-      "current_week": "20260924",
+      "current_week": "20260930",
       "weeks": {
         "20260918": {
           "signal_week": "20260918",
@@ -124,11 +164,19 @@
           "weekly_j": 89.25,
           "recorded_at": "2026-09-28 12:31:50",
           "source": "live"
+        },
+        "20260930": {
+          "signal_week": "20260930",
+          "action": "wait_golden",
+          "action_label": "R12 已卖1/3·等金叉",
+          "weekly_j": 59.43,
+          "recorded_at": "2026-10-08 12:29:11",
+          "source": "live"
         }
       }
     },
     "创新药": {
-      "current_week": "20260924",
+      "current_week": "20260930",
       "weeks": {
         "20260918": {
           "signal_week": "20260918",
@@ -145,11 +193,19 @@
           "weekly_j": 10.87,
           "recorded_at": "2026-09-28 12:31:50",
           "source": "live"
+        },
+        "20260930": {
+          "signal_week": "20260930",
+          "action": "hold_fully_invested",
+          "action_label": "R14 预算已投完·持有等卖",
+          "weekly_j": 31.35,
+          "recorded_at": "2026-10-08 12:29:11",
+          "source": "live"
         }
       }
     },
     "电力": {
-      "current_week": "20260924",
+      "current_week": "20260930",
       "weeks": {
         "20260918": {
           "signal_week": "20260918",
@@ -166,11 +222,19 @@
           "weekly_j": 12.31,
           "recorded_at": "2026-09-28 12:31:50",
           "source": "live"
+        },
+        "20260930": {
+          "signal_week": "20260930",
+          "action": "wait_golden",
+          "action_label": "R8 已卖1/3·等金叉",
+          "weekly_j": 11.95,
+          "recorded_at": "2026-10-08 12:29:11",
+          "source": "live"
         }
       }
     },
     "科创半导体": {
-      "current_week": "20260924",
+      "current_week": "20260930",
       "weeks": {
         "20260918": {
           "signal_week": "20260918",
@@ -187,11 +251,19 @@
           "weekly_j": 57.86,
           "recorded_at": "2026-09-28 12:31:50",
           "source": "live"
+        },
+        "20260930": {
+          "signal_week": "20260930",
+          "action": "wait_golden",
+          "action_label": "R3 已卖1/3·等金叉",
+          "weekly_j": 42.76,
+          "recorded_at": "2026-10-08 12:29:11",
+          "source": "live"
         }
       }
     },
     "卫星ETF富国": {
-      "current_week": "20260924",
+      "current_week": "20260930",
       "weeks": {
         "20260918": {
           "signal_week": "20260918",
@@ -208,11 +280,19 @@
           "weekly_j": 46.73,
           "recorded_at": "2026-09-28 12:31:50",
           "source": "live"
+        },
+        "20260930": {
+          "signal_week": "20260930",
+          "action": "hold_fully_invested",
+          "action_label": "R2 预算已投完·持有等卖",
+          "weekly_j": 17.51,
+          "recorded_at": "2026-10-08 12:29:11",
+          "source": "live"
         }
       }
     },
     "有色金属": {
-      "current_week": "20260924",
+      "current_week": "20260930",
       "weeks": {
         "20260918": {
           "signal_week": "20260918",
@@ -229,11 +309,19 @@
           "weekly_j": 18.26,
           "recorded_at": "2026-09-28 12:31:50",
           "source": "live"
+        },
+        "20260930": {
+          "signal_week": "20260930",
+          "action": "buy",
+          "action_label": "R13 建议定投(1x)",
+          "weekly_j": 2.9,
+          "recorded_at": "2026-10-08 12:29:11",
+          "source": "live"
         }
       }
     },
     "人工智能": {
-      "current_week": "20260924",
+      "current_week": "20260930",
       "weeks": {
         "20260918": {
           "signal_week": "20260918",
@@ -250,11 +338,19 @@
           "weekly_j": 34.5,
           "recorded_at": "2026-09-28 12:31:50",
           "source": "live"
+        },
+        "20260930": {
+          "signal_week": "20260930",
+          "action": "hold",
+          "action_label": "R13 定投暂停·持有观望",
+          "weekly_j": 14.05,
+          "recorded_at": "2026-10-08 12:29:11",
+          "source": "live"
         }
       }
     },
     "创业板新能源": {
-      "current_week": "20260924",
+      "current_week": "20260930",
       "weeks": {
         "20260918": {
           "signal_week": "20260918",
@@ -271,11 +367,19 @@
           "weekly_j": 10.9,
           "recorded_at": "2026-09-28 12:31:50",
           "source": "live"
+        },
+        "20260930": {
+          "signal_week": "20260930",
+          "action": "buy",
+          "action_label": "R2 建议定投(0x)",
+          "weekly_j": 7.25,
+          "recorded_at": "2026-10-08 12:29:11",
+          "source": "live"
         }
       }
     },
     "机器人": {
-      "current_week": "20260924",
+      "current_week": "20260930",
       "weeks": {
         "20260918": {
           "signal_week": "20260918",
@@ -291,6 +395,14 @@
           "action_label": "R11 预算已投完·持有等卖",
           "weekly_j": 15.29,
           "recorded_at": "2026-09-28 12:31:50",
+          "source": "live"
+        },
+        "20260930": {
+          "signal_week": "20260930",
+          "action": "buy",
+          "action_label": "R11 建议定投(0x)",
+          "weekly_j": 7.5,
+          "recorded_at": "2026-10-08 12:29:11",
           "source": "live"
         }
       }

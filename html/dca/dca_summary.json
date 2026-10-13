@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2026-10-12",
+  "lastUpdate": "2026-10-13",
   "etf_list": [
     {
       "name": "红利低波",
@@ -8,12 +8,12 @@
       "action_label": "空仓等待",
       "action_color": "#95a5a6",
       "action": "wait",
-      "action_detail": "周线J=78.35，空仓等待J<=13 ｜ 依据20261009收盘周线（下次更新：下周首个交易日） ｜ 本周盘中预览J=96.33(未确认)",
+      "action_detail": "周线J=78.35，空仓等待J<=13 ｜ 依据20261009收盘周线（下次更新：下周首个交易日） ｜ 本周盘中预览J=90.57(未确认)",
       "signal_week_date": "20261009",
-      "preview_weekly_j": 96.33,
+      "preview_weekly_j": 90.57,
       "positions": [],
-      "last_date": "20261012",
-      "last_price": 1.23,
+      "last_date": "20261013",
+      "last_price": 1.224,
       "weekly_j": 78.35,
       "weekly_k": 73.62,
       "weekly_d": 71.26,
@@ -23,7 +23,8 @@
       "total_invested": 55000.0,
       "total_return": 3445.83,
       "return_pct": 6.27,
-      "trade_count": 70
+      "trade_count": 70,
+      "decision_source": "ledger"
     },
     {
       "name": "上证50",
@@ -32,37 +33,38 @@
       "action_label": "R12 建议定投(0x)",
       "action_color": "#e74c3c",
       "action": "buy",
-      "action_detail": "R12 定投中，浮亏0.13%，建议买入0元(0x) ｜ 依据20261009收盘周线（下次更新：下周首个交易日） ｜ 本周盘中预览J=13.61(未确认)",
+      "action_detail": "R12 定投中，浮亏0.55%，建议买入1000元(1x) ｜ 依据20261009收盘周线（下次更新：下周首个交易日） ｜ 本周盘中预览J=7.37(未确认)",
       "signal_week_date": "20261009",
-      "preview_weekly_j": 13.61,
+      "preview_weekly_j": 7.37,
       "positions": [
         {
           "round_id": 12,
-          "shares": 1703.0309,
-          "avg_cost": 2.9359,
+          "shares": 1363.7206,
+          "avg_cost": 2.9332,
           "sell_stage": 0,
-          "j_peak": 13.61,
+          "j_peak": 7.37,
           "dca_active": true,
           "round_budget": 5000,
-          "budget_remaining": 0.0,
+          "budget_remaining": 1000.0,
           "action": "buy",
-          "action_label": "R12 建议定投(0x)",
+          "action_label": "R12 建议定投(1x)",
           "action_color": "#e74c3c",
-          "action_detail": "R12 定投中，浮亏0.13%，建议买入0元(0x)"
+          "action_detail": "R12 定投中，浮亏0.55%，建议买入1000元(1x)"
         }
       ],
-      "last_date": "20261012",
-      "last_price": 2.932,
+      "last_date": "20261013",
+      "last_price": 2.917,
       "weekly_j": 4.72,
       "weekly_k": 22.31,
       "weekly_d": 31.1,
-      "shares": 1703.0309,
-      "avg_cost": 2.9359,
-      "loss_pct": -0.13,
-      "total_invested": 60000.0,
-      "total_return": -181.56,
-      "return_pct": -0.3,
-      "trade_count": 64
+      "shares": 1363.7206,
+      "avg_cost": 2.9332,
+      "loss_pct": -0.55,
+      "total_invested": 59000.0,
+      "total_return": -196.87,
+      "return_pct": -0.33,
+      "trade_count": 64,
+      "decision_source": "ledger"
     },
     {
       "name": "沪深300",
@@ -71,9 +73,9 @@
       "action_label": "R13 建议定投(0x)",
       "action_color": "#e74c3c",
       "action": "buy",
-      "action_detail": "R13 定投中，浮亏7.00%，建议买入0元(0x) ｜ 依据20261009收盘周线（下次更新：下周首个交易日） ｜ 本周盘中预览J=6.45(未确认)",
+      "action_detail": "R13 定投中，浮亏7.32%，建议买入0元(0x) ｜ 依据20261009收盘周线（下次更新：下周首个交易日） ｜ 本周盘中预览J=7.29(未确认)",
       "signal_week_date": "20261009",
-      "preview_weekly_j": 6.45,
+      "preview_weekly_j": 7.29,
       "positions": [
         {
           "round_id": 13,
@@ -87,21 +89,22 @@
           "action": "buy",
           "action_label": "R13 建议定投(0x)",
           "action_color": "#e74c3c",
-          "action_detail": "R13 定投中，浮亏7.00%，建议买入0元(0x)"
+          "action_detail": "R13 定投中，浮亏7.32%，建议买入0元(0x)"
         }
       ],
-      "last_date": "20261012",
-      "last_price": 4.36,
+      "last_date": "20261013",
+      "last_price": 4.345,
       "weekly_j": 8.05,
       "weekly_k": 15.63,
       "weekly_d": 19.42,
       "shares": 1066.5122,
       "avg_cost": 4.6882,
-      "loss_pct": -7.0,
+      "loss_pct": -7.32,
       "total_invested": 65000.0,
-      "total_return": -356.48,
-      "return_pct": -0.55,
-      "trade_count": 78
+      "total_return": -372.47,
+      "return_pct": -0.57,
+      "trade_count": 78,
+      "decision_source": "ledger"
     },
     {
       "name": "NASDAQ100",
@@ -110,9 +113,9 @@
       "action_label": "R10 已卖2/3·等死叉",
       "action_color": "#f39c12",
       "action": "wait_dead_cross",
-      "action_detail": "R10 等死叉全清 | R11 监控收盘<多空线(1.6624)，中期>多空卖1/3，中期<多空全清 ｜ 依据20261009收盘周线（下次更新：下周首个交易日） ｜ 本周盘中预览J=97.04(未确认)",
+      "action_detail": "R10 等死叉全清 | R11 监控收盘<多空线(1.6673)，中期>多空卖1/3，中期<多空全清 ｜ 依据20261009收盘周线（下次更新：下周首个交易日） ｜ 本周盘中预览J=93.29(未确认)",
       "signal_week_date": "20261009",
-      "preview_weekly_j": 97.04,
+      "preview_weekly_j": 93.29,
       "positions": [
         {
           "round_id": 10,
@@ -124,9 +127,9 @@
           "round_budget": 5000,
           "budget_remaining": 0,
           "total_invested": 8000.0,
-          "total_return": 1681.5,
-          "return_pct": 21.02,
-          "loss_pct": 35.36,
+          "total_return": 1663.13,
+          "return_pct": 20.79,
+          "loss_pct": 34.67,
           "action": "wait_dead_cross",
           "action_label": "R10 已卖2/3·等死叉",
           "action_color": "#f39c12",
@@ -142,27 +145,28 @@
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "total_return": 309.05,
-          "return_pct": 6.18,
-          "loss_pct": 7.42,
+          "total_return": 290.82,
+          "return_pct": 5.82,
+          "loss_pct": 6.87,
           "action": "wait_price_below_dk",
           "action_label": "R11 已卖1/3·等收盘<多空线",
           "action_color": "#e67e22",
-          "action_detail": "R11 监控收盘<多空线(1.6624)，中期>多空卖1/3，中期<多空全清"
+          "action_detail": "R11 监控收盘<多空线(1.6673)，中期>多空卖1/3，中期<多空全清"
         }
       ],
-      "last_date": "20261012",
-      "last_price": 1.768,
+      "last_date": "20261013",
+      "last_price": 1.759,
       "weekly_j": 105.38,
       "weekly_k": 89.47,
       "weekly_d": 81.52,
       "shares": 4066.8455,
       "avg_cost": 1.4753,
-      "loss_pct": 19.84,
+      "loss_pct": 19.23,
       "total_invested": 74000.0,
-      "total_return": 12431.02,
-      "return_pct": 16.8,
-      "trade_count": 81
+      "total_return": 12359.66,
+      "return_pct": 16.7,
+      "trade_count": 81,
+      "decision_source": "ledger"
     },
     {
       "name": "中证2000",
@@ -171,12 +175,12 @@
       "action_label": "空仓等待",
       "action_color": "#95a5a6",
       "action": "wait",
-      "action_detail": "周线J=55.06，空仓等待J<=13 ｜ 依据20261009收盘周线（下次更新：下周首个交易日） ｜ 本周盘中预览J=22.98(未确认)",
+      "action_detail": "周线J=55.06，空仓等待J<=13 ｜ 依据20261009收盘周线（下次更新：下周首个交易日） ｜ 本周盘中预览J=34.9(未确认)",
       "signal_week_date": "20261009",
-      "preview_weekly_j": 22.98,
+      "preview_weekly_j": 34.9,
       "positions": [],
-      "last_date": "20261012",
-      "last_price": 1.372,
+      "last_date": "20261013",
+      "last_price": 1.383,
       "weekly_j": 55.06,
       "weekly_k": 61.02,
       "weekly_d": 64.0,
@@ -186,7 +190,8 @@
       "total_invested": 20000.0,
       "total_return": 2049.69,
       "return_pct": 10.25,
-      "trade_count": 25
+      "trade_count": 25,
+      "decision_source": "ledger"
     },
     {
       "name": "通信",
@@ -195,9 +200,9 @@
       "action_label": "R12 已卖1/3·等金叉",
       "action_color": "#9b59b6",
       "action": "wait_golden",
-      "action_detail": "R12 空头区间，等金叉 | R13 J=29.61，等卖出或买入信号 ｜ 依据20261009收盘周线（下次更新：下周首个交易日） ｜ 本周盘中预览J=1.35(未确认)",
+      "action_detail": "R12 空头区间，等金叉 ｜ 依据20261009收盘周线（下次更新：下周首个交易日） ｜ 本周盘中预览J=14.93(未确认)",
       "signal_week_date": "20261009",
-      "preview_weekly_j": 1.35,
+      "preview_weekly_j": 14.93,
       "positions": [
         {
           "round_id": 12,
@@ -212,34 +217,21 @@
           "action_label": "R12 已卖1/3·等金叉",
           "action_color": "#9b59b6",
           "action_detail": "R12 空头区间，等金叉"
-        },
-        {
-          "round_id": 13,
-          "shares": 1779.3594,
-          "avg_cost": 0.562,
-          "sell_stage": 0,
-          "j_peak": 1.35,
-          "dca_active": true,
-          "round_budget": 5000,
-          "budget_remaining": 4000.0,
-          "action": "hold",
-          "action_label": "R13 定投暂停·持有观望",
-          "action_color": "#f39c12",
-          "action_detail": "R13 J=29.61，等卖出或买入信号"
         }
       ],
-      "last_date": "20261012",
-      "last_price": 0.562,
+      "last_date": "20261013",
+      "last_price": 0.572,
       "weekly_j": 29.61,
       "weekly_k": 41.37,
       "weekly_d": 47.25,
-      "shares": 6944.7449,
-      "avg_cost": 0.624,
-      "loss_pct": -9.93,
-      "total_invested": 61000.0,
-      "total_return": 15334.58,
-      "return_pct": 25.14,
-      "trade_count": 75
+      "shares": 5165.3855,
+      "avg_cost": 0.6453,
+      "loss_pct": -11.36,
+      "total_invested": 60000.0,
+      "total_return": 15390.62,
+      "return_pct": 25.65,
+      "trade_count": 74,
+      "decision_source": "ledger"
     },
     {
       "name": "创新药",
@@ -248,9 +240,9 @@
       "action_label": "R14 预算已投完·持有等卖",
       "action_color": "#3498db",
       "action": "hold_fully_invested",
-      "action_detail": "R14 预算已全部投入(5000元)，J=28.72，等J>=93或回撤止盈卖出 ｜ 依据20261009收盘周线（下次更新：下周首个交易日） ｜ 本周盘中预览J=20.42(未确认)",
+      "action_detail": "R14 预算已全部投入(5000元)，J=28.72，等J>=93或回撤止盈卖出 ｜ 依据20261009收盘周线（下次更新：下周首个交易日） ｜ 本周盘中预览J=14.77(未确认)",
       "signal_week_date": "20261009",
-      "preview_weekly_j": 20.42,
+      "preview_weekly_j": 14.77,
       "positions": [
         {
           "round_id": 14,
@@ -267,18 +259,19 @@
           "action_detail": "R14 预算已全部投入(5000元)，J=28.72，等J>=93或回撤止盈卖出"
         }
       ],
-      "last_date": "20261012",
-      "last_price": 0.664,
+      "last_date": "20261013",
+      "last_price": 0.655,
       "weekly_j": 28.72,
       "weekly_k": 36.66,
       "weekly_d": 40.62,
       "shares": 7408.0631,
       "avg_cost": 0.6749,
-      "loss_pct": -1.62,
+      "loss_pct": -2.95,
       "total_invested": 70000.0,
-      "total_return": 1097.55,
-      "return_pct": 1.57,
-      "trade_count": 84
+      "total_return": 1030.88,
+      "return_pct": 1.47,
+      "trade_count": 84,
+      "decision_source": "ledger"
     },
     {
       "name": "电力",
@@ -287,9 +280,9 @@
       "action_label": "R8 已卖1/3·等金叉",
       "action_color": "#9b59b6",
       "action": "wait_golden",
-      "action_detail": "R8 空头区间，等金叉 | R9 预算已全部投入(5000元)，J=44.17，等J>=93或回撤止盈卖出 ｜ 依据20261009收盘周线（下次更新：下周首个交易日） ｜ 本周盘中预览J=62.69(未确认)",
+      "action_detail": "R8 空头区间，等金叉 | R9 预算已全部投入(5000元)，J=44.17，等J>=93或回撤止盈卖出 ｜ 依据20261009收盘周线（下次更新：下周首个交易日） ｜ 本周盘中预览J=52.97(未确认)",
       "signal_week_date": "20261009",
-      "preview_weekly_j": 62.69,
+      "preview_weekly_j": 52.97,
       "positions": [
         {
           "round_id": 8,
@@ -310,7 +303,7 @@
           "shares": 4770.3356,
           "avg_cost": 1.0481,
           "sell_stage": 0,
-          "j_peak": 62.69,
+          "j_peak": 52.97,
           "dca_active": true,
           "round_budget": 5000,
           "budget_remaining": 0.0,
@@ -320,18 +313,19 @@
           "action_detail": "R9 预算已全部投入(5000元)，J=44.17，等J>=93或回撤止盈卖出"
         }
       ],
-      "last_date": "20261012",
-      "last_price": 1.05,
+      "last_date": "20261013",
+      "last_price": 1.044,
       "weekly_j": 44.17,
       "weekly_k": 34.58,
       "weekly_d": 29.78,
       "shares": 7966.1014,
       "avg_cost": 1.0461,
-      "loss_pct": 0.37,
+      "loss_pct": -0.2,
       "total_invested": 45000.0,
-      "total_return": -97.86,
-      "return_pct": -0.22,
-      "trade_count": 49
+      "total_return": -145.66,
+      "return_pct": -0.32,
+      "trade_count": 49,
+      "decision_source": "ledger"
     },
     {
       "name": "科创半导体",
@@ -340,9 +334,9 @@
       "action_label": "R3 已卖1/3·等金叉",
       "action_color": "#9b59b6",
       "action": "wait_golden",
-      "action_detail": "R3 空头区间，等金叉 ｜ 依据20261009收盘周线（下次更新：下周首个交易日） ｜ 本周盘中预览J=13.51(未确认)",
+      "action_detail": "R3 空头区间，等金叉 ｜ 依据20261009收盘周线（下次更新：下周首个交易日） ｜ 本周盘中预览J=17.05(未确认)",
       "signal_week_date": "20261009",
-      "preview_weekly_j": 13.51,
+      "preview_weekly_j": 17.05,
       "positions": [
         {
           "round_id": 3,
@@ -359,18 +353,19 @@
           "action_detail": "R3 空头区间，等金叉"
         }
       ],
-      "last_date": "20261012",
-      "last_price": 0.865,
+      "last_date": "20261013",
+      "last_price": 0.878,
       "weekly_j": 23.28,
       "weekly_k": 31.44,
       "weekly_d": 35.52,
       "shares": 3351.8955,
       "avg_cost": 0.9945,
-      "loss_pct": -13.02,
+      "loss_pct": -11.71,
       "total_invested": 15000.0,
-      "total_return": 5487.89,
-      "return_pct": 36.59,
-      "trade_count": 16
+      "total_return": 5531.47,
+      "return_pct": 36.88,
+      "trade_count": 16,
+      "decision_source": "ledger"
     },
     {
       "name": "卫星ETF富国",
@@ -379,22 +374,38 @@
       "action_label": "建议买入",
       "action_color": "#e74c3c",
       "action": "buy",
-      "action_detail": "周线J=12.81<=13，建议以1000元定投买入 ｜ 依据20261009收盘周线（下次更新：下周首个交易日） ｜ 本周盘中预览J=1.87(未确认)",
+      "action_detail": "R3 定投中，浮亏0.00%，建议买入1000元(1x) ｜ 依据20261009收盘周线（下次更新：下周首个交易日） ｜ 本周盘中预览J=9.86(未确认)",
       "signal_week_date": "20261009",
-      "preview_weekly_j": 1.87,
-      "positions": [],
-      "last_date": "20261012",
-      "last_price": 0.98,
+      "preview_weekly_j": 9.86,
+      "positions": [
+        {
+          "round_id": 3,
+          "shares": 1017.294,
+          "avg_cost": 0.983,
+          "sell_stage": 0,
+          "j_peak": 9.86,
+          "dca_active": true,
+          "round_budget": 5000,
+          "budget_remaining": 4000.0,
+          "action": "buy",
+          "action_label": "R3 建议定投(1x)",
+          "action_color": "#e74c3c",
+          "action_detail": "R3 定投中，浮亏0.00%，建议买入1000元(1x)"
+        }
+      ],
+      "last_date": "20261013",
+      "last_price": 0.983,
       "weekly_j": 12.81,
       "weekly_k": 20.67,
       "weekly_d": 24.59,
-      "shares": 0,
-      "avg_cost": null,
-      "loss_pct": 0,
-      "total_invested": 10000.0,
+      "shares": 1017.294,
+      "avg_cost": 0.983,
+      "loss_pct": -0.0,
+      "total_invested": 11000.0,
       "total_return": -1480.14,
-      "return_pct": -14.8,
-      "trade_count": 10
+      "return_pct": -13.46,
+      "trade_count": 11,
+      "decision_source": "ledger"
     },
     {
       "name": "有色金属",
@@ -403,14 +414,14 @@
       "action_label": "R13 建议定投(1x)",
       "action_color": "#e74c3c",
       "action": "buy",
-      "action_detail": "R13 定投中，浮亏1.69%，建议买入1000元(1x) ｜ 依据20261009收盘周线（下次更新：下周首个交易日） ｜ 本周盘中预览J=-8.58(未确认)",
+      "action_detail": "R13 定投中，浮亏1.28%，建议买入1000元(1x) ｜ 依据20261009收盘周线（下次更新：下周首个交易日） ｜ 本周盘中预览J=-1.66(未确认)",
       "signal_week_date": "20261009",
-      "preview_weekly_j": -8.58,
+      "preview_weekly_j": -1.66,
       "positions": [
         {
           "round_id": 13,
-          "shares": 1854.8474,
-          "avg_cost": 1.6174,
+          "shares": 1850.9165,
+          "avg_cost": 1.6208,
           "sell_stage": 0,
           "j_peak": 2.9,
           "dca_active": true,
@@ -419,21 +430,22 @@
           "action": "buy",
           "action_label": "R13 建议定投(1x)",
           "action_color": "#e74c3c",
-          "action_detail": "R13 定投中，浮亏1.69%，建议买入1000元(1x)"
+          "action_detail": "R13 定投中，浮亏1.28%，建议买入1000元(1x)"
         }
       ],
-      "last_date": "20261012",
-      "last_price": 1.59,
+      "last_date": "20261013",
+      "last_price": 1.6,
       "weekly_j": 1.45,
       "weekly_k": 25.27,
       "weekly_d": 37.18,
-      "shares": 1854.8474,
-      "avg_cost": 1.6174,
-      "loss_pct": -1.69,
+      "shares": 1850.9165,
+      "avg_cost": 1.6208,
+      "loss_pct": -1.28,
       "total_invested": 63000.0,
-      "total_return": 1309.89,
-      "return_pct": 2.08,
-      "trade_count": 79
+      "total_return": 1268.26,
+      "return_pct": 2.01,
+      "trade_count": 79,
+      "decision_source": "ledger"
     },
     {
       "name": "人工智能",
@@ -442,16 +454,16 @@
       "action_label": "R13 定投暂停·持有观望",
       "action_color": "#f39c12",
       "action": "hold",
-      "action_detail": "R13 J=15.66，等卖出或买入信号 ｜ 依据20261009收盘周线（下次更新：下周首个交易日） ｜ 本周盘中预览J=6.71(未确认)",
+      "action_detail": "R13 J=15.66，等卖出或买入信号 ｜ 依据20261009收盘周线（下次更新：下周首个交易日） ｜ 本周盘中预览J=11.5(未确认)",
       "signal_week_date": "20261009",
-      "preview_weekly_j": 6.71,
+      "preview_weekly_j": 11.5,
       "positions": [
         {
           "round_id": 13,
-          "shares": 642.2608,
-          "avg_cost": 1.557,
+          "shares": 644.7453,
+          "avg_cost": 1.551,
           "sell_stage": 0,
-          "j_peak": 6.71,
+          "j_peak": 11.5,
           "dca_active": true,
           "round_budget": 5000,
           "budget_remaining": 4000.0,
@@ -461,18 +473,19 @@
           "action_detail": "R13 J=15.66，等卖出或买入信号"
         }
       ],
-      "last_date": "20261012",
-      "last_price": 1.557,
+      "last_date": "20261013",
+      "last_price": 1.551,
       "weekly_j": 15.66,
       "weekly_k": 19.75,
       "weekly_d": 21.8,
-      "shares": 642.2608,
-      "avg_cost": 1.557,
+      "shares": 644.7453,
+      "avg_cost": 1.551,
       "loss_pct": -0.0,
       "total_invested": 61000.0,
-      "total_return": 7722.6,
-      "return_pct": 12.66,
-      "trade_count": 80
+      "total_return": 7711.1,
+      "return_pct": 12.64,
+      "trade_count": 80,
+      "decision_source": "ledger"
     },
     {
       "name": "创业板新能源",
@@ -481,9 +494,9 @@
       "action_label": "R2 建议定投(0x)",
       "action_color": "#e74c3c",
       "action": "buy",
-      "action_detail": "R2 定投中，浮亏6.66%，建议买入0元(0x) ｜ 依据20261009收盘周线（下次更新：下周首个交易日） ｜ 本周盘中预览J=4.03(未确认)",
+      "action_detail": "R2 定投中，浮亏8.25%，建议买入0元(0x) ｜ 依据20261009收盘周线（下次更新：下周首个交易日） ｜ 本周盘中预览J=7.13(未确认)",
       "signal_week_date": "20261009",
-      "preview_weekly_j": 4.03,
+      "preview_weekly_j": 7.13,
       "positions": [
         {
           "round_id": 2,
@@ -497,21 +510,22 @@
           "action": "buy",
           "action_label": "R2 建议定投(0x)",
           "action_color": "#e74c3c",
-          "action_detail": "R2 定投中，浮亏6.66%，建议买入0元(0x)"
+          "action_detail": "R2 定投中，浮亏8.25%，建议买入0元(0x)"
         }
       ],
-      "last_date": "20261012",
-      "last_price": 0.645,
+      "last_date": "20261013",
+      "last_price": 0.634,
       "weekly_j": 7.21,
       "weekly_k": 13.43,
       "weekly_d": 16.53,
       "shares": 7235.89,
       "avg_cost": 0.691,
-      "loss_pct": -6.66,
+      "loss_pct": -8.25,
       "total_invested": 10000.0,
-      "total_return": -1247.87,
-      "return_pct": -12.48,
-      "trade_count": 7
+      "total_return": -1327.47,
+      "return_pct": -13.27,
+      "trade_count": 7,
+      "decision_source": "ledger"
     },
     {
       "name": "机器人",
@@ -520,9 +534,9 @@
       "action_label": "R11 建议定投(0x)",
       "action_color": "#e74c3c",
       "action": "buy",
-      "action_detail": "R11 定投中，浮亏13.86%，建议买入0元(0x) ｜ 依据20261009收盘周线（下次更新：下周首个交易日） ｜ 本周盘中预览J=5.0(未确认)",
+      "action_detail": "R11 定投中，浮亏14.27%，建议买入0元(0x) ｜ 依据20261009收盘周线（下次更新：下周首个交易日） ｜ 本周盘中预览J=8.54(未确认)",
       "signal_week_date": "20261009",
-      "preview_weekly_j": 5.0,
+      "preview_weekly_j": 8.54,
       "positions": [
         {
           "round_id": 11,
@@ -536,21 +550,22 @@
           "action": "buy",
           "action_label": "R11 建议定投(0x)",
           "action_color": "#e74c3c",
-          "action_detail": "R11 定投中，浮亏13.86%，建议买入0元(0x)"
+          "action_detail": "R11 定投中，浮亏14.27%，建议买入0元(0x)"
         }
       ],
-      "last_date": "20261012",
-      "last_price": 0.841,
+      "last_date": "20261013",
+      "last_price": 0.837,
       "weekly_j": 11.06,
       "weekly_k": 15.43,
       "weekly_d": 17.62,
       "shares": 5121.2662,
       "avg_cost": 0.9763,
-      "loss_pct": -13.86,
+      "loss_pct": -14.27,
       "total_invested": 55000.0,
-      "total_return": 7025.54,
-      "return_pct": 12.77,
-      "trade_count": 65
+      "total_return": 7005.05,
+      "return_pct": 12.74,
+      "trade_count": 65,
+      "decision_source": "ledger"
     }
   ]
 }

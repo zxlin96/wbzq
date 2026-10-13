@@ -4,7 +4,7 @@
   "investment_level_idx": 0,
   "red_bar_count": 0,
   "green_bar_count": 0,
-  "last_trade_date": "20261012",
+  "last_trade_date": "20261013",
   "trades": [
     {
       "date": "20260319",
@@ -182,5 +182,5 @@
       "reason": "连续3根绿柱，确认趋势反转"
     }
   ],
-  "saved_at": "2026-10-12 12:37:05"
+  "saved_at": "2026-10-13 12:30:05"
 }

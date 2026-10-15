@@ -54,6 +54,13 @@ class DataManager:
 
     ALL_FACTOR_COLS = RAW_API_COLS | COMPUTED_COLS
 
+    # 单日数据损坏检测阈值
+    ADJ_FACTOR_NAN_LIMIT = 0.05        # adj_factor 缺失率超过该值视为接口数据异常
+    QFQ_NAN_LIMIT = 0.05               # 前复权价格缺失率上限
+    KDJ_FLAT_J13_RATIO = 0.98          # J<13 股票占比超过该值
+    KDJ_FLAT_J13_MEAN = 10.0           # 且 J 均值低于该值 → 判定为 RSV 被 fillna(0) 的损坏数据
+    MIN_STOCKS_FOR_KDJ_CHECK = 500     # 样本不足时不做 KDJ 整体分布校验
+
     def __init__(self, db_path=None, cache_dir=None):
         self.db_path = db_path or DBConfig.DB_PATH
         self.cache_dir = cache_dir or DBConfig.CACHE_DIR
@@ -108,6 +115,45 @@ class DataManager:
             logging.error(f"获取交易日历失败: {e}")
             return []
 
+    def _validate_day_frame(self, date, day_df) -> bool:
+        """校验单日数据是否损坏。
+
+        检测三类已知损坏模式：
+        1. adj_factor 大面积缺失（tushare 接口异常），会导致前复权价全为 NaN；
+        2. 前复权价格大面积 NaN，RSV 被 fillna(0) 后 KDJ J 值整体趋近 0；
+        3. KDJ J 值整体塌缩到 <13（几乎全部股票 J≈0），即 fillna(0) 后的典型形态。
+
+        Args:
+            date: 交易日（用于日志）
+            day_df: 单日全字段 DataFrame
+
+        Returns:
+            True=正常；False=损坏（调用方应删除缓存并重新拉取）
+        """
+        if day_df is None or day_df.empty:
+            logging.error(f"{date}: 数据为空")
+            return False
+        problems = []
+        if 'adj_factor' in day_df.columns:
+            adj_nan = day_df['adj_factor'].isna().mean()
+            if adj_nan > self.ADJ_FACTOR_NAN_LIMIT:
+                problems.append(f"adj_factor 缺失率 {adj_nan:.1%}")
+        for col in ('open_qfq', 'high_qfq', 'low_qfq', 'close_qfq'):
+            if col in day_df.columns:
+                nan_ratio = day_df[col].isna().mean()
+                if nan_ratio > self.QFQ_NAN_LIMIT:
+                    problems.append(f"{col} 缺失率 {nan_ratio:.1%}")
+        if 'kdj_qfq' in day_df.columns and len(day_df) >= self.MIN_STOCKS_FOR_KDJ_CHECK:
+            j = day_df['kdj_qfq']
+            if (j < 13).mean() > self.KDJ_FLAT_J13_RATIO and j.mean() < self.KDJ_FLAT_J13_MEAN:
+                problems.append(
+                    f"KDJ J 值整体异常：{(j < 13).mean():.1%} 股票 J<13，均值 {j.mean():.1f}"
+                )
+        if problems:
+            logging.error(f"{date} 数据损坏: {'; '.join(problems)}")
+            return False
+        return True
+
     # -------------------- 核心：因子数据 --------------------
     def get_stock_factors(self, trade_dates, fields):
         """获取股票因子数据（兼容旧接口，内部已切换为 daily+adj+basic）"""
@@ -131,6 +177,12 @@ class DataManager:
                         logging.warning(f"{date} 缓存缺失字段 {list(missing_cols)}，将重新生成")
                         os.remove(file_path)
                         missing_dates.append(date)
+                    elif not self._validate_day_frame(date, temp):
+                        # 缓存数据损坏（如 adj_factor 缺失导致 J 值全为 0），
+                        # 删除并加入缺失列表，走重新拉取流程，避免脏数据被反复使用
+                        logging.warning(f"{date} 缓存数据损坏，删除并重新拉取: {file_path}")
+                        os.remove(file_path)
+                        missing_dates.append(date)
                     else:
                         cached_frames.append(pd.read_parquet(file_path, columns=fields))
                 except Exception as e:
@@ -151,13 +203,18 @@ class DataManager:
             compute_end.strftime('%Y%m%d')
         )
 
-        # 3. 读取扩展区间内已有缓存的数据作为历史铺垫
+        # 3. 读取扩展区间内已有缓存的数据作为历史铺垫（损坏的日期跳过，
+        #    否则坏数据会作为 EWM 种子污染重算窗口内的 KDJ 链条）
         history_frames = []
         for date in extended_dates:
             file_path = os.path.join(self.cache_dir, f"factors_{date}.parquet")
             if os.path.exists(file_path) and date not in missing_dates:
                 try:
-                    history_frames.append(pd.read_parquet(file_path))
+                    temp = pd.read_parquet(file_path)
+                    if self._validate_day_frame(date, temp):
+                        history_frames.append(temp)
+                    else:
+                        logging.warning(f"{date} 历史缓存数据损坏，跳过: {file_path}")
                 except Exception:
                     pass
 
@@ -172,6 +229,19 @@ class DataManager:
         df = pd.concat(history_frames + raw_frames, ignore_index=True)
         df = df.sort_values(['ts_code', 'trade_date']).drop_duplicates(subset=['ts_code', 'trade_date']).reset_index(drop=True)
         df = self._calculate_indicators(df)
+
+        # 5.1 计算后逐日校验，损坏日期（如 adj_factor 缺失导致 J≈0）整体丢弃，
+        #     既不写入缓存也不返回给策略，下次运行会重新拉取
+        good_frames = []
+        dropped_dates = []
+        for date, day_df in df.groupby('trade_date'):
+            if self._validate_day_frame(date, day_df):
+                good_frames.append(day_df)
+            else:
+                dropped_dates.append(date)
+        if dropped_dates:
+            logging.error(f"丢弃 {len(dropped_dates)} 个损坏日期的数据: {dropped_dates}")
+        df = pd.concat(good_frames, ignore_index=True) if good_frames else df.iloc[0:0]
 
         # 6. 保存扩展区间内所有日期的缓存
         for date, day_df in df.groupby('trade_date'):

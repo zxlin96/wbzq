@@ -1,72 +1,17 @@
 {
-  "next_round_id": 11,
-  "total_sell_amount": 33298.145027664104,
+  "next_round_id": 10,
+  "total_sell_amount": 30781.404359787608,
   "trades": [
-    {
-      "date": "20211014",
-      "action": "BUY",
-      "price": 1.3407,
-      "amount": 1000.0,
-      "shares": 745.885,
-      "round": 1,
-      "reason": "周线J=-0.78, 金额=1000",
-      "total_shares": 745.885,
-      "avg_cost": 1.3407
-    },
-    {
-      "date": "20211018",
-      "action": "BUY",
-      "price": 1.3674,
-      "amount": 4000.0,
-      "shares": 2925.2763,
-      "round": 1,
-      "reason": "J回升=20.47, 剩余预算投入=4000",
-      "total_shares": 3671.1614,
-      "avg_cost": 1.362
-    },
-    {
-      "date": "20211108",
-      "action": "SELL",
-      "price": 1.4268,
-      "amount": 873.03,
-      "shares": 611.8602,
-      "round": 1,
-      "reason": "R1 周线J=99.26>=93",
-      "total_shares": 3059.3011,
-      "profit": 39.7
-    },
-    {
-      "date": "20211202",
-      "action": "SELL",
-      "price": 1.377,
-      "amount": 842.51,
-      "shares": 611.8602,
-      "round": 1,
-      "reason": "R1 多头回调: 收盘(1.3996)<多空线(1.3998), 中期(1.4208)>多空线",
-      "total_shares": 2447.4409,
-      "profit": 9.18
-    },
     {
       "date": "20220124",
       "action": "BUY",
       "price": 1.3367,
       "amount": 1000.0,
       "shares": 748.1342,
-      "round": 2,
+      "round": 1,
       "reason": "周线J=7.23, 金额=1000",
       "total_shares": 748.1342,
       "avg_cost": 1.3367
-    },
-    {
-      "date": "20220126",
-      "action": "SELL",
-      "price": 1.3095,
-      "amount": 801.2,
-      "shares": 611.8602,
-      "round": 1,
-      "reason": "R1 日线知行多空死叉(卖1/6，余1/2长期持有)",
-      "total_shares": 1835.5807,
-      "profit": -32.13
     },
     {
       "date": "20220207",
@@ -74,7 +19,7 @@
       "price": 1.3477,
       "amount": 1000.0,
       "shares": 741.9813,
-      "round": 2,
+      "round": 1,
       "reason": "周线J=-4.11, 金额=1000",
       "total_shares": 1490.1155,
       "avg_cost": 1.3422
@@ -85,7 +30,7 @@
       "price": 1.3372,
       "amount": 1000.0,
       "shares": 747.8523,
-      "round": 2,
+      "round": 1,
       "reason": "周线J=11.03, 金额=1000",
       "total_shares": 2237.9678,
       "avg_cost": 1.3405
@@ -96,7 +41,7 @@
       "price": 1.316,
       "amount": 1000.0,
       "shares": 759.8775,
-      "round": 2,
+      "round": 1,
       "reason": "周线J=9.47, 金额=1000",
       "total_shares": 2997.8453,
       "avg_cost": 1.3343
@@ -107,7 +52,7 @@
       "price": 1.2913,
       "amount": 1000.0,
       "shares": 774.405,
-      "round": 2,
+      "round": 1,
       "reason": "周线J=5.33, 金额=1000",
       "total_shares": 3772.2503,
       "avg_cost": 1.3255
@@ -118,7 +63,7 @@
       "price": 1.2747,
       "amount": 1000.0,
       "shares": 784.5059,
-      "round": 2,
+      "round": 1,
       "reason": "周线J=12.22, 金额=1000",
       "total_shares": 4556.7562,
       "avg_cost": 1.3167
@@ -129,8 +74,8 @@
       "price": 1.355,
       "amount": 1029.07,
       "shares": 759.4594,
-      "round": 2,
-      "reason": "R2 周线J=96.13>=93",
+      "round": 1,
+      "reason": "R1 周线J=96.13>=93",
       "total_shares": 3797.2968,
       "profit": 29.07
     },
@@ -140,8 +85,8 @@
       "price": 1.329,
       "amount": 1009.32,
       "shares": 759.4594,
-      "round": 2,
-      "reason": "R2 多头回调: 收盘(1.3270)<多空线(1.3505), 中期(1.3510)>多空线",
+      "round": 1,
+      "reason": "R1 多头回调: 收盘(1.3270)<多空线(1.3505), 中期(1.3510)>多空线",
       "total_shares": 3037.8375,
       "profit": 9.32
     },
@@ -151,8 +96,8 @@
       "price": 1.361,
       "amount": 1033.62,
       "shares": 759.4594,
-      "round": 2,
-      "reason": "R2 日线知行多空死叉(卖1/6，余1/2长期持有)",
+      "round": 1,
+      "reason": "R1 日线知行多空死叉(卖1/6，余1/2长期持有)",
       "total_shares": 2278.3781,
       "profit": 33.62
     },
@@ -162,7 +107,7 @@
       "price": 1.246,
       "amount": 1000.0,
       "shares": 802.5682,
-      "round": 3,
+      "round": 2,
       "reason": "周线J=-4.55, 金额=1000",
       "total_shares": 802.5682,
       "avg_cost": 1.246
@@ -173,7 +118,7 @@
       "price": 1.318,
       "amount": 1000.0,
       "shares": 758.7253,
-      "round": 3,
+      "round": 2,
       "reason": "周线J=8.92, 金额=1000",
       "total_shares": 1561.2936,
       "avg_cost": 1.281
@@ -184,7 +129,7 @@
       "price": 1.289,
       "amount": 3000.0,
       "shares": 2327.3856,
-      "round": 3,
+      "round": 2,
       "reason": "J回升=24.05, 剩余预算投入=3000",
       "total_shares": 3888.6791,
       "avg_cost": 1.2858
@@ -195,7 +140,7 @@
       "price": 1.167,
       "amount": 2000.0,
       "shares": 1713.7961,
-      "round": 3,
+      "round": 2,
       "reason": "周线J=3.37, 金额=2000",
       "total_shares": 5602.4752,
       "avg_cost": 1.2494
@@ -206,7 +151,7 @@
       "price": 1.23,
       "amount": 1000.0,
       "shares": 813.0081,
-      "round": 3,
+      "round": 2,
       "reason": "周线J=12.04, 金额=1000",
       "total_shares": 6415.4833,
       "avg_cost": 1.247
@@ -217,7 +162,7 @@
       "price": 1.197,
       "amount": 1000.0,
       "shares": 835.4219,
-      "round": 3,
+      "round": 2,
       "reason": "周线J=10.14, 金额=1000",
       "total_shares": 7250.9052,
       "avg_cost": 1.2412
@@ -228,8 +173,8 @@
       "price": 1.309,
       "amount": 1581.91,
       "shares": 1208.4842,
-      "round": 3,
-      "reason": "R3 周线J=94.01>=93",
+      "round": 2,
+      "reason": "R2 周线J=94.01>=93",
       "total_shares": 6042.421,
       "profit": 81.91
     },
@@ -239,8 +184,8 @@
       "price": 1.284,
       "amount": 1551.69,
       "shares": 1208.4842,
-      "round": 3,
-      "reason": "R3 多头回调: 收盘(1.3050)<多空线(1.3073), 中期(1.3380)>多空线",
+      "round": 2,
+      "reason": "R2 多头回调: 收盘(1.3050)<多空线(1.3073), 中期(1.3380)>多空线",
       "total_shares": 4833.9368,
       "profit": 51.69
     },
@@ -250,7 +195,7 @@
       "price": 1.218,
       "amount": 1000.0,
       "shares": 821.0181,
-      "round": 4,
+      "round": 3,
       "reason": "周线J=-0.20, 金额=1000",
       "total_shares": 821.0181,
       "avg_cost": 1.218
@@ -261,8 +206,8 @@
       "price": 1.22,
       "amount": 1474.35,
       "shares": 1208.4842,
-      "round": 3,
-      "reason": "R3 日线知行多空死叉(卖1/6，余1/2长期持有)",
+      "round": 2,
+      "reason": "R2 日线知行多空死叉(卖1/6，余1/2长期持有)",
       "total_shares": 3625.4526,
       "profit": -25.65
     },
@@ -272,7 +217,7 @@
       "price": 1.21,
       "amount": 1000.0,
       "shares": 826.4463,
-      "round": 4,
+      "round": 3,
       "reason": "周线J=-15.32, 金额=1000",
       "total_shares": 1647.4643,
       "avg_cost": 1.214
@@ -283,7 +228,7 @@
       "price": 1.212,
       "amount": 1000.0,
       "shares": 825.0825,
-      "round": 4,
+      "round": 3,
       "reason": "周线J=-4.85, 金额=1000",
       "total_shares": 2472.5469,
       "avg_cost": 1.2133
@@ -294,7 +239,7 @@
       "price": 1.264,
       "amount": 1000.0,
       "shares": 791.1392,
-      "round": 4,
+      "round": 3,
       "reason": "周线J=-0.65, 金额=1000",
       "total_shares": 3263.6861,
       "avg_cost": 1.2256
@@ -305,7 +250,7 @@
       "price": 1.315,
       "amount": 1000.0,
       "shares": 760.4563,
-      "round": 4,
+      "round": 3,
       "reason": "J回升=25.99, 剩余预算投入=1000",
       "total_shares": 4024.1424,
       "avg_cost": 1.2425
@@ -316,8 +261,8 @@
       "price": 1.328,
       "amount": 890.68,
       "shares": 670.6904,
-      "round": 4,
-      "reason": "R4 周线J=97.24>=93",
+      "round": 3,
+      "reason": "R3 周线J=97.24>=93",
       "total_shares": 3353.452,
       "profit": 57.34
     },
@@ -327,8 +272,8 @@
       "price": 1.29,
       "amount": 865.19,
       "shares": 670.6904,
-      "round": 4,
-      "reason": "R4 多头回调: 收盘(1.2980)<多空线(1.3103), 中期(1.3380)>多空线",
+      "round": 3,
+      "reason": "R3 多头回调: 收盘(1.2980)<多空线(1.3103), 中期(1.3380)>多空线",
       "total_shares": 2682.7616,
       "profit": 31.86
     },
@@ -338,8 +283,8 @@
       "price": 1.26,
       "amount": 845.07,
       "shares": 670.6904,
-      "round": 4,
-      "reason": "R4 日线知行多空死叉(卖1/6，余1/2长期持有)",
+      "round": 3,
+      "reason": "R3 日线知行多空死叉(卖1/6，余1/2长期持有)",
       "total_shares": 2012.0712,
       "profit": 11.74
     },
@@ -349,7 +294,7 @@
       "price": 1.25,
       "amount": 1000.0,
       "shares": 800.0,
-      "round": 5,
+      "round": 4,
       "reason": "周线J=1.61, 金额=1000",
       "total_shares": 800.0,
       "avg_cost": 1.25
@@ -360,7 +305,7 @@
       "price": 1.254,
       "amount": 1000.0,
       "shares": 797.4482,
-      "round": 5,
+      "round": 4,
       "reason": "周线J=-13.23, 金额=1000",
       "total_shares": 1597.4482,
       "avg_cost": 1.252
@@ -371,7 +316,7 @@
       "price": 1.263,
       "amount": 1000.0,
       "shares": 791.7656,
-      "round": 5,
+      "round": 4,
       "reason": "周线J=-4.96, 金额=1000",
       "total_shares": 2389.2138,
       "avg_cost": 1.2556
@@ -382,7 +327,7 @@
       "price": 1.284,
       "amount": 1000.0,
       "shares": 778.8162,
-      "round": 5,
+      "round": 4,
       "reason": "周线J=-4.89, 金额=1000",
       "total_shares": 3168.03,
       "avg_cost": 1.2626
@@ -393,7 +338,7 @@
       "price": 1.315,
       "amount": 1000.0,
       "shares": 760.4563,
-      "round": 5,
+      "round": 4,
       "reason": "J回升=33.50, 剩余预算投入=1000",
       "total_shares": 3928.4863,
       "avg_cost": 1.2728
@@ -404,8 +349,8 @@
       "price": 1.27,
       "amount": 831.53,
       "shares": 654.7477,
-      "round": 5,
-      "reason": "R5 J峰值回撤(J_peak=82.45, J=52.11, 回撤=30.34)",
+      "round": 4,
+      "reason": "R4 J峰值回撤(J_peak=82.45, J=52.11, 回撤=30.34)",
       "total_shares": 3273.7386,
       "profit": -1.8
     },
@@ -415,8 +360,8 @@
       "price": 1.27,
       "amount": 831.53,
       "shares": 654.7477,
-      "round": 5,
-      "reason": "R5 多头回调: 收盘(1.2750)<多空线(1.2951), 中期(1.3033)>多空线",
+      "round": 4,
+      "reason": "R4 多头回调: 收盘(1.2750)<多空线(1.2951), 中期(1.3033)>多空线",
       "total_shares": 2618.9909,
       "profit": -1.8
     },
@@ -426,8 +371,8 @@
       "price": 1.278,
       "amount": 836.77,
       "shares": 654.7477,
-      "round": 5,
-      "reason": "R5 日线知行多空死叉(卖1/6，余1/2长期持有)",
+      "round": 4,
+      "reason": "R4 日线知行多空死叉(卖1/6，余1/2长期持有)",
       "total_shares": 1964.2431,
       "profit": 3.43
     },
@@ -437,7 +382,7 @@
       "price": 1.472,
       "amount": 1000.0,
       "shares": 679.3478,
-      "round": 6,
+      "round": 5,
       "reason": "周线J=-3.84, 金额=1000",
       "total_shares": 679.3478,
       "avg_cost": 1.472
@@ -448,7 +393,7 @@
       "price": 1.492,
       "amount": 1000.0,
       "shares": 670.2413,
-      "round": 6,
+      "round": 5,
       "reason": "周线J=8.44, 金额=1000",
       "total_shares": 1349.5891,
       "avg_cost": 1.4819
@@ -459,7 +404,7 @@
       "price": 1.455,
       "amount": 1000.0,
       "shares": 687.2852,
-      "round": 6,
+      "round": 5,
       "reason": "周线J=-8.30, 金额=1000",
       "total_shares": 2036.8743,
       "avg_cost": 1.4728
@@ -470,7 +415,7 @@
       "price": 1.426,
       "amount": 1000.0,
       "shares": 701.2623,
-      "round": 6,
+      "round": 5,
       "reason": "周线J=-13.83, 金额=1000",
       "total_shares": 2738.1366,
       "avg_cost": 1.4608
@@ -481,7 +426,7 @@
       "price": 1.494,
       "amount": 1000.0,
       "shares": 669.344,
-      "round": 6,
+      "round": 5,
       "reason": "J回升=20.30, 剩余预算投入=1000",
       "total_shares": 3407.4807,
       "avg_cost": 1.4674
@@ -492,8 +437,8 @@
       "price": 1.534,
       "amount": 871.18,
       "shares": 567.9134,
-      "round": 6,
-      "reason": "R6 周线J=104.20>=93",
+      "round": 5,
+      "reason": "R5 周线J=104.20>=93",
       "total_shares": 2839.5672,
       "profit": 37.85
     },
@@ -503,8 +448,8 @@
       "price": 1.742,
       "amount": 989.31,
       "shares": 567.9134,
-      "round": 6,
-      "reason": "R6 多头回调: 收盘(1.7410)<多空线(1.7575), 中期(1.8119)>多空线",
+      "round": 5,
+      "reason": "R5 多头回调: 收盘(1.7410)<多空线(1.7575), 中期(1.8119)>多空线",
       "total_shares": 2271.6538,
       "profit": 155.97
     },
@@ -514,7 +459,7 @@
       "price": 1.702,
       "amount": 1000.0,
       "shares": 587.5441,
-      "round": 7,
+      "round": 6,
       "reason": "周线J=7.36, 金额=1000",
       "total_shares": 587.5441,
       "avg_cost": 1.702
@@ -525,7 +470,7 @@
       "price": 1.758,
       "amount": 1000.0,
       "shares": 568.8282,
-      "round": 7,
+      "round": 6,
       "reason": "周线J=2.43, 金额=1000",
       "total_shares": 1156.3723,
       "avg_cost": 1.7295
@@ -536,7 +481,7 @@
       "price": 1.758,
       "amount": 1000.0,
       "shares": 568.8282,
-      "round": 7,
+      "round": 6,
       "reason": "周线J=7.35, 金额=1000",
       "total_shares": 1725.2005,
       "avg_cost": 1.7389
@@ -547,7 +492,7 @@
       "price": 1.801,
       "amount": 2000.0,
       "shares": 1110.4942,
-      "round": 7,
+      "round": 6,
       "reason": "J回升=27.71, 剩余预算投入=2000",
       "total_shares": 2835.6947,
       "avg_cost": 1.7632
@@ -558,8 +503,8 @@
       "price": 1.884,
       "amount": 890.41,
       "shares": 472.6158,
-      "round": 7,
-      "reason": "R7 周线J=93.49>=93",
+      "round": 6,
+      "reason": "R6 周线J=93.49>=93",
       "total_shares": 2363.0789,
       "profit": 57.07
     },
@@ -569,8 +514,8 @@
       "price": 1.901,
       "amount": 898.44,
       "shares": 472.6158,
-      "round": 7,
-      "reason": "R7 多头回调: 收盘(1.9110)<多空线(1.9248), 中期(1.9863)>多空线",
+      "round": 6,
+      "reason": "R6 多头回调: 收盘(1.9110)<多空线(1.9248), 中期(1.9863)>多空线",
       "total_shares": 1890.4631,
       "profit": 65.11
     },
@@ -580,7 +525,7 @@
       "price": 1.842,
       "amount": 1000.0,
       "shares": 542.8882,
-      "round": 8,
+      "round": 7,
       "reason": "周线J=12.47, 金额=1000",
       "total_shares": 542.8882,
       "avg_cost": 1.842
@@ -591,8 +536,8 @@
       "price": 1.914,
       "amount": 1086.99,
       "shares": 567.9134,
-      "round": 6,
-      "reason": "R6 日线知行多空死叉(卖1/6，余1/2长期持有)",
+      "round": 5,
+      "reason": "R5 日线知行多空死叉(卖1/6，余1/2长期持有)",
       "total_shares": 1703.7403,
       "profit": 253.65
     },
@@ -602,8 +547,8 @@
       "price": 1.914,
       "amount": 904.59,
       "shares": 472.6158,
-      "round": 7,
-      "reason": "R7 日线知行多空死叉(卖1/6，余1/2长期持有)",
+      "round": 6,
+      "reason": "R6 日线知行多空死叉(卖1/6，余1/2长期持有)",
       "total_shares": 1417.8473,
       "profit": 71.25
     },
@@ -613,7 +558,7 @@
       "price": 1.978,
       "amount": 4000.0,
       "shares": 2022.2447,
-      "round": 8,
+      "round": 7,
       "reason": "J回升=41.60, 剩余预算投入=4000",
       "total_shares": 2565.1329,
       "avg_cost": 1.9492
@@ -624,8 +569,8 @@
       "price": 1.966,
       "amount": 840.51,
       "shares": 427.5221,
-      "round": 8,
-      "reason": "R8 J峰值回撤(J_peak=86.32, J=61.92, 回撤=24.40)",
+      "round": 7,
+      "reason": "R7 J峰值回撤(J_peak=86.32, J=61.92, 回撤=24.40)",
       "total_shares": 2137.6107,
       "profit": 7.18
     },
@@ -635,8 +580,8 @@
       "price": 1.96,
       "amount": 837.94,
       "shares": 427.5221,
-      "round": 8,
-      "reason": "R8 多头回调: 收盘(1.9630)<多空线(1.9691), 中期(1.9948)>多空线",
+      "round": 7,
+      "reason": "R7 多头回调: 收盘(1.9630)<多空线(1.9691), 中期(1.9948)>多空线",
       "total_shares": 1710.0886,
       "profit": 4.61
     },
@@ -646,7 +591,7 @@
       "price": 2.052,
       "amount": 1000.0,
       "shares": 487.3294,
-      "round": 9,
+      "round": 8,
       "reason": "周线J=-2.04, 金额=1000",
       "total_shares": 487.3294,
       "avg_cost": 2.052
@@ -657,8 +602,8 @@
       "price": 2.034,
       "amount": 869.58,
       "shares": 427.5221,
-      "round": 8,
-      "reason": "R8 日线知行多空死叉(卖1/6，余1/2长期持有)",
+      "round": 7,
+      "reason": "R7 日线知行多空死叉(卖1/6，余1/2长期持有)",
       "total_shares": 1282.5664,
       "profit": 36.25
     },
@@ -668,7 +613,7 @@
       "price": 1.998,
       "amount": 1000.0,
       "shares": 500.5005,
-      "round": 9,
+      "round": 8,
       "reason": "周线J=-9.01, 金额=1000",
       "total_shares": 987.8299,
       "avg_cost": 2.0246
@@ -679,7 +624,7 @@
       "price": 1.94,
       "amount": 1000.0,
       "shares": 515.4639,
-      "round": 9,
+      "round": 8,
       "reason": "周线J=-8.69, 金额=1000",
       "total_shares": 1503.2939,
       "avg_cost": 1.9956
@@ -690,7 +635,7 @@
       "price": 1.984,
       "amount": 1000.0,
       "shares": 504.0323,
-      "round": 9,
+      "round": 8,
       "reason": "周线J=3.64, 金额=1000",
       "total_shares": 2007.3261,
       "avg_cost": 1.9927
@@ -701,7 +646,7 @@
       "price": 1.91,
       "amount": 1000.0,
       "shares": 523.5602,
-      "round": 9,
+      "round": 8,
       "reason": "周线J=9.22, 金额=1000",
       "total_shares": 2530.8863,
       "avg_cost": 1.9756
@@ -712,7 +657,7 @@
       "price": 1.707,
       "amount": 4000.0,
       "shares": 2343.2923,
-      "round": 9,
+      "round": 8,
       "reason": "周线J=0.46, 金额=4000",
       "total_shares": 4874.1786,
       "avg_cost": 1.8465
@@ -723,8 +668,8 @@
       "price": 2.009,
       "amount": 1632.04,
       "shares": 812.3631,
-      "round": 9,
-      "reason": "R9 周线J=105.89>=93",
+      "round": 8,
+      "reason": "R8 周线J=105.89>=93",
       "total_shares": 4061.8155,
       "profit": 132.04
     },
@@ -734,8 +679,8 @@
       "price": 2.422,
       "amount": 1967.54,
       "shares": 812.3631,
-      "round": 9,
-      "reason": "R9 多头回调: 收盘(2.4120)<多空线(2.4210), 中期(2.4473)>多空线",
+      "round": 8,
+      "reason": "R8 多头回调: 收盘(2.4120)<多空线(2.4210), 中期(2.4473)>多空线",
       "total_shares": 3249.4524,
       "profit": 467.54
     },
@@ -745,7 +690,7 @@
       "price": 2.371,
       "amount": 1000.0,
       "shares": 421.763,
-      "round": 10,
+      "round": 9,
       "reason": "周线J=4.10, 金额=1000",
       "total_shares": 421.763,
       "avg_cost": 2.371
@@ -756,8 +701,8 @@
       "price": 2.395,
       "amount": 1945.61,
       "shares": 812.3631,
-      "round": 9,
-      "reason": "R9 日线知行多空死叉(卖1/6，余1/2长期持有)",
+      "round": 8,
+      "reason": "R8 日线知行多空死叉(卖1/6，余1/2长期持有)",
       "total_shares": 2437.0893,
       "profit": 445.61
     },
@@ -767,7 +712,7 @@
       "price": 2.381,
       "amount": 4000.0,
       "shares": 1679.9664,
-      "round": 10,
+      "round": 9,
       "reason": "J回升=13.45, 剩余预算投入=4000",
       "total_shares": 2101.7294,
       "avg_cost": 2.379
@@ -778,7 +723,7 @@
       "price": 2.306,
       "amount": 1000.0,
       "shares": 433.6513,
-      "round": 10,
+      "round": 9,
       "reason": "周线J=10.28, 金额=1000",
       "total_shares": 2535.3807,
       "avg_cost": 2.3665
@@ -789,7 +734,7 @@
       "price": 2.284,
       "amount": 1000.0,
       "shares": 437.8284,
-      "round": 10,
+      "round": 9,
       "reason": "周线J=-5.41, 金额=1000",
       "total_shares": 2973.2091,
       "avg_cost": 2.3544
@@ -800,7 +745,7 @@
       "price": 2.225,
       "amount": 2000.0,
       "shares": 898.8764,
-      "round": 10,
+      "round": 9,
       "reason": "周线J=-13.13, 金额=2000",
       "total_shares": 3872.0855,
       "avg_cost": 2.3243
@@ -811,7 +756,7 @@
       "price": 2.159,
       "amount": 2000.0,
       "shares": 926.3548,
-      "round": 10,
+      "round": 9,
       "reason": "周线J=2.49, 金额=2000",
       "total_shares": 4798.4403,
       "avg_cost": 2.2924
@@ -822,7 +767,7 @@
       "price": 2.209,
       "amount": 1000.0,
       "shares": 452.6935,
-      "round": 10,
+      "round": 9,
       "reason": "周线J=12.70, 金额=1000",
       "total_shares": 5251.1338,
       "avg_cost": 2.2852
@@ -833,8 +778,8 @@
       "price": 2.383,
       "amount": 2085.58,
       "shares": 875.189,
-      "round": 10,
-      "reason": "R10 周线J=96.83>=93",
+      "round": 9,
+      "reason": "R9 周线J=96.83>=93",
       "total_shares": 4375.9448,
       "profit": 85.58
     },
@@ -844,8 +789,8 @@
       "price": 2.492,
       "amount": 2180.97,
       "shares": 875.189,
-      "round": 10,
-      "reason": "R10 多头回调: 收盘(2.4820)<多空线(2.4822), 中期(2.5416)>多空线",
+      "round": 9,
+      "reason": "R9 多头回调: 收盘(2.4820)<多空线(2.4822), 中期(2.5416)>多空线",
       "total_shares": 3500.7559,
       "profit": 180.97
     }
@@ -853,95 +798,12 @@
   "positions": [
     {
       "round_id": 1,
-      "shares": 1835.5806752576934,
-      "total_cost": 2500.0,
-      "total_invested": 5000.0,
-      "total_sell_amount": 2516.7406678764964,
-      "dca_active": true,
-      "j_peak": 99.26384444003546,
-      "pullback_sold": false,
-      "sell_stage": 3,
-      "waiting_golden": false,
-      "golden_confirmed": true,
-      "price_below_dk_sold": true,
-      "round_budget": 5000,
-      "round_periods": 5,
-      "buy_count": 2,
-      "dca_exited": true,
-      "dca_exit_date": "20211015",
-      "dca_exit_amount": 4000.0,
-      "cycle_low": null,
-      "j_high_done": false,
-      "trades": [
-        {
-          "date": "20211014",
-          "action": "BUY",
-          "price": 1.3407,
-          "amount": 1000.0,
-          "shares": 745.885,
-          "round": 1,
-          "reason": "周线J=-0.78, 金额=1000",
-          "total_shares": 745.885,
-          "avg_cost": 1.3407
-        },
-        {
-          "date": "20211018",
-          "action": "BUY",
-          "price": 1.3674,
-          "amount": 4000.0,
-          "shares": 2925.2763,
-          "round": 1,
-          "reason": "J回升=20.47, 剩余预算投入=4000",
-          "total_shares": 3671.1614,
-          "avg_cost": 1.362
-        },
-        {
-          "date": "20211108",
-          "action": "SELL",
-          "price": 1.4268,
-          "amount": 873.03,
-          "shares": 611.8602,
-          "round": 1,
-          "reason": "R1 周线J=99.26>=93",
-          "total_shares": 3059.3011,
-          "profit": 39.7
-        },
-        {
-          "date": "20211202",
-          "action": "SELL",
-          "price": 1.377,
-          "amount": 842.51,
-          "shares": 611.8602,
-          "round": 1,
-          "reason": "R1 多头回调: 收盘(1.3996)<多空线(1.3998), 中期(1.4208)>多空线",
-          "total_shares": 2447.4409,
-          "profit": 9.18
-        },
-        {
-          "date": "20220126",
-          "action": "SELL",
-          "price": 1.3095,
-          "amount": 801.2,
-          "shares": 611.8602,
-          "round": 1,
-          "reason": "R1 日线知行多空死叉(卖1/6，余1/2长期持有)",
-          "total_shares": 1835.5807,
-          "profit": -32.13
-        }
-      ],
-      "week_invested": [
-        "20211015",
-        "20211013"
-      ]
-    },
-    {
-      "round_id": 2,
       "shares": 2278.3781030282544,
       "total_cost": 3000.0,
       "total_invested": 6000.0,
       "total_sell_amount": 3072.0131422497634,
       "dca_active": true,
-      "j_peak": 96.12580873753672,
+      "j_peak": 96.1258087389736,
       "pullback_sold": false,
       "sell_stage": 3,
       "waiting_golden": false,
@@ -962,7 +824,7 @@
           "price": 1.3367,
           "amount": 1000.0,
           "shares": 748.1342,
-          "round": 2,
+          "round": 1,
           "reason": "周线J=7.23, 金额=1000",
           "total_shares": 748.1342,
           "avg_cost": 1.3367
@@ -973,7 +835,7 @@
           "price": 1.3477,
           "amount": 1000.0,
           "shares": 741.9813,
-          "round": 2,
+          "round": 1,
           "reason": "周线J=-4.11, 金额=1000",
           "total_shares": 1490.1155,
           "avg_cost": 1.3422
@@ -984,7 +846,7 @@
           "price": 1.3372,
           "amount": 1000.0,
           "shares": 747.8523,
-          "round": 2,
+          "round": 1,
           "reason": "周线J=11.03, 金额=1000",
           "total_shares": 2237.9678,
           "avg_cost": 1.3405
@@ -995,7 +857,7 @@
           "price": 1.316,
           "amount": 1000.0,
           "shares": 759.8775,
-          "round": 2,
+          "round": 1,
           "reason": "周线J=9.47, 金额=1000",
           "total_shares": 2997.8453,
           "avg_cost": 1.3343
@@ -1006,7 +868,7 @@
           "price": 1.2913,
           "amount": 1000.0,
           "shares": 774.405,
-          "round": 2,
+          "round": 1,
           "reason": "周线J=5.33, 金额=1000",
           "total_shares": 3772.2503,
           "avg_cost": 1.3255
@@ -1017,7 +879,7 @@
           "price": 1.2747,
           "amount": 1000.0,
           "shares": 784.5059,
-          "round": 2,
+          "round": 1,
           "reason": "周线J=12.22, 金额=1000",
           "total_shares": 4556.7562,
           "avg_cost": 1.3167
@@ -1028,8 +890,8 @@
           "price": 1.355,
           "amount": 1029.07,
           "shares": 759.4594,
-          "round": 2,
-          "reason": "R2 周线J=96.13>=93",
+          "round": 1,
+          "reason": "R1 周线J=96.13>=93",
           "total_shares": 3797.2968,
           "profit": 29.07
         },
@@ -1039,8 +901,8 @@
           "price": 1.329,
           "amount": 1009.32,
           "shares": 759.4594,
-          "round": 2,
-          "reason": "R2 多头回调: 收盘(1.3270)<多空线(1.3505), 中期(1.3510)>多空线",
+          "round": 1,
+          "reason": "R1 多头回调: 收盘(1.3270)<多空线(1.3505), 中期(1.3510)>多空线",
           "total_shares": 3037.8375,
           "profit": 9.32
         },
@@ -1050,29 +912,29 @@
           "price": 1.361,
           "amount": 1033.62,
           "shares": 759.4594,
-          "round": 2,
-          "reason": "R2 日线知行多空死叉(卖1/6，余1/2长期持有)",
+          "round": 1,
+          "reason": "R1 日线知行多空死叉(卖1/6，余1/2长期持有)",
           "total_shares": 2278.3781,
           "profit": 33.62
         }
       ],
       "week_invested": [
-        "20220128",
-        "20220121",
+        "20220218",
         "20220211",
         "20220225",
-        "20220218",
-        "20220311"
+        "20220311",
+        "20220128",
+        "20220121"
       ]
     },
     {
-      "round_id": 3,
+      "round_id": 2,
       "shares": 3625.4526031691294,
       "total_cost": 4500.0,
       "total_invested": 9000.0,
       "total_sell_amount": 4607.950258627963,
       "dca_active": true,
-      "j_peak": 94.00625682607593,
+      "j_peak": 94.00625682607865,
       "pullback_sold": false,
       "sell_stage": 3,
       "waiting_golden": false,
@@ -1093,7 +955,7 @@
           "price": 1.246,
           "amount": 1000.0,
           "shares": 802.5682,
-          "round": 3,
+          "round": 2,
           "reason": "周线J=-4.55, 金额=1000",
           "total_shares": 802.5682,
           "avg_cost": 1.246
@@ -1104,7 +966,7 @@
           "price": 1.318,
           "amount": 1000.0,
           "shares": 758.7253,
-          "round": 3,
+          "round": 2,
           "reason": "周线J=8.92, 金额=1000",
           "total_shares": 1561.2936,
           "avg_cost": 1.281
@@ -1115,7 +977,7 @@
           "price": 1.289,
           "amount": 3000.0,
           "shares": 2327.3856,
-          "round": 3,
+          "round": 2,
           "reason": "J回升=24.05, 剩余预算投入=3000",
           "total_shares": 3888.6791,
           "avg_cost": 1.2858
@@ -1126,7 +988,7 @@
           "price": 1.167,
           "amount": 2000.0,
           "shares": 1713.7961,
-          "round": 3,
+          "round": 2,
           "reason": "周线J=3.37, 金额=2000",
           "total_shares": 5602.4752,
           "avg_cost": 1.2494
@@ -1137,7 +999,7 @@
           "price": 1.23,
           "amount": 1000.0,
           "shares": 813.0081,
-          "round": 3,
+          "round": 2,
           "reason": "周线J=12.04, 金额=1000",
           "total_shares": 6415.4833,
           "avg_cost": 1.247
@@ -1148,7 +1010,7 @@
           "price": 1.197,
           "amount": 1000.0,
           "shares": 835.4219,
-          "round": 3,
+          "round": 2,
           "reason": "周线J=10.14, 金额=1000",
           "total_shares": 7250.9052,
           "avg_cost": 1.2412
@@ -1159,8 +1021,8 @@
           "price": 1.309,
           "amount": 1581.91,
           "shares": 1208.4842,
-          "round": 3,
-          "reason": "R3 周线J=94.01>=93",
+          "round": 2,
+          "reason": "R2 周线J=94.01>=93",
           "total_shares": 6042.421,
           "profit": 81.91
         },
@@ -1170,8 +1032,8 @@
           "price": 1.284,
           "amount": 1551.69,
           "shares": 1208.4842,
-          "round": 3,
-          "reason": "R3 多头回调: 收盘(1.3050)<多空线(1.3073), 中期(1.3380)>多空线",
+          "round": 2,
+          "reason": "R2 多头回调: 收盘(1.3050)<多空线(1.3073), 中期(1.3380)>多空线",
           "total_shares": 4833.9368,
           "profit": 51.69
         },
@@ -1181,23 +1043,23 @@
           "price": 1.22,
           "amount": 1474.35,
           "shares": 1208.4842,
-          "round": 3,
-          "reason": "R3 日线知行多空死叉(卖1/6，余1/2长期持有)",
+          "round": 2,
+          "reason": "R2 日线知行多空死叉(卖1/6，余1/2长期持有)",
           "total_shares": 3625.4526,
           "profit": -25.65
         }
       ],
       "week_invested": [
-        "20220520",
         "20220701",
-        "20220617",
+        "20220602",
         "20220624",
         "20220527",
-        "20220602"
+        "20220520",
+        "20220617"
       ]
     },
     {
-      "round_id": 4,
+      "round_id": 3,
       "shares": 2012.0711829552602,
       "total_cost": 2500.0,
       "total_invested": 5000.0,
@@ -1224,7 +1086,7 @@
           "price": 1.218,
           "amount": 1000.0,
           "shares": 821.0181,
-          "round": 4,
+          "round": 3,
           "reason": "周线J=-0.20, 金额=1000",
           "total_shares": 821.0181,
           "avg_cost": 1.218
@@ -1235,7 +1097,7 @@
           "price": 1.21,
           "amount": 1000.0,
           "shares": 826.4463,
-          "round": 4,
+          "round": 3,
           "reason": "周线J=-15.32, 金额=1000",
           "total_shares": 1647.4643,
           "avg_cost": 1.214
@@ -1246,7 +1108,7 @@
           "price": 1.212,
           "amount": 1000.0,
           "shares": 825.0825,
-          "round": 4,
+          "round": 3,
           "reason": "周线J=-4.85, 金额=1000",
           "total_shares": 2472.5469,
           "avg_cost": 1.2133
@@ -1257,7 +1119,7 @@
           "price": 1.264,
           "amount": 1000.0,
           "shares": 791.1392,
-          "round": 4,
+          "round": 3,
           "reason": "周线J=-0.65, 金额=1000",
           "total_shares": 3263.6861,
           "avg_cost": 1.2256
@@ -1268,7 +1130,7 @@
           "price": 1.315,
           "amount": 1000.0,
           "shares": 760.4563,
-          "round": 4,
+          "round": 3,
           "reason": "J回升=25.99, 剩余预算投入=1000",
           "total_shares": 4024.1424,
           "avg_cost": 1.2425
@@ -1279,8 +1141,8 @@
           "price": 1.328,
           "amount": 890.68,
           "shares": 670.6904,
-          "round": 4,
-          "reason": "R4 周线J=97.24>=93",
+          "round": 3,
+          "reason": "R3 周线J=97.24>=93",
           "total_shares": 3353.452,
           "profit": 57.34
         },
@@ -1290,8 +1152,8 @@
           "price": 1.29,
           "amount": 865.19,
           "shares": 670.6904,
-          "round": 4,
-          "reason": "R4 多头回调: 收盘(1.2980)<多空线(1.3103), 中期(1.3380)>多空线",
+          "round": 3,
+          "reason": "R3 多头回调: 收盘(1.2980)<多空线(1.3103), 中期(1.3380)>多空线",
           "total_shares": 2682.7616,
           "profit": 31.86
         },
@@ -1301,22 +1163,22 @@
           "price": 1.26,
           "amount": 845.07,
           "shares": 670.6904,
-          "round": 4,
-          "reason": "R4 日线知行多空死叉(卖1/6，余1/2长期持有)",
+          "round": 3,
+          "reason": "R3 日线知行多空死叉(卖1/6，余1/2长期持有)",
           "total_shares": 2012.0712,
           "profit": 11.74
         }
       ],
       "week_invested": [
         "20221014",
+        "20220930",
         "20221021",
         "20220923",
-        "20221028",
-        "20220930"
+        "20221028"
       ]
     },
     {
-      "round_id": 5,
+      "round_id": 4,
       "shares": 1964.2431381908814,
       "total_cost": 2500.0,
       "total_invested": 5000.0,
@@ -1343,7 +1205,7 @@
           "price": 1.25,
           "amount": 1000.0,
           "shares": 800.0,
-          "round": 5,
+          "round": 4,
           "reason": "周线J=1.61, 金额=1000",
           "total_shares": 800.0,
           "avg_cost": 1.25
@@ -1354,7 +1216,7 @@
           "price": 1.254,
           "amount": 1000.0,
           "shares": 797.4482,
-          "round": 5,
+          "round": 4,
           "reason": "周线J=-13.23, 金额=1000",
           "total_shares": 1597.4482,
           "avg_cost": 1.252
@@ -1365,7 +1227,7 @@
           "price": 1.263,
           "amount": 1000.0,
           "shares": 791.7656,
-          "round": 5,
+          "round": 4,
           "reason": "周线J=-4.96, 金额=1000",
           "total_shares": 2389.2138,
           "avg_cost": 1.2556
@@ -1376,7 +1238,7 @@
           "price": 1.284,
           "amount": 1000.0,
           "shares": 778.8162,
-          "round": 5,
+          "round": 4,
           "reason": "周线J=-4.89, 金额=1000",
           "total_shares": 3168.03,
           "avg_cost": 1.2626
@@ -1387,7 +1249,7 @@
           "price": 1.315,
           "amount": 1000.0,
           "shares": 760.4563,
-          "round": 5,
+          "round": 4,
           "reason": "J回升=33.50, 剩余预算投入=1000",
           "total_shares": 3928.4863,
           "avg_cost": 1.2728
@@ -1398,8 +1260,8 @@
           "price": 1.27,
           "amount": 831.53,
           "shares": 654.7477,
-          "round": 5,
-          "reason": "R5 J峰值回撤(J_peak=82.45, J=52.11, 回撤=30.34)",
+          "round": 4,
+          "reason": "R4 J峰值回撤(J_peak=82.45, J=52.11, 回撤=30.34)",
           "total_shares": 3273.7386,
           "profit": -1.8
         },
@@ -1409,8 +1271,8 @@
           "price": 1.27,
           "amount": 831.53,
           "shares": 654.7477,
-          "round": 5,
-          "reason": "R5 多头回调: 收盘(1.2750)<多空线(1.2951), 中期(1.3033)>多空线",
+          "round": 4,
+          "reason": "R4 多头回调: 收盘(1.2750)<多空线(1.2951), 中期(1.3033)>多空线",
           "total_shares": 2618.9909,
           "profit": -1.8
         },
@@ -1420,8 +1282,8 @@
           "price": 1.278,
           "amount": 836.77,
           "shares": 654.7477,
-          "round": 5,
-          "reason": "R5 日线知行多空死叉(卖1/6，余1/2长期持有)",
+          "round": 4,
+          "reason": "R4 日线知行多空死叉(卖1/6，余1/2长期持有)",
           "total_shares": 1964.2431,
           "profit": 3.43
         }
@@ -1429,13 +1291,13 @@
       "week_invested": [
         "20230203",
         "20230120",
+        "20221230",
         "20230113",
-        "20230106",
-        "20221230"
+        "20230106"
       ]
     },
     {
-      "round_id": 6,
+      "round_id": 5,
       "shares": 1703.7403256228527,
       "total_cost": 2500.0,
       "total_invested": 5000.0,
@@ -1462,7 +1324,7 @@
           "price": 1.472,
           "amount": 1000.0,
           "shares": 679.3478,
-          "round": 6,
+          "round": 5,
           "reason": "周线J=-3.84, 金额=1000",
           "total_shares": 679.3478,
           "avg_cost": 1.472
@@ -1473,7 +1335,7 @@
           "price": 1.492,
           "amount": 1000.0,
           "shares": 670.2413,
-          "round": 6,
+          "round": 5,
           "reason": "周线J=8.44, 金额=1000",
           "total_shares": 1349.5891,
           "avg_cost": 1.4819
@@ -1484,7 +1346,7 @@
           "price": 1.455,
           "amount": 1000.0,
           "shares": 687.2852,
-          "round": 6,
+          "round": 5,
           "reason": "周线J=-8.30, 金额=1000",
           "total_shares": 2036.8743,
           "avg_cost": 1.4728
@@ -1495,7 +1357,7 @@
           "price": 1.426,
           "amount": 1000.0,
           "shares": 701.2623,
-          "round": 6,
+          "round": 5,
           "reason": "周线J=-13.83, 金额=1000",
           "total_shares": 2738.1366,
           "avg_cost": 1.4608
@@ -1506,7 +1368,7 @@
           "price": 1.494,
           "amount": 1000.0,
           "shares": 669.344,
-          "round": 6,
+          "round": 5,
           "reason": "J回升=20.30, 剩余预算投入=1000",
           "total_shares": 3407.4807,
           "avg_cost": 1.4674
@@ -1517,8 +1379,8 @@
           "price": 1.534,
           "amount": 871.18,
           "shares": 567.9134,
-          "round": 6,
-          "reason": "R6 周线J=104.20>=93",
+          "round": 5,
+          "reason": "R5 周线J=104.20>=93",
           "total_shares": 2839.5672,
           "profit": 37.85
         },
@@ -1528,8 +1390,8 @@
           "price": 1.742,
           "amount": 989.31,
           "shares": 567.9134,
-          "round": 6,
-          "reason": "R6 多头回调: 收盘(1.7410)<多空线(1.7575), 中期(1.8119)>多空线",
+          "round": 5,
+          "reason": "R5 多头回调: 收盘(1.7410)<多空线(1.7575), 中期(1.8119)>多空线",
           "total_shares": 2271.6538,
           "profit": 155.97
         },
@@ -1539,22 +1401,22 @@
           "price": 1.914,
           "amount": 1086.99,
           "shares": 567.9134,
-          "round": 6,
-          "reason": "R6 日线知行多空死叉(卖1/6，余1/2长期持有)",
+          "round": 5,
+          "reason": "R5 日线知行多空死叉(卖1/6，余1/2长期持有)",
           "total_shares": 1703.7403,
           "profit": 253.65
         }
       ],
       "week_invested": [
+        "20231020",
         "20231013",
         "20231103",
-        "20231027",
         "20230928",
-        "20231020"
+        "20231027"
       ]
     },
     {
-      "round_id": 7,
+      "round_id": 6,
       "shares": 1417.8473317346802,
       "total_cost": 2500.0,
       "total_invested": 5000.0,
@@ -1581,7 +1443,7 @@
           "price": 1.702,
           "amount": 1000.0,
           "shares": 587.5441,
-          "round": 7,
+          "round": 6,
           "reason": "周线J=7.36, 金额=1000",
           "total_shares": 587.5441,
           "avg_cost": 1.702
@@ -1592,7 +1454,7 @@
           "price": 1.758,
           "amount": 1000.0,
           "shares": 568.8282,
-          "round": 7,
+          "round": 6,
           "reason": "周线J=2.43, 金额=1000",
           "total_shares": 1156.3723,
           "avg_cost": 1.7295
@@ -1603,7 +1465,7 @@
           "price": 1.758,
           "amount": 1000.0,
           "shares": 568.8282,
-          "round": 7,
+          "round": 6,
           "reason": "周线J=7.35, 金额=1000",
           "total_shares": 1725.2005,
           "avg_cost": 1.7389
@@ -1614,7 +1476,7 @@
           "price": 1.801,
           "amount": 2000.0,
           "shares": 1110.4942,
-          "round": 7,
+          "round": 6,
           "reason": "J回升=27.71, 剩余预算投入=2000",
           "total_shares": 2835.6947,
           "avg_cost": 1.7632
@@ -1625,8 +1487,8 @@
           "price": 1.884,
           "amount": 890.41,
           "shares": 472.6158,
-          "round": 7,
-          "reason": "R7 周线J=93.49>=93",
+          "round": 6,
+          "reason": "R6 周线J=93.49>=93",
           "total_shares": 2363.0789,
           "profit": 57.07
         },
@@ -1636,8 +1498,8 @@
           "price": 1.901,
           "amount": 898.44,
           "shares": 472.6158,
-          "round": 7,
-          "reason": "R7 多头回调: 收盘(1.9110)<多空线(1.9248), 中期(1.9863)>多空线",
+          "round": 6,
+          "reason": "R6 多头回调: 收盘(1.9110)<多空线(1.9248), 中期(1.9863)>多空线",
           "total_shares": 1890.4631,
           "profit": 65.11
         },
@@ -1647,21 +1509,21 @@
           "price": 1.914,
           "amount": 904.59,
           "shares": 472.6158,
-          "round": 7,
-          "reason": "R7 日线知行多空死叉(卖1/6，余1/2长期持有)",
+          "round": 6,
+          "reason": "R6 日线知行多空死叉(卖1/6，余1/2长期持有)",
           "total_shares": 1417.8473,
           "profit": 71.25
         }
       ],
       "week_invested": [
-        "20240510",
-        "20240419",
+        "20240426",
         "20240430",
-        "20240426"
+        "20240510",
+        "20240419"
       ]
     },
     {
-      "round_id": 8,
+      "round_id": 7,
       "shares": 1282.5664283228434,
       "total_cost": 2500.0,
       "total_invested": 5000.0,
@@ -1688,7 +1550,7 @@
           "price": 1.842,
           "amount": 1000.0,
           "shares": 542.8882,
-          "round": 8,
+          "round": 7,
           "reason": "周线J=12.47, 金额=1000",
           "total_shares": 542.8882,
           "avg_cost": 1.842
@@ -1699,7 +1561,7 @@
           "price": 1.978,
           "amount": 4000.0,
           "shares": 2022.2447,
-          "round": 8,
+          "round": 7,
           "reason": "J回升=41.60, 剩余预算投入=4000",
           "total_shares": 2565.1329,
           "avg_cost": 1.9492
@@ -1710,8 +1572,8 @@
           "price": 1.966,
           "amount": 840.51,
           "shares": 427.5221,
-          "round": 8,
-          "reason": "R8 J峰值回撤(J_peak=86.32, J=61.92, 回撤=24.40)",
+          "round": 7,
+          "reason": "R7 J峰值回撤(J_peak=86.32, J=61.92, 回撤=24.40)",
           "total_shares": 2137.6107,
           "profit": 7.18
         },
@@ -1721,8 +1583,8 @@
           "price": 1.96,
           "amount": 837.94,
           "shares": 427.5221,
-          "round": 8,
-          "reason": "R8 多头回调: 收盘(1.9630)<多空线(1.9691), 中期(1.9948)>多空线",
+          "round": 7,
+          "reason": "R7 多头回调: 收盘(1.9630)<多空线(1.9691), 中期(1.9948)>多空线",
           "total_shares": 1710.0886,
           "profit": 4.61
         },
@@ -1732,8 +1594,8 @@
           "price": 2.034,
           "amount": 869.58,
           "shares": 427.5221,
-          "round": 8,
-          "reason": "R8 日线知行多空死叉(卖1/6，余1/2长期持有)",
+          "round": 7,
+          "reason": "R7 日线知行多空死叉(卖1/6，余1/2长期持有)",
           "total_shares": 1282.5664,
           "profit": 36.25
         }
@@ -1744,7 +1606,7 @@
       ]
     },
     {
-      "round_id": 9,
+      "round_id": 8,
       "shares": 2437.089322965181,
       "total_cost": 4500.0,
       "total_invested": 9000.0,
@@ -1771,7 +1633,7 @@
           "price": 2.052,
           "amount": 1000.0,
           "shares": 487.3294,
-          "round": 9,
+          "round": 8,
           "reason": "周线J=-2.04, 金额=1000",
           "total_shares": 487.3294,
           "avg_cost": 2.052
@@ -1782,7 +1644,7 @@
           "price": 1.998,
           "amount": 1000.0,
           "shares": 500.5005,
-          "round": 9,
+          "round": 8,
           "reason": "周线J=-9.01, 金额=1000",
           "total_shares": 987.8299,
           "avg_cost": 2.0246
@@ -1793,7 +1655,7 @@
           "price": 1.94,
           "amount": 1000.0,
           "shares": 515.4639,
-          "round": 9,
+          "round": 8,
           "reason": "周线J=-8.69, 金额=1000",
           "total_shares": 1503.2939,
           "avg_cost": 1.9956
@@ -1804,7 +1666,7 @@
           "price": 1.984,
           "amount": 1000.0,
           "shares": 504.0323,
-          "round": 9,
+          "round": 8,
           "reason": "周线J=3.64, 金额=1000",
           "total_shares": 2007.3261,
           "avg_cost": 1.9927
@@ -1815,7 +1677,7 @@
           "price": 1.91,
           "amount": 1000.0,
           "shares": 523.5602,
-          "round": 9,
+          "round": 8,
           "reason": "周线J=9.22, 金额=1000",
           "total_shares": 2530.8863,
           "avg_cost": 1.9756
@@ -1826,7 +1688,7 @@
           "price": 1.707,
           "amount": 4000.0,
           "shares": 2343.2923,
-          "round": 9,
+          "round": 8,
           "reason": "周线J=0.46, 金额=4000",
           "total_shares": 4874.1786,
           "avg_cost": 1.8465
@@ -1837,8 +1699,8 @@
           "price": 2.009,
           "amount": 1632.04,
           "shares": 812.3631,
-          "round": 9,
-          "reason": "R9 周线J=105.89>=93",
+          "round": 8,
+          "reason": "R8 周线J=105.89>=93",
           "total_shares": 4061.8155,
           "profit": 132.04
         },
@@ -1848,8 +1710,8 @@
           "price": 2.422,
           "amount": 1967.54,
           "shares": 812.3631,
-          "round": 9,
-          "reason": "R9 多头回调: 收盘(2.4120)<多空线(2.4210), 中期(2.4473)>多空线",
+          "round": 8,
+          "reason": "R8 多头回调: 收盘(2.4120)<多空线(2.4210), 中期(2.4473)>多空线",
           "total_shares": 3249.4524,
           "profit": 467.54
         },
@@ -1859,23 +1721,23 @@
           "price": 2.395,
           "amount": 1945.61,
           "shares": 812.3631,
-          "round": 9,
-          "reason": "R9 日线知行多空死叉(卖1/6，余1/2长期持有)",
+          "round": 8,
+          "reason": "R8 日线知行多空死叉(卖1/6，余1/2长期持有)",
           "total_shares": 2437.0893,
           "profit": 445.61
         }
       ],
       "week_invested": [
         "20250321",
-        "20250307",
-        "20250314",
         "20250228",
         "20250403",
-        "20250328"
+        "20250307",
+        "20250328",
+        "20250314"
       ]
     },
     {
-      "round_id": 10,
+      "round_id": 9,
       "shares": 3500.755873562619,
       "total_cost": 8000.0,
       "total_invested": 12000.0,
@@ -1902,7 +1764,7 @@
           "price": 2.371,
           "amount": 1000.0,
           "shares": 421.763,
-          "round": 10,
+          "round": 9,
           "reason": "周线J=4.10, 金额=1000",
           "total_shares": 421.763,
           "avg_cost": 2.371
@@ -1913,7 +1775,7 @@
           "price": 2.381,
           "amount": 4000.0,
           "shares": 1679.9664,
-          "round": 10,
+          "round": 9,
           "reason": "J回升=13.45, 剩余预算投入=4000",
           "total_shares": 2101.7294,
           "avg_cost": 2.379
@@ -1924,7 +1786,7 @@
           "price": 2.306,
           "amount": 1000.0,
           "shares": 433.6513,
-          "round": 10,
+          "round": 9,
           "reason": "周线J=10.28, 金额=1000",
           "total_shares": 2535.3807,
           "avg_cost": 2.3665
@@ -1935,7 +1797,7 @@
           "price": 2.284,
           "amount": 1000.0,
           "shares": 437.8284,
-          "round": 10,
+          "round": 9,
           "reason": "周线J=-5.41, 金额=1000",
           "total_shares": 2973.2091,
           "avg_cost": 2.3544
@@ -1946,7 +1808,7 @@
           "price": 2.225,
           "amount": 2000.0,
           "shares": 898.8764,
-          "round": 10,
+          "round": 9,
           "reason": "周线J=-13.13, 金额=2000",
           "total_shares": 3872.0855,
           "avg_cost": 2.3243
@@ -1957,7 +1819,7 @@
           "price": 2.159,
           "amount": 2000.0,
           "shares": 926.3548,
-          "round": 10,
+          "round": 9,
           "reason": "周线J=2.49, 金额=2000",
           "total_shares": 4798.4403,
           "avg_cost": 2.2924
@@ -1968,7 +1830,7 @@
           "price": 2.209,
           "amount": 1000.0,
           "shares": 452.6935,
-          "round": 10,
+          "round": 9,
           "reason": "周线J=12.70, 金额=1000",
           "total_shares": 5251.1338,
           "avg_cost": 2.2852
@@ -1979,8 +1841,8 @@
           "price": 2.383,
           "amount": 2085.58,
           "shares": 875.189,
-          "round": 10,
-          "reason": "R10 周线J=96.83>=93",
+          "round": 9,
+          "reason": "R9 周线J=96.83>=93",
           "total_shares": 4375.9448,
           "profit": 85.58
         },
@@ -1990,20 +1852,20 @@
           "price": 2.492,
           "amount": 2180.97,
           "shares": 875.189,
-          "round": 10,
-          "reason": "R10 多头回调: 收盘(2.4820)<多空线(2.4822), 中期(2.5416)>多空线",
+          "round": 9,
+          "reason": "R9 多头回调: 收盘(2.4820)<多空线(2.4822), 中期(2.5416)>多空线",
           "total_shares": 3500.7559,
           "profit": 180.97
         }
       ],
       "week_invested": [
-        "20260403",
         "20260320",
-        "20260206",
         "20260306",
-        "20260213",
+        "20260327",
+        "20260403",
         "20260313",
-        "20260327"
+        "20260213",
+        "20260206"
       ]
     }
   ],

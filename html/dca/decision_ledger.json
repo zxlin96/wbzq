@@ -518,6 +518,58 @@
           "source": "live"
         }
       }
+    },
+    "纳指100": {
+      "current_week": "20261009",
+      "weeks": {
+        "20261009": {
+          "signal_week": "20261009",
+          "action": "hold_long_term",
+          "action_label": "R1 长期持有剩余1/2",
+          "weekly_j": 110.92,
+          "recorded_at": "2026-10-16 23:56:09",
+          "source": "live"
+        }
+      }
+    },
+    "标普500": {
+      "current_week": "20261009",
+      "weeks": {
+        "20261009": {
+          "signal_week": "20261009",
+          "action": "hold_long_term",
+          "action_label": "R1 长期持有剩余1/2",
+          "weekly_j": 65.1,
+          "recorded_at": "2026-10-16 23:56:09",
+          "source": "live"
+        }
+      }
+    },
+    "日经225": {
+      "current_week": "20261009",
+      "weeks": {
+        "20261009": {
+          "signal_week": "20261009",
+          "action": "hold_long_term",
+          "action_label": "R1 长期持有剩余1/2",
+          "weekly_j": 99.02,
+          "recorded_at": "2026-10-16 23:56:09",
+          "source": "live"
+        }
+      }
+    },
+    "德国DAX": {
+      "current_week": "20261009",
+      "weeks": {
+        "20261009": {
+          "signal_week": "20261009",
+          "action": "hold_long_term",
+          "action_label": "R1 长期持有剩余1/2",
+          "weekly_j": -7.56,
+          "recorded_at": "2026-10-16 23:56:09",
+          "source": "live"
+        }
+      }
     }
   }
 }

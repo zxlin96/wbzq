@@ -1,0 +1,496 @@
+{
+  "next_round_id": 5,
+  "total_sell_amount": 14627.578097990656,
+  "trades": [
+    {
+      "date": "20251128",
+      "action": "BUY",
+      "price": 0.461,
+      "amount": 1000.0,
+      "shares": 2169.1974,
+      "round": 1,
+      "reason": "周线J=8.00, 金额=1000",
+      "total_shares": 2169.1974,
+      "avg_cost": 0.461
+    },
+    {
+      "date": "20251205",
+      "action": "BUY",
+      "price": 0.4673,
+      "amount": 1000.0,
+      "shares": 2139.8003,
+      "round": 1,
+      "reason": "周线J=10.31, 金额=1000",
+      "total_shares": 4308.9977,
+      "avg_cost": 0.4641
+    },
+    {
+      "date": "20251212",
+      "action": "BUY",
+      "price": 0.497,
+      "amount": 3000.0,
+      "shares": 6036.2173,
+      "round": 1,
+      "reason": "J回升=43.37, 剩余预算投入=3000",
+      "total_shares": 10345.215,
+      "avg_cost": 0.4833
+    },
+    {
+      "date": "20260109",
+      "action": "SELL",
+      "price": 0.5803,
+      "amount": 2001.22,
+      "shares": 3448.405,
+      "round": 1,
+      "reason": "R1 周线J=102.00>=93",
+      "total_shares": 6896.81,
+      "profit": 334.56
+    },
+    {
+      "date": "20260202",
+      "action": "SELL",
+      "price": 0.568,
+      "amount": 1958.69,
+      "shares": 3448.405,
+      "round": 1,
+      "reason": "R1 多头回调: 收盘(0.5680)<中期线(0.6004), 中期(0.6004)>多空线(0.5480)",
+      "total_shares": 3448.405,
+      "profit": 292.03
+    },
+    {
+      "date": "20260309",
+      "action": "SELL",
+      "price": 0.5527,
+      "amount": 1905.82,
+      "shares": 3448.405,
+      "round": 1,
+      "reason": "R1 收盘(0.5527)<多空线(0.5672)全清",
+      "total_shares": 0.0,
+      "profit": 239.15
+    },
+    {
+      "date": "20260320",
+      "action": "BUY",
+      "price": 0.5317,
+      "amount": 1000.0,
+      "shares": 1880.8777,
+      "round": 2,
+      "reason": "周线J=-5.15, 金额=1000",
+      "total_shares": 1880.8777,
+      "avg_cost": 0.5317
+    },
+    {
+      "date": "20260327",
+      "action": "BUY",
+      "price": 0.5347,
+      "amount": 1000.0,
+      "shares": 1870.3242,
+      "round": 2,
+      "reason": "周线J=-3.62, 金额=1000",
+      "total_shares": 3751.2019,
+      "avg_cost": 0.5332
+    },
+    {
+      "date": "20260403",
+      "action": "BUY",
+      "price": 0.524,
+      "amount": 1000.0,
+      "shares": 1908.3969,
+      "round": 2,
+      "reason": "周线J=-5.77, 金额=1000",
+      "total_shares": 5659.5989,
+      "avg_cost": 0.5301
+    },
+    {
+      "date": "20260410",
+      "action": "BUY",
+      "price": 0.5743,
+      "amount": 2000.0,
+      "shares": 3482.2983,
+      "round": 2,
+      "reason": "J回升=24.48, 剩余预算投入=2000",
+      "total_shares": 9141.8972,
+      "avg_cost": 0.5469
+    },
+    {
+      "date": "20260430",
+      "action": "SELL",
+      "price": 0.656,
+      "amount": 1999.03,
+      "shares": 3047.2991,
+      "round": 2,
+      "reason": "R2 周线J=94.21>=93",
+      "total_shares": 6094.5981,
+      "profit": 332.36
+    },
+    {
+      "date": "20260601",
+      "action": "SELL",
+      "price": 0.77,
+      "amount": 2346.42,
+      "shares": 3047.2991,
+      "round": 2,
+      "reason": "R2 多头回调: 收盘(0.7700)<中期线(0.8067), 中期(0.8067)>多空线(0.7051)",
+      "total_shares": 3047.2991,
+      "profit": 679.75
+    },
+    {
+      "date": "20260717",
+      "action": "SELL",
+      "price": 0.973,
+      "amount": 2965.02,
+      "shares": 3047.2991,
+      "round": 2,
+      "reason": "R2 收盘(0.9730)<多空线(1.0141)全清",
+      "total_shares": 0.0,
+      "profit": 1298.36
+    },
+    {
+      "date": "20260731",
+      "action": "BUY",
+      "price": 0.92,
+      "amount": 1000.0,
+      "shares": 1086.9565,
+      "round": 3,
+      "reason": "周线J=11.97, 金额=1000",
+      "total_shares": 1086.9565,
+      "avg_cost": 0.92
+    },
+    {
+      "date": "20260807",
+      "action": "BUY",
+      "price": 1.015,
+      "amount": 4000.0,
+      "shares": 3940.8867,
+      "round": 3,
+      "reason": "J回升=15.68, 剩余预算投入=4000",
+      "total_shares": 5027.8432,
+      "avg_cost": 0.9945
+    },
+    {
+      "date": "20261009",
+      "action": "SELL",
+      "price": 0.866,
+      "amount": 1451.37,
+      "shares": 1675.9477,
+      "round": 3,
+      "reason": "R3 J峰值回撤(J_peak=57.86, J=23.28, 回撤=34.58)",
+      "total_shares": 3351.8955,
+      "profit": -215.3
+    },
+    {
+      "date": "20261016",
+      "action": "BUY",
+      "price": 0.836,
+      "amount": 1000.0,
+      "shares": 1196.1722,
+      "round": 4,
+      "reason": "周线J=9.53, 金额=1000",
+      "total_shares": 1196.1722,
+      "avg_cost": 0.836
+    }
+  ],
+  "positions": [
+    {
+      "round_id": 1,
+      "shares": 0,
+      "total_cost": 0,
+      "total_invested": 5000.0,
+      "total_sell_amount": 5865.736897114597,
+      "dca_active": false,
+      "j_peak": 0.0,
+      "pullback_sold": false,
+      "sell_stage": 0,
+      "waiting_golden": false,
+      "golden_confirmed": false,
+      "price_below_dk_sold": false,
+      "round_budget": 5000,
+      "round_periods": 5,
+      "buy_count": 0,
+      "dca_exited": false,
+      "dca_exit_date": "",
+      "dca_exit_amount": 0.0,
+      "cycle_low": 0.4526666666666667,
+      "j_high_done": true,
+      "trades": [
+        {
+          "date": "20251128",
+          "action": "BUY",
+          "price": 0.461,
+          "amount": 1000.0,
+          "shares": 2169.1974,
+          "round": 1,
+          "reason": "周线J=8.00, 金额=1000",
+          "total_shares": 2169.1974,
+          "avg_cost": 0.461
+        },
+        {
+          "date": "20251205",
+          "action": "BUY",
+          "price": 0.4673,
+          "amount": 1000.0,
+          "shares": 2139.8003,
+          "round": 1,
+          "reason": "周线J=10.31, 金额=1000",
+          "total_shares": 4308.9977,
+          "avg_cost": 0.4641
+        },
+        {
+          "date": "20251212",
+          "action": "BUY",
+          "price": 0.497,
+          "amount": 3000.0,
+          "shares": 6036.2173,
+          "round": 1,
+          "reason": "J回升=43.37, 剩余预算投入=3000",
+          "total_shares": 10345.215,
+          "avg_cost": 0.4833
+        },
+        {
+          "date": "20260109",
+          "action": "SELL",
+          "price": 0.5803,
+          "amount": 2001.22,
+          "shares": 3448.405,
+          "round": 1,
+          "reason": "R1 周线J=102.00>=93",
+          "total_shares": 6896.81,
+          "profit": 334.56
+        },
+        {
+          "date": "20260202",
+          "action": "SELL",
+          "price": 0.568,
+          "amount": 1958.69,
+          "shares": 3448.405,
+          "round": 1,
+          "reason": "R1 多头回调: 收盘(0.5680)<中期线(0.6004), 中期(0.6004)>多空线(0.5480)",
+          "total_shares": 3448.405,
+          "profit": 292.03
+        },
+        {
+          "date": "20260309",
+          "action": "SELL",
+          "price": 0.5527,
+          "amount": 1905.82,
+          "shares": 3448.405,
+          "round": 1,
+          "reason": "R1 收盘(0.5527)<多空线(0.5672)全清",
+          "total_shares": 0.0,
+          "profit": 239.15
+        }
+      ],
+      "week_invested": [
+        "20251212",
+        "20251205",
+        "20251128"
+      ]
+    },
+    {
+      "round_id": 2,
+      "shares": 0,
+      "total_cost": 0,
+      "total_invested": 5000.0,
+      "total_sell_amount": 7310.470457676231,
+      "dca_active": false,
+      "j_peak": 0.0,
+      "pullback_sold": false,
+      "sell_stage": 0,
+      "waiting_golden": false,
+      "golden_confirmed": false,
+      "price_below_dk_sold": false,
+      "round_budget": 5000,
+      "round_periods": 5,
+      "buy_count": 0,
+      "dca_exited": false,
+      "dca_exit_date": "",
+      "dca_exit_amount": 0.0,
+      "cycle_low": 0.5106666666666667,
+      "j_high_done": true,
+      "trades": [
+        {
+          "date": "20260320",
+          "action": "BUY",
+          "price": 0.5317,
+          "amount": 1000.0,
+          "shares": 1880.8777,
+          "round": 2,
+          "reason": "周线J=-5.15, 金额=1000",
+          "total_shares": 1880.8777,
+          "avg_cost": 0.5317
+        },
+        {
+          "date": "20260327",
+          "action": "BUY",
+          "price": 0.5347,
+          "amount": 1000.0,
+          "shares": 1870.3242,
+          "round": 2,
+          "reason": "周线J=-3.62, 金额=1000",
+          "total_shares": 3751.2019,
+          "avg_cost": 0.5332
+        },
+        {
+          "date": "20260403",
+          "action": "BUY",
+          "price": 0.524,
+          "amount": 1000.0,
+          "shares": 1908.3969,
+          "round": 2,
+          "reason": "周线J=-5.77, 金额=1000",
+          "total_shares": 5659.5989,
+          "avg_cost": 0.5301
+        },
+        {
+          "date": "20260410",
+          "action": "BUY",
+          "price": 0.5743,
+          "amount": 2000.0,
+          "shares": 3482.2983,
+          "round": 2,
+          "reason": "J回升=24.48, 剩余预算投入=2000",
+          "total_shares": 9141.8972,
+          "avg_cost": 0.5469
+        },
+        {
+          "date": "20260430",
+          "action": "SELL",
+          "price": 0.656,
+          "amount": 1999.03,
+          "shares": 3047.2991,
+          "round": 2,
+          "reason": "R2 周线J=94.21>=93",
+          "total_shares": 6094.5981,
+          "profit": 332.36
+        },
+        {
+          "date": "20260601",
+          "action": "SELL",
+          "price": 0.77,
+          "amount": 2346.42,
+          "shares": 3047.2991,
+          "round": 2,
+          "reason": "R2 多头回调: 收盘(0.7700)<中期线(0.8067), 中期(0.8067)>多空线(0.7051)",
+          "total_shares": 3047.2991,
+          "profit": 679.75
+        },
+        {
+          "date": "20260717",
+          "action": "SELL",
+          "price": 0.973,
+          "amount": 2965.02,
+          "shares": 3047.2991,
+          "round": 2,
+          "reason": "R2 收盘(0.9730)<多空线(1.0141)全清",
+          "total_shares": 0.0,
+          "profit": 1298.36
+        }
+      ],
+      "week_invested": [
+        "20260403",
+        "20260320",
+        "20260410",
+        "20260327"
+      ]
+    },
+    {
+      "round_id": 3,
+      "shares": 3351.895480831013,
+      "total_cost": 3333.3333333333335,
+      "total_invested": 5000.0,
+      "total_sell_amount": 1451.3707431998284,
+      "dca_active": true,
+      "j_peak": 57.85649336143945,
+      "pullback_sold": true,
+      "sell_stage": 1,
+      "waiting_golden": true,
+      "golden_confirmed": false,
+      "price_below_dk_sold": false,
+      "round_budget": 5000,
+      "round_periods": 5,
+      "buy_count": 2,
+      "dca_exited": true,
+      "dca_exit_date": "",
+      "dca_exit_amount": 0.0,
+      "cycle_low": 0.8290000000000001,
+      "j_high_done": true,
+      "trades": [
+        {
+          "date": "20260731",
+          "action": "BUY",
+          "price": 0.92,
+          "amount": 1000.0,
+          "shares": 1086.9565,
+          "round": 3,
+          "reason": "周线J=11.97, 金额=1000",
+          "total_shares": 1086.9565,
+          "avg_cost": 0.92
+        },
+        {
+          "date": "20260807",
+          "action": "BUY",
+          "price": 1.015,
+          "amount": 4000.0,
+          "shares": 3940.8867,
+          "round": 3,
+          "reason": "J回升=15.68, 剩余预算投入=4000",
+          "total_shares": 5027.8432,
+          "avg_cost": 0.9945
+        },
+        {
+          "date": "20261009",
+          "action": "SELL",
+          "price": 0.866,
+          "amount": 1451.37,
+          "shares": 1675.9477,
+          "round": 3,
+          "reason": "R3 J峰值回撤(J_peak=57.86, J=23.28, 回撤=34.58)",
+          "total_shares": 3351.8955,
+          "profit": -215.3
+        }
+      ],
+      "week_invested": [
+        "20260731",
+        "20260807"
+      ]
+    },
+    {
+      "round_id": 4,
+      "shares": 1196.1722488038279,
+      "total_cost": 1000.0,
+      "total_invested": 1000.0,
+      "total_sell_amount": 0.0,
+      "dca_active": true,
+      "j_peak": 9.530241475314355,
+      "pullback_sold": false,
+      "sell_stage": 0,
+      "waiting_golden": false,
+      "golden_confirmed": false,
+      "price_below_dk_sold": false,
+      "round_budget": 5000,
+      "round_periods": 5,
+      "buy_count": 1,
+      "dca_exited": false,
+      "dca_exit_date": "",
+      "dca_exit_amount": 0.0,
+      "cycle_low": 0.836,
+      "j_high_done": false,
+      "trades": [
+        {
+          "date": "20261016",
+          "action": "BUY",
+          "price": 0.836,
+          "amount": 1000.0,
+          "shares": 1196.1722,
+          "round": 4,
+          "reason": "周线J=9.53, 金额=1000",
+          "total_shares": 1196.1722,
+          "avg_cost": 0.836
+        }
+      ],
+      "week_invested": [
+        "20261016"
+      ]
+    }
+  ]
+}

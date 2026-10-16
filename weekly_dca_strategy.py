@@ -9,6 +9,9 @@
 3. 亏损达 5%/10% 时金额 ×2/×4（仅 V1；V5/V6 已去除倍投、限每轮买入次数）
 4. J≥93 或 J 从峰值(≥50)回落≥20 时卖 1/3
 5. 之后 V1 按收盘<多空线分批、死叉全清（V2 系按收盘与中期线/多空线位置阶梯清仓）
+   V1h 变体（sell_version='v1h'）：每个卖出阶段只卖基准份额的 1/6
+   （阶段卖出比例为当前份额的 1/6→1/5→1/4，等效基准 1/6×3 次），
+   共卖出 50%，剩余 1/2 永久持有、不再触发任何卖出。
 
 数据源：Tushare fund_daily（ETF 日线 + 复权因子）
 """
@@ -421,6 +424,11 @@ class WeeklyDCAStrategy:
         return any(p.dca_active for p in self.positions)
 
     @property
+    def hold_half(self) -> bool:
+        """v1h 卖出变体：每阶段只卖基准1/6共卖50%，剩余1/2永久持有"""
+        return self.sell_version == 'v1h'
+
+    @property
     def half_sold(self) -> bool:
         return any(p.sell_stage > 0 for p in self.positions)
 
@@ -535,7 +543,10 @@ class WeeklyDCAStrategy:
         logging.info(f"  亏损翻倍阈值: {self.loss_threshold_1*100}% / {self.loss_threshold_2*100}%")
         logging.info(f"  周线 J<={self.j_buy_threshold} 定投, J>={self.j_sell_half_threshold} 卖1/3")
         logging.info(f"  J峰值回撤>={self.j_pullback}(peak>={self.j_peak_min}) 卖1/3")
-        if self.sell_version == 'v1':
+        if self.hold_half:
+            logging.info(f"  [V1H] 每个卖出阶段只卖基准1/6(共3次=卖50%)，剩余1/2长期持有")
+            logging.info(f"  [V1H] J>=93/回撤卖1/6 → 收盘<多空线卖1/6 → 死叉卖1/6")
+        elif self.sell_version == 'v1':
             logging.info(f"  [V1] 收盘<多空线: 中期>多空卖1/3, 中期<多空全清")
             logging.info(f"  [V1] 死叉全清")
         else:
@@ -545,6 +556,17 @@ class WeeklyDCAStrategy:
         if backtest_start:
             logging.info(f"  预热后回测起始: {backtest_start}")
         logging.info(f"{'='*70}")
+        # 卖出比例：v1h 每阶段卖基准1/6（对应当前份额 1/6→1/5→1/4），卖3次后剩1/2
+        if self.hold_half:
+            first_sell_ratio = 1.0 / 6
+            second_sell_ratio = 1.0 / 5
+            final_sell_ratio = 1.0 / 4
+            sell_frac = '1/6'
+        else:
+            first_sell_ratio = 1.0 / 3
+            second_sell_ratio = 0.5
+            final_sell_ratio = 1.0
+            sell_frac = '1/3'
         daily_with_duokong = calc_zhixing_duokong(daily_df)
         daily_dict = {}
         for _, row in daily_with_duokong.iterrows():
@@ -691,7 +713,7 @@ class WeeklyDCAStrategy:
                     if (pos.shares > 0 and not pos.pullback_sold
                             and pos.j_peak >= self.j_peak_min
                             and weekly_j <= pos.j_peak - self.j_pullback):
-                        pos.sell(trade_date_actual, trade_price, 1.0 / 3,
+                        pos.sell(trade_date_actual, trade_price, first_sell_ratio,
                                  f"R{pos.round_id} J峰值回撤(J_peak={pos.j_peak:.2f}, "
                                  f"J={weekly_j:.2f}, 回撤={pos.j_peak - weekly_j:.2f})")
                         pos.sell_stage = 1
@@ -703,19 +725,19 @@ class WeeklyDCAStrategy:
                             pos.golden_confirmed = True
                             pos.waiting_golden = False
                             logging.info(f"[{self.name}] R{pos.round_id} {trade_date} "
-                                         + ("回撤止盈卖1/3，多头区间，监控收盘<多空线"
-                                            if self.sell_version == 'v1'
+                                         + (f"回撤止盈卖{sell_frac}，多头区间，监控收盘<多空线"
+                                            if self.sell_version in ('v1', 'v1h')
                                             else "回撤止盈卖1/3，多头区间，监控收盘<中期线"))
                         else:
                             pos.golden_confirmed = False
                             logging.info(f"[{self.name}] R{pos.round_id} {trade_date} "
-                                         f"回撤止盈卖1/3，空头区间，等金叉")
+                                         f"回撤止盈卖{sell_frac}，空头区间，等金叉")
                         self.total_sell_amount += pos.total_sell_amount
 
                     # J≥93 卖1/3
                     elif (pos.shares > 0 and weekly_j >= self.j_sell_half_threshold
                             and pos.sell_stage == 0):
-                        pos.sell(trade_date_actual, trade_price, 1.0 / 3,
+                        pos.sell(trade_date_actual, trade_price, first_sell_ratio,
                                  f"R{pos.round_id} 周线J={weekly_j:.2f}"
                                  f">={self.j_sell_half_threshold}")
                         pos.sell_stage = 1
@@ -726,43 +748,61 @@ class WeeklyDCAStrategy:
                             pos.golden_confirmed = True
                             pos.waiting_golden = False
                             logging.info(f"[{self.name}] R{pos.round_id} {trade_date} "
-                                         + ("卖1/3，多头区间，监控收盘<多空线"
-                                            if self.sell_version == 'v1'
+                                         + (f"卖{sell_frac}，多头区间，监控收盘<多空线"
+                                            if self.sell_version in ('v1', 'v1h')
                                             else "卖1/3，多头区间，监控收盘<中期线"))
                         else:
                             pos.golden_confirmed = False
                             logging.info(f"[{self.name}] R{pos.round_id} {trade_date} "
-                                         f"卖1/3，空头区间，等金叉")
+                                         f"卖{sell_frac}，空头区间，等金叉")
 
-                # 收盘<多空线(V1) 或 收盘<中期线(V2)：双空全清 vs 多头回调
-                trigger_price = dk_val_today if self.sell_version == 'v1' else mid_val_today
-                trigger_name = "多空线" if self.sell_version == 'v1' else "中期线"
+                # 收盘<多空线(V1/V1H) 或 收盘<中期线(V2)：双空全清 vs 多头回调
+                trigger_price = (dk_val_today
+                                 if self.sell_version in ('v1', 'v1h')
+                                 else mid_val_today)
+                trigger_name = ("多空线"
+                                if self.sell_version in ('v1', 'v1h')
+                                else "中期线")
                 if (pos.shares > 0 and pos.golden_confirmed
                         and not pos.price_below_dk_sold
                         and pd.notna(trigger_price) and price < trigger_price):
                     mid_below_dk = (pd.notna(mid_val_today) and mid_val_today < dk_val_today)
                     if mid_below_dk:
-                        pos.sell(trade_date_actual, trade_price, 1.0,
-                                 f"R{pos.round_id} 双空全清: "
-                                 f"收盘({price:.4f})<{trigger_name}({trigger_price:.4f}) "
-                                 f"且中期({mid_val_today:.4f})<多空线")
-                        logging.info(f"[{self.name}] R{pos.round_id} {trade_date} 双空全清")
+                        if self.hold_half:
+                            # v1h: 双空也只减仓一阶段(基准1/6)，剩余继续走死叉减仓
+                            pos.sell(trade_date_actual, trade_price, second_sell_ratio,
+                                     f"R{pos.round_id} 双空减仓: "
+                                     f"收盘({price:.4f})<{trigger_name}({trigger_price:.4f}) "
+                                     f"且中期({mid_val_today:.4f})<多空线，卖{sell_frac}")
+                            pos.sell_stage = 2
+                            pos.price_below_dk_sold = True
+                            logging.info(f"[{self.name}] R{pos.round_id} {trade_date} "
+                                         f"双空减仓{sell_frac}，等死叉减仓")
+                        else:
+                            pos.sell(trade_date_actual, trade_price, 1.0,
+                                     f"R{pos.round_id} 双空全清: "
+                                     f"收盘({price:.4f})<{trigger_name}({trigger_price:.4f}) "
+                                     f"且中期({mid_val_today:.4f})<多空线")
+                            logging.info(f"[{self.name}] R{pos.round_id} {trade_date} 双空全清")
                     else:
-                        pos.sell(trade_date_actual, trade_price, 0.5,
+                        pos.sell(trade_date_actual, trade_price, second_sell_ratio,
                                  f"R{pos.round_id} 多头回调: "
                                  f"收盘({price:.4f})<{trigger_name}({trigger_price:.4f}), "
                                  f"中期({mid_val_today:.4f})>多空线")
                         pos.sell_stage = 2
                         pos.price_below_dk_sold = True
-                        if self.sell_version == 'v1':
+                        if self.hold_half:
+                            logging.info(f"[{self.name}] R{pos.round_id} {trade_date} "
+                                         f"多头回调卖{sell_frac}，等死叉减仓")
+                        elif self.sell_version == 'v1':
                             logging.info(f"[{self.name}] R{pos.round_id} {trade_date} "
                                          f"多头回调卖1/3，等死叉全清")
                         else:
                             logging.info(f"[{self.name}] R{pos.round_id} {trade_date} "
                                          f"多头回调卖1/3，等收盘<多空线全清")
 
-                # V1: 死叉全清 | V2: 收盘<多空线全清
-                if self.sell_version == 'v1':
+                # V1/V1H: 死叉清仓(v1h只减基准1/6) | V2: 收盘<多空线全清
+                if self.sell_version in ('v1', 'v1h'):
                     clear_cond = (pos.shares > 0 and pos.golden_confirmed
                                   and pos.price_below_dk_sold
                                   and trade_date in dead_cross_dates)
@@ -771,7 +811,16 @@ class WeeklyDCAStrategy:
                                   and pos.price_below_dk_sold
                                   and pd.notna(dk_val_today) and price < dk_val_today)
                 if clear_cond:
-                    if self.sell_version == 'v1':
+                    if self.hold_half:
+                        # v1h: 死叉只卖最后一笔基准1/6，之后剩余1/2永久持有
+                        if pos.sell_stage == 2:
+                            pos.sell(trade_date_actual, trade_price, final_sell_ratio,
+                                     f"R{pos.round_id} 日线知行多空死叉"
+                                     f"(卖{sell_frac}，余1/2长期持有)")
+                            pos.sell_stage = 3
+                            logging.info(f"[{self.name}] R{pos.round_id} {trade_date} "
+                                         f"死叉减仓{sell_frac}，剩余1/2长期持有")
+                    elif self.sell_version == 'v1':
                         pos.sell(trade_date_actual, trade_price, 1.0,
                                  f"R{pos.round_id} 日线知行多空死叉(全清剩余)")
                         logging.info(f"[{self.name}] R{pos.round_id} {trade_date} 死叉全清")
@@ -903,6 +952,7 @@ class WeeklyDCAStrategy:
                 pos_info['loss_pct'] = round(pos_profit * 100, 2)
             invest_amount = pos.get_invest_amount(last_price)
             multiplier = max(1, round(invest_amount / self.base_amount)) if self.base_amount > 0 else 1
+            sell_frac = '1/6' if self.hold_half else '1/3'
 
             if pos.sell_stage == 0:
                 # 回撤止盈
@@ -910,7 +960,7 @@ class WeeklyDCAStrategy:
                         and pos.j_peak >= self.j_peak_min
                         and weekly_j <= pos.j_peak - self.j_pullback):
                     pos_info['action'] = 'sell_third_pullback'
-                    pos_info['action_label'] = f'R{pos.round_id} 建议卖出1/3(回撤止盈)'
+                    pos_info['action_label'] = f'R{pos.round_id} 建议卖出{sell_frac}(回撤止盈)'
                     pos_info['action_color'] = '#2ecc71'
                     pullback_pts = pos.j_peak - weekly_j
                     pos_info['action_detail'] = (
@@ -919,7 +969,7 @@ class WeeklyDCAStrategy:
                     )
                 elif pos.shares > 0 and weekly_j >= self.j_sell_half_threshold:
                     pos_info['action'] = 'sell_third'
-                    pos_info['action_label'] = f'R{pos.round_id} 建议卖出1/3'
+                    pos_info['action_label'] = f'R{pos.round_id} 建议卖出{sell_frac}'
                     pos_info['action_color'] = '#2ecc71'
                     pos_info['action_detail'] = (
                         f"R{pos.round_id} 周线J={weekly_j:.2f}"
@@ -988,20 +1038,26 @@ class WeeklyDCAStrategy:
             elif pos.sell_stage == 1:
                 if not mid_above_dk:
                     pos_info['action'] = 'wait_golden'
-                    pos_info['action_label'] = f'R{pos.round_id} 已卖1/3·等金叉'
+                    pos_info['action_label'] = f'R{pos.round_id} 已卖{sell_frac}·等金叉'
                     pos_info['action_color'] = '#9b59b6'
                     pos_info['action_detail'] = f"R{pos.round_id} 空头区间，等金叉"
                 else:
                     dk_v = dk_val if pd.notna(dk_val) else 0
                     mid_v = mid_val if pd.notna(mid_val) else 0
-                    if self.sell_version == 'v1':
+                    if self.sell_version in ('v1', 'v1h'):
                         pos_info['action'] = 'wait_price_below_dk'
-                        pos_info['action_label'] = f'R{pos.round_id} 已卖1/3·等收盘<多空线'
+                        pos_info['action_label'] = f'R{pos.round_id} 已卖{sell_frac}·等收盘<多空线'
                         pos_info['action_color'] = '#e67e22'
-                        pos_info['action_detail'] = (
-                            f"R{pos.round_id} 监控收盘<多空线({dk_v:.4f})，"
-                            f"中期>多空卖1/3，中期<多空全清"
-                        )
+                        if self.hold_half:
+                            pos_info['action_detail'] = (
+                                f"R{pos.round_id} 监控收盘<多空线({dk_v:.4f})，"
+                                f"触发再卖{sell_frac}(累计1/3)，死叉再卖后余1/2长期持有"
+                            )
+                        else:
+                            pos_info['action_detail'] = (
+                                f"R{pos.round_id} 监控收盘<多空线({dk_v:.4f})，"
+                                f"中期>多空卖1/3，中期<多空全清"
+                            )
                     else:
                         pos_info['action'] = 'wait_price_below_mid'
                         pos_info['action_label'] = f'R{pos.round_id} 已卖1/3·等收盘<中期线'
@@ -1011,7 +1067,12 @@ class WeeklyDCAStrategy:
                             f"中期>多空卖1/3，中期<多空全清"
                         )
             elif pos.sell_stage == 2:
-                if self.sell_version == 'v1':
+                if self.hold_half:
+                    pos_info['action'] = 'wait_dead_cross'
+                    pos_info['action_label'] = f'R{pos.round_id} 已卖1/3·等死叉'
+                    pos_info['action_color'] = '#f39c12'
+                    pos_info['action_detail'] = f"R{pos.round_id} 等死叉减仓{sell_frac}(累计1/2)"
+                elif self.sell_version == 'v1':
                     pos_info['action'] = 'wait_dead_cross'
                     pos_info['action_label'] = f'R{pos.round_id} 已卖2/3·等死叉'
                     pos_info['action_color'] = '#f39c12'
@@ -1022,6 +1083,19 @@ class WeeklyDCAStrategy:
                     pos_info['action_label'] = f'R{pos.round_id} 已卖2/3·等收盘<多空线'
                     pos_info['action_color'] = '#f39c12'
                     pos_info['action_detail'] = f"R{pos.round_id} 等收盘<多空线全清"
+            elif pos.sell_stage >= 3:
+                if self.hold_half:
+                    pos_info['action'] = 'hold_long_term'
+                    pos_info['action_label'] = f'R{pos.round_id} 长期持有剩余1/2'
+                    pos_info['action_color'] = '#3498db'
+                    pos_info['action_detail'] = (
+                        f"R{pos.round_id} 已分3次卖出共1/2，"
+                        f"剩余1/2长期持有，不再触发卖出"
+                    )
+                else:
+                    pos_info['action'] = 'unknown'
+                    pos_info['action_label'] = f'R{pos.round_id} 未知'
+                    pos_info['action_color'] = '#95a5a6'
             else:
                 pos_info['action'] = 'unknown'
                 pos_info['action_label'] = f'R{pos.round_id} 未知'
@@ -1186,7 +1260,10 @@ def generate_backtest_report(strategy: WeeklyDCAStrategy,
     for pos_data in na.get('positions', []):
         rid = pos_data.get('round_id', '?')
         color = round_colors.get(rid, '#95a5a6')
-        stage_labels = {0: '定投中', 1: '已卖1/3', 2: '已卖2/3'}
+        if getattr(strategy, 'hold_half', False):
+            stage_labels = {0: '定投中', 1: '已卖1/6', 2: '已卖1/3', 3: '长期持有1/2'}
+        else:
+            stage_labels = {0: '定投中', 1: '已卖1/3', 2: '已卖2/3'}
         stage_text = stage_labels.get(pos_data.get('sell_stage', 0), '已清仓')
         pos_shares = pos_data.get('shares', 0)
         pos_cost = pos_data.get('avg_cost', 0)
@@ -1207,6 +1284,11 @@ def generate_backtest_report(strategy: WeeklyDCAStrategy,
     sell_desc = ("收盘<多空线:中期>多空卖1/3,中期<多空全清 | 死叉全清"
                  if strategy.sell_version == 'v1'
                  else "收盘<中期线:中期>多空卖1/3,中期<多空全清 | 已卖2/3后收盘<多空线全清")
+    sell_frac_label = '1/3'
+    if getattr(strategy, 'hold_half', False):
+        sell_desc = ("J≥93/回撤卖1/6 → 收盘<多空线卖1/6 → 死叉卖1/6 | "
+                     "共3次卖50%，剩余1/2长期持有")
+        sell_frac_label = '1/6'
     html = f"""<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -1252,7 +1334,7 @@ h2 {{ color: #333; font-size: 18px; margin: 15px 0 10px; }}
 <body>
 <div class="container">
 <h1>周线KDJ定投策略回测报告</h1>
-<div class="subtitle">{strategy.name} | 基础金额: {strategy.base_amount} | J&lt;={strategy.j_buy_threshold}定投 | J&gt;={strategy.j_sell_half_threshold}卖1/3 | 回撤止盈(peak&gt;={strategy.j_peak_min},回落&gt;={strategy.j_pullback}) | {sell_desc}</div>
+<div class="subtitle">{strategy.name} | 基础金额: {strategy.base_amount} | J&lt;={strategy.j_buy_threshold}定投 | J&gt;={strategy.j_sell_half_threshold}卖{sell_frac_label} | 回撤止盈(peak&gt;={strategy.j_peak_min},回落&gt;={strategy.j_pullback}) | {sell_desc}</div>
 <div class="action-box">
 <div class="action-header">
     <div class="action-label">下一交易日: {na['action_label']}</div>
@@ -1805,6 +1887,25 @@ def run_backtest_from_config(config_path: str = 'etf_config.json',
                     **(etf.get('v7_params', {}) or {}),
                 )
                 report_func = generate_backtest_report_v6
+            elif strat_version == 'v1h':
+                # V1 变体：每阶段卖基准1/6共卖50%，剩余1/2长期持有不再卖
+                strategy = WeeklyDCAStrategy(
+                    name=name,
+                    base_amount=base_amount,
+                    sell_version='v1h',
+                )
+                report_func = generate_backtest_report
+            elif strat_version == 'plain':
+                # 直接每周定投（海外宽基）：无条件每周买入，不止盈止损，长期持有
+                from weekly_dca_strategy_plain import (
+                    PlainWeeklyDCA,
+                    generate_plain_dca_report,
+                )
+                strategy = PlainWeeklyDCA(
+                    name=name,
+                    base_amount=base_amount,
+                )
+                report_func = generate_plain_dca_report
             else:
                 strategy = WeeklyDCAStrategy(
                     name=name,

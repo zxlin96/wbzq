@@ -1,0 +1,225 @@
+{
+ "params": {
+  "start": "20211013",
+  "budget": 20000.0,
+  "refresh": false
+ },
+ "avg_xirr": {
+  "4%法无门": 4.343333333333334,
+  "4%法+PE<50%": 4.398333333333333,
+  "4%法+PE<30%": 4.213333333333334,
+  "每周定投": 3.9099999999999997
+ },
+ "detail": {
+  "沪深300": {
+   "ts_code": "510300.SH",
+   "index": "000300.SH",
+   "cur_pe": 13.2,
+   "cur_pe_pct": 69.0,
+   "4%法无门": {
+    "xirr": 3.78,
+    "final": 24072.59,
+    "trades": 12,
+    "rounds": 1,
+    "flat_days": 1
+   },
+   "4%法+PE<50%": {
+    "xirr": 3.74,
+    "final": 24026.97,
+    "trades": 10,
+    "rounds": 1,
+    "flat_days": 215
+   },
+   "4%法+PE<30%": {
+    "xirr": 3.47,
+    "final": 23717.74,
+    "trades": 7,
+    "rounds": 1,
+    "flat_days": 314
+   },
+   "每周定投": {
+    "xirr": 2.77,
+    "final": 22922.05,
+    "trades": 104,
+    "rounds": 0,
+    "flat_days": 0
+   },
+   "first_buy_50": "20211018"
+  },
+  "上证50": {
+   "ts_code": "510050.SH",
+   "index": "000016.SH",
+   "cur_pe": 10.7,
+   "cur_pe_pct": 56.0,
+   "4%法无门": {
+    "xirr": 3.05,
+    "final": 23237.46,
+    "trades": 11,
+    "rounds": 1,
+    "flat_days": 1
+   },
+   "4%法+PE<50%": {
+    "xirr": 2.95,
+    "final": 23124.24,
+    "trades": 7,
+    "rounds": 1,
+    "flat_days": 239
+   },
+   "4%法+PE<30%": {
+    "xirr": 2.51,
+    "final": 22630.7,
+    "trades": 5,
+    "rounds": 1,
+    "flat_days": 266
+   },
+   "每周定投": {
+    "xirr": 2.43,
+    "final": 22546.23,
+    "trades": 104,
+    "rounds": 0,
+    "flat_days": 0
+   },
+   "first_buy_50": "20220128"
+  },
+  "中证500": {
+   "ts_code": "510500.SH",
+   "index": "000905.SH",
+   "cur_pe": 31.2,
+   "cur_pe_pct": 78.0,
+   "4%法无门": {
+    "xirr": 3.73,
+    "final": 24015.16,
+    "trades": 14,
+    "rounds": 2,
+    "flat_days": 2
+   },
+   "4%法+PE<50%": {
+    "xirr": 3.8,
+    "final": 24090.02,
+    "trades": 9,
+    "rounds": 1,
+    "flat_days": 262
+   },
+   "4%法+PE<30%": {
+    "xirr": 3.8,
+    "final": 24090.02,
+    "trades": 9,
+    "rounds": 1,
+    "flat_days": 262
+   },
+   "每周定投": {
+    "xirr": 4.38,
+    "final": 24777.84,
+    "trades": 104,
+    "rounds": 0,
+    "flat_days": 0
+   },
+   "first_buy_50": "20211013"
+  },
+  "中证1000": {
+   "ts_code": "512100.SH",
+   "index": "000852.SH",
+   "cur_pe": 41.2,
+   "cur_pe_pct": 76.0,
+   "4%法无门": {
+    "xirr": 4.41,
+    "final": 24802.55,
+    "trades": 21,
+    "rounds": 3,
+    "flat_days": 3
+   },
+   "4%法+PE<50%": {
+    "xirr": 3.99,
+    "final": 24315.11,
+    "trades": 14,
+    "rounds": 2,
+    "flat_days": 297
+   },
+   "4%法+PE<30%": {
+    "xirr": 3.0,
+    "final": 23174.88,
+    "trades": 11,
+    "rounds": 1,
+    "flat_days": 460
+   },
+   "每周定投": {
+    "xirr": 2.1,
+    "final": 22187.22,
+    "trades": 104,
+    "rounds": 0,
+    "flat_days": 0
+   },
+   "first_buy_50": "20211013"
+  },
+  "创业板指": {
+   "ts_code": "159915.SZ",
+   "index": "399006.SZ",
+   "cur_pe": 34.8,
+   "cur_pe_pct": 43.0,
+   "4%法无门": {
+    "xirr": 4.94,
+    "final": 25446.55,
+    "trades": 18,
+    "rounds": 2,
+    "flat_days": 2
+   },
+   "4%法+PE<50%": {
+    "xirr": 7.19,
+    "final": 28290.52,
+    "trades": 22,
+    "rounds": 3,
+    "flat_days": 245
+   },
+   "4%法+PE<30%": {
+    "xirr": 7.78,
+    "final": 29066.47,
+    "trades": 19,
+    "rounds": 3,
+    "flat_days": 441
+   },
+   "每周定投": {
+    "xirr": 4.9,
+    "final": 25392.52,
+    "trades": 104,
+    "rounds": 0,
+    "flat_days": 0
+   },
+   "first_buy_50": "20220308"
+  },
+  "科创50": {
+   "ts_code": "588000.SH",
+   "index": "000688.SH",
+   "cur_pe": 119.5,
+   "cur_pe_pct": 72.0,
+   "4%法无门": {
+    "xirr": 6.15,
+    "final": 26943.83,
+    "trades": 26,
+    "rounds": 4,
+    "flat_days": 4
+   },
+   "4%法+PE<50%": {
+    "xirr": 4.72,
+    "final": 25183.37,
+    "trades": 11,
+    "rounds": 1,
+    "flat_days": 263
+   },
+   "4%法+PE<30%": {
+    "xirr": 4.72,
+    "final": 25183.37,
+    "trades": 11,
+    "rounds": 1,
+    "flat_days": 263
+   },
+   "每周定投": {
+    "xirr": 6.88,
+    "final": 27876.75,
+    "trades": 104,
+    "rounds": 0,
+    "flat_days": 0
+   },
+   "first_buy_50": "20211013"
+  }
+ }
+}

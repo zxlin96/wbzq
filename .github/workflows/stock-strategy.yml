@@ -89,6 +89,16 @@ jobs:
         echo "========================================"
         python weekly_dca_strategy.py --target config --amount 1000 --years 5
 
+    - name: 运行4%定投策略（估值门版）
+      env:
+        TUSHARE_TOKEN: ${{ secrets.TUSHARE_TOKEN }}
+      run: |
+        echo "========================================"
+        echo "开始执行4%定投策略（4%台阶+PE分位门）"
+        echo "日期: ${{ steps.date.outputs.today }}"
+        echo "========================================"
+        python dca_4pct_strategy.py
+
     - name: 生成报告索引
       run: python generate_reports_json.py
 
@@ -118,6 +128,8 @@ jobs:
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
         git add html/ reports.json index.html strategy_state.json c154_result_*.csv etf_config.json
+        git add dca_state_4pct_*.json 2>/dev/null || true
+        git add dca_state_*.json 2>/dev/null || true
         git add c432_result_*.csv 2>/dev/null || true
         git add macd_result_*.csv 2>/dev/null || true
         git add html/multi_indicator_trend/ 2>/dev/null || true

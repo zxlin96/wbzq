@@ -1,0 +1,1260 @@
+{
+ "params": {
+  "years": 5,
+  "base_amount": 1000.0,
+  "round_budget": 5000.0,
+  "round_periods": 5,
+  "detach": 15.0,
+  "exit_drop": 4.0,
+  "refresh": false,
+  "no_ablation": false,
+  "no_report": true
+ },
+ "replica_check": [
+  {
+   "name": "红利低波",
+   "max_diff": 0.0
+  },
+  {
+   "name": "上证50",
+   "max_diff": 0.0
+  },
+  {
+   "name": "沪深300",
+   "max_diff": 0.0
+  },
+  {
+   "name": "NASDAQ100",
+   "max_diff": 0.0
+  },
+  {
+   "name": "中证2000",
+   "max_diff": 0.0
+  },
+  {
+   "name": "通信",
+   "max_diff": 0.0
+  },
+  {
+   "name": "创新药",
+   "max_diff": 0.0
+  },
+  {
+   "name": "电力",
+   "max_diff": 0.0
+  },
+  {
+   "name": "科创半导体",
+   "max_diff": 0.0
+  },
+  {
+   "name": "有色金属",
+   "max_diff": 0.0
+  },
+  {
+   "name": "人工智能",
+   "max_diff": 0.0
+  },
+  {
+   "name": "创业板新能源",
+   "max_diff": 0.0
+  },
+  {
+   "name": "机器人",
+   "max_diff": 0.0
+  }
+ ],
+ "ablation": {
+  "pct_exit": [
+   {
+    "name": "红利低波",
+    "基准 detach15/exit4": 11.89,
+    "detach=10": 8.92,
+    "detach=20": 15.69,
+    "exit_drop=3": 12.88,
+    "exit_drop=5": 11.19
+   },
+   {
+    "name": "上证50",
+    "基准 detach15/exit4": 0.84,
+    "detach=10": 2.3,
+    "detach=20": 0.84,
+    "exit_drop=3": 0.84,
+    "exit_drop=5": 0.84
+   },
+   {
+    "name": "沪深300",
+    "基准 detach15/exit4": 2.94,
+    "detach=10": 1.23,
+    "detach=20": 2.46,
+    "exit_drop=3": 3.45,
+    "exit_drop=5": 2.13
+   },
+   {
+    "name": "NASDAQ100",
+    "基准 detach15/exit4": 15.1,
+    "detach=10": 15.1,
+    "detach=20": 21.82,
+    "exit_drop=3": 14.02,
+    "exit_drop=5": 15.2
+   },
+   {
+    "name": "中证2000",
+    "基准 detach15/exit4": 8.31,
+    "detach=10": 10.38,
+    "detach=20": 14.33,
+    "exit_drop=3": 8.31,
+    "exit_drop=5": 8.31
+   },
+   {
+    "name": "通信",
+    "基准 detach15/exit4": 26.87,
+    "detach=10": 23.81,
+    "detach=20": 32.21,
+    "exit_drop=3": 27.45,
+    "exit_drop=5": 26.28
+   },
+   {
+    "name": "创新药",
+    "基准 detach15/exit4": -24.25,
+    "detach=10": -24.25,
+    "detach=20": -24.25,
+    "exit_drop=3": -24.25,
+    "exit_drop=5": -24.25
+   },
+   {
+    "name": "电力",
+    "基准 detach15/exit4": 10.41,
+    "detach=10": 8.1,
+    "detach=20": 10.41,
+    "exit_drop=3": 10.3,
+    "exit_drop=5": 9.95
+   },
+   {
+    "name": "科创半导体",
+    "基准 detach15/exit4": 22.19,
+    "detach=10": 17.95,
+    "detach=20": 22.19,
+    "exit_drop=3": 19.17,
+    "exit_drop=5": 22.19
+   },
+   {
+    "name": "有色金属",
+    "基准 detach15/exit4": 5.75,
+    "detach=10": -4.39,
+    "detach=20": 5.75,
+    "exit_drop=3": 6.79,
+    "exit_drop=5": 5.75
+   },
+   {
+    "name": "人工智能",
+    "基准 detach15/exit4": 19.43,
+    "detach=10": 16.82,
+    "detach=20": 25.58,
+    "exit_drop=3": 20.77,
+    "exit_drop=5": 16.55
+   },
+   {
+    "name": "创业板新能源",
+    "基准 detach15/exit4": -12.63,
+    "detach=10": -12.63,
+    "detach=20": -12.63,
+    "exit_drop=3": -12.63,
+    "exit_drop=5": -12.63
+   },
+   {
+    "name": "机器人",
+    "基准 detach15/exit4": 11.77,
+    "detach=10": 9.61,
+    "detach=20": 12.17,
+    "exit_drop=3": 12.1,
+    "exit_drop=5": 10.76
+   }
+  ],
+  "v6+pct": [
+   {
+    "name": "红利低波",
+    "基准 detach15/exit4": 3.13,
+    "detach=10": 3.04,
+    "detach=20": 3.13,
+    "exit_drop=3": 3.13,
+    "exit_drop=5": 3.13
+   },
+   {
+    "name": "上证50",
+    "基准 detach15/exit4": -0.07,
+    "detach=10": -0.07,
+    "detach=20": -0.07,
+    "exit_drop=3": -0.07,
+    "exit_drop=5": -0.07
+   },
+   {
+    "name": "沪深300",
+    "基准 detach15/exit4": -0.44,
+    "detach=10": -0.44,
+    "detach=20": -0.44,
+    "exit_drop=3": -0.44,
+    "exit_drop=5": -0.44
+   },
+   {
+    "name": "NASDAQ100",
+    "基准 detach15/exit4": 1.86,
+    "detach=10": 1.9,
+    "detach=20": 1.86,
+    "exit_drop=3": 1.13,
+    "exit_drop=5": 1.86
+   },
+   {
+    "name": "中证2000",
+    "基准 detach15/exit4": 5.11,
+    "detach=10": 4.45,
+    "detach=20": 5.12,
+    "exit_drop=3": 5.11,
+    "exit_drop=5": 5.12
+   },
+   {
+    "name": "通信",
+    "基准 detach15/exit4": 11.03,
+    "detach=10": 11.25,
+    "detach=20": 13.22,
+    "exit_drop=3": 11.14,
+    "exit_drop=5": 11.89
+   },
+   {
+    "name": "创新药",
+    "基准 detach15/exit4": 1.02,
+    "detach=10": 1.02,
+    "detach=20": 1.03,
+    "exit_drop=3": 1.21,
+    "exit_drop=5": 0.82
+   },
+   {
+    "name": "电力",
+    "基准 detach15/exit4": 0.24,
+    "detach=10": 0.24,
+    "detach=20": -0.04,
+    "exit_drop=3": 0.24,
+    "exit_drop=5": 0.18
+   },
+   {
+    "name": "科创半导体",
+    "基准 detach15/exit4": 17.8,
+    "detach=10": 14.87,
+    "detach=20": 17.8,
+    "exit_drop=3": 15.79,
+    "exit_drop=5": 17.8
+   },
+   {
+    "name": "有色金属",
+    "基准 detach15/exit4": 1.13,
+    "detach=10": 1.12,
+    "detach=20": 1.11,
+    "exit_drop=3": 1.13,
+    "exit_drop=5": 0.85
+   },
+   {
+    "name": "人工智能",
+    "基准 detach15/exit4": 7.23,
+    "detach=10": 7.23,
+    "detach=20": 7.06,
+    "exit_drop=3": 7.62,
+    "exit_drop=5": 7.07
+   },
+   {
+    "name": "创业板新能源",
+    "基准 detach15/exit4": -7.4,
+    "detach=10": -7.4,
+    "detach=20": -7.4,
+    "exit_drop=3": -7.4,
+    "exit_drop=5": -7.4
+   },
+   {
+    "name": "机器人",
+    "基准 detach15/exit4": 6.5,
+    "detach=10": 6.55,
+    "detach=20": 6.43,
+    "exit_drop=3": 6.6,
+    "exit_drop=5": 6.18
+   }
+  ],
+  "hybrid": [
+   {
+    "name": "红利低波",
+    "基准 detach15/exit4": 7.01,
+    "detach=10": 5.12,
+    "detach=20": 12.16,
+    "exit_drop=3": 7.63,
+    "exit_drop=5": 6.57
+   },
+   {
+    "name": "上证50",
+    "基准 detach15/exit4": 2.18,
+    "detach=10": 2.18,
+    "detach=20": 1.2,
+    "exit_drop=3": 1.46,
+    "exit_drop=5": 1.83
+   },
+   {
+    "name": "沪深300",
+    "基准 detach15/exit4": -2.51,
+    "detach=10": -1.41,
+    "detach=20": -2.51,
+    "exit_drop=3": -2.51,
+    "exit_drop=5": -2.51
+   },
+   {
+    "name": "NASDAQ100",
+    "基准 detach15/exit4": 9.07,
+    "detach=10": 9.07,
+    "detach=20": 8.19,
+    "exit_drop=3": 7.21,
+    "exit_drop=5": 9.07
+   },
+   {
+    "name": "中证2000",
+    "基准 detach15/exit4": -0.09,
+    "detach=10": 4.28,
+    "detach=20": 4.42,
+    "exit_drop=3": -0.09,
+    "exit_drop=5": -0.09
+   },
+   {
+    "name": "通信",
+    "基准 detach15/exit4": 14.63,
+    "detach=10": 14.07,
+    "detach=20": 16.78,
+    "exit_drop=3": 14.94,
+    "exit_drop=5": 15.05
+   },
+   {
+    "name": "创新药",
+    "基准 detach15/exit4": -3.17,
+    "detach=10": -3.23,
+    "detach=20": -3.92,
+    "exit_drop=3": -3.14,
+    "exit_drop=5": -3.57
+   },
+   {
+    "name": "电力",
+    "基准 detach15/exit4": 2.52,
+    "detach=10": 2.52,
+    "detach=20": 3.72,
+    "exit_drop=3": 2.52,
+    "exit_drop=5": 3.49
+   },
+   {
+    "name": "科创半导体",
+    "基准 detach15/exit4": 22.19,
+    "detach=10": 18.15,
+    "detach=20": 22.19,
+    "exit_drop=3": 19.17,
+    "exit_drop=5": 22.19
+   },
+   {
+    "name": "有色金属",
+    "基准 detach15/exit4": -1.74,
+    "detach=10": -0.03,
+    "detach=20": -1.74,
+    "exit_drop=3": -1.74,
+    "exit_drop=5": 0.53
+   },
+   {
+    "name": "人工智能",
+    "基准 detach15/exit4": 7.23,
+    "detach=10": 6.23,
+    "detach=20": 7.13,
+    "exit_drop=3": 7.73,
+    "exit_drop=5": 5.79
+   },
+   {
+    "name": "创业板新能源",
+    "基准 detach15/exit4": -7.4,
+    "detach=10": -7.4,
+    "detach=20": -7.4,
+    "exit_drop=3": -7.4,
+    "exit_drop=5": -7.4
+   },
+   {
+    "name": "机器人",
+    "基准 detach15/exit4": 6.8,
+    "detach=10": 6.31,
+    "detach=20": 8.71,
+    "exit_drop=3": 6.83,
+    "exit_drop=5": 5.9
+   }
+  ]
+ },
+ "results": {
+  "红利低波": {
+   "ts_code": "512890.SH",
+   "effective_start": "20211013",
+   "n_days": 1209,
+   "metrics": {
+    "V6基线(官方)": {
+     "label": "V6基线(官方)",
+     "total_invested": 55000.0,
+     "total_sell": 56722.86,
+     "final_assets": 56722.86,
+     "abs_profit": 1722.86,
+     "return_pct": 3.13,
+     "pnl_drawdown": 311.0,
+     "n_buy": 43,
+     "n_sell": 27,
+     "open_shares": -0.0001
+    },
+    "V6复刻": {
+     "label": "V6复刻",
+     "total_invested": 55000.0,
+     "total_sell": 56722.86,
+     "final_assets": 56722.86,
+     "abs_profit": 1722.86,
+     "return_pct": 3.13,
+     "pnl_drawdown": 311.0,
+     "n_buy": 43,
+     "n_sell": 27,
+     "open_shares": -0.0001
+    },
+    "4%止盈替换": {
+     "label": "4%止盈替换",
+     "total_invested": 25000.0,
+     "total_sell": 22746.37,
+     "final_assets": 27971.28,
+     "abs_profit": 2971.28,
+     "return_pct": 11.89,
+     "pnl_drawdown": 761.0,
+     "n_buy": 23,
+     "n_sell": 4,
+     "open_shares": 4325.2577
+    },
+    "V6+4%叠加": {
+     "label": "V6+4%叠加",
+     "total_invested": 55000.0,
+     "total_sell": 56722.86,
+     "final_assets": 56722.86,
+     "abs_profit": 1722.86,
+     "return_pct": 3.13,
+     "pnl_drawdown": 311.0,
+     "n_buy": 43,
+     "n_sell": 27,
+     "open_shares": -0.0001
+    },
+    "止损+4%止盈混合": {
+     "label": "止损+4%止盈混合",
+     "total_invested": 40000.0,
+     "total_sell": 37321.31,
+     "final_assets": 42803.12,
+     "abs_profit": 2803.12,
+     "return_pct": 7.01,
+     "pnl_drawdown": 803.0,
+     "n_buy": 32,
+     "n_sell": 7,
+     "open_shares": 4537.9184
+    }
+   }
+  },
+  "上证50": {
+   "ts_code": "510050.SH",
+   "effective_start": "20211013",
+   "n_days": 1210,
+   "metrics": {
+    "V6基线(官方)": {
+     "label": "V6基线(官方)",
+     "total_invested": 57000.0,
+     "total_sell": 54912.59,
+     "final_assets": 56892.6,
+     "abs_profit": -107.4,
+     "return_pct": -0.19,
+     "pnl_drawdown": 1235.0,
+     "n_buy": 42,
+     "n_sell": 20,
+     "open_shares": 678.3196
+    },
+    "V6复刻": {
+     "label": "V6复刻",
+     "total_invested": 57000.0,
+     "total_sell": 54912.59,
+     "final_assets": 56892.6,
+     "abs_profit": -107.4,
+     "return_pct": -0.19,
+     "pnl_drawdown": 1235.0,
+     "n_buy": 42,
+     "n_sell": 20,
+     "open_shares": 678.3196
+    },
+    "4%止盈替换": {
+     "label": "4%止盈替换",
+     "total_invested": 5000.0,
+     "total_sell": 0.0,
+     "final_assets": 5041.86,
+     "abs_profit": 41.86,
+     "return_pct": 0.84,
+     "pnl_drawdown": 1347.0,
+     "n_buy": 5,
+     "n_sell": 0,
+     "open_shares": 1727.2559
+    },
+    "V6+4%叠加": {
+     "label": "V6+4%叠加",
+     "total_invested": 57000.0,
+     "total_sell": 54977.43,
+     "final_assets": 56957.44,
+     "abs_profit": -42.56,
+     "return_pct": -0.07,
+     "pnl_drawdown": 1235.0,
+     "n_buy": 42,
+     "n_sell": 19,
+     "open_shares": 678.3196
+    },
+    "止损+4%止盈混合": {
+     "label": "止损+4%止盈混合",
+     "total_invested": 15000.0,
+     "total_sell": 10417.5,
+     "final_assets": 15327.5,
+     "abs_profit": 327.5,
+     "return_pct": 2.18,
+     "pnl_drawdown": 1363.0,
+     "n_buy": 11,
+     "n_sell": 2,
+     "open_shares": 1682.0845
+    }
+   }
+  },
+  "沪深300": {
+   "ts_code": "510300.SH",
+   "effective_start": "20211013",
+   "n_days": 1210,
+   "metrics": {
+    "V6基线(官方)": {
+     "label": "V6基线(官方)",
+     "total_invested": 65000.0,
+     "total_sell": 59996.8,
+     "final_assets": 64673.46,
+     "abs_profit": -326.54,
+     "return_pct": -0.5,
+     "pnl_drawdown": 1796.0,
+     "n_buy": 54,
+     "n_sell": 24,
+     "open_shares": 1066.5121
+    },
+    "V6复刻": {
+     "label": "V6复刻",
+     "total_invested": 65000.0,
+     "total_sell": 59996.8,
+     "final_assets": 64673.46,
+     "abs_profit": -326.54,
+     "return_pct": -0.5,
+     "pnl_drawdown": 1796.0,
+     "n_buy": 54,
+     "n_sell": 24,
+     "open_shares": 1066.5121
+    },
+    "4%止盈替换": {
+     "label": "4%止盈替换",
+     "total_invested": 10000.0,
+     "total_sell": 5616.96,
+     "final_assets": 10293.62,
+     "abs_profit": 293.62,
+     "return_pct": 2.94,
+     "pnl_drawdown": 1471.0,
+     "n_buy": 9,
+     "n_sell": 1,
+     "open_shares": 1066.5122
+    },
+    "V6+4%叠加": {
+     "label": "V6+4%叠加",
+     "total_invested": 65000.0,
+     "total_sell": 60036.27,
+     "final_assets": 64712.93,
+     "abs_profit": -287.07,
+     "return_pct": -0.44,
+     "pnl_drawdown": 1796.0,
+     "n_buy": 54,
+     "n_sell": 23,
+     "open_shares": 1066.5121
+    },
+    "止损+4%止盈混合": {
+     "label": "止损+4%止盈混合",
+     "total_invested": 51000.0,
+     "total_sell": 48728.74,
+     "final_assets": 49718.14,
+     "abs_profit": -1281.86,
+     "return_pct": -2.51,
+     "pnl_drawdown": 2014.0,
+     "n_buy": 39,
+     "n_sell": 10,
+     "open_shares": 225.6319
+    }
+   }
+  },
+  "NASDAQ100": {
+   "ts_code": "159941.SZ",
+   "effective_start": "20211013",
+   "n_days": 1210,
+   "metrics": {
+    "V6基线(官方)": {
+     "label": "V6基线(官方)",
+     "total_invested": 60000.0,
+     "total_sell": 57248.62,
+     "final_assets": 60846.74,
+     "abs_profit": 846.74,
+     "return_pct": 1.41,
+     "pnl_drawdown": 1112.0,
+     "n_buy": 44,
+     "n_sell": 27,
+     "open_shares": 2033.9852
+    },
+    "V6复刻": {
+     "label": "V6复刻",
+     "total_invested": 60000.0,
+     "total_sell": 57248.62,
+     "final_assets": 60846.74,
+     "abs_profit": 846.74,
+     "return_pct": 1.41,
+     "pnl_drawdown": 1112.0,
+     "n_buy": 44,
+     "n_sell": 27,
+     "open_shares": 2033.9852
+    },
+    "4%止盈替换": {
+     "label": "4%止盈替换",
+     "total_invested": 30000.0,
+     "total_sell": 29133.6,
+     "final_assets": 34530.78,
+     "abs_profit": 4530.78,
+     "return_pct": 15.1,
+     "pnl_drawdown": 1596.0,
+     "n_buy": 22,
+     "n_sell": 5,
+     "open_shares": 3050.9772
+    },
+    "V6+4%叠加": {
+     "label": "V6+4%叠加",
+     "total_invested": 60000.0,
+     "total_sell": 57516.76,
+     "final_assets": 61114.88,
+     "abs_profit": 1114.88,
+     "return_pct": 1.86,
+     "pnl_drawdown": 1112.0,
+     "n_buy": 44,
+     "n_sell": 26,
+     "open_shares": 2033.9851
+    },
+    "止损+4%止盈混合": {
+     "label": "止损+4%止盈混合",
+     "total_invested": 60000.0,
+     "total_sell": 60046.24,
+     "final_assets": 65443.42,
+     "abs_profit": 5443.42,
+     "return_pct": 9.07,
+     "pnl_drawdown": 1405.0,
+     "n_buy": 42,
+     "n_sell": 11,
+     "open_shares": 3050.9771
+    }
+   }
+  },
+  "中证2000": {
+   "ts_code": "563300.SH",
+   "effective_start": "20240426",
+   "n_days": 593,
+   "metrics": {
+    "V6基线(官方)": {
+     "label": "V6基线(官方)",
+     "total_invested": 20000.0,
+     "total_sell": 21024.88,
+     "final_assets": 21024.88,
+     "abs_profit": 1024.88,
+     "return_pct": 5.12,
+     "pnl_drawdown": 351.0,
+     "n_buy": 15,
+     "n_sell": 10,
+     "open_shares": -0.0002
+    },
+    "V6复刻": {
+     "label": "V6复刻",
+     "total_invested": 20000.0,
+     "total_sell": 21024.88,
+     "final_assets": 21024.88,
+     "abs_profit": 1024.88,
+     "return_pct": 5.12,
+     "pnl_drawdown": 351.0,
+     "n_buy": 15,
+     "n_sell": 10,
+     "open_shares": -0.0002
+    },
+    "4%止盈替换": {
+     "label": "4%止盈替换",
+     "total_invested": 15000.0,
+     "total_sell": 11435.29,
+     "final_assets": 16246.49,
+     "abs_profit": 1246.49,
+     "return_pct": 8.31,
+     "pnl_drawdown": 1471.0,
+     "n_buy": 11,
+     "n_sell": 2,
+     "open_shares": 3429.2244
+    },
+    "V6+4%叠加": {
+     "label": "V6+4%叠加",
+     "total_invested": 20000.0,
+     "total_sell": 21021.51,
+     "final_assets": 21021.51,
+     "abs_profit": 1021.51,
+     "return_pct": 5.11,
+     "pnl_drawdown": 351.0,
+     "n_buy": 15,
+     "n_sell": 9,
+     "open_shares": -0.0001
+    },
+    "止损+4%止盈混合": {
+     "label": "止损+4%止盈混合",
+     "total_invested": 20000.0,
+     "total_sell": 14766.38,
+     "final_assets": 19981.23,
+     "abs_profit": -18.77,
+     "return_pct": -0.09,
+     "pnl_drawdown": 1172.0,
+     "n_buy": 14,
+     "n_sell": 3,
+     "open_shares": 3716.9259
+    }
+   }
+  },
+  "通信": {
+   "ts_code": "515880.SH",
+   "effective_start": "20211013",
+   "n_days": 1210,
+   "metrics": {
+    "V6基线(官方)": {
+     "label": "V6基线(官方)",
+     "total_invested": 60000.0,
+     "total_sell": 64549.14,
+     "final_assets": 67607.05,
+     "abs_profit": 7607.05,
+     "return_pct": 12.68,
+     "pnl_drawdown": 1554.0,
+     "n_buy": 45,
+     "n_sell": 29,
+     "open_shares": 5165.3854
+    },
+    "V6复刻": {
+     "label": "V6复刻",
+     "total_invested": 60000.0,
+     "total_sell": 64549.14,
+     "final_assets": 67607.05,
+     "abs_profit": 7607.05,
+     "return_pct": 12.68,
+     "pnl_drawdown": 1554.0,
+     "n_buy": 45,
+     "n_sell": 29,
+     "open_shares": 5165.3854
+    },
+    "4%止盈替换": {
+     "label": "4%止盈替换",
+     "total_invested": 25000.0,
+     "total_sell": 27131.88,
+     "final_assets": 31718.74,
+     "abs_profit": 6718.74,
+     "return_pct": 26.87,
+     "pnl_drawdown": 2002.0,
+     "n_buy": 19,
+     "n_sell": 4,
+     "open_shares": 7748.078
+    },
+    "V6+4%叠加": {
+     "label": "V6+4%叠加",
+     "total_invested": 60000.0,
+     "total_sell": 63558.87,
+     "final_assets": 66616.78,
+     "abs_profit": 6616.78,
+     "return_pct": 11.03,
+     "pnl_drawdown": 1554.0,
+     "n_buy": 45,
+     "n_sell": 22,
+     "open_shares": 5165.3855
+    },
+    "止损+4%止盈混合": {
+     "label": "止损+4%止盈混合",
+     "total_invested": 60000.0,
+     "total_sell": 64191.8,
+     "final_assets": 68778.66,
+     "abs_profit": 8778.66,
+     "return_pct": 14.63,
+     "pnl_drawdown": 1267.0,
+     "n_buy": 43,
+     "n_sell": 11,
+     "open_shares": 7748.0779
+    }
+   }
+  },
+  "创新药": {
+   "ts_code": "516080.SH",
+   "effective_start": "20211013",
+   "n_days": 1210,
+   "metrics": {
+    "V6基线(官方)": {
+     "label": "V6基线(官方)",
+     "total_invested": 70000.0,
+     "total_sell": 65589.32,
+     "final_assets": 70597.17,
+     "abs_profit": 597.17,
+     "return_pct": 0.85,
+     "pnl_drawdown": 2117.0,
+     "n_buy": 54,
+     "n_sell": 30,
+     "open_shares": 7408.0627
+    },
+    "V6复刻": {
+     "label": "V6复刻",
+     "total_invested": 70000.0,
+     "total_sell": 65589.32,
+     "final_assets": 70597.17,
+     "abs_profit": 597.17,
+     "return_pct": 0.85,
+     "pnl_drawdown": 2117.0,
+     "n_buy": 54,
+     "n_sell": 30,
+     "open_shares": 7408.0627
+    },
+    "4%止盈替换": {
+     "label": "4%止盈替换",
+     "total_invested": 5000.0,
+     "total_sell": 0.0,
+     "final_assets": 3787.67,
+     "abs_profit": -1212.33,
+     "return_pct": -24.25,
+     "pnl_drawdown": 2807.0,
+     "n_buy": 2,
+     "n_sell": 0,
+     "open_shares": 5603.0605
+    },
+    "V6+4%叠加": {
+     "label": "V6+4%叠加",
+     "total_invested": 70000.0,
+     "total_sell": 65705.06,
+     "final_assets": 70712.91,
+     "abs_profit": 712.91,
+     "return_pct": 1.02,
+     "pnl_drawdown": 2074.0,
+     "n_buy": 54,
+     "n_sell": 25,
+     "open_shares": 7408.0627
+    },
+    "止损+4%止盈混合": {
+     "label": "止损+4%止盈混合",
+     "total_invested": 65000.0,
+     "total_sell": 57932.62,
+     "final_assets": 62940.47,
+     "abs_profit": -2059.53,
+     "return_pct": -3.17,
+     "pnl_drawdown": 3572.0,
+     "n_buy": 41,
+     "n_sell": 12,
+     "open_shares": 7408.0628
+    }
+   }
+  },
+  "电力": {
+   "ts_code": "159611.SZ",
+   "effective_start": "20220812",
+   "n_days": 1005,
+   "metrics": {
+    "V6基线(官方)": {
+     "label": "V6基线(官方)",
+     "total_invested": 41000.0,
+     "total_sell": 36602.19,
+     "final_assets": 40982.53,
+     "abs_profit": -17.47,
+     "return_pct": -0.04,
+     "pnl_drawdown": 974.0,
+     "n_buy": 29,
+     "n_sell": 19,
+     "open_shares": 4163.8204
+    },
+    "V6复刻": {
+     "label": "V6复刻",
+     "total_invested": 41000.0,
+     "total_sell": 36602.19,
+     "final_assets": 40982.53,
+     "abs_profit": -17.47,
+     "return_pct": -0.04,
+     "pnl_drawdown": 974.0,
+     "n_buy": 29,
+     "n_sell": 19,
+     "open_shares": 4163.8204
+    },
+    "4%止盈替换": {
+     "label": "4%止盈替换",
+     "total_invested": 15000.0,
+     "total_sell": 11518.62,
+     "final_assets": 16561.54,
+     "abs_profit": 1561.54,
+     "return_pct": 10.41,
+     "pnl_drawdown": 804.0,
+     "n_buy": 12,
+     "n_sell": 2,
+     "open_shares": 4793.6488
+    },
+    "V6+4%叠加": {
+     "label": "V6+4%叠加",
+     "total_invested": 41000.0,
+     "total_sell": 36717.59,
+     "final_assets": 41097.93,
+     "abs_profit": 97.93,
+     "return_pct": 0.24,
+     "pnl_drawdown": 974.0,
+     "n_buy": 29,
+     "n_sell": 18,
+     "open_shares": 4163.8203
+    },
+    "止损+4%止盈混合": {
+     "label": "止损+4%止盈混合",
+     "total_invested": 30000.0,
+     "total_sell": 25713.38,
+     "final_assets": 30756.3,
+     "abs_profit": 756.3,
+     "return_pct": 2.52,
+     "pnl_drawdown": 901.0,
+     "n_buy": 20,
+     "n_sell": 5,
+     "open_shares": 4793.649
+    }
+   }
+  },
+  "科创半导体": {
+   "ts_code": "588170.SH",
+   "effective_start": "20251107",
+   "n_days": 222,
+   "metrics": {
+    "V6基线(官方)": {
+     "label": "V6基线(官方)",
+     "total_invested": 15000.0,
+     "total_sell": 13176.2,
+     "final_assets": 17530.31,
+     "abs_profit": 2530.31,
+     "return_pct": 16.87,
+     "pnl_drawdown": 1938.0,
+     "n_buy": 9,
+     "n_sell": 6,
+     "open_shares": 5027.843
+    },
+    "V6复刻": {
+     "label": "V6复刻",
+     "total_invested": 15000.0,
+     "total_sell": 13176.2,
+     "final_assets": 17530.31,
+     "abs_profit": 2530.31,
+     "return_pct": 16.87,
+     "pnl_drawdown": 1938.0,
+     "n_buy": 9,
+     "n_sell": 6,
+     "open_shares": 5027.843
+    },
+    "4%止盈替换": {
+     "label": "4%止盈替换",
+     "total_invested": 15000.0,
+     "total_sell": 13973.82,
+     "final_assets": 18327.93,
+     "abs_profit": 3327.93,
+     "return_pct": 22.19,
+     "pnl_drawdown": 1210.0,
+     "n_buy": 9,
+     "n_sell": 2,
+     "open_shares": 5027.8431
+    },
+    "V6+4%叠加": {
+     "label": "V6+4%叠加",
+     "total_invested": 15000.0,
+     "total_sell": 13316.12,
+     "final_assets": 17670.23,
+     "abs_profit": 2670.23,
+     "return_pct": 17.8,
+     "pnl_drawdown": 1197.0,
+     "n_buy": 9,
+     "n_sell": 4,
+     "open_shares": 5027.8431
+    },
+    "止损+4%止盈混合": {
+     "label": "止损+4%止盈混合",
+     "total_invested": 15000.0,
+     "total_sell": 13973.82,
+     "final_assets": 18327.93,
+     "abs_profit": 3327.93,
+     "return_pct": 22.19,
+     "pnl_drawdown": 1210.0,
+     "n_buy": 9,
+     "n_sell": 2,
+     "open_shares": 5027.8431
+    }
+   }
+  },
+  "有色金属": {
+   "ts_code": "512400.SH",
+   "effective_start": "20211013",
+   "n_days": 1210,
+   "metrics": {
+    "V6基线(官方)": {
+     "label": "V6基线(官方)",
+     "total_invested": 61000.0,
+     "total_sell": 60680.35,
+     "final_assets": 61693.3,
+     "abs_profit": 693.3,
+     "return_pct": 1.14,
+     "pnl_drawdown": 1822.0,
+     "n_buy": 48,
+     "n_sell": 29,
+     "open_shares": 616.9027
+    },
+    "V6复刻": {
+     "label": "V6复刻",
+     "total_invested": 61000.0,
+     "total_sell": 60680.35,
+     "final_assets": 61693.3,
+     "abs_profit": 693.3,
+     "return_pct": 1.14,
+     "pnl_drawdown": 1822.0,
+     "n_buy": 48,
+     "n_sell": 29,
+     "open_shares": 616.9027
+    },
+    "4%止盈替换": {
+     "label": "4%止盈替换",
+     "total_invested": 10000.0,
+     "total_sell": 6307.82,
+     "final_assets": 10574.87,
+     "abs_profit": 574.87,
+     "return_pct": 5.75,
+     "pnl_drawdown": 2413.0,
+     "n_buy": 9,
+     "n_sell": 1,
+     "open_shares": 2598.6924
+    },
+    "V6+4%叠加": {
+     "label": "V6+4%叠加",
+     "total_invested": 61000.0,
+     "total_sell": 60678.22,
+     "final_assets": 61691.17,
+     "abs_profit": 691.17,
+     "return_pct": 1.13,
+     "pnl_drawdown": 1705.0,
+     "n_buy": 48,
+     "n_sell": 26,
+     "open_shares": 616.9027
+    },
+    "止损+4%止盈混合": {
+     "label": "止损+4%止盈混合",
+     "total_invested": 45000.0,
+     "total_sell": 39880.35,
+     "final_assets": 44217.83,
+     "abs_profit": -782.17,
+     "return_pct": -1.74,
+     "pnl_drawdown": 2338.0,
+     "n_buy": 29,
+     "n_sell": 8,
+     "open_shares": 2641.5863
+    }
+   }
+  },
+  "人工智能": {
+   "ts_code": "159819.SZ",
+   "effective_start": "20211013",
+   "n_days": 1210,
+   "metrics": {
+    "V6基线(官方)": {
+     "label": "V6基线(官方)",
+     "total_invested": 60000.0,
+     "total_sell": 63861.32,
+     "final_assets": 63861.32,
+     "abs_profit": 3861.32,
+     "return_pct": 6.44,
+     "pnl_drawdown": 2195.0,
+     "n_buy": 49,
+     "n_sell": 30,
+     "open_shares": 0.0001
+    },
+    "V6复刻": {
+     "label": "V6复刻",
+     "total_invested": 60000.0,
+     "total_sell": 63861.32,
+     "final_assets": 63861.32,
+     "abs_profit": 3861.32,
+     "return_pct": 6.44,
+     "pnl_drawdown": 2195.0,
+     "n_buy": 49,
+     "n_sell": 30,
+     "open_shares": 0.0001
+    },
+    "4%止盈替换": {
+     "label": "4%止盈替换",
+     "total_invested": 25000.0,
+     "total_sell": 25519.21,
+     "final_assets": 29856.36,
+     "abs_profit": 4856.36,
+     "return_pct": 19.43,
+     "pnl_drawdown": 2502.0,
+     "n_buy": 18,
+     "n_sell": 4,
+     "open_shares": 2702.2721
+    },
+    "V6+4%叠加": {
+     "label": "V6+4%叠加",
+     "total_invested": 60000.0,
+     "total_sell": 64338.6,
+     "final_assets": 64338.6,
+     "abs_profit": 4338.6,
+     "return_pct": 7.23,
+     "pnl_drawdown": 1981.0,
+     "n_buy": 49,
+     "n_sell": 22,
+     "open_shares": -0.0001
+    },
+    "止损+4%止盈混合": {
+     "label": "止损+4%止盈混合",
+     "total_invested": 70000.0,
+     "total_sell": 70503.4,
+     "final_assets": 75057.88,
+     "abs_profit": 5057.88,
+     "return_pct": 7.23,
+     "pnl_drawdown": 2043.0,
+     "n_buy": 46,
+     "n_sell": 13,
+     "open_shares": 2837.6838
+    }
+   }
+  },
+  "创业板新能源": {
+   "ts_code": "159387.SZ",
+   "effective_start": "20260109",
+   "n_days": 179,
+   "metrics": {
+    "V6基线(官方)": {
+     "label": "V6基线(官方)",
+     "total_invested": 10000.0,
+     "total_sell": 4542.49,
+     "final_assets": 9260.29,
+     "abs_profit": -739.71,
+     "return_pct": -7.4,
+     "pnl_drawdown": 993.0,
+     "n_buy": 6,
+     "n_sell": 1,
+     "open_shares": 7235.89
+    },
+    "V6复刻": {
+     "label": "V6复刻",
+     "total_invested": 10000.0,
+     "total_sell": 4542.49,
+     "final_assets": 9260.29,
+     "abs_profit": -739.71,
+     "return_pct": -7.4,
+     "pnl_drawdown": 993.0,
+     "n_buy": 6,
+     "n_sell": 1,
+     "open_shares": 7235.89
+    },
+    "4%止盈替换": {
+     "label": "4%止盈替换",
+     "total_invested": 5000.0,
+     "total_sell": 0.0,
+     "final_assets": 4368.29,
+     "abs_profit": -631.71,
+     "return_pct": -12.63,
+     "pnl_drawdown": 884.0,
+     "n_buy": 5,
+     "n_sell": 0,
+     "open_shares": 6699.8366
+    },
+    "V6+4%叠加": {
+     "label": "V6+4%叠加",
+     "total_invested": 10000.0,
+     "total_sell": 4542.49,
+     "final_assets": 9260.29,
+     "abs_profit": -739.71,
+     "return_pct": -7.4,
+     "pnl_drawdown": 993.0,
+     "n_buy": 6,
+     "n_sell": 1,
+     "open_shares": 7235.89
+    },
+    "止损+4%止盈混合": {
+     "label": "止损+4%止盈混合",
+     "total_invested": 10000.0,
+     "total_sell": 4542.49,
+     "final_assets": 9260.29,
+     "abs_profit": -739.71,
+     "return_pct": -7.4,
+     "pnl_drawdown": 993.0,
+     "n_buy": 6,
+     "n_sell": 1,
+     "open_shares": 7235.89
+    }
+   }
+  },
+  "机器人": {
+   "ts_code": "562500.SH",
+   "effective_start": "20220805",
+   "n_days": 1010,
+   "metrics": {
+    "V6基线(官方)": {
+     "label": "V6基线(官方)",
+     "total_invested": 55000.0,
+     "total_sell": 53859.26,
+     "final_assets": 58278.91,
+     "abs_profit": 3278.91,
+     "return_pct": 5.96,
+     "pnl_drawdown": 1719.0,
+     "n_buy": 37,
+     "n_sell": 28,
+     "open_shares": 5121.2659
+    },
+    "V6复刻": {
+     "label": "V6复刻",
+     "total_invested": 55000.0,
+     "total_sell": 53859.26,
+     "final_assets": 58278.91,
+     "abs_profit": 3278.91,
+     "return_pct": 5.96,
+     "pnl_drawdown": 1719.0,
+     "n_buy": 37,
+     "n_sell": 28,
+     "open_shares": 5121.2659
+    },
+    "4%止盈替换": {
+     "label": "4%止盈替换",
+     "total_invested": 30000.0,
+     "total_sell": 29112.04,
+     "final_assets": 33531.69,
+     "abs_profit": 3531.69,
+     "return_pct": 11.77,
+     "pnl_drawdown": 2116.0,
+     "n_buy": 24,
+     "n_sell": 5,
+     "open_shares": 5121.2664
+    },
+    "V6+4%叠加": {
+     "label": "V6+4%叠加",
+     "total_invested": 55000.0,
+     "total_sell": 54153.21,
+     "final_assets": 58572.86,
+     "abs_profit": 3572.86,
+     "return_pct": 6.5,
+     "pnl_drawdown": 1719.0,
+     "n_buy": 37,
+     "n_sell": 22,
+     "open_shares": 5121.2661
+    },
+    "止损+4%止盈混合": {
+     "label": "止损+4%止盈混合",
+     "total_invested": 46000.0,
+     "total_sell": 48167.56,
+     "final_assets": 49129.66,
+     "abs_profit": 3129.66,
+     "return_pct": 6.8,
+     "pnl_drawdown": 2279.0,
+     "n_buy": 31,
+     "n_sell": 9,
+     "open_shares": 1114.8273
+    }
+   }
+  }
+ }
+}

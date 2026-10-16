@@ -1,0 +1,1781 @@
+{
+ "params": {
+  "start": "20211012",
+  "budget": 20000.0,
+  "deploy_weeks": 104,
+  "drop": 4.0,
+  "detach": 15.0,
+  "exit_drop": 4.0,
+  "n_parts": 10,
+  "commission": 0.0,
+  "refresh": false,
+  "no_ablation": false,
+  "no_report": false
+ },
+ "ablation": [
+  {
+   "name": "红利低波",
+   "基准 drop4/detach15/exit4": 1.76,
+   "严格版：涨回成本即停投": 1.76,
+   "drop=3": 2.05,
+   "drop=5": 1.78,
+   "detach=10": 2.84,
+   "detach=20": 2.34,
+   "exit_drop=3": 2.06,
+   "exit_drop=5": 1.75,
+   "n_parts=5": 3.41,
+   "n_parts=20": 0.9
+  },
+  {
+   "name": "上证50",
+   "基准 drop4/detach15/exit4": 3.07,
+   "严格版：涨回成本即停投": -0.06,
+   "drop=3": 3.04,
+   "drop=5": 2.29,
+   "detach=10": 3.07,
+   "detach=20": 3.07,
+   "exit_drop=3": 2.48,
+   "exit_drop=5": 2.98,
+   "n_parts=5": 1.29,
+   "n_parts=20": 1.58
+  },
+  {
+   "name": "沪深300",
+   "基准 drop4/detach15/exit4": 3.7,
+   "严格版：涨回成本即停投": -0.04,
+   "drop=3": 3.55,
+   "drop=5": 2.84,
+   "detach=10": 3.7,
+   "detach=20": 3.7,
+   "exit_drop=3": 3.24,
+   "exit_drop=5": 3.7,
+   "n_parts=5": 3.1,
+   "n_parts=20": 1.91
+  },
+  {
+   "name": "NASDAQ100",
+   "基准 drop4/detach15/exit4": 8.61,
+   "严格版：涨回成本即停投": 2.18,
+   "drop=3": 10.88,
+   "drop=5": 7.26,
+   "detach=10": 8.61,
+   "detach=20": 7.23,
+   "exit_drop=3": 9.25,
+   "exit_drop=5": 8.4,
+   "n_parts=5": 14.1,
+   "n_parts=20": 4.66
+  },
+  {
+   "name": "中证2000",
+   "基准 drop4/detach15/exit4": 6.74,
+   "严格版：涨回成本即停投": 1.24,
+   "drop=3": 8.72,
+   "drop=5": 6.24,
+   "detach=10": 7.5,
+   "detach=20": 6.42,
+   "exit_drop=3": 6.82,
+   "exit_drop=5": 8.1,
+   "n_parts=5": 10.6,
+   "n_parts=20": 3.49
+  },
+  {
+   "name": "通信",
+   "基准 drop4/detach15/exit4": 16.62,
+   "严格版：涨回成本即停投": 3.65,
+   "drop=3": 18.22,
+   "drop=5": 14.28,
+   "detach=10": 16.79,
+   "detach=20": 16.68,
+   "exit_drop=3": 17.48,
+   "exit_drop=5": 15.6,
+   "n_parts=5": 21.81,
+   "n_parts=20": 9.56
+  },
+  {
+   "name": "创新药",
+   "基准 drop4/detach15/exit4": -1.79,
+   "严格版：涨回成本即停投": -0.57,
+   "drop=3": -2.42,
+   "drop=5": -0.63,
+   "detach=10": -1.79,
+   "detach=20": -1.79,
+   "exit_drop=3": -1.79,
+   "exit_drop=5": -1.79,
+   "n_parts=5": -4.59,
+   "n_parts=20": 2.15
+  },
+  {
+   "name": "电力",
+   "基准 drop4/detach15/exit4": 2.42,
+   "严格版：涨回成本即停投": 0.28,
+   "drop=3": 3.54,
+   "drop=5": 2.66,
+   "detach=10": 1.65,
+   "detach=20": 2.06,
+   "exit_drop=3": 2.54,
+   "exit_drop=5": 2.52,
+   "n_parts=5": 4.65,
+   "n_parts=20": 1.24
+  },
+  {
+   "name": "科创半导体",
+   "基准 drop4/detach15/exit4": 27.91,
+   "严格版：涨回成本即停投": 10.88,
+   "drop=3": 31.81,
+   "drop=5": 25.67,
+   "detach=10": 27.74,
+   "detach=20": 27.91,
+   "exit_drop=3": 23.77,
+   "exit_drop=5": 27.16,
+   "n_parts=5": 52.55,
+   "n_parts=20": 14.39
+  },
+  {
+   "name": "卫星ETF富国",
+   "基准 drop4/detach15/exit4": -19.31,
+   "严格版：涨回成本即停投": -5.73,
+   "drop=3": -25.29,
+   "drop=5": -12.14,
+   "detach=10": -19.31,
+   "detach=20": -11.08,
+   "exit_drop=3": -19.31,
+   "exit_drop=5": -11.08,
+   "n_parts=5": -20.44,
+   "n_parts=20": -9.84
+  },
+  {
+   "name": "有色金属",
+   "基准 drop4/detach15/exit4": 3.7,
+   "严格版：涨回成本即停投": 1.0,
+   "drop=3": 5.72,
+   "drop=5": 4.44,
+   "detach=10": 5.71,
+   "detach=20": 6.73,
+   "exit_drop=3": 4.16,
+   "exit_drop=5": 6.73,
+   "n_parts=5": 4.35,
+   "n_parts=20": 2.86
+  },
+  {
+   "name": "人工智能",
+   "基准 drop4/detach15/exit4": 12.93,
+   "严格版：涨回成本即停投": 2.2,
+   "drop=3": 14.59,
+   "drop=5": 11.12,
+   "detach=10": 13.62,
+   "detach=20": 12.53,
+   "exit_drop=3": 13.55,
+   "exit_drop=5": 12.39,
+   "n_parts=5": 16.28,
+   "n_parts=20": 6.9
+  },
+  {
+   "name": "创业板新能源",
+   "基准 drop4/detach15/exit4": -3.58,
+   "严格版：涨回成本即停投": -0.84,
+   "drop=3": -6.77,
+   "drop=5": -1.52,
+   "detach=10": -1.4,
+   "detach=20": -3.58,
+   "exit_drop=3": -1.43,
+   "exit_drop=5": 0.77,
+   "n_parts=5": -6.18,
+   "n_parts=20": -1.78
+  },
+  {
+   "name": "机器人",
+   "基准 drop4/detach15/exit4": 4.85,
+   "严格版：涨回成本即停投": -0.66,
+   "drop=3": 1.91,
+   "drop=5": 4.39,
+   "detach=10": 5.77,
+   "detach=20": 6.13,
+   "exit_drop=3": 4.85,
+   "exit_drop=5": 5.16,
+   "n_parts=5": 2.57,
+   "n_parts=20": 3.78
+  }
+ ],
+ "results": {
+  "红利低波": {
+   "meta": {
+    "ts_code": "512890.SH",
+    "sim_start": "20211012",
+    "sim_end": "20261009",
+    "n_days": 1210,
+    "years": 4.99
+   },
+   "4%定投法": {
+    "strategy": "4%定投法",
+    "final_assets": 21823.59,
+    "abs_profit": 1823.59,
+    "total_profit_pct": 9.12,
+    "xirr_pct": 1.76,
+    "mdd_pct": 3.04,
+    "n_trades": 7,
+    "n_rounds": 2,
+    "realized": 9565.65,
+    "open_cost": 2000.0,
+    "open_value": 2257.94,
+    "open_shares": 1869.1589,
+    "open_avg_cost": 1.07,
+    "years": 4.99,
+    "rounds_detail": [
+     {
+      "start": "20211012",
+      "end": "20230512",
+      "invested": 4000.0,
+      "proceeds": 4930.37,
+      "return_pct": 23.26,
+      "days": 385
+     },
+     {
+      "start": "20230515",
+      "end": "20250109",
+      "invested": 4000.0,
+      "proceeds": 4635.28,
+      "return_pct": 15.88,
+      "days": 405
+     }
+    ]
+   },
+   "4%定投法_rounds": [
+    {
+     "start": "20211012",
+     "end": "20230512",
+     "invested": 4000.0,
+     "proceeds": 4930.37,
+     "return_pct": 23.26,
+     "days": 385
+    },
+    {
+     "start": "20230515",
+     "end": "20250109",
+     "invested": 4000.0,
+     "proceeds": 4635.28,
+     "return_pct": 15.88,
+     "days": 405
+    }
+   ],
+   "每周定投": {
+    "strategy": "每周定投",
+    "final_assets": 28292.75,
+    "abs_profit": 8292.75,
+    "total_profit_pct": 41.46,
+    "xirr_pct": 7.19,
+    "mdd_pct": 14.16,
+    "n_trades": 104,
+    "n_rounds": 0,
+    "realized": 0.0,
+    "open_cost": 20000.0,
+    "open_value": 28292.75,
+    "open_shares": 23421.1529,
+    "open_avg_cost": null,
+    "years": 4.99,
+    "rounds_detail": []
+   },
+   "每周定投_rounds": [],
+   "一次性买入": {
+    "strategy": "一次性买入",
+    "final_assets": 30015.9,
+    "abs_profit": 10015.9,
+    "total_profit_pct": 50.08,
+    "xirr_pct": 8.47,
+    "mdd_pct": 14.16,
+    "n_trades": 1,
+    "n_rounds": 0,
+    "realized": 0.0,
+    "open_cost": 20000.0,
+    "open_value": 30015.9,
+    "open_shares": 24847.6017,
+    "open_avg_cost": null,
+    "years": 4.99,
+    "rounds_detail": []
+   },
+   "一次性买入_rounds": []
+  },
+  "上证50": {
+   "meta": {
+    "ts_code": "510050.SH",
+    "sim_start": "20211012",
+    "sim_end": "20261009",
+    "n_days": 1211,
+    "years": 4.99
+   },
+   "4%定投法": {
+    "strategy": "4%定投法",
+    "final_assets": 23257.12,
+    "abs_profit": 3257.12,
+    "total_profit_pct": 16.29,
+    "xirr_pct": 3.07,
+    "mdd_pct": 16.43,
+    "n_trades": 11,
+    "n_rounds": 1,
+    "realized": 19404.45,
+    "open_cost": 4000.0,
+    "open_value": 3852.68,
+    "open_shares": 1319.8618,
+    "open_avg_cost": 3.0306,
+    "years": 4.99,
+    "rounds_detail": [
+     {
+      "start": "20211012",
+      "end": "20260202",
+      "invested": 16000.0,
+      "proceeds": 19404.45,
+      "return_pct": 21.28,
+      "days": 1049
+     }
+    ]
+   },
+   "4%定投法_rounds": [
+    {
+     "start": "20211012",
+     "end": "20260202",
+     "invested": 16000.0,
+     "proceeds": 19404.45,
+     "return_pct": 21.28,
+     "days": 1049
+    }
+   ],
+   "每周定投": {
+    "strategy": "每周定投",
+    "final_assets": 22548.02,
+    "abs_profit": 2548.02,
+    "total_profit_pct": 12.74,
+    "xirr_pct": 2.43,
+    "mdd_pct": 18.15,
+    "n_trades": 104,
+    "n_rounds": 0,
+    "realized": 0.0,
+    "open_cost": 20000.0,
+    "open_value": 22548.02,
+    "open_shares": 7724.5709,
+    "open_avg_cost": null,
+    "years": 4.99,
+    "rounds_detail": []
+   },
+   "每周定投_rounds": [],
+   "一次性买入": {
+    "strategy": "一次性买入",
+    "final_assets": 19372.98,
+    "abs_profit": -627.02,
+    "total_profit_pct": -3.14,
+    "xirr_pct": -0.64,
+    "mdd_pct": 31.37,
+    "n_trades": 1,
+    "n_rounds": 0,
+    "realized": 0.0,
+    "open_cost": 20000.0,
+    "open_value": 19372.98,
+    "open_shares": 6636.8555,
+    "open_avg_cost": null,
+    "years": 4.99,
+    "rounds_detail": []
+   },
+   "一次性买入_rounds": []
+  },
+  "沪深300": {
+   "meta": {
+    "ts_code": "510300.SH",
+    "sim_start": "20211012",
+    "sim_end": "20261009",
+    "n_days": 1211,
+    "years": 4.99
+   },
+   "4%定投法": {
+    "strategy": "4%定投法",
+    "final_assets": 23974.9,
+    "abs_profit": 3974.9,
+    "total_profit_pct": 19.87,
+    "xirr_pct": 3.7,
+    "mdd_pct": 17.66,
+    "n_trades": 11,
+    "n_rounds": 1,
+    "realized": 22000.36,
+    "open_cost": 2000.0,
+    "open_value": 1974.53,
+    "open_shares": 450.2927,
+    "open_avg_cost": 4.4416,
+    "years": 4.99,
+    "rounds_detail": [
+     {
+      "start": "20211012",
+      "end": "20251121",
+      "invested": 18000.0,
+      "proceeds": 22000.36,
+      "return_pct": 22.22,
+      "days": 1000
+     }
+    ]
+   },
+   "4%定投法_rounds": [
+    {
+     "start": "20211012",
+     "end": "20251121",
+     "invested": 18000.0,
+     "proceeds": 22000.36,
+     "return_pct": 22.22,
+     "days": 1000
+    }
+   ],
+   "每周定投": {
+    "strategy": "每周定投",
+    "final_assets": 22924.16,
+    "abs_profit": 2924.16,
+    "total_profit_pct": 14.62,
+    "xirr_pct": 2.77,
+    "mdd_pct": 20.84,
+    "n_trades": 104,
+    "n_rounds": 0,
+    "realized": 0.0,
+    "open_cost": 20000.0,
+    "open_value": 22924.16,
+    "open_shares": 5227.8582,
+    "open_avg_cost": null,
+    "years": 4.99,
+    "rounds_detail": []
+   },
+   "每周定投_rounds": [],
+   "一次性买入": {
+    "strategy": "一次性买入",
+    "final_assets": 19572.39,
+    "abs_profit": -427.61,
+    "total_profit_pct": -2.14,
+    "xirr_pct": -0.43,
+    "mdd_pct": 34.88,
+    "n_trades": 1,
+    "n_rounds": 0,
+    "realized": 0.0,
+    "open_cost": 20000.0,
+    "open_value": 19572.39,
+    "open_shares": 4463.4869,
+    "open_avg_cost": null,
+    "years": 4.99,
+    "rounds_detail": []
+   },
+   "一次性买入_rounds": []
+  },
+  "NASDAQ100": {
+   "meta": {
+    "ts_code": "159941.SZ",
+    "sim_start": "20211012",
+    "sim_end": "20261009",
+    "n_days": 1211,
+    "years": 4.99
+   },
+   "4%定投法": {
+    "strategy": "4%定投法",
+    "final_assets": 30206.82,
+    "abs_profit": 10206.82,
+    "total_profit_pct": 51.03,
+    "xirr_pct": 8.61,
+    "mdd_pct": 8.72,
+    "n_trades": 28,
+    "n_rounds": 6,
+    "realized": 49795.88,
+    "open_cost": 4000.0,
+    "open_value": 4410.94,
+    "open_shares": 2493.4663,
+    "open_avg_cost": 1.6042,
+    "years": 4.99,
+    "rounds_detail": [
+     {
+      "start": "20211012",
+      "end": "20230810",
+      "invested": 10000.0,
+      "proceeds": 12839.52,
+      "return_pct": 28.4,
+      "days": 448
+     },
+     {
+      "start": "20230811",
+      "end": "20240419",
+      "invested": 4000.0,
+      "proceeds": 4678.83,
+      "return_pct": 16.97,
+      "days": 166
+     },
+     {
+      "start": "20240422",
+      "end": "20240719",
+      "invested": 2000.0,
+      "proceeds": 2334.04,
+      "return_pct": 16.7,
+      "days": 61
+     },
+     {
+      "start": "20240722",
+      "end": "20241220",
+      "invested": 6000.0,
+      "proceeds": 7011.04,
+      "return_pct": 16.85,
+      "days": 103
+     },
+     {
+      "start": "20241223",
+      "end": "20251118",
+      "invested": 12000.0,
+      "proceeds": 15286.62,
+      "return_pct": 27.39,
+      "days": 219
+     },
+     {
+      "start": "20251119",
+      "end": "20260604",
+      "invested": 6000.0,
+      "proceeds": 7645.83,
+      "return_pct": 27.43,
+      "days": 130
+     }
+    ]
+   },
+   "4%定投法_rounds": [
+    {
+     "start": "20211012",
+     "end": "20230810",
+     "invested": 10000.0,
+     "proceeds": 12839.52,
+     "return_pct": 28.4,
+     "days": 448
+    },
+    {
+     "start": "20230811",
+     "end": "20240419",
+     "invested": 4000.0,
+     "proceeds": 4678.83,
+     "return_pct": 16.97,
+     "days": 166
+    },
+    {
+     "start": "20240422",
+     "end": "20240719",
+     "invested": 2000.0,
+     "proceeds": 2334.04,
+     "return_pct": 16.7,
+     "days": 61
+    },
+    {
+     "start": "20240722",
+     "end": "20241220",
+     "invested": 6000.0,
+     "proceeds": 7011.04,
+     "return_pct": 16.85,
+     "days": 103
+    },
+    {
+     "start": "20241223",
+     "end": "20251118",
+     "invested": 12000.0,
+     "proceeds": 15286.62,
+     "return_pct": 27.39,
+     "days": 219
+    },
+    {
+     "start": "20251119",
+     "end": "20260604",
+     "invested": 6000.0,
+     "proceeds": 7645.83,
+     "return_pct": 27.43,
+     "days": 130
+    }
+   ],
+   "每周定投": {
+    "strategy": "每周定投",
+    "final_assets": 50277.9,
+    "abs_profit": 30277.9,
+    "total_profit_pct": 151.39,
+    "xirr_pct": 20.27,
+    "mdd_pct": 24.73,
+    "n_trades": 104,
+    "n_rounds": 0,
+    "realized": 0.0,
+    "open_cost": 20000.0,
+    "open_value": 50277.9,
+    "open_shares": 28421.6522,
+    "open_avg_cost": null,
+    "years": 4.99,
+    "rounds_detail": []
+   },
+   "每周定投_rounds": [],
+   "一次性买入": {
+    "strategy": "一次性买入",
+    "final_assets": 48250.94,
+    "abs_profit": 28250.94,
+    "total_profit_pct": 141.25,
+    "xirr_pct": 19.28,
+    "mdd_pct": 29.4,
+    "n_trades": 1,
+    "n_rounds": 0,
+    "realized": 0.0,
+    "open_cost": 20000.0,
+    "open_value": 48250.94,
+    "open_shares": 27275.8268,
+    "open_avg_cost": null,
+    "years": 4.99,
+    "rounds_detail": []
+   },
+   "一次性买入_rounds": []
+  },
+  "中证2000": {
+   "meta": {
+    "ts_code": "563300.SH",
+    "sim_start": "20230914",
+    "sim_end": "20261009",
+    "n_days": 739,
+    "years": 3.07
+   },
+   "4%定投法": {
+    "strategy": "4%定投法",
+    "final_assets": 24439.42,
+    "abs_profit": 4439.42,
+    "total_profit_pct": 22.2,
+    "xirr_pct": 6.74,
+    "mdd_pct": 16.67,
+    "n_trades": 17,
+    "n_rounds": 3,
+    "realized": 24298.92,
+    "open_cost": 8000.0,
+    "open_value": 8140.5,
+    "open_shares": 5802.2109,
+    "open_avg_cost": 1.3788,
+    "years": 3.07,
+    "rounds_detail": [
+     {
+      "start": "20230914",
+      "end": "20241101",
+      "invested": 14000.0,
+      "proceeds": 16813.75,
+      "return_pct": 20.1,
+      "days": 271
+     },
+     {
+      "start": "20241104",
+      "end": "20250903",
+      "invested": 4000.0,
+      "proceeds": 5173.81,
+      "return_pct": 29.35,
+      "days": 206
+     },
+     {
+      "start": "20250904",
+      "end": "20260202",
+      "invested": 2000.0,
+      "proceeds": 2311.36,
+      "return_pct": 15.57,
+      "days": 100
+     }
+    ]
+   },
+   "4%定投法_rounds": [
+    {
+     "start": "20230914",
+     "end": "20241101",
+     "invested": 14000.0,
+     "proceeds": 16813.75,
+     "return_pct": 20.1,
+     "days": 271
+    },
+    {
+     "start": "20241104",
+     "end": "20250903",
+     "invested": 4000.0,
+     "proceeds": 5173.81,
+     "return_pct": 29.35,
+     "days": 206
+    },
+    {
+     "start": "20250904",
+     "end": "20260202",
+     "invested": 2000.0,
+     "proceeds": 2311.36,
+     "return_pct": 15.57,
+     "days": 100
+    }
+   ],
+   "每周定投": {
+    "strategy": "每周定投",
+    "final_assets": 28948.36,
+    "abs_profit": 8948.36,
+    "total_profit_pct": 44.74,
+    "xirr_pct": 12.79,
+    "mdd_pct": 25.78,
+    "n_trades": 104,
+    "n_rounds": 0,
+    "realized": 0.0,
+    "open_cost": 20000.0,
+    "open_value": 28948.36,
+    "open_shares": 20633.1885,
+    "open_avg_cost": null,
+    "years": 3.07,
+    "rounds_detail": []
+   },
+   "每周定投_rounds": [],
+   "一次性买入": {
+    "strategy": "一次性买入",
+    "final_assets": 28458.42,
+    "abs_profit": 8458.42,
+    "total_profit_pct": 42.29,
+    "xirr_pct": 12.17,
+    "mdd_pct": 32.76,
+    "n_trades": 1,
+    "n_rounds": 0,
+    "realized": 0.0,
+    "open_cost": 20000.0,
+    "open_value": 28458.42,
+    "open_shares": 20283.9757,
+    "open_avg_cost": null,
+    "years": 3.07,
+    "rounds_detail": []
+   },
+   "一次性买入_rounds": []
+  },
+  "通信": {
+   "meta": {
+    "ts_code": "515880.SH",
+    "sim_start": "20211012",
+    "sim_end": "20261009",
+    "n_days": 1211,
+    "years": 4.99
+   },
+   "4%定投法": {
+    "strategy": "4%定投法",
+    "final_assets": 43099.92,
+    "abs_profit": 23099.92,
+    "total_profit_pct": 115.5,
+    "xirr_pct": 16.62,
+    "mdd_pct": 15.01,
+    "n_trades": 43,
+    "n_rounds": 7,
+    "realized": 79193.41,
+    "open_cost": 18000.0,
+    "open_value": 15906.51,
+    "open_shares": 26869.1116,
+    "open_avg_cost": 0.6699,
+    "years": 4.99,
+    "rounds_detail": [
+     {
+      "start": "20211012",
+      "end": "20230330",
+      "invested": 12000.0,
+      "proceeds": 14511.3,
+      "return_pct": 20.93,
+      "days": 359
+     },
+     {
+      "start": "20230331",
+      "end": "20230621",
+      "invested": 4000.0,
+      "proceeds": 5070.38,
+      "return_pct": 26.76,
+      "days": 55
+     },
+     {
+      "start": "20230626",
+      "end": "20241009",
+      "invested": 16000.0,
+      "proceeds": 20790.65,
+      "return_pct": 29.94,
+      "days": 312
+     },
+     {
+      "start": "20241010",
+      "end": "20250902",
+      "invested": 12000.0,
+      "proceeds": 26452.0,
+      "return_pct": 120.43,
+      "days": 222
+     },
+     {
+      "start": "20250903",
+      "end": "20251215",
+      "invested": 6000.0,
+      "proceeds": 7162.14,
+      "return_pct": 19.37,
+      "days": 68
+     },
+     {
+      "start": "20251216",
+      "end": "20260424",
+      "invested": 2000.0,
+      "proceeds": 2843.84,
+      "return_pct": 42.19,
+      "days": 85
+     },
+     {
+      "start": "20260427",
+      "end": "20260608",
+      "invested": 2000.0,
+      "proceeds": 2363.1,
+      "return_pct": 18.15,
+      "days": 28
+     }
+    ]
+   },
+   "4%定投法_rounds": [
+    {
+     "start": "20211012",
+     "end": "20230330",
+     "invested": 12000.0,
+     "proceeds": 14511.3,
+     "return_pct": 20.93,
+     "days": 359
+    },
+    {
+     "start": "20230331",
+     "end": "20230621",
+     "invested": 4000.0,
+     "proceeds": 5070.38,
+     "return_pct": 26.76,
+     "days": 55
+    },
+    {
+     "start": "20230626",
+     "end": "20241009",
+     "invested": 16000.0,
+     "proceeds": 20790.65,
+     "return_pct": 29.94,
+     "days": 312
+    },
+    {
+     "start": "20241010",
+     "end": "20250902",
+     "invested": 12000.0,
+     "proceeds": 26452.0,
+     "return_pct": 120.43,
+     "days": 222
+    },
+    {
+     "start": "20250903",
+     "end": "20251215",
+     "invested": 6000.0,
+     "proceeds": 7162.14,
+     "return_pct": 19.37,
+     "days": 68
+    },
+    {
+     "start": "20251216",
+     "end": "20260424",
+     "invested": 2000.0,
+     "proceeds": 2843.84,
+     "return_pct": 42.19,
+     "days": 85
+    },
+    {
+     "start": "20260427",
+     "end": "20260608",
+     "invested": 2000.0,
+     "proceeds": 2363.1,
+     "return_pct": 18.15,
+     "days": 28
+    }
+   ],
+   "每周定投": {
+    "strategy": "每周定投",
+    "final_assets": 72757.13,
+    "abs_profit": 52757.13,
+    "total_profit_pct": 263.79,
+    "xirr_pct": 29.51,
+    "mdd_pct": 41.09,
+    "n_trades": 104,
+    "n_rounds": 0,
+    "realized": 0.0,
+    "open_cost": 20000.0,
+    "open_value": 72757.13,
+    "open_shares": 122900.5627,
+    "open_avg_cost": null,
+    "years": 4.99,
+    "rounds_detail": []
+   },
+   "每周定投_rounds": [],
+   "一次性买入": {
+    "strategy": "一次性买入",
+    "final_assets": 71736.05,
+    "abs_profit": 51736.05,
+    "total_profit_pct": 258.68,
+    "xirr_pct": 29.14,
+    "mdd_pct": 41.09,
+    "n_trades": 1,
+    "n_rounds": 0,
+    "realized": 0.0,
+    "open_cost": 20000.0,
+    "open_value": 71736.05,
+    "open_shares": 121175.7576,
+    "open_avg_cost": null,
+    "years": 4.99,
+    "rounds_detail": []
+   },
+   "一次性买入_rounds": []
+  },
+  "创新药": {
+   "meta": {
+    "ts_code": "516080.SH",
+    "sim_start": "20211012",
+    "sim_end": "20261009",
+    "n_days": 1211,
+    "years": 4.99
+   },
+   "4%定投法": {
+    "strategy": "4%定投法",
+    "final_assets": 18279.36,
+    "abs_profit": -1720.64,
+    "total_profit_pct": -8.6,
+    "xirr_pct": -1.79,
+    "mdd_pct": 41.05,
+    "n_trades": 10,
+    "n_rounds": 0,
+    "realized": 0,
+    "open_cost": 20000.0,
+    "open_value": 18279.36,
+    "open_shares": 27040.4721,
+    "open_avg_cost": 0.7396,
+    "years": 4.99,
+    "rounds_detail": []
+   },
+   "4%定投法_rounds": [],
+   "每周定投": {
+    "strategy": "每周定投",
+    "final_assets": 19238.15,
+    "abs_profit": -761.85,
+    "total_profit_pct": -3.81,
+    "xirr_pct": -0.77,
+    "mdd_pct": 37.14,
+    "n_trades": 104,
+    "n_rounds": 0,
+    "realized": 0.0,
+    "open_cost": 20000.0,
+    "open_value": 19238.15,
+    "open_shares": 28458.8072,
+    "open_avg_cost": null,
+    "years": 4.99,
+    "rounds_detail": []
+   },
+   "每周定投_rounds": [],
+   "一次性买入": {
+    "strategy": "一次性买入",
+    "final_assets": 14398.3,
+    "abs_profit": -5601.7,
+    "total_profit_pct": -28.01,
+    "xirr_pct": -6.37,
+    "mdd_pct": 52.68,
+    "n_trades": 1,
+    "n_rounds": 0,
+    "realized": 0.0,
+    "open_cost": 20000.0,
+    "open_value": 14398.3,
+    "open_shares": 21299.2545,
+    "open_avg_cost": null,
+    "years": 4.99,
+    "rounds_detail": []
+   },
+   "一次性买入_rounds": []
+  },
+  "电力": {
+   "meta": {
+    "ts_code": "159611.SZ",
+    "sim_start": "20220107",
+    "sim_end": "20261009",
+    "n_days": 1149,
+    "years": 4.76
+   },
+   "4%定投法": {
+    "strategy": "4%定投法",
+    "final_assets": 22412.22,
+    "abs_profit": 2412.22,
+    "total_profit_pct": 12.06,
+    "xirr_pct": 2.42,
+    "mdd_pct": 7.13,
+    "n_trades": 12,
+    "n_rounds": 2,
+    "realized": 16617.13,
+    "open_cost": 6000.0,
+    "open_value": 5795.08,
+    "open_shares": 5508.6341,
+    "open_avg_cost": 1.0892,
+    "years": 4.76,
+    "rounds_detail": [
+     {
+      "start": "20220107",
+      "end": "20240731",
+      "invested": 8000.0,
+      "proceeds": 9630.25,
+      "return_pct": 20.38,
+      "days": 621
+     },
+     {
+      "start": "20240801",
+      "end": "20260316",
+      "invested": 6000.0,
+      "proceeds": 6986.88,
+      "return_pct": 16.45,
+      "days": 390
+     }
+    ]
+   },
+   "4%定投法_rounds": [
+    {
+     "start": "20220107",
+     "end": "20240731",
+     "invested": 8000.0,
+     "proceeds": 9630.25,
+     "return_pct": 20.38,
+     "days": 621
+    },
+    {
+     "start": "20240801",
+     "end": "20260316",
+     "invested": 6000.0,
+     "proceeds": 6986.88,
+     "return_pct": 16.45,
+     "days": 390
+    }
+   ],
+   "每周定投": {
+    "strategy": "每周定投",
+    "final_assets": 23652.31,
+    "abs_profit": 3652.31,
+    "total_profit_pct": 18.26,
+    "xirr_pct": 3.59,
+    "mdd_pct": 19.97,
+    "n_trades": 104,
+    "n_rounds": 0,
+    "realized": 0.0,
+    "open_cost": 20000.0,
+    "open_value": 23652.31,
+    "open_shares": 22483.1799,
+    "open_avg_cost": null,
+    "years": 4.76,
+    "rounds_detail": []
+   },
+   "每周定投_rounds": [],
+   "一次性买入": {
+    "strategy": "一次性买入",
+    "final_assets": 22194.09,
+    "abs_profit": 2194.09,
+    "total_profit_pct": 10.97,
+    "xirr_pct": 2.21,
+    "mdd_pct": 19.97,
+    "n_trades": 1,
+    "n_rounds": 0,
+    "realized": 0.0,
+    "open_cost": 20000.0,
+    "open_value": 22194.09,
+    "open_shares": 21097.0464,
+    "open_avg_cost": null,
+    "years": 4.76,
+    "rounds_detail": []
+   },
+   "一次性买入_rounds": []
+  },
+  "科创半导体": {
+   "meta": {
+    "ts_code": "588170.SH",
+    "sim_start": "20250408",
+    "sim_end": "20261009",
+    "n_days": 365,
+    "years": 1.5
+   },
+   "4%定投法": {
+    "strategy": "4%定投法",
+    "final_assets": 28963.03,
+    "abs_profit": 8963.03,
+    "total_profit_pct": 44.82,
+    "xirr_pct": 27.91,
+    "mdd_pct": 9.94,
+    "n_trades": 23,
+    "n_rounds": 5,
+    "realized": 34507.86,
+    "open_cost": 12000.0,
+    "open_value": 10455.17,
+    "open_shares": 12072.9445,
+    "open_avg_cost": 0.994,
+    "years": 1.5,
+    "rounds_detail": [
+     {
+      "start": "20250408",
+      "end": "20250903",
+      "invested": 2000.0,
+      "proceeds": 2593.78,
+      "return_pct": 29.69,
+      "days": 103
+     },
+     {
+      "start": "20250904",
+      "end": "20251014",
+      "invested": 2000.0,
+      "proceeds": 2571.18,
+      "return_pct": 28.56,
+      "days": 23
+     },
+     {
+      "start": "20251015",
+      "end": "20260126",
+      "invested": 4000.0,
+      "proceeds": 5162.07,
+      "return_pct": 29.05,
+      "days": 72
+     },
+     {
+      "start": "20260127",
+      "end": "20260521",
+      "invested": 10000.0,
+      "proceeds": 15060.46,
+      "return_pct": 50.6,
+      "days": 73
+     },
+     {
+      "start": "20260522",
+      "end": "20260702",
+      "invested": 6000.0,
+      "proceeds": 9120.37,
+      "return_pct": 52.01,
+      "days": 29
+     }
+    ]
+   },
+   "4%定投法_rounds": [
+    {
+     "start": "20250408",
+     "end": "20250903",
+     "invested": 2000.0,
+     "proceeds": 2593.78,
+     "return_pct": 29.69,
+     "days": 103
+    },
+    {
+     "start": "20250904",
+     "end": "20251014",
+     "invested": 2000.0,
+     "proceeds": 2571.18,
+     "return_pct": 28.56,
+     "days": 23
+    },
+    {
+     "start": "20251015",
+     "end": "20260126",
+     "invested": 4000.0,
+     "proceeds": 5162.07,
+     "return_pct": 29.05,
+     "days": 72
+    },
+    {
+     "start": "20260127",
+     "end": "20260521",
+     "invested": 10000.0,
+     "proceeds": 15060.46,
+     "return_pct": 50.6,
+     "days": 73
+    },
+    {
+     "start": "20260522",
+     "end": "20260702",
+     "invested": 6000.0,
+     "proceeds": 9120.37,
+     "return_pct": 52.01,
+     "days": 29
+    }
+   ],
+   "每周定投": {
+    "strategy": "每周定投",
+    "final_assets": 30531.01,
+    "abs_profit": 10531.01,
+    "total_profit_pct": 52.66,
+    "xirr_pct": 32.48,
+    "mdd_pct": 34.16,
+    "n_trades": 78,
+    "n_rounds": 0,
+    "realized": 0.0,
+    "open_cost": 15000.0,
+    "open_value": 25531.01,
+    "open_shares": 29481.5309,
+    "open_avg_cost": null,
+    "years": 1.5,
+    "rounds_detail": []
+   },
+   "每周定投_rounds": [],
+   "一次性买入": {
+    "strategy": "一次性买入",
+    "final_assets": 55691.32,
+    "abs_profit": 35691.32,
+    "total_profit_pct": 178.46,
+    "xirr_pct": 97.56,
+    "mdd_pct": 40.66,
+    "n_trades": 1,
+    "n_rounds": 0,
+    "realized": 0.0,
+    "open_cost": 20000.0,
+    "open_value": 55691.32,
+    "open_shares": 64308.6817,
+    "open_avg_cost": null,
+    "years": 1.5,
+    "rounds_detail": []
+   },
+   "一次性买入_rounds": []
+  },
+  "卫星ETF富国": {
+   "meta": {
+    "ts_code": "563230.SH",
+    "sim_start": "20250917",
+    "sim_end": "20261009",
+    "n_days": 253,
+    "years": 1.06
+   },
+   "4%定投法": {
+    "strategy": "4%定投法",
+    "final_assets": 15929.7,
+    "abs_profit": -4070.3,
+    "total_profit_pct": -20.35,
+    "xirr_pct": -19.31,
+    "mdd_pct": 30.2,
+    "n_trades": 15,
+    "n_rounds": 2,
+    "realized": 7733.29,
+    "open_cost": 20000.0,
+    "open_value": 14196.41,
+    "open_shares": 14069.7826,
+    "open_avg_cost": 1.4215,
+    "years": 1.06,
+    "rounds_detail": [
+     {
+      "start": "20250917",
+      "end": "20251223",
+      "invested": 4000.0,
+      "proceeds": 4747.24,
+      "return_pct": 18.68,
+      "days": 64
+     },
+     {
+      "start": "20251224",
+      "end": "20260113",
+      "invested": 2000.0,
+      "proceeds": 2986.05,
+      "return_pct": 49.3,
+      "days": 13
+     }
+    ]
+   },
+   "4%定投法_rounds": [
+    {
+     "start": "20250917",
+     "end": "20251223",
+     "invested": 4000.0,
+     "proceeds": 4747.24,
+     "return_pct": 18.68,
+     "days": 64
+    },
+    {
+     "start": "20251224",
+     "end": "20260113",
+     "invested": 2000.0,
+     "proceeds": 2986.05,
+     "return_pct": 49.3,
+     "days": 13
+    }
+   ],
+   "每周定投": {
+    "strategy": "每周定投",
+    "final_assets": 18061.6,
+    "abs_profit": -1938.4,
+    "total_profit_pct": -9.69,
+    "xirr_pct": -9.17,
+    "mdd_pct": 20.44,
+    "n_trades": 55,
+    "n_rounds": 0,
+    "realized": 0.0,
+    "open_cost": 10576.92,
+    "open_value": 8638.53,
+    "open_shares": 8561.4736,
+    "open_avg_cost": null,
+    "years": 1.06,
+    "rounds_detail": []
+   },
+   "每周定投_rounds": [],
+   "一次性买入": {
+    "strategy": "一次性买入",
+    "final_assets": 20099.6,
+    "abs_profit": 99.6,
+    "total_profit_pct": 0.5,
+    "xirr_pct": 0.47,
+    "mdd_pct": 48.62,
+    "n_trades": 1,
+    "n_rounds": 0,
+    "realized": 0.0,
+    "open_cost": 20000.0,
+    "open_value": 20099.6,
+    "open_shares": 19920.3187,
+    "open_avg_cost": null,
+    "years": 1.06,
+    "rounds_detail": []
+   },
+   "一次性买入_rounds": []
+  },
+  "有色金属": {
+   "meta": {
+    "ts_code": "512400.SH",
+    "sim_start": "20211012",
+    "sim_end": "20261009",
+    "n_days": 1211,
+    "years": 4.99
+   },
+   "4%定投法": {
+    "strategy": "4%定投法",
+    "final_assets": 23982.4,
+    "abs_profit": 3982.4,
+    "total_profit_pct": 19.91,
+    "xirr_pct": 3.7,
+    "mdd_pct": 34.29,
+    "n_trades": 20,
+    "n_rounds": 3,
+    "realized": 28708.61,
+    "open_cost": 10000.0,
+    "open_value": 9273.79,
+    "open_shares": 5647.8595,
+    "open_avg_cost": 1.7706,
+    "years": 4.99,
+    "rounds_detail": [
+     {
+      "start": "20211012",
+      "end": "20250731",
+      "invested": 20000.0,
+      "proceeds": 23214.88,
+      "return_pct": 16.07,
+      "days": 925
+     },
+     {
+      "start": "20250801",
+      "end": "20250904",
+      "invested": 2000.0,
+      "proceeds": 2359.48,
+      "return_pct": 17.97,
+      "days": 25
+     },
+     {
+      "start": "20250905",
+      "end": "20260130",
+      "invested": 2000.0,
+      "proceeds": 3134.25,
+      "return_pct": 56.71,
+      "days": 98
+     }
+    ]
+   },
+   "4%定投法_rounds": [
+    {
+     "start": "20211012",
+     "end": "20250731",
+     "invested": 20000.0,
+     "proceeds": 23214.88,
+     "return_pct": 16.07,
+     "days": 925
+    },
+    {
+     "start": "20250801",
+     "end": "20250904",
+     "invested": 2000.0,
+     "proceeds": 2359.48,
+     "return_pct": 17.97,
+     "days": 25
+    },
+    {
+     "start": "20250905",
+     "end": "20260130",
+     "invested": 2000.0,
+     "proceeds": 3134.25,
+     "return_pct": 56.71,
+     "days": 98
+    }
+   ],
+   "每周定投": {
+    "strategy": "每周定投",
+    "final_assets": 29979.62,
+    "abs_profit": 9979.62,
+    "total_profit_pct": 49.9,
+    "xirr_pct": 8.44,
+    "mdd_pct": 37.38,
+    "n_trades": 104,
+    "n_rounds": 0,
+    "realized": 0.0,
+    "open_cost": 20000.0,
+    "open_value": 29979.62,
+    "open_shares": 18257.9896,
+    "open_avg_cost": null,
+    "years": 4.99,
+    "rounds_detail": []
+   },
+   "每周定投_rounds": [],
+   "一次性买入": {
+    "strategy": "一次性买入",
+    "final_assets": 26018.26,
+    "abs_profit": 6018.26,
+    "total_profit_pct": 30.09,
+    "xirr_pct": 5.41,
+    "mdd_pct": 45.43,
+    "n_trades": 1,
+    "n_rounds": 0,
+    "realized": 0.0,
+    "open_cost": 20000.0,
+    "open_value": 26018.26,
+    "open_shares": 15845.4681,
+    "open_avg_cost": null,
+    "years": 4.99,
+    "rounds_detail": []
+   },
+   "一次性买入_rounds": []
+  },
+  "人工智能": {
+   "meta": {
+    "ts_code": "159819.SZ",
+    "sim_start": "20211012",
+    "sim_end": "20261009",
+    "n_days": 1211,
+    "years": 4.99
+   },
+   "4%定投法": {
+    "strategy": "4%定投法",
+    "final_assets": 36715.51,
+    "abs_profit": 16715.51,
+    "total_profit_pct": 83.58,
+    "xirr_pct": 12.93,
+    "mdd_pct": 23.15,
+    "n_trades": 39,
+    "n_rounds": 5,
+    "realized": 75641.2,
+    "open_cost": 10000.0,
+    "open_value": 9074.31,
+    "open_shares": 5653.7785,
+    "open_avg_cost": 1.7687,
+    "years": 4.99,
+    "rounds_detail": [
+     {
+      "start": "20211012",
+      "end": "20230410",
+      "invested": 18000.0,
+      "proceeds": 23714.98,
+      "return_pct": 31.75,
+      "days": 365
+     },
+     {
+      "start": "20230411",
+      "end": "20241114",
+      "invested": 20000.0,
+      "proceeds": 24851.61,
+      "return_pct": 24.26,
+      "days": 387
+     },
+     {
+      "start": "20241115",
+      "end": "20250902",
+      "invested": 6000.0,
+      "proceeds": 9799.4,
+      "return_pct": 63.32,
+      "days": 196
+     },
+     {
+      "start": "20250903",
+      "end": "20260120",
+      "invested": 6000.0,
+      "proceeds": 7178.59,
+      "return_pct": 19.64,
+      "days": 92
+     },
+     {
+      "start": "20260121",
+      "end": "20260515",
+      "invested": 8000.0,
+      "proceeds": 10096.62,
+      "return_pct": 26.21,
+      "days": 73
+     }
+    ]
+   },
+   "4%定投法_rounds": [
+    {
+     "start": "20211012",
+     "end": "20230410",
+     "invested": 18000.0,
+     "proceeds": 23714.98,
+     "return_pct": 31.75,
+     "days": 365
+    },
+    {
+     "start": "20230411",
+     "end": "20241114",
+     "invested": 20000.0,
+     "proceeds": 24851.61,
+     "return_pct": 24.26,
+     "days": 387
+    },
+    {
+     "start": "20241115",
+     "end": "20250902",
+     "invested": 6000.0,
+     "proceeds": 9799.4,
+     "return_pct": 63.32,
+     "days": 196
+    },
+    {
+     "start": "20250903",
+     "end": "20260120",
+     "invested": 6000.0,
+     "proceeds": 7178.59,
+     "return_pct": 19.64,
+     "days": 92
+    },
+    {
+     "start": "20260121",
+     "end": "20260515",
+     "invested": 8000.0,
+     "proceeds": 10096.62,
+     "return_pct": 26.21,
+     "days": 73
+    }
+   ],
+   "每周定投": {
+    "strategy": "每周定投",
+    "final_assets": 39893.52,
+    "abs_profit": 19893.52,
+    "total_profit_pct": 99.47,
+    "xirr_pct": 14.83,
+    "mdd_pct": 42.55,
+    "n_trades": 104,
+    "n_rounds": 0,
+    "realized": 0.0,
+    "open_cost": 20000.0,
+    "open_value": 39893.52,
+    "open_shares": 24855.7738,
+    "open_avg_cost": null,
+    "years": 4.99,
+    "rounds_detail": []
+   },
+   "每周定投_rounds": [],
+   "一次性买入": {
+    "strategy": "一次性买入",
+    "final_assets": 34967.32,
+    "abs_profit": 14967.32,
+    "total_profit_pct": 74.84,
+    "xirr_pct": 11.84,
+    "mdd_pct": 45.05,
+    "n_trades": 1,
+    "n_rounds": 0,
+    "realized": 0.0,
+    "open_cost": 20000.0,
+    "open_value": 34967.32,
+    "open_shares": 21786.4924,
+    "open_avg_cost": null,
+    "years": 4.99,
+    "rounds_detail": []
+   },
+   "一次性买入_rounds": []
+  },
+  "创业板新能源": {
+   "meta": {
+    "ts_code": "159387.SZ",
+    "sim_start": "20250610",
+    "sim_end": "20261009",
+    "n_days": 324,
+    "years": 1.33
+   },
+   "4%定投法": {
+    "strategy": "4%定投法",
+    "final_assets": 19053.32,
+    "abs_profit": -946.68,
+    "total_profit_pct": -4.73,
+    "xirr_pct": -3.58,
+    "mdd_pct": 12.6,
+    "n_trades": 11,
+    "n_rounds": 2,
+    "realized": 5403.78,
+    "open_cost": 14000.0,
+    "open_value": 11649.54,
+    "open_shares": 17867.392,
+    "open_avg_cost": 0.7836,
+    "years": 1.33,
+    "rounds_detail": [
+     {
+      "start": "20250610",
+      "end": "20250910",
+      "invested": 2000.0,
+      "proceeds": 2935.87,
+      "return_pct": 46.79,
+      "days": 67
+     },
+     {
+      "start": "20250911",
+      "end": "20260601",
+      "invested": 2000.0,
+      "proceeds": 2467.91,
+      "return_pct": 23.4,
+      "days": 170
+     }
+    ]
+   },
+   "4%定投法_rounds": [
+    {
+     "start": "20250610",
+     "end": "20250910",
+     "invested": 2000.0,
+     "proceeds": 2935.87,
+     "return_pct": 46.79,
+     "days": 67
+    },
+    {
+     "start": "20250911",
+     "end": "20260601",
+     "invested": 2000.0,
+     "proceeds": 2467.91,
+     "return_pct": 23.4,
+     "days": 170
+    }
+   ],
+   "每周定投": {
+    "strategy": "每周定投",
+    "final_assets": 18310.25,
+    "abs_profit": -1689.75,
+    "total_profit_pct": -8.45,
+    "xirr_pct": -6.41,
+    "mdd_pct": 20.65,
+    "n_trades": 69,
+    "n_rounds": 0,
+    "realized": 0.0,
+    "open_cost": 13269.23,
+    "open_value": 11579.48,
+    "open_shares": 17759.9426,
+    "open_avg_cost": null,
+    "years": 1.33,
+    "rounds_detail": []
+   },
+   "每周定投_rounds": [],
+   "一次性买入": {
+    "strategy": "一次性买入",
+    "final_assets": 26117.89,
+    "abs_profit": 6117.89,
+    "total_profit_pct": 30.59,
+    "xirr_pct": 22.19,
+    "mdd_pct": 33.47,
+    "n_trades": 1,
+    "n_rounds": 0,
+    "realized": 0.0,
+    "open_cost": 20000.0,
+    "open_value": 26117.89,
+    "open_shares": 40058.1162,
+    "open_avg_cost": null,
+    "years": 1.33,
+    "rounds_detail": []
+   },
+   "一次性买入_rounds": []
+  },
+  "机器人": {
+   "meta": {
+    "ts_code": "562500.SH",
+    "sim_start": "20211229",
+    "sim_end": "20261009",
+    "n_days": 1155,
+    "years": 4.78
+   },
+   "4%定投法": {
+    "strategy": "4%定投法",
+    "final_assets": 25082.89,
+    "abs_profit": 5082.89,
+    "total_profit_pct": 25.41,
+    "xirr_pct": 4.85,
+    "mdd_pct": 38.27,
+    "n_trades": 26,
+    "n_rounds": 3,
+    "realized": 40745.9,
+    "open_cost": 12000.0,
+    "open_value": 10336.99,
+    "open_shares": 11977.9729,
+    "open_avg_cost": 1.0018,
+    "years": 4.78,
+    "rounds_detail": [
+     {
+      "start": "20211229",
+      "end": "20250228",
+      "invested": 20000.0,
+      "proceeds": 24320.2,
+      "return_pct": 21.6,
+      "days": 765
+     },
+     {
+      "start": "20250303",
+      "end": "20250904",
+      "invested": 10000.0,
+      "proceeds": 11621.93,
+      "return_pct": 16.22,
+      "days": 129
+     },
+     {
+      "start": "20250905",
+      "end": "20260527",
+      "invested": 4000.0,
+      "proceeds": 4803.77,
+      "return_pct": 20.09,
+      "days": 171
+     }
+    ]
+   },
+   "4%定投法_rounds": [
+    {
+     "start": "20211229",
+     "end": "20250228",
+     "invested": 20000.0,
+     "proceeds": 24320.2,
+     "return_pct": 21.6,
+     "days": 765
+    },
+    {
+     "start": "20250303",
+     "end": "20250904",
+     "invested": 10000.0,
+     "proceeds": 11621.93,
+     "return_pct": 16.22,
+     "days": 129
+    },
+    {
+     "start": "20250905",
+     "end": "20260527",
+     "invested": 4000.0,
+     "proceeds": 4803.77,
+     "return_pct": 20.09,
+     "days": 171
+    }
+   ],
+   "每周定投": {
+    "strategy": "每周定投",
+    "final_assets": 22225.2,
+    "abs_profit": 2225.2,
+    "total_profit_pct": 11.13,
+    "xirr_pct": 2.23,
+    "mdd_pct": 36.13,
+    "n_trades": 104,
+    "n_rounds": 0,
+    "realized": 0.0,
+    "open_cost": 20000.0,
+    "open_value": 22225.2,
+    "open_shares": 25753.4131,
+    "open_avg_cost": null,
+    "years": 4.78,
+    "rounds_detail": []
+   },
+   "每周定投_rounds": [],
+   "一次性买入": {
+    "strategy": "一次性买入",
+    "final_assets": 17469.64,
+    "abs_profit": -2530.36,
+    "total_profit_pct": -12.65,
+    "xirr_pct": -2.79,
+    "mdd_pct": 45.42,
+    "n_trades": 1,
+    "n_rounds": 0,
+    "realized": 0.0,
+    "open_cost": 20000.0,
+    "open_value": 17469.64,
+    "open_shares": 20242.915,
+    "open_avg_cost": null,
+    "years": 4.78,
+    "rounds_detail": []
+   },
+   "一次性买入_rounds": []
+  }
+ }
+}

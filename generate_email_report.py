@@ -53,6 +53,18 @@ def load_dca_summary():
     return None
 
 
+def load_4pct_summary():
+    """加载 4%定投策略（估值门版）摘要"""
+    path = "html/dca_4pct/strategy_summary.json"
+    if os.path.exists(path):
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except (json.JSONDecodeError, OSError) as e:
+            logging.warning("读取4%定投摘要失败: %s", e)
+    return None
+
+
 def load_multi_indicator_hints():
     """加载最新的超阈值行业提示 JSON 文件。
 
@@ -185,6 +197,64 @@ def generate_dca_section(dca_summary):
         </tr>
         {rows}
     </table>"""
+
+
+def generate_4pct_section(pct_summary):
+    """生成 4%定投策略（估值门版）汇总 HTML"""
+    if not pct_summary or not pct_summary.get("pool"):
+        return "<p style='color:#999'>暂无 4%定投策略数据</p>"
+
+    rows = ""
+    for etf in pct_summary["pool"]:
+        name = escape_html(etf.get("name", ""))
+        ts_code = escape_html(etf.get("ts_code", ""))
+        color = etf.get("action_color", "#333")
+        label = escape_html(etf.get("action_label", ""))
+        parts = f"{etf.get('parts_bought', 0)}/{etf.get('n_parts', 0)}份"
+
+        today = etf.get("today_action")
+        if today:
+            verb = "买入" if today.get("action") == "BUY" else "卖出"
+            today_txt = f"<b style='color:{color}'>{verb} {today.get('amount', 0):.0f}元</b>"
+        else:
+            today_txt = "—"
+
+        pe_pct = etf.get("pe_pct")
+        if pe_pct is not None:
+            pe_txt = f"{pe_pct:.0f}%"
+            pe_color = "#27ae60" if pe_pct < 50 else ("#e67e22" if pe_pct < 70 else "#e74c3c")
+            gate = "门开" if etf.get("gate_open") else "门关"
+        else:
+            pe_txt, pe_color, gate = "无PE门", "#999", "—"
+
+        next_desc = escape_html(etf.get("next_desc", ""))
+        rows += f"""
+        <tr>
+            <td><strong>{name}</strong><br><span style="color:#999;font-size:11px">{ts_code}</span></td>
+            <td style="color:{color};font-weight:bold">{label}</td>
+            <td>{today_txt}</td>
+            <td>{parts}</td>
+            <td style="color:{pe_color};font-weight:bold">{pe_txt}
+                <span style="font-size:11px;color:#999">({gate})</span></td>
+            <td style="font-size:12px;color:#666">{next_desc}</td>
+        </tr>"""
+
+    return f"""
+    <table style="border-collapse:collapse;width:100%;font-size:13px;margin-bottom:8px">
+        <tr style="background:#f5f5f5">
+            <th style="padding:6px 8px;border:1px solid #ddd;text-align:left">ETF</th>
+            <th style="padding:6px 8px;border:1px solid #ddd;text-align:left">阶段</th>
+            <th style="padding:6px 8px;border:1px solid #ddd;text-align:left">今日动作</th>
+            <th style="padding:6px 8px;border:1px solid #ddd;text-align:left">份额</th>
+            <th style="padding:6px 8px;border:1px solid #ddd;text-align:left">PE分位</th>
+            <th style="padding:6px 8px;border:1px solid #ddd;text-align:left">下一触发</th>
+        </tr>
+        {rows}
+    </table>
+    <p style="font-size:12px;color:#888;margin-top:0">
+        纪律：指数PE_TTM五年分位&lt;50%才开新一轮 → 每较上次买入价跌4%补1份（只买跌）→
+        涨超成本15%进止盈观察期 → 自高点回撤4%全卖 → 盈利滚动。池内标的均带估值门控。
+    </p>"""
 
 
 def generate_sentiment_section(state, latest_date=""):
@@ -407,6 +477,7 @@ def generate_email_report(status="success", repo="", ref="", run_url=""):
     reports = load_reports_json()
     strategy_state = load_strategy_state()
     dca_summary = load_dca_summary()
+    pct_summary = load_4pct_summary()
     multi_hints = load_multi_indicator_hints()
 
     # 状态图标和颜色
@@ -470,6 +541,11 @@ def generate_email_report(status="success", repo="", ref="", run_url=""):
     💰 ETF 定投策略汇总
 </h3>
 {generate_dca_section(dca_summary)}
+
+<h3 style="color:#2c3e50;border-left:4px solid #c0392b;padding-left:10px;margin-top:24px">
+    🎯 4%定投策略（估值门版）
+</h3>
+{generate_4pct_section(pct_summary)}
 
 <hr style="border:none;border-top:1px solid #ddd;margin:20px 0">
 <p style="font-size:13px">

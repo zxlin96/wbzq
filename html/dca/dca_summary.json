@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2026-10-16",
+  "lastUpdate": "2026-10-17",
   "etf_list": [
     {
       "name": "红利低波",
@@ -389,7 +389,8 @@
       "total_invested": 67000.0,
       "total_return": 42987.54,
       "return_pct": 64.16,
-      "trade_count": 79
+      "trade_count": 79,
+      "decision_source": "ledger"
     },
     {
       "name": "标普500",
@@ -576,7 +577,8 @@
       "total_invested": 61000.0,
       "total_return": 26410.68,
       "return_pct": 43.3,
-      "trade_count": 72
+      "trade_count": 72,
+      "decision_source": "ledger"
     },
     {
       "name": "日经225",
@@ -817,7 +819,8 @@
       "total_invested": 78000.0,
       "total_return": 33522.46,
       "return_pct": 42.98,
-      "trade_count": 96
+      "trade_count": 96,
+      "decision_source": "ledger"
     },
     {
       "name": "德国DAX",
@@ -1040,7 +1043,8 @@
       "total_invested": 62000.0,
       "total_return": 20460.01,
       "return_pct": 33.0,
-      "trade_count": 72
+      "trade_count": 72,
+      "decision_source": "ledger"
     },
     {
       "name": "中证2000",

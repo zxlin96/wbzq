@@ -363,9 +363,11 @@ class DataManager:
         low_min = grouped['low_qfq'].transform(lambda x: x.rolling(window=9, min_periods=9).min())
         high_max = grouped['high_qfq'].transform(lambda x: x.rolling(window=9, min_periods=9).max())
         rsv = (df['close_qfq'] - low_min) / (high_max - low_min) * 100
-        rsv = rsv.replace([np.inf, -np.inf], 0).fillna(0)
-
-        df['rsv_tmp'] = rsv
+        # 0/0（连续一字等 high==low 行情）沿用前一日 RSV；窗口不足 9 根的预热期保持
+        # NaN，ewm 从首个有效 RSV 起步。不能 fillna(0)：假 0 会把预热期 J 拉成 0，
+        # 被单日校验误判为损坏数据而永久丢弃
+        df['rsv_tmp'] = rsv.replace([np.inf, -np.inf], np.nan)
+        df['rsv_tmp'] = df.groupby('ts_code')['rsv_tmp'].ffill()
         df['kdj_k_qfq'] = df.groupby('ts_code')['rsv_tmp'].transform(lambda x: x.ewm(com=2, adjust=False).mean())
         df['kdj_d_qfq'] = df.groupby('ts_code')['kdj_k_qfq'].transform(lambda x: x.ewm(com=2, adjust=False).mean())
         df['kdj_qfq'] = 3 * df['kdj_k_qfq'] - 2 * df['kdj_d_qfq']

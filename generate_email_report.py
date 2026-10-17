@@ -177,8 +177,17 @@ def generate_dca_section(dca_summary):
                 lt_value = sum(
                     _position_return_info(p, last_price)[2] for p in long_term
                 )
-                lt_ret = (lt_value - lt_invested) / lt_invested * 100 \
-                    if lt_invested > 0 else 0.0
+                # 收益率须与单轮行同口径（整轮收益=已卖出回收+剩余市值-投入）；
+                # 长持轮次已卖掉一半仓位，只拿剩余市值对投入算会严重低估甚至假负
+                lt_profit = 0.0
+                for p in long_term:
+                    inv = p.get("total_invested", 0) or 0
+                    rp = p.get("return_pct")
+                    if rp is not None:
+                        lt_profit += inv * float(rp) / 100
+                    else:
+                        lt_profit += _position_return_info(p, last_price)[2] - inv
+                lt_ret = lt_profit / lt_invested * 100 if lt_invested > 0 else 0.0
                 lt_ret_str = f"+{lt_ret:.2f}%" if lt_ret >= 0 else f"{lt_ret:.2f}%"
                 lt_ret_color = "#27ae60" if lt_ret >= 0 else "#e74c3c"
                 rows += f"""

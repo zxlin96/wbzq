@@ -157,7 +157,9 @@ def generate_dca_section(dca_summary):
                 <td>{pos_remaining:.0f}元</td>
             </tr>"""
         else:
-            # 多轮 — 汇总行 + 每轮子行
+            # 多轮 — 汇总行 + 每轮子行（长期持有轮合并为一行，仅逐行展示操作中的轮）
+            long_term = [p for p in positions if p.get("action") == "hold_long_term"]
+            active = [p for p in positions if p.get("action") != "hold_long_term"]
             total_remaining = sum(
                 _position_return_info(pos, last_price)[2] for pos in positions
             )
@@ -168,8 +170,26 @@ def generate_dca_section(dca_summary):
                 <td>—</td>
                 <td>{total_remaining:.0f}元</td>
             </tr>"""
-            # 每轮子行
-            for pos in positions:
+            # 长期持有轮合并汇总（v1h 卖满3次后剩余1/2长持的轮次）
+            if long_term:
+                lt_shares = sum(p.get("shares", 0) or 0 for p in long_term)
+                lt_invested = sum(p.get("total_invested", 0) or 0 for p in long_term)
+                lt_value = sum(
+                    _position_return_info(p, last_price)[2] for p in long_term
+                )
+                lt_ret = (lt_value - lt_invested) / lt_invested * 100 \
+                    if lt_invested > 0 else 0.0
+                lt_ret_str = f"+{lt_ret:.2f}%" if lt_ret >= 0 else f"{lt_ret:.2f}%"
+                lt_ret_color = "#27ae60" if lt_ret >= 0 else "#e74c3c"
+                rows += f"""
+            <tr style="background:#fafafa">
+                <td style="padding-left:24px;color:#888;font-size:12px">↳ 长期持有×{len(long_term)}轮 | {lt_shares:.0f}份</td>
+                <td style="color:#888;font-size:12px">不再卖出</td>
+                <td style="color:{lt_ret_color};font-size:12px">{lt_ret_str}</td>
+                <td style="font-size:12px;color:#666">{lt_value:.0f}元</td>
+            </tr>"""
+            # 操作中的轮次子行
+            for pos in active:
                 round_id = pos.get("round_id", "")
                 color = pos.get("action_color", "#333")
                 label = escape_html(pos.get("action_label", ""))

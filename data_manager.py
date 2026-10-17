@@ -60,6 +60,8 @@ class DataManager:
     KDJ_FLAT_J13_RATIO = 0.98          # J<13 股票占比超过该值
     KDJ_FLAT_J13_MEAN = 10.0           # 且 J 均值低于该值 → 判定为 RSV 被 fillna(0) 的损坏数据
     MIN_STOCKS_FOR_KDJ_CHECK = 500     # 样本不足时不做 KDJ 整体分布校验
+    FETCH_MAX_RETRIES = 3              # 单日原始数据拉取失败后的最大重试次数
+    FETCH_RETRY_DELAY = 1.0            # 重试退避基数（秒），第 n 次重试前等待 base * 2^(n-1)
 
     def __init__(self, db_path=None, cache_dir=None):
         self.db_path = db_path or DBConfig.DB_PATH
@@ -264,7 +266,7 @@ class DataManager:
         return pd.concat(all_frames, ignore_index=True)
 
     def _fetch_raw_data_parallel(self, dates):
-        """多线程拉取每日原始数据（daily + adj_factor + daily_basic）"""
+        """多线程拉取每日原始数据（daily + adj_factor + daily_basic），单日失败自动重试"""
         from concurrent.futures import ThreadPoolExecutor, as_completed
         from tqdm import tqdm
 
@@ -272,36 +274,47 @@ class DataManager:
         max_workers = min(10, len(dates)) if dates else 1
 
         def fetch_one(date):
-            try:
-                # daily
-                daily_fields = 'ts_code,trade_date,open,high,low,close,pre_close,change,pct_chg,vol,amount'
-                daily_df = pro.daily(trade_date=date, fields=daily_fields)
-                if daily_df is None or daily_df.empty:
-                    return date, None
+            # 任一接口为空或异常都视为本次尝试失败，三个接口齐全才算成功；
+            # 重试耗尽后返回 None，该日期不写缓存，下次运行会自动重新拉取
+            last_error = None
+            for attempt in range(1 + self.FETCH_MAX_RETRIES):
+                try:
+                    # daily
+                    daily_fields = 'ts_code,trade_date,open,high,low,close,pre_close,change,pct_chg,vol,amount'
+                    daily_df = pro.daily(trade_date=date, fields=daily_fields)
+                    if daily_df is None or daily_df.empty:
+                        raise ValueError("daily 返回为空")
 
-                # adj_factor
-                adj_df = pro.adj_factor(trade_date=date, fields='ts_code,adj_factor')
-                if adj_df is not None and not adj_df.empty:
+                    # adj_factor
+                    adj_df = pro.adj_factor(trade_date=date, fields='ts_code,adj_factor')
+                    if adj_df is None or adj_df.empty:
+                        raise ValueError("adj_factor 返回为空")
                     daily_df = daily_df.merge(adj_df[['ts_code', 'adj_factor']], on='ts_code', how='left')
-                else:
-                    daily_df['adj_factor'] = np.nan
 
-                # daily_basic
-                basic_fields = (
-                    'ts_code,trade_date,turnover_rate,turnover_rate_f,volume_ratio,'
-                    'pe,pe_ttm,pb,ps,ps_ttm,dv_ratio,dv_ttm,'
-                    'total_share,float_share,free_share,total_mv,circ_mv'
-                )
-                basic_df = pro.daily_basic(trade_date=date, fields=basic_fields)
-                if basic_df is not None and not basic_df.empty:
+                    # daily_basic
+                    basic_fields = (
+                        'ts_code,trade_date,turnover_rate,turnover_rate_f,volume_ratio,'
+                        'pe,pe_ttm,pb,ps,ps_ttm,dv_ratio,dv_ttm,'
+                        'total_share,float_share,free_share,total_mv,circ_mv'
+                    )
+                    basic_df = pro.daily_basic(trade_date=date, fields=basic_fields)
+                    if basic_df is None or basic_df.empty:
+                        raise ValueError("daily_basic 返回为空")
                     basic_df = basic_df.drop(columns=['trade_date'], errors='ignore')
                     daily_df = daily_df.merge(basic_df, on='ts_code', how='left')
 
-                time.sleep(0.12)  # 频率保护
-                return date, daily_df
-            except Exception as e:
-                logging.error(f"拉取 {date} 原始数据失败: {e}")
-                return date, None
+                    time.sleep(0.12)  # 频率保护
+                    return date, daily_df
+                except Exception as e:
+                    last_error = e
+                    if attempt < self.FETCH_MAX_RETRIES:
+                        delay = self.FETCH_RETRY_DELAY * (2 ** attempt)
+                        logging.warning(
+                            f"拉取 {date} 第 {attempt + 1} 次尝试失败: {e}，{delay:.0f}s 后重试")
+                        time.sleep(delay)
+            logging.error(
+                f"拉取 {date} 原始数据失败，共尝试 {self.FETCH_MAX_RETRIES + 1} 次: {last_error}")
+            return date, None
 
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             future_to_date = {executor.submit(fetch_one, d): d for d in dates}

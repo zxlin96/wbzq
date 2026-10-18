@@ -100,7 +100,13 @@ def _position_return_info(position, etf_last_price=0):
     total_invested = position.get("total_invested", 0) or 0
     shares = position.get("shares", 0) or 0
     last_price = etf_last_price or position.get("last_price", 0)
-    holding_value = round(shares * last_price, 2) if shares > 0 and last_price > 0 else 0
+    # 组合策略（存量资金）带 portfolio_value：应显示"组合总值"（含现金），
+    # 只显示持仓市值会漏掉减仓后的现金，严重低估
+    pv = position.get("portfolio_value")
+    if pv:
+        holding_value = round(float(pv), 2)
+    else:
+        holding_value = round(shares * last_price, 2) if shares > 0 and last_price > 0 else 0
     if return_pct is not None:
         return float(return_pct), total_invested, holding_value
     # 兼容旧数据：没有 return_pct 时用浮盈浮亏

@@ -1644,6 +1644,10 @@ def _generate_comparison_chart(results: dict, output_dir: str):
     chart_file = os.path.join(output_dir, 'dca_comparison.html')
     series_data = {}
     for name, strategy in results.items():
+        if getattr(strategy, 'nav_kind', 'dca') != 'dca':
+            # 组合净值（存量资金）与定投的"利润/累计投入"口径不同，不混画
+            logging.info(f"[对比图] 跳过 {name}：{getattr(strategy, 'nav_kind')} 口径")
+            continue
         nav_df = strategy._nav_curve
         if nav_df is not None and not nav_df.empty:
             series_data[name] = {
@@ -1887,6 +1891,16 @@ def run_backtest_from_config(config_path: str = 'etf_config.json',
                     **(etf.get('v7_params', {}) or {}),
                 )
                 report_func = generate_backtest_report_v6
+            elif strat_version == 'trim':
+                # 存量资金组合策略：满仓打底 + 周线J>trim_j 减到 keep_ratio + J<refill_j 补满
+                # 注意：该策略不使用 base_amount，资金规模由 trim_params.initial_capital 决定
+                from portfolio_trim_strategy import (PortfolioTrimStrategy,
+                                                     generate_trim_report)
+                strategy = PortfolioTrimStrategy(
+                    name=name,
+                    **(etf.get('trim_params', {}) or {}),
+                )
+                report_func = generate_trim_report
             elif strat_version == 'v6h':
                 # V6H：V6 买入端 + V1h 卖出哲学
                 # 三段各卖基准 1/6（合计 50%），剩余 1/2 永久持有；无倍投。

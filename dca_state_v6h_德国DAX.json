@@ -1,6 +1,6 @@
 {
   "next_round_id": 12,
-  "total_sell_amount": 24700.555761422263,
+  "total_sell_amount": 25763.43710090027,
   "trades": [
     {
       "date": "20211019",
@@ -34,6 +34,28 @@
       "reason": "R1 止损减仓1/6: 收盘跌破多空线且创新低",
       "total_shares": 3513.8086,
       "profit": -6.18
+    },
+    {
+      "date": "20211126",
+      "action": "SELL",
+      "price": 1.161,
+      "amount": 815.91,
+      "shares": 702.7617,
+      "round": 1,
+      "reason": "R1 收盘(1.1610)<中期线(1.1990) 减仓1/6",
+      "total_shares": 2811.0469,
+      "profit": -17.43
+    },
+    {
+      "date": "20211129",
+      "action": "SELL",
+      "price": 1.146,
+      "amount": 805.36,
+      "shares": 702.7617,
+      "round": 1,
+      "reason": "R1 收盘(1.1460)<多空线(1.2037) 减仓1/6",
+      "total_shares": 2108.2852,
+      "profit": -27.97
     },
     {
       "date": "20220225",
@@ -89,6 +111,28 @@
       "reason": "R2 J峰值回撤(J_peak=69.35, J=43.51)减仓1/6",
       "total_shares": 4145.2722,
       "profit": -10.08
+    },
+    {
+      "date": "20220519",
+      "action": "SELL",
+      "price": 0.994,
+      "amount": 824.08,
+      "shares": 829.0544,
+      "round": 2,
+      "reason": "R2 收盘(0.9940)<中期线(0.9957) 减仓1/6",
+      "total_shares": 3316.2177,
+      "profit": -9.25
+    },
+    {
+      "date": "20220520",
+      "action": "SELL",
+      "price": 1.003,
+      "amount": 831.54,
+      "shares": 829.0544,
+      "round": 2,
+      "reason": "R2 收盘(1.0030)<多空线(1.0175) 减仓1/6",
+      "total_shares": 2487.1633,
+      "profit": -1.79
     },
     {
       "date": "20220624",
@@ -157,6 +201,28 @@
       "profit": -14.38
     },
     {
+      "date": "20220905",
+      "action": "SELL",
+      "price": 0.877,
+      "amount": 813.39,
+      "shares": 927.4724,
+      "round": 3,
+      "reason": "R3 收盘(0.8770)<中期线(0.9160) 减仓1/6",
+      "total_shares": 3709.8895,
+      "profit": -19.94
+    },
+    {
+      "date": "20220906",
+      "action": "SELL",
+      "price": 0.885,
+      "amount": 820.81,
+      "shares": 927.4724,
+      "round": 3,
+      "reason": "R3 收盘(0.8850)<多空线(0.9278) 减仓1/6",
+      "total_shares": 2782.4171,
+      "profit": -12.52
+    },
+    {
       "date": "20220923",
       "action": "BUY",
       "price": 0.878,
@@ -204,56 +270,12 @@
       "date": "20221206",
       "action": "SELL",
       "price": 1.052,
-      "amount": 872.17,
-      "shares": 829.0544,
-      "round": 2,
-      "reason": "R2 收盘(1.0520)<中期线(1.0532) 减仓1/6",
-      "total_shares": 3316.2177,
-      "profit": 38.83
-    },
-    {
-      "date": "20221206",
-      "action": "SELL",
-      "price": 1.052,
-      "amount": 975.7,
-      "shares": 927.4724,
-      "round": 3,
-      "reason": "R3 收盘(1.0520)<中期线(1.0532) 减仓1/6",
-      "total_shares": 3709.8895,
-      "profit": 142.37
-    },
-    {
-      "date": "20221206",
-      "action": "SELL",
-      "price": 1.052,
       "amount": 1003.13,
       "shares": 953.5491,
       "round": 4,
       "reason": "R4 收盘(1.0520)<中期线(1.0532) 减仓1/6",
       "total_shares": 3814.1965,
       "profit": 169.8
-    },
-    {
-      "date": "20230314",
-      "action": "SELL",
-      "price": 1.093,
-      "amount": 906.16,
-      "shares": 829.0544,
-      "round": 2,
-      "reason": "R2 收盘(1.0930)<多空线(1.0961) 减仓1/6",
-      "total_shares": 2487.1633,
-      "profit": 72.82
-    },
-    {
-      "date": "20230314",
-      "action": "SELL",
-      "price": 1.093,
-      "amount": 1013.73,
-      "shares": 927.4724,
-      "round": 3,
-      "reason": "R3 收盘(1.0930)<多空线(1.0961) 减仓1/6",
-      "total_shares": 2782.4171,
-      "profit": 180.39
     },
     {
       "date": "20230314",
@@ -674,26 +696,26 @@
       "profit": 7.27
     },
     {
-      "date": "20260821",
+      "date": "20260616",
       "action": "SELL",
-      "price": 1.886,
-      "amount": 903.35,
+      "price": 1.787,
+      "amount": 855.93,
       "shares": 478.976,
       "round": 10,
-      "reason": "R10 收盘(1.8860)<中期线(1.8937) 减仓1/6",
+      "reason": "R10 收盘(1.7870)<中期线(1.7871) 减仓1/6",
       "total_shares": 1915.9041,
-      "profit": 70.02
+      "profit": 22.6
     },
     {
-      "date": "20260908",
+      "date": "20260617",
       "action": "SELL",
-      "price": 1.857,
-      "amount": 889.46,
+      "price": 1.788,
+      "amount": 856.41,
       "shares": 478.976,
       "round": 10,
-      "reason": "R10 收盘(1.8570)<多空线(1.8583) 减仓1/6",
+      "reason": "R10 收盘(1.7880)<多空线(1.7978) 减仓1/6",
       "total_shares": 1436.9281,
-      "profit": 56.13
+      "profit": 23.08
     },
     {
       "date": "20260924",
@@ -732,17 +754,17 @@
   "positions": [
     {
       "round_id": 1,
-      "shares": 3513.8085994565745,
-      "total_cost": 4166.666666666667,
+      "shares": 2108.2851596739447,
+      "total_cost": 2500.0,
       "total_invested": 5000.0,
-      "total_sell_amount": 827.1505443120776,
+      "total_sell_amount": 2448.421832101341,
       "dca_active": true,
       "j_peak": 84.70324871818372,
       "pullback_sold": false,
-      "sell_stage": 1,
+      "sell_stage": 3,
       "waiting_golden": false,
       "golden_confirmed": false,
-      "price_below_dk_sold": false,
+      "price_below_dk_sold": true,
       "round_budget": 5000,
       "round_periods": 5,
       "buy_count": 2,
@@ -784,11 +806,33 @@
           "reason": "R1 止损减仓1/6: 收盘跌破多空线且创新低",
           "total_shares": 3513.8086,
           "profit": -6.18
+        },
+        {
+          "date": "20211126",
+          "action": "SELL",
+          "price": 1.161,
+          "amount": 815.91,
+          "shares": 702.7617,
+          "round": 1,
+          "reason": "R1 收盘(1.1610)<中期线(1.1990) 减仓1/6",
+          "total_shares": 2811.0469,
+          "profit": -17.43
+        },
+        {
+          "date": "20211129",
+          "action": "SELL",
+          "price": 1.146,
+          "amount": 805.36,
+          "shares": 702.7617,
+          "round": 1,
+          "reason": "R1 收盘(1.1460)<多空线(1.2037) 减仓1/6",
+          "total_shares": 2108.2852,
+          "profit": -27.97
         }
       ],
       "week_invested": [
-        "20211022",
-        "20211019"
+        "20211019",
+        "20211022"
       ]
     },
     {
@@ -796,14 +840,14 @@
       "shares": 2487.1633003166235,
       "total_cost": 2500.0,
       "total_invested": 5000.0,
-      "total_sell_amount": 2601.5728121311877,
+      "total_sell_amount": 2478.872755982234,
       "dca_active": true,
       "j_peak": 69.347631516684,
       "pullback_sold": true,
       "sell_stage": 3,
       "waiting_golden": false,
       "golden_confirmed": true,
-      "price_below_dk_sold": true,
+      "price_below_dk_sold": false,
       "round_budget": 5000,
       "round_periods": 5,
       "buy_count": 4,
@@ -869,32 +913,32 @@
           "profit": -10.08
         },
         {
-          "date": "20221206",
+          "date": "20220519",
           "action": "SELL",
-          "price": 1.052,
-          "amount": 872.17,
+          "price": 0.994,
+          "amount": 824.08,
           "shares": 829.0544,
           "round": 2,
-          "reason": "R2 收盘(1.0520)<中期线(1.0532) 减仓1/6",
+          "reason": "R2 收盘(0.9940)<中期线(0.9957) 减仓1/6",
           "total_shares": 3316.2177,
-          "profit": 38.83
+          "profit": -9.25
         },
         {
-          "date": "20230314",
+          "date": "20220520",
           "action": "SELL",
-          "price": 1.093,
-          "amount": 906.16,
+          "price": 1.003,
+          "amount": 831.54,
           "shares": 829.0544,
           "round": 2,
-          "reason": "R2 收盘(1.0930)<多空线(1.0961) 减仓1/6",
+          "reason": "R2 收盘(1.0030)<多空线(1.0175) 减仓1/6",
           "total_shares": 2487.1633,
-          "profit": 72.82
+          "profit": -1.79
         }
       ],
       "week_invested": [
-        "20220318",
         "20220225",
         "20220311",
+        "20220318",
         "20220304"
       ]
     },
@@ -903,14 +947,14 @@
       "shares": 2782.4171213322925,
       "total_cost": 2500.0,
       "total_invested": 5000.0,
-      "total_sell_amount": 2808.3863477980603,
+      "total_sell_amount": 2453.1644286413043,
       "dca_active": true,
       "j_peak": 84.80460599852009,
       "pullback_sold": true,
       "sell_stage": 3,
       "waiting_golden": false,
       "golden_confirmed": true,
-      "price_below_dk_sold": true,
+      "price_below_dk_sold": false,
       "round_budget": 5000,
       "round_periods": 5,
       "buy_count": 5,
@@ -987,34 +1031,34 @@
           "profit": -14.38
         },
         {
-          "date": "20221206",
+          "date": "20220905",
           "action": "SELL",
-          "price": 1.052,
-          "amount": 975.7,
+          "price": 0.877,
+          "amount": 813.39,
           "shares": 927.4724,
           "round": 3,
-          "reason": "R3 收盘(1.0520)<中期线(1.0532) 减仓1/6",
+          "reason": "R3 收盘(0.8770)<中期线(0.9160) 减仓1/6",
           "total_shares": 3709.8895,
-          "profit": 142.37
+          "profit": -19.94
         },
         {
-          "date": "20230314",
+          "date": "20220906",
           "action": "SELL",
-          "price": 1.093,
-          "amount": 1013.73,
+          "price": 0.885,
+          "amount": 820.81,
           "shares": 927.4724,
           "round": 3,
-          "reason": "R3 收盘(1.0930)<多空线(1.0961) 减仓1/6",
+          "reason": "R3 收盘(0.8850)<多空线(0.9278) 减仓1/6",
           "total_shares": 2782.4171,
-          "profit": 180.39
+          "profit": -12.52
         }
       ],
       "week_invested": [
-        "20220701",
-        "20220722",
         "20220708",
         "20220624",
-        "20220715"
+        "20220715",
+        "20220701",
+        "20220722"
       ]
     },
     {
@@ -1107,8 +1151,8 @@
         }
       ],
       "week_invested": [
-        "20220923",
         "20221014",
+        "20220923",
         "20220930"
       ]
     },
@@ -1224,10 +1268,10 @@
         }
       ],
       "week_invested": [
+        "20230908",
+        "20230818",
         "20230915",
         "20230901",
-        "20230818",
-        "20230908",
         "20230825"
       ]
     },
@@ -1310,8 +1354,8 @@
         }
       ],
       "week_invested": [
-        "20240208",
-        "20240223"
+        "20240223",
+        "20240208"
       ]
     },
     {
@@ -1592,11 +1636,11 @@
         }
       ],
       "week_invested": [
+        "20250926",
         "20250930",
         "20250919",
-        "20251010",
         "20250912",
-        "20250926"
+        "20251010"
       ]
     },
     {
@@ -1604,14 +1648,14 @@
       "shares": 1436.9280893847558,
       "total_cost": 2500.0,
       "total_invested": 5000.0,
-      "total_sell_amount": 2633.410211812462,
+      "total_sell_amount": 2552.942238806916,
       "dca_active": true,
       "j_peak": 87.52762508592173,
       "pullback_sold": true,
       "sell_stage": 3,
       "waiting_golden": false,
       "golden_confirmed": true,
-      "price_below_dk_sold": true,
+      "price_below_dk_sold": false,
       "round_budget": 5000,
       "round_periods": 5,
       "buy_count": 5,
@@ -1688,33 +1732,33 @@
           "profit": 7.27
         },
         {
-          "date": "20260821",
+          "date": "20260616",
           "action": "SELL",
-          "price": 1.886,
-          "amount": 903.35,
+          "price": 1.787,
+          "amount": 855.93,
           "shares": 478.976,
           "round": 10,
-          "reason": "R10 收盘(1.8860)<中期线(1.8937) 减仓1/6",
+          "reason": "R10 收盘(1.7870)<中期线(1.7871) 减仓1/6",
           "total_shares": 1915.9041,
-          "profit": 70.02
+          "profit": 22.6
         },
         {
-          "date": "20260908",
+          "date": "20260617",
           "action": "SELL",
-          "price": 1.857,
-          "amount": 889.46,
+          "price": 1.788,
+          "amount": 856.41,
           "shares": 478.976,
           "round": 10,
-          "reason": "R10 收盘(1.8570)<多空线(1.8583) 减仓1/6",
+          "reason": "R10 收盘(1.7880)<多空线(1.7978) 减仓1/6",
           "total_shares": 1436.9281,
-          "profit": 56.13
+          "profit": 23.08
         }
       ],
       "week_invested": [
+        "20260320",
+        "20260410",
         "20260403",
         "20260313",
-        "20260410",
-        "20260320",
         "20260327"
       ]
     },
@@ -1775,9 +1819,9 @@
         }
       ],
       "week_invested": [
-        "20261009",
+        "20260924",
         "20260930",
-        "20260924"
+        "20261009"
       ]
     }
   ]

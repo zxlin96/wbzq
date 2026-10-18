@@ -111,9 +111,17 @@ class WeeklyDCAStrategyV4(WeeklyDCAStrategy):
         if not sorted_weekly_dates:
             logging.warning(f"[{self.name}] 无周线KDJ数据")
             return
+        # 决策只消费"已收盘周线"：本周半成品bar（标签==最新交易日）不参与判断，
+        # 避免同一周内J值每日漂移造成"前一天卖出、后一天不卖"的信号抖动。
+        max_daily_date = all_dates[-1] if all_dates else None
+        decision_weekly_dates = [wd for wd in sorted_weekly_dates
+                                 if max_daily_date and wd < max_daily_date]
+        if len(decision_weekly_dates) < len(sorted_weekly_dates):
+            logging.info(f"[{self.name}] 本周周线尚未收盘，决策沿用 {decision_weekly_dates[-1] if decision_weekly_dates else '无'} 收盘周线"
+                         f"（跳过半成品bar: {sorted_weekly_dates[-1]}）")
         for d in all_dates:
             best_wd = None
-            for wd in sorted_weekly_dates:
+            for wd in decision_weekly_dates:
                 if wd <= d:
                     best_wd = wd
                 else:
@@ -172,6 +180,8 @@ class WeeklyDCAStrategyV4(WeeklyDCAStrategy):
                         dca_pos.buy(trade_date, price, remaining,
                                     f"J回升={weekly_j:.2f}, 剩余预算投入={remaining:.0f}")
                         dca_pos.week_invested.add(trade_date)
+                        dca_pos.dca_exit_date = trade_date
+                        dca_pos.dca_exit_amount = remaining
                         logging.info(f"[{self.name}] R{dca_pos.round_id} {trade_date} "
                                      f"J回升投入剩余预算: 价格={price:.4f}, 金额={remaining:.0f}")
                     dca_pos.dca_exited = True

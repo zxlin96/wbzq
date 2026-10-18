@@ -25,35 +25,35 @@
       "ts_code": "159941.SZ",
       "name": "NASDAQ100",
       "target": "nasdaq",
-      "strategy": "v1",
+      "strategy": "v6h",
       "enabled": true
     },
     {
       "ts_code": "513100.SH",
       "name": "纳指100",
       "target": "nasdaq_timing",
-      "strategy": "v1h",
+      "strategy": "v6h",
       "enabled": true
     },
     {
       "ts_code": "513500.SH",
       "name": "标普500",
       "target": "sp500",
-      "strategy": "v1h",
+      "strategy": "v6h",
       "enabled": true
     },
     {
       "ts_code": "513520.SH",
       "name": "日经225",
       "target": "nikkei225",
-      "strategy": "v1h",
+      "strategy": "v6h",
       "enabled": true
     },
     {
       "ts_code": "513030.SH",
       "name": "德国DAX",
       "target": "german_dax",
-      "strategy": "v1h",
+      "strategy": "v6h",
       "enabled": true
     },
     {

@@ -1887,6 +1887,16 @@ def run_backtest_from_config(config_path: str = 'etf_config.json',
                     **(etf.get('v7_params', {}) or {}),
                 )
                 report_func = generate_backtest_report_v6
+            elif strat_version == 'v6h':
+                # V6H：V6 买入端 + V1h 卖出哲学
+                # 三段各卖基准 1/6（合计 50%），剩余 1/2 永久持有；无倍投。
+                from weekly_dca_strategy_v6h import WeeklyDCAStrategyV6H
+                strategy = WeeklyDCAStrategyV6H(
+                    name=name,
+                    base_amount=base_amount,
+                    **(etf.get('v6h_params', {}) or {}),
+                )
+                report_func = generate_backtest_report_v6
             elif strat_version == 'v1h':
                 # V1 变体：每阶段卖基准1/6共卖50%，剩余1/2长期持有不再卖
                 strategy = WeeklyDCAStrategy(

@@ -19,7 +19,10 @@ V1h 的卖出是"留仓式"：三段各卖 1/6（合计 50%），剩余 1/2 永�
         · V4 止损：收盘<多空线 且 中期<多空线 且 收盘<本轮最低价（需 J 门控解锁）
         · J 峰值回撤 ≥20（峰值≥50）
         · 周线 J ≥ 93
-    第二段（stage 1→2）：golden_confirmed 且 收盘<中期线
+    第二段（stage 1→2）：收盘<中期线，且满足以下任一
+        · golden_confirmed（多头回调场景）
+        · 中期<多空（空头场景，不再等金叉）
+        · V4 止损条件成立
     第三段（stage 2→3）：price_below_dk_sold 且 收盘<多空线
     stage 3：永久持有，不再任何卖出
 
@@ -441,9 +444,14 @@ class WeeklyDCAStrategyV6H(WeeklyDCAStrategyV6):
                                 pos.golden_confirmed = False
 
                 # 第二段：收盘<中期线
+                # 金叉确认只是"多头回调"场景的前置；空头（中期<多空）或止损触发时
+                # 不应再等金叉，否则单边下跌会把仓位永久卡在 5/6（V1h 也是双空直接减档）。
                 elif (pos.sell_stage == 1 and getattr(pos, 'j_high_done', False)
-                      and pos.golden_confirmed and not pos.price_below_dk_sold
-                      and pd.notna(mid_val_today) and price < mid_val_today):
+                      and not pos.price_below_dk_sold
+                      and pd.notna(mid_val_today) and price < mid_val_today
+                      and (pos.golden_confirmed
+                           or (pd.notna(dk_val_today) and mid_val_today < dk_val_today)
+                           or stop_hit)):
                     if self._sell_tranche(pos, trade_date, price,
                                           f"R{pos.round_id} 收盘({price:.4f})<中期线"
                                           f"({mid_val_today:.4f}) 减仓1/6"):

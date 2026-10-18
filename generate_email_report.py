@@ -164,8 +164,10 @@ def generate_dca_section(dca_summary):
             </tr>"""
         else:
             # 多轮 — 汇总行 + 每轮子行（长期持有轮合并为一行，仅逐行展示操作中的轮）
-            long_term = [p for p in positions if p.get("action") == "hold_long_term"]
-            active = [p for p in positions if p.get("action") != "hold_long_term"]
+            # 长期持有轮合并为一行：V1H 用 hold_long_term，V6H 用 v6h_stage_3（已卖满50%）
+            long_term_actions = ("hold_long_term", "v6h_stage_3")
+            long_term = [p for p in positions if p.get("action") in long_term_actions]
+            active = [p for p in positions if p.get("action") not in long_term_actions]
             total_remaining = sum(
                 _position_return_info(pos, last_price)[2] for pos in positions
             )
@@ -198,7 +200,7 @@ def generate_dca_section(dca_summary):
                 lt_ret_color = "#27ae60" if lt_ret >= 0 else "#e74c3c"
                 rows += f"""
             <tr style="background:#fafafa">
-                <td style="padding-left:24px;color:#888;font-size:12px">↳ 长期持有×{len(long_term)}轮 | {lt_shares:.0f}份</td>
+                <td style="padding-left:24px;color:#888;font-size:12px">↳ 永久持有×{len(long_term)}轮 | {lt_shares:.0f}份</td>
                 <td style="color:#888;font-size:12px">不再卖出</td>
                 <td style="color:{lt_ret_color};font-size:12px">{lt_ret_str}</td>
                 <td style="font-size:12px;color:#666">{lt_value:.0f}元</td>

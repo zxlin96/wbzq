@@ -840,6 +840,11 @@ class WeeklyDCAStrategy:
                 'dca_active': pos.dca_active,
                 'round_budget': round(pos.round_budget, 2),
                 'budget_remaining': round(pos.get_budget_remaining(), 2),
+                # 整轮收益口径（剩余市值 + 已卖出回收 − 投入），供邮件"长期持有"汇总行使用
+                'total_invested': round(pos.total_invested, 2),
+                'return_pct': (round((pos.shares * last_price + pos.total_sell_amount
+                                      - pos.total_invested) / pos.total_invested * 100, 2)
+                               if pos.total_invested > 0 else None),
             }
             pos_loss = pos.get_current_loss_pct(last_price)
             pos_profit = -pos_loss

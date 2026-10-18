@@ -120,6 +120,52 @@ class WeeklyDCAStrategyV6H(WeeklyDCAStrategyV6):
         pos.sell(trade_date, price, qty / pos.shares, reason)
         return True
 
+    # ---------------------------------------------------------------- 展示层
+    STAGE_LABELS = {
+        1: ('已减1/6·等收盘<中期线', '#e67e22'),
+        2: ('已减1/3·等收盘<多空线', '#f39c12'),
+        3: ('已卖50%·永久持有', '#3498db'),
+    }
+
+    def get_next_action(self, daily_df, weekly_df):
+        """在 V2/V4 的建议结构上，改写 hold_half 语义的阶段标签。
+
+        V2 的 get_next_action 只认 sell_stage 0/1/2，stage=3 会落到 '未知'；
+        且 1/2 段的文案是"已卖1/3/2/3"（V2 口径），对 V6H 是错的。
+        这里按 round_id 回填正确文案，顶层汇总同步刷新。
+        """
+        res = super().get_next_action(daily_df, weekly_df)
+        if not self.hold_half:
+            return res
+        by_round = {p.round_id: p for p in self._active_positions()}
+        for info in res.get('positions', []):
+            pos = by_round.get(info.get('round_id'))
+            if pos is None:
+                continue
+            stage = pos.sell_stage
+            if stage in self.STAGE_LABELS:
+                label, color = self.STAGE_LABELS[stage]
+                info['action'] = f'v6h_stage_{stage}'
+                info['action_label'] = f"R{pos.round_id} {label}"
+                info['action_color'] = color
+                if stage == 3:
+                    info['action_detail'] = (
+                        f"R{pos.round_id} 已卖满50%，剩余{pos.shares:.0f}份永久持有，不再触发卖出")
+                elif stage == 2:
+                    info['action_detail'] = (
+                        f"R{pos.round_id} 收盘<多空线再减1/6，之后永久持有剩余1/2")
+                else:
+                    info['action_detail'] = (
+                        f"R{pos.round_id} 收盘<中期线再减1/6，共三段、累计50%")
+        if res.get('positions'):
+            first = res['positions'][0]
+            res['action'] = first.get('action', res.get('action'))
+            res['action_label'] = first.get('action_label', res.get('action_label'))
+            res['action_color'] = first.get('action_color', res.get('action_color'))
+            res['action_detail'] = ' | '.join(
+                p.get('action_detail', '') for p in res['positions'])
+        return res
+
     def backtest(self, daily_df: pd.DataFrame, weekly_df: pd.DataFrame,
                  backtest_start: str = None):
         mode = 'V6H 留半仓' if self.hold_half else 'V6 原版(等价性对照)'

@@ -1101,7 +1101,11 @@ def generate_backtest_report(strategy: WeeklyDCAStrategy,
     for pos_data in na.get('positions', []):
         rid = pos_data.get('round_id', '?')
         color = round_colors.get(rid, '#95a5a6')
-        stage_labels = {0: '定投中', 1: '已卖1/3', 2: '已卖2/3'}
+        # hold_half 变体（V1H/V6H）：三段各卖 1/6，卖满 50% 后永久持有
+        if getattr(strategy, 'hold_half', False):
+            stage_labels = {0: '定投中', 1: '已卖1/6', 2: '已卖1/3', 3: '永久持有1/2'}
+        else:
+            stage_labels = {0: '定投中', 1: '已卖1/3', 2: '已卖2/3'}
         stage_text = stage_labels.get(pos_data.get('sell_stage', 0), '已清仓')
         pos_shares = pos_data.get('shares', 0)
         pos_cost = pos_data.get('avg_cost', 0)

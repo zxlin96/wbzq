@@ -14,27 +14,6 @@
       "enabled": true
     },
     {
-      "ts_code": "510050.SH",
-      "name": "上证50",
-      "target": "sz50",
-      "strategy": "v6",
-      "enabled": true
-    },
-    {
-      "ts_code": "510300.SH",
-      "name": "沪深300",
-      "target": "hs300",
-      "strategy": "v6",
-      "enabled": true
-    },
-    {
-      "ts_code": "159941.SZ",
-      "name": "NASDAQ100",
-      "target": "nasdaq",
-      "strategy": "v6h",
-      "enabled": true
-    },
-    {
       "ts_code": "513100.SH",
       "name": "纳指100",
       "target": "nasdaq_timing",
@@ -129,6 +108,20 @@
       "ts_code": "562500.SH",
       "name": "机器人",
       "target": "robot",
+      "strategy": "v6",
+      "enabled": true
+    },
+    {
+      "ts_code": "510050.SH",
+      "name": "上证50",
+      "target": "sz50",
+      "strategy": "v6",
+      "enabled": true
+    },
+    {
+      "ts_code": "510300.SH",
+      "name": "沪深300",
+      "target": "hs300",
       "strategy": "v6",
       "enabled": true
     }

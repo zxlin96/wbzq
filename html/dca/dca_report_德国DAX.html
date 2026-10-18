@@ -15,9 +15,9 @@ h2 { color: #333; font-size: 18px; margin: 15px 0 10px; }
 .card { background: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
 .card-label { color: #666; font-size: 12px; margin-bottom: 5px; }
 .card-value { font-size: 20px; font-weight: bold; color: #333; }
-.action-box { background: white; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 5px solid #3498db; }
+.action-box { background: white; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 5px solid #e67e22; }
 .action-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-.action-label { font-size: 22px; font-weight: bold; color: #3498db; }
+.action-label { font-size: 22px; font-weight: bold; color: #e67e22; }
 .action-date { color: #999; font-size: 13px; }
 .action-detail { font-size: 14px; color: #555; line-height: 1.8; padding: 10px; background: #fafafa; border-radius: 4px; }
 .action-metrics { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 12px; }
@@ -43,37 +43,40 @@ h2 { color: #333; font-size: 18px; margin: 15px 0 10px; }
 <body>
 <div class="container">
 <h1>周线KDJ定投策略回测报告</h1>
-<div class="subtitle">德国DAX | 基础金额: 1000 | J&lt;=13定投 | J&gt;=93卖1/6 | 回撤止盈(peak&gt;=50,回落&gt;=20) | J≥93/回撤卖1/6 → 收盘<多空线卖1/6 → 死叉卖1/6 | 共3次卖50%，剩余1/2长期持有</div>
+<div class="subtitle">德国DAX | 基础金额: 1000 | "
+    f"J<=13定投 | J>=93卖1/3 | "
+    f"回撤止盈(peak>=50,回落>=20) | "
+    f"收盘<中期线:中期>多空卖1/3,中期<多空全清 | 已卖2/3后收盘<多空线全清</div>
 <div class="action-box">
 <div class="action-header">
-    <div class="action-label">下一交易日: R1 长期持有剩余1/2</div>
+    <div class="action-label">下一交易日: R1 已减1/6·等收盘<中期线</div>
     <div class="action-date">数据截至: 20261016 收盘价: 1.7720</div>
 </div>
-<div class="action-detail">R1 已分3次卖出共1/2，剩余1/2长期持有，不再触发卖出 | R2 已分3次卖出共1/2，剩余1/2长期持有，不再触发卖出 | R3 已分3次卖出共1/2，剩余1/2长期持有，不再触发卖出 | R4 已分3次卖出共1/2，剩余1/2长期持有，不再触发卖出 | R5 已分3次卖出共1/2，剩余1/2长期持有，不再触发卖出 | R6 已分3次卖出共1/2，剩余1/2长期持有，不再触发卖出 | R7 已分3次卖出共1/2，剩余1/2长期持有，不再触发卖出 | R8 已分3次卖出共1/2，剩余1/2长期持有，不再触发卖出 | R9 已分3次卖出共1/2，剩余1/2长期持有，不再触发卖出 | R10 已分3次卖出共1/2，剩余1/2长期持有，不再触发卖出 | R11 定投中，浮亏0.50%，建议买入1000元(1x)</div>
+<div class="action-detail">R1 收盘<中期线再减1/6，共三段、累计50% | R2 已卖满50%，剩余2487份永久持有，不再触发卖出 | R3 已卖满50%，剩余2782份永久持有，不再触发卖出 | R4 已卖满50%，剩余2861份永久持有，不再触发卖出 | R5 已卖满50%，剩余2059份永久持有，不再触发卖出 | R6 已卖满50%，剩余1908份永久持有，不再触发卖出 | R7 已卖满50%，剩余1888份永久持有，不再触发卖出 | R8 已卖满50%，剩余1778份永久持有，不再触发卖出 | R9 已卖满50%，剩余1355份永久持有，不再触发卖出 | R10 已卖满50%，剩余1437份永久持有，不再触发卖出 | R11 定投中，浮亏0.91%，建议买入1000元(1x)</div>
 <div class="action-metrics">
     <div class="action-metric">周线K=18.55</div>
     <div class="action-metric">周线D=31.61</div>
     <div class="action-metric">周线J=-7.56</div>
     <div class='action-metric'>中期=1.7956 多空=1.8169 (空头)</div>
-    <div class='action-metric'>持仓=26568.47份 成本=1.2233 浮盈=44.86%</div>
+    <div class='action-metric'>持仓=23746.42份 成本=1.2493 浮盈=41.84%</div>
 </div>
 </div>
 <div class="summary">
 <div class="card">
     <div class="card-label">总投入</div>
-    <div class="card-value">62000.00</div>
+    <div class="card-value">53000.00</div>
 </div>
 <div class="card">
     <div class="card-label">总卖出</div>
-    <div class="card-value">32299.89</div>
+    <div class="card-value">24700.56</div>
 </div>
 <div class="card">
     <div class="card-label">剩余持仓</div>
-    <div class="card-value">26568.4666 份</div>
+    <div class="card-value">23746.4178 份</div>
 </div>
 <div class="card">
     <div class="card-label">交易次数</div>
-    <div class="card-value">72</div>
+    <div class="card-value">66</div>
 </div>
 <div class="card">
     <div class="card-label">轮次数</div>
@@ -86,120 +89,120 @@ h2 { color: #333; font-size: 18px; margin: 15px 0 10px; }
 <div class="pos-card" style="border-left: 4px solid #e74c3c;">
     <div class="pos-header">
         <span class="pos-round" style="background: #e74c3c;">R1</span>
-        <span class="pos-stage">长期持有1/2</span>
+        <span class="pos-stage">已卖1/6</span>
     </div>
-    <div class="pos-detail">R1 长期持有剩余1/2</div>
+    <div class="pos-detail">R1 已减1/6·等收盘<中期线</div>
     <div class="pos-metrics">
-        <span>持仓: 2105.80份</span>
-        <span>成本: 1.1872</span>
+        <span>持仓: 3513.81份</span>
+        <span>成本: 1.1858</span>
         <span>J峰值: 84.70</span>
     </div>
 </div>
 <div class="pos-card" style="border-left: 4px solid #3498db;">
     <div class="pos-header">
         <span class="pos-round" style="background: #3498db;">R2</span>
-        <span class="pos-stage">长期持有1/2</span>
+        <span class="pos-stage">永久持有1/2</span>
     </div>
-    <div class="pos-detail">R2 长期持有剩余1/2</div>
+    <div class="pos-detail">R2 已卖50%·永久持有</div>
     <div class="pos-metrics">
-        <span>持仓: 3164.41份</span>
-        <span>成本: 0.9480</span>
+        <span>持仓: 2487.16份</span>
+        <span>成本: 1.0052</span>
         <span>J峰值: 69.35</span>
     </div>
 </div>
 <div class="pos-card" style="border-left: 4px solid #9b59b6;">
     <div class="pos-header">
         <span class="pos-round" style="background: #9b59b6;">R3</span>
-        <span class="pos-stage">长期持有1/2</span>
+        <span class="pos-stage">永久持有1/2</span>
     </div>
-    <div class="pos-detail">R3 长期持有剩余1/2</div>
+    <div class="pos-detail">R3 已卖50%·永久持有</div>
     <div class="pos-metrics">
-        <span>持仓: 2764.60份</span>
-        <span>成本: 0.9043</span>
+        <span>持仓: 2782.42份</span>
+        <span>成本: 0.8985</span>
         <span>J峰值: 84.80</span>
     </div>
 </div>
 <div class="pos-card" style="border-left: 4px solid #e67e22;">
     <div class="pos-header">
         <span class="pos-round" style="background: #e67e22;">R4</span>
-        <span class="pos-stage">长期持有1/2</span>
+        <span class="pos-stage">永久持有1/2</span>
     </div>
-    <div class="pos-detail">R4 长期持有剩余1/2</div>
+    <div class="pos-detail">R4 已卖50%·永久持有</div>
     <div class="pos-metrics">
-        <span>持仓: 2893.86份</span>
-        <span>成本: 0.8639</span>
+        <span>持仓: 2860.65份</span>
+        <span>成本: 0.8739</span>
         <span>J峰值: 94.36</span>
     </div>
 </div>
 <div class="pos-card" style="border-left: 4px solid #1abc9c;">
     <div class="pos-header">
         <span class="pos-round" style="background: #1abc9c;">R5</span>
-        <span class="pos-stage">长期持有1/2</span>
+        <span class="pos-stage">永久持有1/2</span>
     </div>
-    <div class="pos-detail">R5 长期持有剩余1/2</div>
+    <div class="pos-detail">R5 已卖50%·永久持有</div>
     <div class="pos-metrics">
-        <span>持仓: 5584.54份</span>
-        <span>成本: 1.1639</span>
+        <span>持仓: 2059.16份</span>
+        <span>成本: 1.2141</span>
         <span>J峰值: 114.84</span>
     </div>
 </div>
 <div class="pos-card" style="border-left: 4px solid #f39c12;">
     <div class="pos-header">
         <span class="pos-round" style="background: #f39c12;">R6</span>
-        <span class="pos-stage">长期持有1/2</span>
+        <span class="pos-stage">永久持有1/2</span>
     </div>
-    <div class="pos-detail">R6 长期持有剩余1/2</div>
+    <div class="pos-detail">R6 已卖50%·永久持有</div>
     <div class="pos-metrics">
-        <span>持仓: 1907.41份</span>
-        <span>成本: 1.3107</span>
+        <span>持仓: 1907.77份</span>
+        <span>成本: 1.3104</span>
         <span>J峰值: 102.24</span>
     </div>
 </div>
 <div class="pos-card" style="border-left: 4px solid #2ecc71;">
     <div class="pos-header">
         <span class="pos-round" style="background: #2ecc71;">R7</span>
-        <span class="pos-stage">长期持有1/2</span>
+        <span class="pos-stage">永久持有1/2</span>
     </div>
-    <div class="pos-detail">R7 长期持有剩余1/2</div>
+    <div class="pos-detail">R7 已卖50%·永久持有</div>
     <div class="pos-metrics">
-        <span>持仓: 1887.24份</span>
-        <span>成本: 1.3247</span>
+        <span>持仓: 1887.66份</span>
+        <span>成本: 1.3244</span>
         <span>J峰值: 96.05</span>
     </div>
 </div>
 <div class="pos-card" style="border-left: 4px solid #e84393;">
     <div class="pos-header">
         <span class="pos-round" style="background: #e84393;">R8</span>
-        <span class="pos-stage">长期持有1/2</span>
+        <span class="pos-stage">永久持有1/2</span>
     </div>
-    <div class="pos-detail">R8 长期持有剩余1/2</div>
+    <div class="pos-detail">R8 已卖50%·永久持有</div>
     <div class="pos-metrics">
-        <span>持仓: 1765.59份</span>
-        <span>成本: 1.4160</span>
+        <span>持仓: 1778.49份</span>
+        <span>成本: 1.4057</span>
         <span>J峰值: 91.48</span>
     </div>
 </div>
 <div class="pos-card" style="border-left: 4px solid #00b894;">
     <div class="pos-header">
         <span class="pos-round" style="background: #00b894;">R9</span>
-        <span class="pos-stage">长期持有1/2</span>
+        <span class="pos-stage">永久持有1/2</span>
     </div>
-    <div class="pos-detail">R9 长期持有剩余1/2</div>
+    <div class="pos-detail">R9 已卖50%·永久持有</div>
     <div class="pos-metrics">
-        <span>持仓: 1349.86份</span>
-        <span>成本: 1.8520</span>
+        <span>持仓: 1354.71份</span>
+        <span>成本: 1.8454</span>
         <span>J峰值: 76.01</span>
     </div>
 </div>
 <div class="pos-card" style="border-left: 4px solid #6c5ce7;">
     <div class="pos-header">
         <span class="pos-round" style="background: #6c5ce7;">R10</span>
-        <span class="pos-stage">长期持有1/2</span>
+        <span class="pos-stage">永久持有1/2</span>
     </div>
-    <div class="pos-detail">R10 长期持有剩余1/2</div>
+    <div class="pos-detail">R10 已卖50%·永久持有</div>
     <div class="pos-metrics">
-        <span>持仓: 1460.62份</span>
-        <span>成本: 1.7116</span>
+        <span>持仓: 1436.93份</span>
+        <span>成本: 1.7398</span>
         <span>J峰值: 87.53</span>
     </div>
 </div>
@@ -210,8 +213,8 @@ h2 { color: #333; font-size: 18px; margin: 15px 0 10px; }
     </div>
     <div class="pos-detail">R11 建议定投(1x)</div>
     <div class="pos-metrics">
-        <span>持仓: 1684.54份</span>
-        <span>成本: 1.7809</span>
+        <span>持仓: 1677.68份</span>
+        <span>成本: 1.7882</span>
         <span>J峰值: 8.24</span>
     </div>
 </div>
@@ -233,795 +236,729 @@ h2 { color: #333; font-size: 18px; margin: 15px 0 10px; }
     <th>原因</th><th>持仓</th><th>盈亏</th>
 </tr>
 <tr>
-    <td>20211020</td>
+    <td>20211019</td>
     <td><span class="round-tag" style="background: #e74c3c;">R1</span></td>
     <td><span class="buy-tag">买入</span></td>
-    <td>1.1880</td>
+    <td>1.1890</td>
     <td>1000.00</td>
-    <td>841.7508</td>
+    <td>841.0429</td>
     <td>周线J=9.06, 金额=1000</td>
-    <td>841.7508</td>
+    <td>841.0429</td>
     <td>-</td>
 </tr>
 <tr>
-    <td>20211025</td>
+    <td>20211022</td>
     <td><span class="round-tag" style="background: #e74c3c;">R1</span></td>
     <td><span class="buy-tag">买入</span></td>
-    <td>1.1870</td>
+    <td>1.1850</td>
     <td>4000.00</td>
-    <td>3369.8399</td>
+    <td>3375.5274</td>
     <td>J回升=17.01, 剩余预算投入=4000</td>
-    <td>4211.5908</td>
+    <td>4216.5703</td>
     <td>-</td>
 </tr>
 <tr>
-    <td>20211129</td>
+    <td>20211125</td>
     <td><span class="round-tag" style="background: #7f2921;">R1</span></td>
     <td><span class="sell-tag">卖出</span></td>
-    <td>1.1410</td>
-    <td>800.90</td>
-    <td>701.9318</td>
-    <td>R1 J峰值回撤(J_peak=84.70, J=38.17, 回撤=46.54)</td>
-    <td>3509.6590</td>
-    <td>-32.43</td>
+    <td>1.1770</td>
+    <td>827.15</td>
+    <td>702.7617</td>
+    <td>R1 止损减仓1/6: 收盘跌破多空线且创新低</td>
+    <td>3513.8086</td>
+    <td>-6.18</td>
 </tr>
 <tr>
-    <td>20220228</td>
+    <td>20220225</td>
     <td><span class="round-tag" style="background: #3498db;">R2</span></td>
     <td><span class="buy-tag">买入</span></td>
-    <td>1.0390</td>
+    <td>1.0370</td>
     <td>1000.00</td>
-    <td>962.4639</td>
+    <td>964.3202</td>
     <td>周线J=5.92, 金额=1000</td>
-    <td>962.4639</td>
+    <td>964.3202</td>
     <td>-</td>
 </tr>
 <tr>
-    <td>20220307</td>
+    <td>20220304</td>
     <td><span class="round-tag" style="background: #3498db;">R2</span></td>
     <td><span class="buy-tag">买入</span></td>
-    <td>0.9240</td>
-    <td>4000.00</td>
-    <td>4329.0043</td>
-    <td>周线J=-7.23, 金额=4000</td>
-    <td>5291.4682</td>
-    <td>-</td>
-</tr>
-<tr>
-    <td>20220314</td>
-    <td><span class="round-tag" style="background: #3498db;">R2</span></td>
-    <td><span class="buy-tag">买入</span></td>
-    <td>0.9640</td>
+    <td>0.9620</td>
     <td>1000.00</td>
-    <td>1037.3444</td>
-    <td>周线J=7.23, 金额=1000</td>
-    <td>6328.8126</td>
+    <td>1039.5010</td>
+    <td>周线J=-7.23, 金额=1000</td>
+    <td>2003.8212</td>
     <td>-</td>
 </tr>
 <tr>
-    <td>20220516</td>
+    <td>20220311</td>
+    <td><span class="round-tag" style="background: #3498db;">R2</span></td>
+    <td><span class="buy-tag">买入</span></td>
+    <td>0.9650</td>
+    <td>1000.00</td>
+    <td>1036.2694</td>
+    <td>周线J=7.23, 金额=1000</td>
+    <td>3040.0906</td>
+    <td>-</td>
+</tr>
+<tr>
+    <td>20220318</td>
+    <td><span class="round-tag" style="background: #3498db;">R2</span></td>
+    <td><span class="buy-tag">买入</span></td>
+    <td>1.0340</td>
+    <td>2000.00</td>
+    <td>1934.2360</td>
+    <td>J回升=32.39, 剩余预算投入=2000</td>
+    <td>4974.3266</td>
+    <td>-</td>
+</tr>
+<tr>
+    <td>20220513</td>
     <td><span class="round-tag" style="background: #1c5378;">R2</span></td>
     <td><span class="sell-tag">卖出</span></td>
-    <td>1.0060</td>
-    <td>1061.13</td>
-    <td>1054.8021</td>
-    <td>R2 J峰值回撤(J_peak=69.35, J=43.51, 回撤=25.83)</td>
-    <td>5274.0105</td>
-    <td>61.13</td>
+    <td>0.9930</td>
+    <td>823.25</td>
+    <td>829.0544</td>
+    <td>R2 J峰值回撤(J_peak=69.35, J=43.51)减仓1/6</td>
+    <td>4145.2722</td>
+    <td>-10.08</td>
 </tr>
 <tr>
-    <td>20220627</td>
+    <td>20220624</td>
     <td><span class="round-tag" style="background: #9b59b6;">R3</span></td>
     <td><span class="buy-tag">买入</span></td>
-    <td>0.9370</td>
+    <td>0.9290</td>
     <td>1000.00</td>
-    <td>1067.2359</td>
+    <td>1076.4263</td>
     <td>周线J=-0.78, 金额=1000</td>
-    <td>1067.2359</td>
+    <td>1076.4263</td>
     <td>-</td>
 </tr>
 <tr>
-    <td>20220704</td>
+    <td>20220701</td>
     <td><span class="round-tag" style="background: #9b59b6;">R3</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.9100</td>
     <td>1000.00</td>
     <td>1098.9011</td>
     <td>周线J=-10.46, 金额=1000</td>
-    <td>2166.1370</td>
+    <td>2175.3274</td>
     <td>-</td>
 </tr>
 <tr>
-    <td>20220711</td>
+    <td>20220708</td>
     <td><span class="round-tag" style="background: #9b59b6;">R3</span></td>
     <td><span class="buy-tag">买入</span></td>
-    <td>0.8840</td>
+    <td>0.8800</td>
     <td>1000.00</td>
-    <td>1131.2217</td>
+    <td>1136.3636</td>
     <td>周线J=-11.34, 金额=1000</td>
-    <td>3297.3587</td>
+    <td>3311.6910</td>
     <td>-</td>
 </tr>
 <tr>
-    <td>20220718</td>
+    <td>20220715</td>
     <td><span class="round-tag" style="background: #9b59b6;">R3</span></td>
+    <td><span class="buy-tag">买入</span></td>
+    <td>0.8610</td>
+    <td>1000.00</td>
+    <td>1161.4402</td>
+    <td>周线J=-12.32, 金额=1000</td>
+    <td>4473.1312</td>
+    <td>-</td>
+</tr>
+<tr>
+    <td>20220722</td>
+    <td><span class="round-tag" style="background: #9b59b6;">R3</span></td>
+    <td><span class="buy-tag">买入</span></td>
+    <td>0.9160</td>
+    <td>1000.00</td>
+    <td>1091.7031</td>
+    <td>周线J=9.40, 金额=1000</td>
+    <td>5564.8342</td>
+    <td>-</td>
+</tr>
+<tr>
+    <td>20220902</td>
+    <td><span class="round-tag" style="background: #553064;">R3</span></td>
+    <td><span class="sell-tag">卖出</span></td>
+    <td>0.8830</td>
+    <td>818.96</td>
+    <td>927.4724</td>
+    <td>R3 J峰值回撤(J_peak=84.80, J=44.63)减仓1/6</td>
+    <td>4637.3619</td>
+    <td>-14.38</td>
+</tr>
+<tr>
+    <td>20220923</td>
+    <td><span class="round-tag" style="background: #e67e22;">R4</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>0.8780</td>
     <td>1000.00</td>
     <td>1138.9522</td>
-    <td>周线J=-12.32, 金额=1000</td>
-    <td>4436.3108</td>
-    <td>-</td>
-</tr>
-<tr>
-    <td>20220725</td>
-    <td><span class="round-tag" style="background: #9b59b6;">R3</span></td>
-    <td><span class="buy-tag">买入</span></td>
-    <td>0.9150</td>
-    <td>1000.00</td>
-    <td>1092.8962</td>
-    <td>周线J=9.40, 金额=1000</td>
-    <td>5529.2070</td>
-    <td>-</td>
-</tr>
-<tr>
-    <td>20220905</td>
-    <td><span class="round-tag" style="background: #553064;">R3</span></td>
-    <td><span class="sell-tag">卖出</span></td>
-    <td>0.8870</td>
-    <td>817.40</td>
-    <td>921.5345</td>
-    <td>R3 J峰值回撤(J_peak=84.80, J=44.63, 回撤=40.18)</td>
-    <td>4607.6725</td>
-    <td>-15.93</td>
-</tr>
-<tr>
-    <td>20220926</td>
-    <td><span class="round-tag" style="background: #e67e22;">R4</span></td>
-    <td><span class="buy-tag">买入</span></td>
-    <td>0.8640</td>
-    <td>1000.00</td>
-    <td>1157.4074</td>
     <td>周线J=12.36, 金额=1000</td>
-    <td>1157.4074</td>
+    <td>1138.9522</td>
     <td>-</td>
 </tr>
 <tr>
-    <td>20221010</td>
+    <td>20220930</td>
     <td><span class="round-tag" style="background: #e67e22;">R4</span></td>
     <td><span class="buy-tag">买入</span></td>
-    <td>0.8460</td>
+    <td>0.8440</td>
     <td>1000.00</td>
-    <td>1182.0331</td>
+    <td>1184.8341</td>
     <td>周线J=1.21, 金额=1000</td>
-    <td>2339.4405</td>
+    <td>2323.7863</td>
     <td>-</td>
 </tr>
 <tr>
-    <td>20221017</td>
+    <td>20221014</td>
     <td><span class="round-tag" style="background: #e67e22;">R4</span></td>
     <td><span class="buy-tag">买入</span></td>
-    <td>0.8700</td>
+    <td>0.8830</td>
     <td>3000.00</td>
-    <td>3448.2759</td>
+    <td>3397.5085</td>
     <td>J回升=19.66, 剩余预算投入=3000</td>
-    <td>5787.7164</td>
+    <td>5721.2948</td>
     <td>-</td>
 </tr>
 <tr>
-    <td>20221107</td>
+    <td>20221104</td>
     <td><span class="round-tag" style="background: #7e4512;">R4</span></td>
     <td><span class="sell-tag">卖出</span></td>
-    <td>0.9540</td>
-    <td>920.25</td>
-    <td>964.6194</td>
-    <td>R4 周线J=94.36>=93</td>
-    <td>4823.0970</td>
-    <td>86.91</td>
+    <td>0.9490</td>
+    <td>904.92</td>
+    <td>953.5491</td>
+    <td>R4 周线J=94.36>=93 减仓1/6</td>
+    <td>4767.7457</td>
+    <td>71.58</td>
 </tr>
 <tr>
-    <td>20230315</td>
-    <td><span class="round-tag" style="background: #7f2921;">R1</span></td>
-    <td><span class="sell-tag">卖出</span></td>
-    <td>1.1160</td>
-    <td>783.36</td>
-    <td>701.9318</td>
-    <td>R1 多头回调: 收盘(1.0930)<多空线(1.0961), 中期(1.1295)>多空线</td>
-    <td>2807.7272</td>
-    <td>-49.98</td>
-</tr>
-<tr>
-    <td>20230315</td>
+    <td>20221206</td>
     <td><span class="round-tag" style="background: #1c5378;">R2</span></td>
     <td><span class="sell-tag">卖出</span></td>
-    <td>1.1160</td>
-    <td>1177.16</td>
-    <td>1054.8021</td>
-    <td>R2 多头回调: 收盘(1.0930)<多空线(1.0961), 中期(1.1295)>多空线</td>
-    <td>4219.2084</td>
-    <td>177.16</td>
+    <td>1.0520</td>
+    <td>872.17</td>
+    <td>829.0544</td>
+    <td>R2 收盘(1.0520)<中期线(1.0532) 减仓1/6</td>
+    <td>3316.2177</td>
+    <td>38.83</td>
 </tr>
 <tr>
-    <td>20230315</td>
+    <td>20221206</td>
     <td><span class="round-tag" style="background: #553064;">R3</span></td>
     <td><span class="sell-tag">卖出</span></td>
-    <td>1.1160</td>
-    <td>1028.43</td>
-    <td>921.5345</td>
-    <td>R3 多头回调: 收盘(1.0930)<多空线(1.0961), 中期(1.1295)>多空线</td>
-    <td>3686.1380</td>
-    <td>195.10</td>
+    <td>1.0520</td>
+    <td>975.70</td>
+    <td>927.4724</td>
+    <td>R3 收盘(1.0520)<中期线(1.0532) 减仓1/6</td>
+    <td>3709.8895</td>
+    <td>142.37</td>
 </tr>
 <tr>
-    <td>20230315</td>
+    <td>20221206</td>
     <td><span class="round-tag" style="background: #7e4512;">R4</span></td>
     <td><span class="sell-tag">卖出</span></td>
-    <td>1.1160</td>
-    <td>1076.52</td>
-    <td>964.6194</td>
-    <td>R4 多头回调: 收盘(1.0930)<多空线(1.0961), 中期(1.1295)>多空线</td>
-    <td>3858.4776</td>
-    <td>243.18</td>
+    <td>1.0520</td>
+    <td>1003.13</td>
+    <td>953.5491</td>
+    <td>R4 收盘(1.0520)<中期线(1.0532) 减仓1/6</td>
+    <td>3814.1965</td>
+    <td>169.80</td>
 </tr>
 <tr>
-    <td>20230821</td>
+    <td>20230314</td>
+    <td><span class="round-tag" style="background: #1c5378;">R2</span></td>
+    <td><span class="sell-tag">卖出</span></td>
+    <td>1.0930</td>
+    <td>906.16</td>
+    <td>829.0544</td>
+    <td>R2 收盘(1.0930)<多空线(1.0961) 减仓1/6</td>
+    <td>2487.1633</td>
+    <td>72.82</td>
+</tr>
+<tr>
+    <td>20230314</td>
+    <td><span class="round-tag" style="background: #553064;">R3</span></td>
+    <td><span class="sell-tag">卖出</span></td>
+    <td>1.0930</td>
+    <td>1013.73</td>
+    <td>927.4724</td>
+    <td>R3 收盘(1.0930)<多空线(1.0961) 减仓1/6</td>
+    <td>2782.4171</td>
+    <td>180.39</td>
+</tr>
+<tr>
+    <td>20230314</td>
+    <td><span class="round-tag" style="background: #7e4512;">R4</span></td>
+    <td><span class="sell-tag">卖出</span></td>
+    <td>1.0930</td>
+    <td>1042.23</td>
+    <td>953.5491</td>
+    <td>R4 收盘(1.0930)<多空线(1.0961) 减仓1/6</td>
+    <td>2860.6474</td>
+    <td>208.90</td>
+</tr>
+<tr>
+    <td>20230818</td>
     <td><span class="round-tag" style="background: #1abc9c;">R5</span></td>
     <td><span class="buy-tag">买入</span></td>
-    <td>1.2100</td>
+    <td>1.2110</td>
     <td>1000.00</td>
-    <td>826.4463</td>
+    <td>825.7638</td>
     <td>周线J=5.77, 金额=1000</td>
-    <td>826.4463</td>
+    <td>825.7638</td>
     <td>-</td>
 </tr>
 <tr>
-    <td>20230828</td>
+    <td>20230825</td>
     <td><span class="round-tag" style="background: #1abc9c;">R5</span></td>
     <td><span class="buy-tag">买入</span></td>
-    <td>1.2050</td>
+    <td>1.1960</td>
     <td>1000.00</td>
-    <td>829.8755</td>
+    <td>836.1204</td>
     <td>周线J=-14.07, 金额=1000</td>
-    <td>1656.3218</td>
+    <td>1661.8842</td>
     <td>-</td>
 </tr>
 <tr>
-    <td>20230831</td>
-    <td><span class="round-tag" style="background: #7f2921;">R1</span></td>
-    <td><span class="sell-tag">卖出</span></td>
-    <td>1.2370</td>
-    <td>868.29</td>
-    <td>701.9318</td>
-    <td>R1 日线知行多空死叉(卖1/6，余1/2长期持有)</td>
-    <td>2105.7954</td>
-    <td>34.96</td>
-</tr>
-<tr>
-    <td>20230831</td>
-    <td><span class="round-tag" style="background: #1c5378;">R2</span></td>
-    <td><span class="sell-tag">卖出</span></td>
-    <td>1.2370</td>
-    <td>1304.79</td>
-    <td>1054.8021</td>
-    <td>R2 日线知行多空死叉(卖1/6，余1/2长期持有)</td>
-    <td>3164.4063</td>
-    <td>304.79</td>
-</tr>
-<tr>
-    <td>20230831</td>
-    <td><span class="round-tag" style="background: #553064;">R3</span></td>
-    <td><span class="sell-tag">卖出</span></td>
-    <td>1.2370</td>
-    <td>1139.94</td>
-    <td>921.5345</td>
-    <td>R3 日线知行多空死叉(卖1/6，余1/2长期持有)</td>
-    <td>2764.6035</td>
-    <td>306.60</td>
-</tr>
-<tr>
-    <td>20230831</td>
-    <td><span class="round-tag" style="background: #7e4512;">R4</span></td>
-    <td><span class="sell-tag">卖出</span></td>
-    <td>1.2370</td>
-    <td>1193.23</td>
-    <td>964.6194</td>
-    <td>R4 日线知行多空死叉(卖1/6，余1/2长期持有)</td>
-    <td>2893.8582</td>
-    <td>359.90</td>
-</tr>
-<tr>
-    <td>20230904</td>
+    <td>20230901</td>
     <td><span class="round-tag" style="background: #1abc9c;">R5</span></td>
     <td><span class="buy-tag">买入</span></td>
-    <td>1.2230</td>
+    <td>1.2310</td>
     <td>1000.00</td>
-    <td>817.6615</td>
+    <td>812.3477</td>
     <td>周线J=7.76, 金额=1000</td>
-    <td>2473.9833</td>
+    <td>2474.2319</td>
     <td>-</td>
 </tr>
 <tr>
-    <td>20230911</td>
+    <td>20230908</td>
     <td><span class="round-tag" style="background: #1abc9c;">R5</span></td>
     <td><span class="buy-tag">买入</span></td>
-    <td>1.2200</td>
+    <td>1.2210</td>
     <td>1000.00</td>
-    <td>819.6721</td>
+    <td>819.0008</td>
     <td>周线J=12.57, 金额=1000</td>
-    <td>3293.6554</td>
+    <td>3293.2327</td>
     <td>-</td>
 </tr>
 <tr>
-    <td>20230918</td>
+    <td>20230915</td>
     <td><span class="round-tag" style="background: #1abc9c;">R5</span></td>
     <td><span class="buy-tag">买入</span></td>
-    <td>1.2050</td>
+    <td>1.2120</td>
     <td>1000.00</td>
-    <td>829.8755</td>
+    <td>825.0825</td>
     <td>周线J=8.95, 金额=1000</td>
-    <td>4123.5309</td>
+    <td>4118.3152</td>
     <td>-</td>
 </tr>
 <tr>
-    <td>20230925</td>
-    <td><span class="round-tag" style="background: #1abc9c;">R5</span></td>
-    <td><span class="buy-tag">买入</span></td>
-    <td>1.1810</td>
-    <td>1000.00</td>
-    <td>846.7401</td>
-    <td>周线J=2.75, 金额=1000</td>
-    <td>4970.2710</td>
-    <td>-</td>
-</tr>
-<tr>
-    <td>20231009</td>
-    <td><span class="round-tag" style="background: #1abc9c;">R5</span></td>
-    <td><span class="buy-tag">买入</span></td>
-    <td>1.1420</td>
-    <td>2000.00</td>
-    <td>1751.3135</td>
-    <td>周线J=-6.94, 金额=2000</td>
-    <td>6721.5845</td>
-    <td>-</td>
-</tr>
-<tr>
-    <td>20231016</td>
-    <td><span class="round-tag" style="background: #1abc9c;">R5</span></td>
-    <td><span class="buy-tag">买入</span></td>
-    <td>1.1500</td>
-    <td>1000.00</td>
-    <td>869.5652</td>
-    <td>周线J=2.93, 金额=1000</td>
-    <td>7591.1497</td>
-    <td>-</td>
-</tr>
-<tr>
-    <td>20231023</td>
-    <td><span class="round-tag" style="background: #1abc9c;">R5</span></td>
-    <td><span class="buy-tag">买入</span></td>
-    <td>1.1240</td>
-    <td>2000.00</td>
-    <td>1779.3594</td>
-    <td>周线J=-1.11, 金额=2000</td>
-    <td>9370.5091</td>
-    <td>-</td>
-</tr>
-<tr>
-    <td>20231030</td>
-    <td><span class="round-tag" style="background: #1abc9c;">R5</span></td>
-    <td><span class="buy-tag">买入</span></td>
-    <td>1.1120</td>
-    <td>2000.00</td>
-    <td>1798.5612</td>
-    <td>周线J=-1.96, 金额=2000</td>
-    <td>11169.0703</td>
-    <td>-</td>
-</tr>
-<tr>
-    <td>20231127</td>
+    <td>20231124</td>
     <td><span class="round-tag" style="background: #0e6755;">R5</span></td>
     <td><span class="sell-tag">卖出</span></td>
-    <td>1.2250</td>
-    <td>2280.35</td>
-    <td>1861.5117</td>
-    <td>R5 周线J=114.84>=93</td>
-    <td>9307.5586</td>
-    <td>113.69</td>
+    <td>1.2240</td>
+    <td>840.14</td>
+    <td>686.3859</td>
+    <td>R5 周线J=114.84>=93 减仓1/6</td>
+    <td>3431.9294</td>
+    <td>6.80</td>
 </tr>
 <tr>
-    <td>20240118</td>
+    <td>20240103</td>
     <td><span class="round-tag" style="background: #0e6755;">R5</span></td>
     <td><span class="sell-tag">卖出</span></td>
-    <td>1.2500</td>
-    <td>2326.89</td>
-    <td>1861.5117</td>
-    <td>R5 多头回调: 收盘(1.2510)<多空线(1.2510), 中期(1.2766)>多空线</td>
-    <td>7446.0468</td>
-    <td>160.22</td>
+    <td>1.2740</td>
+    <td>874.46</td>
+    <td>686.3859</td>
+    <td>R5 收盘(1.2740)<中期线(1.2767) 减仓1/6</td>
+    <td>2745.5435</td>
+    <td>41.12</td>
 </tr>
 <tr>
-    <td>20240219</td>
+    <td>20240117</td>
+    <td><span class="round-tag" style="background: #0e6755;">R5</span></td>
+    <td><span class="sell-tag">卖出</span></td>
+    <td>1.2510</td>
+    <td>858.67</td>
+    <td>686.3859</td>
+    <td>R5 收盘(1.2510)<多空线(1.2510) 减仓1/6</td>
+    <td>2059.1576</td>
+    <td>25.34</td>
+</tr>
+<tr>
+    <td>20240208</td>
     <td><span class="round-tag" style="background: #f39c12;">R6</span></td>
     <td><span class="buy-tag">买入</span></td>
-    <td>1.2860</td>
+    <td>1.2810</td>
     <td>1000.00</td>
-    <td>777.6050</td>
+    <td>780.6401</td>
     <td>周线J=10.09, 金额=1000</td>
-    <td>777.6050</td>
+    <td>780.6401</td>
     <td>-</td>
 </tr>
 <tr>
-    <td>20240226</td>
+    <td>20240223</td>
     <td><span class="round-tag" style="background: #f39c12;">R6</span></td>
     <td><span class="buy-tag">买入</span></td>
-    <td>1.3170</td>
+    <td>1.3180</td>
     <td>4000.00</td>
-    <td>3037.2058</td>
+    <td>3034.9014</td>
     <td>J回升=23.08, 剩余预算投入=4000</td>
-    <td>3814.8107</td>
+    <td>3815.5415</td>
     <td>-</td>
 </tr>
 <tr>
-    <td>20240401</td>
+    <td>20240329</td>
     <td><span class="round-tag" style="background: #855509;">R6</span></td>
     <td><span class="sell-tag">卖出</span></td>
     <td>1.4090</td>
-    <td>895.84</td>
-    <td>635.8018</td>
-    <td>R6 周线J=102.24>=93</td>
-    <td>3179.0090</td>
-    <td>62.51</td>
+    <td>896.02</td>
+    <td>635.9236</td>
+    <td>R6 周线J=102.24>=93 减仓1/6</td>
+    <td>3179.6179</td>
+    <td>62.68</td>
 </tr>
 <tr>
-    <td>20240417</td>
+    <td>20240408</td>
     <td><span class="round-tag" style="background: #855509;">R6</span></td>
-    <td><span class="sell-tag">卖出</span></td>
-    <td>1.3240</td>
-    <td>841.80</td>
-    <td>635.8018</td>
-    <td>R6 多头回调: 收盘(1.3250)<多空线(1.3454), 中期(1.3814)>多空线</td>
-    <td>2543.2072</td>
-    <td>8.47</td>
-</tr>
-<tr>
-    <td>20240805</td>
-    <td><span class="round-tag" style="background: #2ecc71;">R7</span></td>
-    <td><span class="buy-tag">买入</span></td>
-    <td>1.3000</td>
-    <td>1000.00</td>
-    <td>769.2308</td>
-    <td>周线J=5.06, 金额=1000</td>
-    <td>769.2308</td>
-    <td>-</td>
-</tr>
-<tr>
-    <td>20240807</td>
-    <td><span class="round-tag" style="background: #0e6755;">R5</span></td>
-    <td><span class="sell-tag">卖出</span></td>
-    <td>1.3040</td>
-    <td>2427.41</td>
-    <td>1861.5117</td>
-    <td>R5 日线知行多空死叉(卖1/6，余1/2长期持有)</td>
-    <td>5584.5351</td>
-    <td>260.74</td>
-</tr>
-<tr>
-    <td>20240807</td>
-    <td><span class="round-tag" style="background: #855509;">R6</span></td>
-    <td><span class="sell-tag">卖出</span></td>
-    <td>1.3040</td>
-    <td>829.09</td>
-    <td>635.8018</td>
-    <td>R6 日线知行多空死叉(卖1/6，余1/2长期持有)</td>
-    <td>1907.4054</td>
-    <td>-4.25</td>
-</tr>
-<tr>
-    <td>20240812</td>
-    <td><span class="round-tag" style="background: #2ecc71;">R7</span></td>
-    <td><span class="buy-tag">买入</span></td>
-    <td>1.3310</td>
-    <td>4000.00</td>
-    <td>3005.2592</td>
-    <td>J回升=13.26, 剩余预算投入=4000</td>
-    <td>3774.4900</td>
-    <td>-</td>
-</tr>
-<tr>
-    <td>20240902</td>
-    <td><span class="round-tag" style="background: #19703e;">R7</span></td>
-    <td><span class="sell-tag">卖出</span></td>
-    <td>1.4150</td>
-    <td>890.15</td>
-    <td>629.0817</td>
-    <td>R7 周线J=96.05>=93</td>
-    <td>3145.4083</td>
-    <td>56.82</td>
-</tr>
-<tr>
-    <td>20240910</td>
-    <td><span class="round-tag" style="background: #19703e;">R7</span></td>
     <td><span class="sell-tag">卖出</span></td>
     <td>1.3820</td>
-    <td>869.39</td>
-    <td>629.0817</td>
-    <td>R7 多头回调: 收盘(1.3770)<多空线(1.3837), 中期(1.3943)>多空线</td>
-    <td>2516.3266</td>
-    <td>36.06</td>
+    <td>878.85</td>
+    <td>635.9236</td>
+    <td>R6 收盘(1.3820)<中期线(1.3824) 减仓1/6</td>
+    <td>2543.6943</td>
+    <td>45.51</td>
 </tr>
 <tr>
-    <td>20241121</td>
+    <td>20240416</td>
+    <td><span class="round-tag" style="background: #855509;">R6</span></td>
+    <td><span class="sell-tag">卖出</span></td>
+    <td>1.3250</td>
+    <td>842.60</td>
+    <td>635.9236</td>
+    <td>R6 收盘(1.3250)<多空线(1.3454) 减仓1/6</td>
+    <td>1907.7707</td>
+    <td>9.27</td>
+</tr>
+<tr>
+    <td>20240802</td>
+    <td><span class="round-tag" style="background: #2ecc71;">R7</span></td>
+    <td><span class="buy-tag">买入</span></td>
+    <td>1.3300</td>
+    <td>1000.00</td>
+    <td>751.8797</td>
+    <td>周线J=5.06, 金额=1000</td>
+    <td>751.8797</td>
+    <td>-</td>
+</tr>
+<tr>
+    <td>20240809</td>
+    <td><span class="round-tag" style="background: #2ecc71;">R7</span></td>
+    <td><span class="buy-tag">买入</span></td>
+    <td>1.3230</td>
+    <td>4000.00</td>
+    <td>3023.4316</td>
+    <td>J回升=13.26, 剩余预算投入=4000</td>
+    <td>3775.3113</td>
+    <td>-</td>
+</tr>
+<tr>
+    <td>20240830</td>
+    <td><span class="round-tag" style="background: #19703e;">R7</span></td>
+    <td><span class="sell-tag">卖出</span></td>
+    <td>1.4130</td>
+    <td>889.09</td>
+    <td>629.2185</td>
+    <td>R7 周线J=96.05>=93 减仓1/6</td>
+    <td>3146.0927</td>
+    <td>55.75</td>
+</tr>
+<tr>
+    <td>20240904</td>
     <td><span class="round-tag" style="background: #19703e;">R7</span></td>
     <td><span class="sell-tag">卖出</span></td>
     <td>1.3830</td>
-    <td>870.02</td>
-    <td>629.0817</td>
-    <td>R7 日线知行多空死叉(卖1/6，余1/2长期持有)</td>
-    <td>1887.2450</td>
-    <td>36.69</td>
+    <td>870.21</td>
+    <td>629.2185</td>
+    <td>R7 收盘(1.3830)<中期线(1.3915) 减仓1/6</td>
+    <td>2516.8742</td>
+    <td>36.88</td>
 </tr>
 <tr>
-    <td>20241125</td>
+    <td>20240909</td>
+    <td><span class="round-tag" style="background: #19703e;">R7</span></td>
+    <td><span class="sell-tag">卖出</span></td>
+    <td>1.3770</td>
+    <td>866.43</td>
+    <td>629.2185</td>
+    <td>R7 收盘(1.3770)<多空线(1.3837) 减仓1/6</td>
+    <td>1887.6556</td>
+    <td>33.10</td>
+</tr>
+<tr>
+    <td>20241122</td>
     <td><span class="round-tag" style="background: #e84393;">R8</span></td>
     <td><span class="buy-tag">买入</span></td>
-    <td>1.4000</td>
+    <td>1.3810</td>
     <td>1000.00</td>
-    <td>714.2857</td>
+    <td>724.1130</td>
     <td>周线J=-7.04, 金额=1000</td>
-    <td>714.2857</td>
+    <td>724.1130</td>
     <td>-</td>
 </tr>
 <tr>
-    <td>20241202</td>
+    <td>20241129</td>
     <td><span class="round-tag" style="background: #e84393;">R8</span></td>
     <td><span class="buy-tag">买入</span></td>
-    <td>1.4200</td>
+    <td>1.4120</td>
     <td>4000.00</td>
-    <td>2816.9014</td>
+    <td>2832.8612</td>
     <td>J回升=13.85, 剩余预算投入=4000</td>
-    <td>3531.1871</td>
+    <td>3556.9742</td>
     <td>-</td>
 </tr>
 <tr>
-    <td>20241223</td>
+    <td>20241220</td>
     <td><span class="round-tag" style="background: #7f2450;">R8</span></td>
     <td><span class="sell-tag">卖出</span></td>
-    <td>1.4330</td>
-    <td>843.37</td>
-    <td>588.5312</td>
-    <td>R8 J峰值回撤(J_peak=91.48, J=64.91, 回撤=26.57)</td>
-    <td>2942.6559</td>
-    <td>10.03</td>
+    <td>1.4250</td>
+    <td>844.78</td>
+    <td>592.8290</td>
+    <td>R8 J峰值回撤(J_peak=91.48, J=64.91)减仓1/6</td>
+    <td>2964.1451</td>
+    <td>11.45</td>
 </tr>
 <tr>
     <td>20241223</td>
     <td><span class="round-tag" style="background: #7f2450;">R8</span></td>
     <td><span class="sell-tag">卖出</span></td>
-    <td>1.4330</td>
-    <td>843.37</td>
-    <td>588.5312</td>
-    <td>R8 多头回调: 收盘(1.4250)<多空线(1.4328), 中期(1.4549)>多空线</td>
-    <td>2354.1247</td>
-    <td>10.03</td>
+    <td>1.4470</td>
+    <td>857.82</td>
+    <td>592.8290</td>
+    <td>R8 收盘(1.4470)<中期线(1.4548) 减仓1/6</td>
+    <td>2371.3161</td>
+    <td>24.49</td>
 </tr>
 <tr>
-    <td>20250915</td>
+    <td>20241231</td>
     <td><span class="round-tag" style="background: #7f2450;">R8</span></td>
     <td><span class="sell-tag">卖出</span></td>
-    <td>1.8420</td>
-    <td>1084.07</td>
-    <td>588.5312</td>
-    <td>R8 日线知行多空死叉(卖1/6，余1/2长期持有)</td>
-    <td>1765.5936</td>
-    <td>250.74</td>
+    <td>1.4330</td>
+    <td>849.52</td>
+    <td>592.8290</td>
+    <td>R8 收盘(1.4330)<多空线(1.4351) 减仓1/6</td>
+    <td>1778.4871</td>
+    <td>16.19</td>
 </tr>
 <tr>
-    <td>20250915</td>
+    <td>20250912</td>
     <td><span class="round-tag" style="background: #00b894;">R9</span></td>
     <td><span class="buy-tag">买入</span></td>
-    <td>1.8420</td>
+    <td>1.8460</td>
     <td>1000.00</td>
-    <td>542.8882</td>
+    <td>541.7118</td>
     <td>周线J=9.88, 金额=1000</td>
-    <td>542.8882</td>
+    <td>541.7118</td>
     <td>-</td>
 </tr>
 <tr>
-    <td>20250922</td>
+    <td>20250919</td>
     <td><span class="round-tag" style="background: #00b894;">R9</span></td>
     <td><span class="buy-tag">买入</span></td>
-    <td>1.8440</td>
+    <td>1.8480</td>
     <td>1000.00</td>
-    <td>542.2993</td>
+    <td>541.1255</td>
     <td>周线J=9.22, 金额=1000</td>
-    <td>1085.1875</td>
+    <td>1082.8374</td>
     <td>-</td>
 </tr>
 <tr>
-    <td>20250929</td>
+    <td>20250926</td>
+    <td><span class="round-tag" style="background: #00b894;">R9</span></td>
+    <td><span class="buy-tag">买入</span></td>
+    <td>1.8210</td>
+    <td>1000.00</td>
+    <td>549.1488</td>
+    <td>周线J=-3.00, 金额=1000</td>
+    <td>1631.9862</td>
+    <td>-</td>
+</tr>
+<tr>
+    <td>20250930</td>
     <td><span class="round-tag" style="background: #00b894;">R9</span></td>
     <td><span class="buy-tag">买入</span></td>
     <td>1.8360</td>
     <td>1000.00</td>
     <td>544.6623</td>
-    <td>周线J=-3.00, 金额=1000</td>
-    <td>1629.8498</td>
-    <td>-</td>
-</tr>
-<tr>
-    <td>20251009</td>
-    <td><span class="round-tag" style="background: #00b894;">R9</span></td>
-    <td><span class="buy-tag">买入</span></td>
-    <td>1.8850</td>
-    <td>1000.00</td>
-    <td>530.5040</td>
     <td>周线J=5.99, 金额=1000</td>
-    <td>2160.3538</td>
+    <td>2176.6485</td>
     <td>-</td>
 </tr>
 <tr>
-    <td>20251013</td>
+    <td>20251010</td>
     <td><span class="round-tag" style="background: #00b894;">R9</span></td>
     <td><span class="buy-tag">买入</span></td>
-    <td>1.8540</td>
+    <td>1.8770</td>
     <td>1000.00</td>
-    <td>539.3743</td>
+    <td>532.7651</td>
     <td>J回升=46.51, 剩余预算投入=1000</td>
-    <td>2699.7281</td>
+    <td>2709.4135</td>
     <td>-</td>
 </tr>
 <tr>
-    <td>20251110</td>
+    <td>20251107</td>
     <td><span class="round-tag" style="background: #006551;">R9</span></td>
     <td><span class="sell-tag">卖出</span></td>
-    <td>1.8460</td>
-    <td>830.62</td>
-    <td>449.9547</td>
-    <td>R9 J峰值回撤(J_peak=76.01, J=44.15, 回撤=31.85)</td>
-    <td>2249.7734</td>
-    <td>-2.72</td>
+    <td>1.8400</td>
+    <td>830.89</td>
+    <td>451.5689</td>
+    <td>R9 J峰值回撤(J_peak=76.01, J=44.15)减仓1/6</td>
+    <td>2257.8446</td>
+    <td>-2.45</td>
 </tr>
 <tr>
     <td>20251110</td>
     <td><span class="round-tag" style="background: #006551;">R9</span></td>
     <td><span class="sell-tag">卖出</span></td>
-    <td>1.8460</td>
-    <td>830.62</td>
-    <td>449.9547</td>
-    <td>R9 多头回调: 收盘(1.8400)<多空线(1.8687), 中期(1.8719)>多空线</td>
-    <td>1799.8188</td>
-    <td>-2.72</td>
+    <td>1.8580</td>
+    <td>839.02</td>
+    <td>451.5689</td>
+    <td>R9 收盘(1.8580)<中期线(1.8702) 减仓1/6</td>
+    <td>1806.2757</td>
+    <td>5.68</td>
 </tr>
 <tr>
-    <td>20251121</td>
+    <td>20251111</td>
     <td><span class="round-tag" style="background: #006551;">R9</span></td>
     <td><span class="sell-tag">卖出</span></td>
-    <td>1.8080</td>
-    <td>813.52</td>
-    <td>449.9547</td>
-    <td>R9 日线知行多空死叉(卖1/6，余1/2长期持有)</td>
-    <td>1349.8641</td>
-    <td>-19.82</td>
+    <td>1.8630</td>
+    <td>841.27</td>
+    <td>451.5689</td>
+    <td>R9 收盘(1.8630)<多空线(1.8676) 减仓1/6</td>
+    <td>1354.7068</td>
+    <td>7.94</td>
 </tr>
 <tr>
-    <td>20260316</td>
+    <td>20260313</td>
     <td><span class="round-tag" style="background: #6c5ce7;">R10</span></td>
     <td><span class="buy-tag">买入</span></td>
-    <td>1.7900</td>
+    <td>1.7970</td>
     <td>1000.00</td>
-    <td>558.6592</td>
+    <td>556.4830</td>
     <td>周线J=9.44, 金额=1000</td>
-    <td>558.6592</td>
+    <td>556.4830</td>
     <td>-</td>
 </tr>
 <tr>
-    <td>20260323</td>
+    <td>20260320</td>
     <td><span class="round-tag" style="background: #6c5ce7;">R10</span></td>
     <td><span class="buy-tag">买入</span></td>
-    <td>1.6790</td>
-    <td>2000.00</td>
-    <td>1191.1852</td>
-    <td>周线J=-7.74, 金额=2000</td>
-    <td>1749.8444</td>
+    <td>1.7240</td>
+    <td>1000.00</td>
+    <td>580.0464</td>
+    <td>周线J=-7.74, 金额=1000</td>
+    <td>1136.5294</td>
     <td>-</td>
 </tr>
 <tr>
-    <td>20260330</td>
+    <td>20260327</td>
     <td><span class="round-tag" style="background: #6c5ce7;">R10</span></td>
     <td><span class="buy-tag">买入</span></td>
-    <td>1.6500</td>
-    <td>666.67</td>
-    <td>404.0404</td>
-    <td>周线J=-2.44, 金额=667</td>
-    <td>2153.8849</td>
+    <td>1.6970</td>
+    <td>1000.00</td>
+    <td>589.2752</td>
+    <td>周线J=-2.44, 金额=1000</td>
+    <td>1725.8046</td>
     <td>-</td>
 </tr>
 <tr>
-    <td>20260407</td>
+    <td>20260403</td>
     <td><span class="round-tag" style="background: #6c5ce7;">R10</span></td>
     <td><span class="buy-tag">买入</span></td>
-    <td>1.7110</td>
-    <td>666.67</td>
-    <td>389.6357</td>
-    <td>周线J=3.05, 金额=667</td>
-    <td>2543.5205</td>
+    <td>1.7030</td>
+    <td>1000.00</td>
+    <td>587.1991</td>
+    <td>周线J=3.05, 金额=1000</td>
+    <td>2313.0037</td>
     <td>-</td>
 </tr>
 <tr>
-    <td>20260413</td>
+    <td>20260410</td>
     <td><span class="round-tag" style="background: #6c5ce7;">R10</span></td>
     <td><span class="buy-tag">买入</span></td>
-    <td>1.7650</td>
-    <td>666.67</td>
-    <td>377.7148</td>
-    <td>J回升=20.80, 剩余预算投入=667</td>
-    <td>2921.2354</td>
+    <td>1.7830</td>
+    <td>1000.00</td>
+    <td>560.8525</td>
+    <td>J回升=20.80, 剩余预算投入=1000</td>
+    <td>2873.8562</td>
     <td>-</td>
 </tr>
 <tr>
-    <td>20260615</td>
+    <td>20260612</td>
     <td><span class="round-tag" style="background: #3b327f;">R10</span></td>
     <td><span class="sell-tag">卖出</span></td>
-    <td>1.7930</td>
-    <td>872.96</td>
-    <td>486.8726</td>
-    <td>R10 J峰值回撤(J_peak=87.53, J=37.12, 回撤=50.40)</td>
-    <td>2434.3628</td>
-    <td>39.63</td>
+    <td>1.7550</td>
+    <td>840.60</td>
+    <td>478.9760</td>
+    <td>R10 J峰值回撤(J_peak=87.53, J=37.12)减仓1/6</td>
+    <td>2394.8801</td>
+    <td>7.27</td>
 </tr>
 <tr>
-    <td>20260909</td>
+    <td>20260821</td>
     <td><span class="round-tag" style="background: #3b327f;">R10</span></td>
     <td><span class="sell-tag">卖出</span></td>
-    <td>1.8620</td>
-    <td>906.56</td>
-    <td>486.8726</td>
-    <td>R10 多头回调: 收盘(1.8570)<多空线(1.8583), 中期(1.8946)>多空线</td>
-    <td>1947.4902</td>
-    <td>73.22</td>
+    <td>1.8860</td>
+    <td>903.35</td>
+    <td>478.9760</td>
+    <td>R10 收盘(1.8860)<中期线(1.8937) 减仓1/6</td>
+    <td>1915.9041</td>
+    <td>70.02</td>
 </tr>
 <tr>
-    <td>20260928</td>
+    <td>20260908</td>
+    <td><span class="round-tag" style="background: #3b327f;">R10</span></td>
+    <td><span class="sell-tag">卖出</span></td>
+    <td>1.8570</td>
+    <td>889.46</td>
+    <td>478.9760</td>
+    <td>R10 收盘(1.8570)<多空线(1.8583) 减仓1/6</td>
+    <td>1436.9281</td>
+    <td>56.13</td>
+</tr>
+<tr>
+    <td>20260924</td>
     <td><span class="round-tag" style="background: #fd79a8;">R11</span></td>
     <td><span class="buy-tag">买入</span></td>
-    <td>1.8000</td>
+    <td>1.7960</td>
     <td>1000.00</td>
-    <td>555.5556</td>
+    <td>556.7929</td>
     <td>周线J=8.24, 金额=1000</td>
-    <td>555.5556</td>
+    <td>556.7929</td>
     <td>-</td>
 </tr>
 <tr>
     <td>20260930</td>
-    <td><span class="round-tag" style="background: #3b327f;">R10</span></td>
-    <td><span class="sell-tag">卖出</span></td>
-    <td>1.7920</td>
-    <td>872.48</td>
-    <td>486.8726</td>
-    <td>R10 日线知行多空死叉(卖1/6，余1/2长期持有)</td>
-    <td>1460.6177</td>
-    <td>39.14</td>
-</tr>
-<tr>
-    <td>20261008</td>
     <td><span class="round-tag" style="background: #fd79a8;">R11</span></td>
     <td><span class="buy-tag">买入</span></td>
-    <td>1.7720</td>
+    <td>1.8030</td>
     <td>1000.00</td>
-    <td>564.3341</td>
+    <td>554.6312</td>
     <td>周线J=-3.16, 金额=1000</td>
-    <td>1119.8896</td>
+    <td>1111.4240</td>
     <td>-</td>
 </tr>
 <tr>
-    <td>20261012</td>
+    <td>20261009</td>
     <td><span class="round-tag" style="background: #fd79a8;">R11</span></td>
     <td><span class="buy-tag">买入</span></td>
-    <td>1.7710</td>
+    <td>1.7660</td>
     <td>1000.00</td>
-    <td>564.6527</td>
+    <td>566.2514</td>
     <td>周线J=-7.56, 金额=1000</td>
-    <td>1684.5424</td>
+    <td>1677.6755</td>
     <td>-</td>
 </tr>
 </table>
@@ -1065,7 +1002,7 @@ var mainSeries = {
     markPoint: {
         symbol: 'pin', symbolSize: 40, animation: false,
         label: { show: true, fontSize: 10, color: '#fff' },
-        data: [{xAxis: '20211020', yAxis: 1.1880, name: 'R1买', itemStyle: {color: '#e74c3c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R1买', color: '#fff', fontSize: 9}},{xAxis: '20211025', yAxis: 1.1870, name: 'R1买', itemStyle: {color: '#e74c3c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R1买', color: '#fff', fontSize: 9}},{xAxis: '20211129', yAxis: 1.1410, name: 'R1卖', itemStyle: {color: '#7f2921'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R1卖', color: '#fff', fontSize: 9}},{xAxis: '20220228', yAxis: 1.0390, name: 'R2买', itemStyle: {color: '#3498db'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R2买', color: '#fff', fontSize: 9}},{xAxis: '20220307', yAxis: 0.9240, name: 'R2买', itemStyle: {color: '#3498db'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R2买', color: '#fff', fontSize: 9}},{xAxis: '20220314', yAxis: 0.9640, name: 'R2买', itemStyle: {color: '#3498db'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R2买', color: '#fff', fontSize: 9}},{xAxis: '20220516', yAxis: 1.0060, name: 'R2卖', itemStyle: {color: '#1c5378'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R2卖', color: '#fff', fontSize: 9}},{xAxis: '20220627', yAxis: 0.9370, name: 'R3买', itemStyle: {color: '#9b59b6'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R3买', color: '#fff', fontSize: 9}},{xAxis: '20220704', yAxis: 0.9100, name: 'R3买', itemStyle: {color: '#9b59b6'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R3买', color: '#fff', fontSize: 9}},{xAxis: '20220711', yAxis: 0.8840, name: 'R3买', itemStyle: {color: '#9b59b6'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R3买', color: '#fff', fontSize: 9}},{xAxis: '20220718', yAxis: 0.8780, name: 'R3买', itemStyle: {color: '#9b59b6'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R3买', color: '#fff', fontSize: 9}},{xAxis: '20220725', yAxis: 0.9150, name: 'R3买', itemStyle: {color: '#9b59b6'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R3买', color: '#fff', fontSize: 9}},{xAxis: '20220905', yAxis: 0.8870, name: 'R3卖', itemStyle: {color: '#553064'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R3卖', color: '#fff', fontSize: 9}},{xAxis: '20220926', yAxis: 0.8640, name: 'R4买', itemStyle: {color: '#e67e22'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R4买', color: '#fff', fontSize: 9}},{xAxis: '20221010', yAxis: 0.8460, name: 'R4买', itemStyle: {color: '#e67e22'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R4买', color: '#fff', fontSize: 9}},{xAxis: '20221017', yAxis: 0.8700, name: 'R4买', itemStyle: {color: '#e67e22'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R4买', color: '#fff', fontSize: 9}},{xAxis: '20221107', yAxis: 0.9540, name: 'R4卖', itemStyle: {color: '#7e4512'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R4卖', color: '#fff', fontSize: 9}},{xAxis: '20230315', yAxis: 1.1160, name: 'R1卖', itemStyle: {color: '#7f2921'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R1卖', color: '#fff', fontSize: 9}},{xAxis: '20230315', yAxis: 1.1160, name: 'R2卖', itemStyle: {color: '#1c5378'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R2卖', color: '#fff', fontSize: 9}},{xAxis: '20230315', yAxis: 1.1160, name: 'R3卖', itemStyle: {color: '#553064'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R3卖', color: '#fff', fontSize: 9}},{xAxis: '20230315', yAxis: 1.1160, name: 'R4卖', itemStyle: {color: '#7e4512'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R4卖', color: '#fff', fontSize: 9}},{xAxis: '20230821', yAxis: 1.2100, name: 'R5买', itemStyle: {color: '#1abc9c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R5买', color: '#fff', fontSize: 9}},{xAxis: '20230828', yAxis: 1.2050, name: 'R5买', itemStyle: {color: '#1abc9c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R5买', color: '#fff', fontSize: 9}},{xAxis: '20230831', yAxis: 1.2370, name: 'R1卖', itemStyle: {color: '#7f2921'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R1卖', color: '#fff', fontSize: 9}},{xAxis: '20230831', yAxis: 1.2370, name: 'R2卖', itemStyle: {color: '#1c5378'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R2卖', color: '#fff', fontSize: 9}},{xAxis: '20230831', yAxis: 1.2370, name: 'R3卖', itemStyle: {color: '#553064'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R3卖', color: '#fff', fontSize: 9}},{xAxis: '20230831', yAxis: 1.2370, name: 'R4卖', itemStyle: {color: '#7e4512'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R4卖', color: '#fff', fontSize: 9}},{xAxis: '20230904', yAxis: 1.2230, name: 'R5买', itemStyle: {color: '#1abc9c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R5买', color: '#fff', fontSize: 9}},{xAxis: '20230911', yAxis: 1.2200, name: 'R5买', itemStyle: {color: '#1abc9c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R5买', color: '#fff', fontSize: 9}},{xAxis: '20230918', yAxis: 1.2050, name: 'R5买', itemStyle: {color: '#1abc9c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R5买', color: '#fff', fontSize: 9}},{xAxis: '20230925', yAxis: 1.1810, name: 'R5买', itemStyle: {color: '#1abc9c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R5买', color: '#fff', fontSize: 9}},{xAxis: '20231009', yAxis: 1.1420, name: 'R5买', itemStyle: {color: '#1abc9c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R5买', color: '#fff', fontSize: 9}},{xAxis: '20231016', yAxis: 1.1500, name: 'R5买', itemStyle: {color: '#1abc9c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R5买', color: '#fff', fontSize: 9}},{xAxis: '20231023', yAxis: 1.1240, name: 'R5买', itemStyle: {color: '#1abc9c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R5买', color: '#fff', fontSize: 9}},{xAxis: '20231030', yAxis: 1.1120, name: 'R5买', itemStyle: {color: '#1abc9c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R5买', color: '#fff', fontSize: 9}},{xAxis: '20231127', yAxis: 1.2250, name: 'R5卖', itemStyle: {color: '#0e6755'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R5卖', color: '#fff', fontSize: 9}},{xAxis: '20240118', yAxis: 1.2500, name: 'R5卖', itemStyle: {color: '#0e6755'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R5卖', color: '#fff', fontSize: 9}},{xAxis: '20240219', yAxis: 1.2860, name: 'R6买', itemStyle: {color: '#f39c12'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R6买', color: '#fff', fontSize: 9}},{xAxis: '20240226', yAxis: 1.3170, name: 'R6买', itemStyle: {color: '#f39c12'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R6买', color: '#fff', fontSize: 9}},{xAxis: '20240401', yAxis: 1.4090, name: 'R6卖', itemStyle: {color: '#855509'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R6卖', color: '#fff', fontSize: 9}},{xAxis: '20240417', yAxis: 1.3240, name: 'R6卖', itemStyle: {color: '#855509'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R6卖', color: '#fff', fontSize: 9}},{xAxis: '20240805', yAxis: 1.3000, name: 'R7买', itemStyle: {color: '#2ecc71'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R7买', color: '#fff', fontSize: 9}},{xAxis: '20240807', yAxis: 1.3040, name: 'R5卖', itemStyle: {color: '#0e6755'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R5卖', color: '#fff', fontSize: 9}},{xAxis: '20240807', yAxis: 1.3040, name: 'R6卖', itemStyle: {color: '#855509'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R6卖', color: '#fff', fontSize: 9}},{xAxis: '20240812', yAxis: 1.3310, name: 'R7买', itemStyle: {color: '#2ecc71'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R7买', color: '#fff', fontSize: 9}},{xAxis: '20240902', yAxis: 1.4150, name: 'R7卖', itemStyle: {color: '#19703e'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R7卖', color: '#fff', fontSize: 9}},{xAxis: '20240910', yAxis: 1.3820, name: 'R7卖', itemStyle: {color: '#19703e'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R7卖', color: '#fff', fontSize: 9}},{xAxis: '20241121', yAxis: 1.3830, name: 'R7卖', itemStyle: {color: '#19703e'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R7卖', color: '#fff', fontSize: 9}},{xAxis: '20241125', yAxis: 1.4000, name: 'R8买', itemStyle: {color: '#e84393'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R8买', color: '#fff', fontSize: 9}},{xAxis: '20241202', yAxis: 1.4200, name: 'R8买', itemStyle: {color: '#e84393'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R8买', color: '#fff', fontSize: 9}},{xAxis: '20241223', yAxis: 1.4330, name: 'R8卖', itemStyle: {color: '#7f2450'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R8卖', color: '#fff', fontSize: 9}},{xAxis: '20241223', yAxis: 1.4330, name: 'R8卖', itemStyle: {color: '#7f2450'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R8卖', color: '#fff', fontSize: 9}},{xAxis: '20250915', yAxis: 1.8420, name: 'R8卖', itemStyle: {color: '#7f2450'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R8卖', color: '#fff', fontSize: 9}},{xAxis: '20250915', yAxis: 1.8420, name: 'R9买', itemStyle: {color: '#00b894'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R9买', color: '#fff', fontSize: 9}},{xAxis: '20250922', yAxis: 1.8440, name: 'R9买', itemStyle: {color: '#00b894'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R9买', color: '#fff', fontSize: 9}},{xAxis: '20250929', yAxis: 1.8360, name: 'R9买', itemStyle: {color: '#00b894'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R9买', color: '#fff', fontSize: 9}},{xAxis: '20251009', yAxis: 1.8850, name: 'R9买', itemStyle: {color: '#00b894'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R9买', color: '#fff', fontSize: 9}},{xAxis: '20251013', yAxis: 1.8540, name: 'R9买', itemStyle: {color: '#00b894'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R9买', color: '#fff', fontSize: 9}},{xAxis: '20251110', yAxis: 1.8460, name: 'R9卖', itemStyle: {color: '#006551'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R9卖', color: '#fff', fontSize: 9}},{xAxis: '20251110', yAxis: 1.8460, name: 'R9卖', itemStyle: {color: '#006551'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R9卖', color: '#fff', fontSize: 9}},{xAxis: '20251121', yAxis: 1.8080, name: 'R9卖', itemStyle: {color: '#006551'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R9卖', color: '#fff', fontSize: 9}},{xAxis: '20260316', yAxis: 1.7900, name: 'R10买', itemStyle: {color: '#6c5ce7'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R10买', color: '#fff', fontSize: 9}},{xAxis: '20260323', yAxis: 1.6790, name: 'R10买', itemStyle: {color: '#6c5ce7'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R10买', color: '#fff', fontSize: 9}},{xAxis: '20260330', yAxis: 1.6500, name: 'R10买', itemStyle: {color: '#6c5ce7'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R10买', color: '#fff', fontSize: 9}},{xAxis: '20260407', yAxis: 1.7110, name: 'R10买', itemStyle: {color: '#6c5ce7'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R10买', color: '#fff', fontSize: 9}},{xAxis: '20260413', yAxis: 1.7650, name: 'R10买', itemStyle: {color: '#6c5ce7'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R10买', color: '#fff', fontSize: 9}},{xAxis: '20260615', yAxis: 1.7930, name: 'R10卖', itemStyle: {color: '#3b327f'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R10卖', color: '#fff', fontSize: 9}},{xAxis: '20260909', yAxis: 1.8620, name: 'R10卖', itemStyle: {color: '#3b327f'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R10卖', color: '#fff', fontSize: 9}},{xAxis: '20260928', yAxis: 1.8000, name: 'R11买', itemStyle: {color: '#fd79a8'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R11买', color: '#fff', fontSize: 9}},{xAxis: '20260930', yAxis: 1.7920, name: 'R10卖', itemStyle: {color: '#3b327f'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R10卖', color: '#fff', fontSize: 9}},{xAxis: '20261008', yAxis: 1.7720, name: 'R11买', itemStyle: {color: '#fd79a8'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R11买', color: '#fff', fontSize: 9}},{xAxis: '20261012', yAxis: 1.7710, name: 'R11买', itemStyle: {color: '#fd79a8'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R11买', color: '#fff', fontSize: 9}}]
+        data: [{xAxis: '20211019', yAxis: 1.1890, name: 'R1买', itemStyle: {color: '#e74c3c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R1买', color: '#fff', fontSize: 9}},{xAxis: '20211022', yAxis: 1.1850, name: 'R1买', itemStyle: {color: '#e74c3c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R1买', color: '#fff', fontSize: 9}},{xAxis: '20211125', yAxis: 1.1770, name: 'R1卖', itemStyle: {color: '#7f2921'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R1卖', color: '#fff', fontSize: 9}},{xAxis: '20220225', yAxis: 1.0370, name: 'R2买', itemStyle: {color: '#3498db'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R2买', color: '#fff', fontSize: 9}},{xAxis: '20220304', yAxis: 0.9620, name: 'R2买', itemStyle: {color: '#3498db'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R2买', color: '#fff', fontSize: 9}},{xAxis: '20220311', yAxis: 0.9650, name: 'R2买', itemStyle: {color: '#3498db'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R2买', color: '#fff', fontSize: 9}},{xAxis: '20220318', yAxis: 1.0340, name: 'R2买', itemStyle: {color: '#3498db'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R2买', color: '#fff', fontSize: 9}},{xAxis: '20220513', yAxis: 0.9930, name: 'R2卖', itemStyle: {color: '#1c5378'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R2卖', color: '#fff', fontSize: 9}},{xAxis: '20220624', yAxis: 0.9290, name: 'R3买', itemStyle: {color: '#9b59b6'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R3买', color: '#fff', fontSize: 9}},{xAxis: '20220701', yAxis: 0.9100, name: 'R3买', itemStyle: {color: '#9b59b6'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R3买', color: '#fff', fontSize: 9}},{xAxis: '20220708', yAxis: 0.8800, name: 'R3买', itemStyle: {color: '#9b59b6'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R3买', color: '#fff', fontSize: 9}},{xAxis: '20220715', yAxis: 0.8610, name: 'R3买', itemStyle: {color: '#9b59b6'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R3买', color: '#fff', fontSize: 9}},{xAxis: '20220722', yAxis: 0.9160, name: 'R3买', itemStyle: {color: '#9b59b6'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R3买', color: '#fff', fontSize: 9}},{xAxis: '20220902', yAxis: 0.8830, name: 'R3卖', itemStyle: {color: '#553064'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R3卖', color: '#fff', fontSize: 9}},{xAxis: '20220923', yAxis: 0.8780, name: 'R4买', itemStyle: {color: '#e67e22'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R4买', color: '#fff', fontSize: 9}},{xAxis: '20220930', yAxis: 0.8440, name: 'R4买', itemStyle: {color: '#e67e22'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R4买', color: '#fff', fontSize: 9}},{xAxis: '20221014', yAxis: 0.8830, name: 'R4买', itemStyle: {color: '#e67e22'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R4买', color: '#fff', fontSize: 9}},{xAxis: '20221104', yAxis: 0.9490, name: 'R4卖', itemStyle: {color: '#7e4512'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R4卖', color: '#fff', fontSize: 9}},{xAxis: '20221206', yAxis: 1.0520, name: 'R2卖', itemStyle: {color: '#1c5378'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R2卖', color: '#fff', fontSize: 9}},{xAxis: '20221206', yAxis: 1.0520, name: 'R3卖', itemStyle: {color: '#553064'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R3卖', color: '#fff', fontSize: 9}},{xAxis: '20221206', yAxis: 1.0520, name: 'R4卖', itemStyle: {color: '#7e4512'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R4卖', color: '#fff', fontSize: 9}},{xAxis: '20230314', yAxis: 1.0930, name: 'R2卖', itemStyle: {color: '#1c5378'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R2卖', color: '#fff', fontSize: 9}},{xAxis: '20230314', yAxis: 1.0930, name: 'R3卖', itemStyle: {color: '#553064'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R3卖', color: '#fff', fontSize: 9}},{xAxis: '20230314', yAxis: 1.0930, name: 'R4卖', itemStyle: {color: '#7e4512'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R4卖', color: '#fff', fontSize: 9}},{xAxis: '20230818', yAxis: 1.2110, name: 'R5买', itemStyle: {color: '#1abc9c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R5买', color: '#fff', fontSize: 9}},{xAxis: '20230825', yAxis: 1.1960, name: 'R5买', itemStyle: {color: '#1abc9c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R5买', color: '#fff', fontSize: 9}},{xAxis: '20230901', yAxis: 1.2310, name: 'R5买', itemStyle: {color: '#1abc9c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R5买', color: '#fff', fontSize: 9}},{xAxis: '20230908', yAxis: 1.2210, name: 'R5买', itemStyle: {color: '#1abc9c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R5买', color: '#fff', fontSize: 9}},{xAxis: '20230915', yAxis: 1.2120, name: 'R5买', itemStyle: {color: '#1abc9c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R5买', color: '#fff', fontSize: 9}},{xAxis: '20231124', yAxis: 1.2240, name: 'R5卖', itemStyle: {color: '#0e6755'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R5卖', color: '#fff', fontSize: 9}},{xAxis: '20240103', yAxis: 1.2740, name: 'R5卖', itemStyle: {color: '#0e6755'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R5卖', color: '#fff', fontSize: 9}},{xAxis: '20240117', yAxis: 1.2510, name: 'R5卖', itemStyle: {color: '#0e6755'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R5卖', color: '#fff', fontSize: 9}},{xAxis: '20240208', yAxis: 1.2810, name: 'R6买', itemStyle: {color: '#f39c12'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R6买', color: '#fff', fontSize: 9}},{xAxis: '20240223', yAxis: 1.3180, name: 'R6买', itemStyle: {color: '#f39c12'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R6买', color: '#fff', fontSize: 9}},{xAxis: '20240329', yAxis: 1.4090, name: 'R6卖', itemStyle: {color: '#855509'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R6卖', color: '#fff', fontSize: 9}},{xAxis: '20240408', yAxis: 1.3820, name: 'R6卖', itemStyle: {color: '#855509'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R6卖', color: '#fff', fontSize: 9}},{xAxis: '20240416', yAxis: 1.3250, name: 'R6卖', itemStyle: {color: '#855509'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R6卖', color: '#fff', fontSize: 9}},{xAxis: '20240802', yAxis: 1.3300, name: 'R7买', itemStyle: {color: '#2ecc71'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R7买', color: '#fff', fontSize: 9}},{xAxis: '20240809', yAxis: 1.3230, name: 'R7买', itemStyle: {color: '#2ecc71'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R7买', color: '#fff', fontSize: 9}},{xAxis: '20240830', yAxis: 1.4130, name: 'R7卖', itemStyle: {color: '#19703e'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R7卖', color: '#fff', fontSize: 9}},{xAxis: '20240904', yAxis: 1.3830, name: 'R7卖', itemStyle: {color: '#19703e'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R7卖', color: '#fff', fontSize: 9}},{xAxis: '20240909', yAxis: 1.3770, name: 'R7卖', itemStyle: {color: '#19703e'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R7卖', color: '#fff', fontSize: 9}},{xAxis: '20241122', yAxis: 1.3810, name: 'R8买', itemStyle: {color: '#e84393'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R8买', color: '#fff', fontSize: 9}},{xAxis: '20241129', yAxis: 1.4120, name: 'R8买', itemStyle: {color: '#e84393'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R8买', color: '#fff', fontSize: 9}},{xAxis: '20241220', yAxis: 1.4250, name: 'R8卖', itemStyle: {color: '#7f2450'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R8卖', color: '#fff', fontSize: 9}},{xAxis: '20241223', yAxis: 1.4470, name: 'R8卖', itemStyle: {color: '#7f2450'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R8卖', color: '#fff', fontSize: 9}},{xAxis: '20241231', yAxis: 1.4330, name: 'R8卖', itemStyle: {color: '#7f2450'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R8卖', color: '#fff', fontSize: 9}},{xAxis: '20250912', yAxis: 1.8460, name: 'R9买', itemStyle: {color: '#00b894'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R9买', color: '#fff', fontSize: 9}},{xAxis: '20250919', yAxis: 1.8480, name: 'R9买', itemStyle: {color: '#00b894'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R9买', color: '#fff', fontSize: 9}},{xAxis: '20250926', yAxis: 1.8210, name: 'R9买', itemStyle: {color: '#00b894'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R9买', color: '#fff', fontSize: 9}},{xAxis: '20250930', yAxis: 1.8360, name: 'R9买', itemStyle: {color: '#00b894'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R9买', color: '#fff', fontSize: 9}},{xAxis: '20251010', yAxis: 1.8770, name: 'R9买', itemStyle: {color: '#00b894'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R9买', color: '#fff', fontSize: 9}},{xAxis: '20251107', yAxis: 1.8400, name: 'R9卖', itemStyle: {color: '#006551'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R9卖', color: '#fff', fontSize: 9}},{xAxis: '20251110', yAxis: 1.8580, name: 'R9卖', itemStyle: {color: '#006551'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R9卖', color: '#fff', fontSize: 9}},{xAxis: '20251111', yAxis: 1.8630, name: 'R9卖', itemStyle: {color: '#006551'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R9卖', color: '#fff', fontSize: 9}},{xAxis: '20260313', yAxis: 1.7970, name: 'R10买', itemStyle: {color: '#6c5ce7'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R10买', color: '#fff', fontSize: 9}},{xAxis: '20260320', yAxis: 1.7240, name: 'R10买', itemStyle: {color: '#6c5ce7'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R10买', color: '#fff', fontSize: 9}},{xAxis: '20260327', yAxis: 1.6970, name: 'R10买', itemStyle: {color: '#6c5ce7'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R10买', color: '#fff', fontSize: 9}},{xAxis: '20260403', yAxis: 1.7030, name: 'R10买', itemStyle: {color: '#6c5ce7'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R10买', color: '#fff', fontSize: 9}},{xAxis: '20260410', yAxis: 1.7830, name: 'R10买', itemStyle: {color: '#6c5ce7'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R10买', color: '#fff', fontSize: 9}},{xAxis: '20260612', yAxis: 1.7550, name: 'R10卖', itemStyle: {color: '#3b327f'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R10卖', color: '#fff', fontSize: 9}},{xAxis: '20260821', yAxis: 1.8860, name: 'R10卖', itemStyle: {color: '#3b327f'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R10卖', color: '#fff', fontSize: 9}},{xAxis: '20260908', yAxis: 1.8570, name: 'R10卖', itemStyle: {color: '#3b327f'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R10卖', color: '#fff', fontSize: 9}},{xAxis: '20260924', yAxis: 1.7960, name: 'R11买', itemStyle: {color: '#fd79a8'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R11买', color: '#fff', fontSize: 9}},{xAxis: '20260930', yAxis: 1.8030, name: 'R11买', itemStyle: {color: '#fd79a8'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R11买', color: '#fff', fontSize: 9}},{xAxis: '20261009', yAxis: 1.7660, name: 'R11买', itemStyle: {color: '#fd79a8'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R11买', color: '#fff', fontSize: 9}}]
     }
 };
 

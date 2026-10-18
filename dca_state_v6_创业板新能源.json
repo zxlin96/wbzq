@@ -171,11 +171,11 @@
         }
       ],
       "week_invested": [
-        "20260724",
-        "20260731",
-        "20260717",
         "20260703",
-        "20260710"
+        "20260717",
+        "20260710",
+        "20260724",
+        "20260731"
       ]
     },
     {
@@ -195,8 +195,8 @@
       "round_periods": 5,
       "buy_count": 1,
       "dca_exited": true,
-      "dca_exit_date": "",
-      "dca_exit_amount": 0.0,
+      "dca_exit_date": "20260918",
+      "dca_exit_amount": 5000.0,
       "cycle_low": null,
       "j_high_done": false,
       "trades": [

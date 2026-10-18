@@ -111,17 +111,6 @@
       "reason": "R2 V4: 收盘(0.9800)<黄多空线(1.1179) 且中期线(1.0671)<多空线(1.1179) 且收盘<本轮最低价止损线(1.0020)全清",
       "total_shares": 0.0,
       "profit": -496.44
-    },
-    {
-      "date": "20261016",
-      "action": "BUY",
-      "price": 0.953,
-      "amount": 1000.0,
-      "shares": 1049.3179,
-      "round": 3,
-      "reason": "周线J=7.45, 金额=1000",
-      "total_shares": 1049.3179,
-      "avg_cost": 0.953
     }
   ],
   "positions": [
@@ -206,8 +195,8 @@
       "week_invested": [
         "20260703",
         "20260618",
-        "20260626",
-        "20260612"
+        "20260612",
+        "20260626"
       ]
     },
     {
@@ -289,20 +278,20 @@
         }
       ],
       "week_invested": [
+        "20260731",
         "20260724",
-        "20260717",
         "20260807",
-        "20260731"
+        "20260717"
       ]
     },
     {
       "round_id": 3,
-      "shares": 1049.3179433368311,
-      "total_cost": 1000.0,
-      "total_invested": 1000.0,
+      "shares": 0.0,
+      "total_cost": 0.0,
+      "total_invested": 0.0,
       "total_sell_amount": 0.0,
       "dca_active": true,
-      "j_peak": 7.44918400750052,
+      "j_peak": 0.0,
       "pullback_sold": false,
       "sell_stage": 0,
       "waiting_golden": false,
@@ -310,28 +299,14 @@
       "price_below_dk_sold": false,
       "round_budget": 5000,
       "round_periods": 5,
-      "buy_count": 1,
+      "buy_count": 0,
       "dca_exited": false,
       "dca_exit_date": "",
       "dca_exit_amount": 0.0,
-      "cycle_low": 0.953,
+      "cycle_low": null,
       "j_high_done": false,
-      "trades": [
-        {
-          "date": "20261016",
-          "action": "BUY",
-          "price": 0.953,
-          "amount": 1000.0,
-          "shares": 1049.3179,
-          "round": 3,
-          "reason": "周线J=7.45, 金额=1000",
-          "total_shares": 1049.3179,
-          "avg_cost": 0.953
-        }
-      ],
-      "week_invested": [
-        "20261016"
-      ]
+      "trades": [],
+      "week_invested": []
     }
   ]
 }

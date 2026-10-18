@@ -52,19 +52,19 @@ h2 { color: #333; font-size: 18px; margin: 15px 0 10px; }
     <div class="action-label">下一交易日: R3 已卖1/3·等金叉</div>
     <div class="action-date">数据截至: 20261016 收盘价: 0.8360</div>
 </div>
-<div class="action-detail">R3 空头区间，等金叉 | R4 J=23.28，等卖出或买入信号</div>
+<div class="action-detail">R3 空头区间，等金叉</div>
 <div class="action-metrics">
     <div class="action-metric">周线K=31.44</div>
     <div class="action-metric">周线D=35.52</div>
     <div class="action-metric">周线J=23.28</div>
     <div class='action-metric'>中期=0.9146 多空=0.9393 (空头)</div>
-    <div class='action-metric'>持仓=4548.07份 成本=0.9528 浮亏=12.26%</div>
+    <div class='action-metric'>持仓=3351.90份 成本=0.9945 浮亏=15.93%</div>
 </div>
 </div>
 <div class="summary">
 <div class="card">
     <div class="card-label">总投入</div>
-    <div class="card-value">16000.00</div>
+    <div class="card-value">15000.00</div>
 </div>
 <div class="card">
     <div class="card-label">总卖出</div>
@@ -72,15 +72,15 @@ h2 { color: #333; font-size: 18px; margin: 15px 0 10px; }
 </div>
 <div class="card">
     <div class="card-label">剩余持仓</div>
-    <div class="card-value">4548.0677 份</div>
+    <div class="card-value">3351.8955 份</div>
 </div>
 <div class="card">
     <div class="card-label">交易次数</div>
-    <div class="card-value">17</div>
+    <div class="card-value">16</div>
 </div>
 <div class="card">
     <div class="card-label">轮次数</div>
-    <div class="card-value">4</div>
+    <div class="card-value">3</div>
 </div>
 </div>
 <h2>各仓位状态</h2>
@@ -96,18 +96,6 @@ h2 { color: #333; font-size: 18px; margin: 15px 0 10px; }
         <span>持仓: 3351.90份</span>
         <span>成本: 0.9945</span>
         <span>J峰值: 57.86</span>
-    </div>
-</div>
-<div class="pos-card" style="border-left: 4px solid #e67e22;">
-    <div class="pos-header">
-        <span class="pos-round" style="background: #e67e22;">R4</span>
-        <span class="pos-stage">定投中</span>
-    </div>
-    <div class="pos-detail">R4 定投暂停·持有观望</div>
-    <div class="pos-metrics">
-        <span>持仓: 1196.17份</span>
-        <span>成本: 0.8360</span>
-        <span>J峰值: 9.53</span>
     </div>
 </div>
 </div>
@@ -303,17 +291,6 @@ h2 { color: #333; font-size: 18px; margin: 15px 0 10px; }
     <td>3351.8955</td>
     <td>-215.30</td>
 </tr>
-<tr>
-    <td>20261016</td>
-    <td><span class="round-tag" style="background: #e67e22;">R4</span></td>
-    <td><span class="buy-tag">买入</span></td>
-    <td>0.8360</td>
-    <td>1000.00</td>
-    <td>1196.1722</td>
-    <td>周线J=9.53, 金额=1000</td>
-    <td>1196.1722</td>
-    <td>-</td>
-</tr>
 </table>
 </div>
 </div>
@@ -355,7 +332,7 @@ var mainSeries = {
     markPoint: {
         symbol: 'pin', symbolSize: 40, animation: false,
         label: { show: true, fontSize: 10, color: '#fff' },
-        data: [{xAxis: '20251128', yAxis: 0.4610, name: 'R1买', itemStyle: {color: '#e74c3c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R1买', color: '#fff', fontSize: 9}},{xAxis: '20251205', yAxis: 0.4673, name: 'R1买', itemStyle: {color: '#e74c3c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R1买', color: '#fff', fontSize: 9}},{xAxis: '20251212', yAxis: 0.4970, name: 'R1买', itemStyle: {color: '#e74c3c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R1买', color: '#fff', fontSize: 9}},{xAxis: '20260109', yAxis: 0.5803, name: 'R1卖', itemStyle: {color: '#7f2921'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R1卖', color: '#fff', fontSize: 9}},{xAxis: '20260202', yAxis: 0.5680, name: 'R1卖', itemStyle: {color: '#7f2921'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R1卖', color: '#fff', fontSize: 9}},{xAxis: '20260309', yAxis: 0.5527, name: 'R1卖', itemStyle: {color: '#7f2921'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R1卖', color: '#fff', fontSize: 9}},{xAxis: '20260320', yAxis: 0.5317, name: 'R2买', itemStyle: {color: '#3498db'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R2买', color: '#fff', fontSize: 9}},{xAxis: '20260327', yAxis: 0.5347, name: 'R2买', itemStyle: {color: '#3498db'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R2买', color: '#fff', fontSize: 9}},{xAxis: '20260403', yAxis: 0.5240, name: 'R2买', itemStyle: {color: '#3498db'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R2买', color: '#fff', fontSize: 9}},{xAxis: '20260410', yAxis: 0.5743, name: 'R2买', itemStyle: {color: '#3498db'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R2买', color: '#fff', fontSize: 9}},{xAxis: '20260430', yAxis: 0.6560, name: 'R2卖', itemStyle: {color: '#1c5378'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R2卖', color: '#fff', fontSize: 9}},{xAxis: '20260601', yAxis: 0.7700, name: 'R2卖', itemStyle: {color: '#1c5378'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R2卖', color: '#fff', fontSize: 9}},{xAxis: '20260717', yAxis: 0.9730, name: 'R2卖', itemStyle: {color: '#1c5378'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R2卖', color: '#fff', fontSize: 9}},{xAxis: '20260731', yAxis: 0.9200, name: 'R3买', itemStyle: {color: '#9b59b6'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R3买', color: '#fff', fontSize: 9}},{xAxis: '20260807', yAxis: 1.0150, name: 'R3买', itemStyle: {color: '#9b59b6'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R3买', color: '#fff', fontSize: 9}},{xAxis: '20261009', yAxis: 0.8660, name: 'R3卖', itemStyle: {color: '#553064'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R3卖', color: '#fff', fontSize: 9}},{xAxis: '20261016', yAxis: 0.8360, name: 'R4买', itemStyle: {color: '#e67e22'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R4买', color: '#fff', fontSize: 9}}]
+        data: [{xAxis: '20251128', yAxis: 0.4610, name: 'R1买', itemStyle: {color: '#e74c3c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R1买', color: '#fff', fontSize: 9}},{xAxis: '20251205', yAxis: 0.4673, name: 'R1买', itemStyle: {color: '#e74c3c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R1买', color: '#fff', fontSize: 9}},{xAxis: '20251212', yAxis: 0.4970, name: 'R1买', itemStyle: {color: '#e74c3c'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R1买', color: '#fff', fontSize: 9}},{xAxis: '20260109', yAxis: 0.5803, name: 'R1卖', itemStyle: {color: '#7f2921'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R1卖', color: '#fff', fontSize: 9}},{xAxis: '20260202', yAxis: 0.5680, name: 'R1卖', itemStyle: {color: '#7f2921'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R1卖', color: '#fff', fontSize: 9}},{xAxis: '20260309', yAxis: 0.5527, name: 'R1卖', itemStyle: {color: '#7f2921'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R1卖', color: '#fff', fontSize: 9}},{xAxis: '20260320', yAxis: 0.5317, name: 'R2买', itemStyle: {color: '#3498db'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R2买', color: '#fff', fontSize: 9}},{xAxis: '20260327', yAxis: 0.5347, name: 'R2买', itemStyle: {color: '#3498db'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R2买', color: '#fff', fontSize: 9}},{xAxis: '20260403', yAxis: 0.5240, name: 'R2买', itemStyle: {color: '#3498db'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R2买', color: '#fff', fontSize: 9}},{xAxis: '20260410', yAxis: 0.5743, name: 'R2买', itemStyle: {color: '#3498db'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R2买', color: '#fff', fontSize: 9}},{xAxis: '20260430', yAxis: 0.6560, name: 'R2卖', itemStyle: {color: '#1c5378'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R2卖', color: '#fff', fontSize: 9}},{xAxis: '20260601', yAxis: 0.7700, name: 'R2卖', itemStyle: {color: '#1c5378'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R2卖', color: '#fff', fontSize: 9}},{xAxis: '20260717', yAxis: 0.9730, name: 'R2卖', itemStyle: {color: '#1c5378'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R2卖', color: '#fff', fontSize: 9}},{xAxis: '20260731', yAxis: 0.9200, name: 'R3买', itemStyle: {color: '#9b59b6'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R3买', color: '#fff', fontSize: 9}},{xAxis: '20260807', yAxis: 1.0150, name: 'R3买', itemStyle: {color: '#9b59b6'}, symbol: 'circle', symbolSize: 30,label: {formatter: 'R3买', color: '#fff', fontSize: 9}},{xAxis: '20261009', yAxis: 0.8660, name: 'R3卖', itemStyle: {color: '#553064'}, symbol: 'diamond', symbolSize: 30,label: {formatter: 'R3卖', color: '#fff', fontSize: 9}}]
     }
 };
 

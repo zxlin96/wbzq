@@ -1,6 +1,6 @@
 {
-  "next_round_id": 4,
-  "total_sell_amount": 14627.578097990656,
+  "next_round_id": 5,
+  "total_sell_amount": 17275.575527847155,
   "trades": [
     {
       "date": "20251128",
@@ -177,6 +177,28 @@
       "reason": "R3 J峰值回撤(J_peak=57.86, J=23.28, 回撤=34.58)",
       "total_shares": 3351.8955,
       "profit": -215.3
+    },
+    {
+      "date": "20261016",
+      "action": "BUY",
+      "price": 0.836,
+      "amount": 1000.0,
+      "shares": 1196.1722,
+      "round": 4,
+      "reason": "周线J=9.53, 金额=1000",
+      "total_shares": 1196.1722,
+      "avg_cost": 0.836
+    },
+    {
+      "date": "20261019",
+      "action": "SELL",
+      "price": 0.79,
+      "amount": 2648.0,
+      "shares": 3351.8955,
+      "round": 3,
+      "reason": "R3 V4: 收盘(0.7900)<黄多空线(0.9331) 且中期线(0.9048)<多空线(0.9331) 且收盘<本轮最低价止损线(0.8290)全清",
+      "total_shares": 0.0,
+      "profit": -685.34
     }
   ],
   "positions": [
@@ -378,29 +400,29 @@
       "week_invested": [
         "20260320",
         "20260403",
-        "20260410",
-        "20260327"
+        "20260327",
+        "20260410"
       ]
     },
     {
       "round_id": 3,
-      "shares": 3351.895480831013,
-      "total_cost": 3333.3333333333335,
+      "shares": 0,
+      "total_cost": 0,
       "total_invested": 5000.0,
-      "total_sell_amount": 1451.3707431998284,
-      "dca_active": true,
-      "j_peak": 57.85649336143945,
-      "pullback_sold": true,
-      "sell_stage": 1,
-      "waiting_golden": true,
+      "total_sell_amount": 4099.368173056329,
+      "dca_active": false,
+      "j_peak": 0.0,
+      "pullback_sold": false,
+      "sell_stage": 0,
+      "waiting_golden": false,
       "golden_confirmed": false,
       "price_below_dk_sold": false,
       "round_budget": 5000,
       "round_periods": 5,
-      "buy_count": 2,
-      "dca_exited": true,
-      "dca_exit_date": "20260807",
-      "dca_exit_amount": 4000.0,
+      "buy_count": 0,
+      "dca_exited": false,
+      "dca_exit_date": "",
+      "dca_exit_amount": 0.0,
       "cycle_low": 0.8290000000000001,
       "j_high_done": true,
       "trades": [
@@ -436,11 +458,60 @@
           "reason": "R3 J峰值回撤(J_peak=57.86, J=23.28, 回撤=34.58)",
           "total_shares": 3351.8955,
           "profit": -215.3
+        },
+        {
+          "date": "20261019",
+          "action": "SELL",
+          "price": 0.79,
+          "amount": 2648.0,
+          "shares": 3351.8955,
+          "round": 3,
+          "reason": "R3 V4: 收盘(0.7900)<黄多空线(0.9331) 且中期线(0.9048)<多空线(0.9331) 且收盘<本轮最低价止损线(0.8290)全清",
+          "total_shares": 0.0,
+          "profit": -685.34
         }
       ],
       "week_invested": [
-        "20260731",
-        "20260807"
+        "20260807",
+        "20260731"
+      ]
+    },
+    {
+      "round_id": 4,
+      "shares": 1196.1722488038279,
+      "total_cost": 1000.0,
+      "total_invested": 1000.0,
+      "total_sell_amount": 0.0,
+      "dca_active": true,
+      "j_peak": 9.530241475314355,
+      "pullback_sold": false,
+      "sell_stage": 0,
+      "waiting_golden": false,
+      "golden_confirmed": false,
+      "price_below_dk_sold": false,
+      "round_budget": 5000,
+      "round_periods": 5,
+      "buy_count": 1,
+      "dca_exited": false,
+      "dca_exit_date": "",
+      "dca_exit_amount": 0.0,
+      "cycle_low": 0.79,
+      "j_high_done": false,
+      "trades": [
+        {
+          "date": "20261016",
+          "action": "BUY",
+          "price": 0.836,
+          "amount": 1000.0,
+          "shares": 1196.1722,
+          "round": 4,
+          "reason": "周线J=9.53, 金额=1000",
+          "total_shares": 1196.1722,
+          "avg_cost": 0.836
+        }
+      ],
+      "week_invested": [
+        "20261016"
       ]
     }
   ]

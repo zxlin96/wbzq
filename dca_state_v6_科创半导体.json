@@ -398,9 +398,9 @@
         }
       ],
       "week_invested": [
-        "20260410",
-        "20260327",
         "20260320",
+        "20260327",
+        "20260410",
         "20260403"
       ]
     },
@@ -495,7 +495,7 @@
       "dca_exited": false,
       "dca_exit_date": "",
       "dca_exit_amount": 0.0,
-      "cycle_low": 0.778,
+      "cycle_low": 0.767,
       "j_high_done": false,
       "trades": [
         {

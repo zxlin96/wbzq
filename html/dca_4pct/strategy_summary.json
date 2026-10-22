@@ -1,13 +1,13 @@
 {
- "last_update": "2026-10-21 12:26",
+ "last_update": "2026-10-22 12:27",
  "gate_threshold": 50.0,
  "budget": 20000.0,
  "pool": [
   {
    "name": "沪深300",
    "ts_code": "510300.SH",
-   "last_date": "20261016",
-   "last_price": 4.236,
+   "last_date": "20261022",
+   "last_price": 4.107,
    "action_label": "等待估值门",
    "action_color": "#95a5a6",
    "today_action": null,
@@ -28,8 +28,8 @@
   {
    "name": "上证50",
    "ts_code": "510050.SH",
-   "last_date": "20261016",
-   "last_price": 2.866,
+   "last_date": "20261022",
+   "last_price": 2.836,
    "action_label": "等待估值门",
    "action_color": "#95a5a6",
    "today_action": null,
@@ -50,8 +50,8 @@
   {
    "name": "中证1000",
    "ts_code": "512100.SH",
-   "last_date": "20261016",
-   "last_price": 2.719,
+   "last_date": "20261022",
+   "last_price": 2.672,
    "action_label": "等待估值门",
    "action_color": "#95a5a6",
    "today_action": null,

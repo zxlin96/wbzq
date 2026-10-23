@@ -295,24 +295,24 @@ def generate_4pct_section(pct_summary):
 
 
 def generate_sentiment_section(state, latest_date=""):
-    """生成情绪反弹策略 HTML（仅在 BUY 发生当天给出买入提醒）"""
+    """按报告当天的信号给出下一交易日操作，买入金额和级别以信号记录为准。"""
     if not state:
         return "<p>暂无情绪反弹策略数据</p>"
 
     position = state.get("position", 0)
-    level = state.get("investment_level_idx", 0)
     trades = state.get("trades", [])
-
-    # 默认投资阶梯（与 sentiment_rebound_strategy.py 保持一致）
-    investment_levels = [2000, 4000, 8000, 16000]
-    next_level_idx = min(level, len(investment_levels) - 1)
-    next_amount = investment_levels[next_level_idx]
-    next_level = next_level_idx + 1
 
     # 最近一笔交易
     last_trade = trades[-1] if trades else None
     last_trade_str = "无交易记录"
-    buy_alert = ""
+    next_action = "继续持有，等待新信号。" if position > 0 else "保持空仓，等待新信号。"
+    action_note = f"截至 {latest_date} 暂无新增买卖信号。"
+    action_background = "#f5f5f5"
+    action_color = "#444"
+    if not latest_date:
+        next_action = "报告日期缺失，请核对最新信号后操作。"
+        action_note = ""
+
     if last_trade:
         action = last_trade.get("action", "")
         date = last_trade.get("date", "")
@@ -323,12 +323,32 @@ def generate_sentiment_section(state, latest_date=""):
         else:
             last_trade_str = f"{date} {action}（{reason}）"
 
-        # 仅在 BUY 发生当天（即交易日期等于报告最新日期）给出醒目提醒
-        if action == "BUY" and date == latest_date:
-            buy_alert = f"""
+        # 当天信号用于下一交易日执行；升级后的档位只供后续新信号参考。
+        if latest_date and date == latest_date and action in ("BUY", "SELL"):
+            action_note = f"执行 {date} 的本次信号；已执行则无需重复操作。"
+            action_background = "#fff3cd"
+            action_color = "#e65100"
+            if action == "BUY":
+                buy_amount = last_trade.get("amount")
+                buy_level = last_trade.get("level")
+                if buy_amount is not None and buy_level is not None:
+                    next_action = f"买入 ¥{buy_amount:,}（第 {buy_level} 级）。"
+                else:
+                    next_action = "本次买入信号缺少金额或级别，请核对完整报告。"
+            else:
+                sell_ratio = last_trade.get("ratio")
+                if sell_ratio == 1:
+                    next_action = "全部卖出，清仓。"
+                elif sell_ratio is not None and 0 < sell_ratio < 1:
+                    next_action = f"卖出当前持仓的 {sell_ratio:.0%}。"
+                else:
+                    next_action = "本次卖出信号缺少有效卖出比例，请核对完整报告。"
+
+    action_html = f"""
         <tr>
-            <td colspan="2" style="padding:12px;background:#fff3cd;border:2px solid #ff9800;border-radius:6px;color:#e65100;font-size:15px;font-weight:bold;text-align:center">
-                ⚠️ 今日触发买入 · 明日请继续买入 ¥{next_amount:,}（第 {next_level} 级）· 请按计划执行
+            <td colspan="2" style="padding:12px;background:{action_background};border:2px solid {action_color};border-radius:6px;color:{action_color};font-size:15px;font-weight:bold;text-align:center">
+                下一交易日操作：{escape_html(next_action)}
+                <div style="font-size:12px;font-weight:normal;margin-top:6px">{escape_html(action_note)}</div>
             </td>
         </tr>"""
 
@@ -336,13 +356,10 @@ def generate_sentiment_section(state, latest_date=""):
 
     return f"""
     <table style="border-collapse:collapse;font-size:13px;margin-bottom:16px;width:100%">
+        {action_html}
         <tr>
             <td style="padding:4px 12px"><strong>当前持仓:</strong></td>
             <td style="padding:4px 12px">{position_str}</td>
-        </tr>
-        <tr>
-            <td style="padding:4px 12px"><strong>投资级别:</strong></td>
-            <td style="padding:4px 12px">第 {level + 1} 级</td>
         </tr>
         <tr>
             <td style="padding:4px 12px"><strong>历史交易:</strong></td>
@@ -352,7 +369,6 @@ def generate_sentiment_section(state, latest_date=""):
             <td style="padding:4px 12px"><strong>最近交易:</strong></td>
             <td style="padding:4px 12px">{escape_html(last_trade_str)}</td>
         </tr>
-        {buy_alert}
     </table>"""
 
 

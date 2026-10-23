@@ -17,6 +17,8 @@
 - 状态持久化 save_state / load_state
 """
 
+from static_site import write_report
+
 import json
 import logging
 import os
@@ -445,8 +447,7 @@ window.addEventListener('resize', function() {{ navChart.resize(); priceChart.re
 </script>
 </body>
 </html>"""
-    with open(output_file, 'w', encoding='utf-8') as f:
-        f.write(html)
+    write_report(output_file, html)
     logging.info(f"直接每周定投报告已保存: {output_file}")
     return output_file
 

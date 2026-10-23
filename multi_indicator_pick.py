@@ -360,6 +360,7 @@ def save_multi_indicator_hints(hints, end_date):
     """
     json_path = f"hints/multi_indicator_hints_{end_date}.json"
     try:
+        os.makedirs("hints", exist_ok=True)
         with open(json_path, 'w', encoding='utf-8') as f:
             json.dump(hints, f, ensure_ascii=False, indent=2)
         logging.info("多指标联合选股: 超阈值行业提示已保存 %s (%d 条)", json_path, len(hints))

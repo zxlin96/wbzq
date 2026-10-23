@@ -13,6 +13,8 @@
 - 连续3根绿柱 → 全卖（容忍2天回调）
 """
 
+from static_site import write_report
+
 import os
 import json
 import pandas as pd
@@ -720,8 +722,7 @@ def generate_strategy_report(strategy: SentimentReboundStrategy,
 </html>'''
     
     if output_file:
-        with open(output_file, 'w', encoding='utf-8') as f:
-            f.write(html_content)
+        write_report(output_file, html_content)
         logging.info(f"策略报告已保存: {output_file}")
     
     return html_content

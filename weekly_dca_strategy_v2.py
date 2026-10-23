@@ -17,6 +17,8 @@
 数据源：Tushare fund_daily
 """
 
+from static_site import write_report
+
 import os
 import json
 import argparse
@@ -1338,8 +1340,7 @@ window.addEventListener('resize', function() { wkChart.resize(); dChart.resize()
 </script>
 </body>
 </html>"""
-    with open(output_file, 'w', encoding='utf-8') as f:
-        f.write(html)
+    write_report(output_file, html)
     logging.info(f"回测报告已保存: {output_file}")
     return output_file
 
@@ -1557,8 +1558,7 @@ window.addEventListener('resize', function() {{ chart.resize(); }});
 </script>
 </body>
 </html>"""
-    with open(chart_file, 'w', encoding='utf-8') as f:
-        f.write(html)
+    write_report(chart_file, html)
     logging.info(f"收益率对比图已保存: {chart_file}")
 
 

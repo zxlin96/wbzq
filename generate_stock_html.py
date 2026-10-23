@@ -6,6 +6,7 @@
 
 import pandas as pd
 import json
+from static_site import write_report
 
 
 def generate_stock_charts(stock_data, ts_code, name):
@@ -103,6 +104,13 @@ def generate_stock_charts(stock_data, ts_code, name):
 def generate_stock_selection_html(result, df, end_date, industry_count):
     """生成交互式选股结果HTML报告，支持下载CSV和个股图表"""
     if result.empty:
+        write_report(f'html/{end_date}/stock_selection_{end_date}.html', f'''<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="report-stock-count" content="0"><title>选股结果报告 - {end_date}</title>
+<script src="https://cdn.tailwindcss.com"></script></head>
+<body class="bg-gray-50"><main class="max-w-5xl mx-auto p-6"><h1 class="text-2xl font-bold">选股结果报告</h1>
+<p class="mt-4">日期：{end_date} | 共选出 0 只，无符合条件的股票。</p></main></body></html>''')
         return
     
     # 创建 html/日期 目录
@@ -379,7 +387,7 @@ def generate_stock_selection_html(result, df, end_date, industry_count):
             
             // 构建K线数据（包含涨跌幅）
             const candlestickWithChange = data.candlestick.map((d, i) => ({{
-                value: [d[1], d[2], d[3], d[4]],
+                value: [d[1], d[2], d[4], d[3]],
                 itemStyle: {{
                     color: d[2] >= d[1] ? '#ef4444' : '#22c55e',
                     color0: d[2] >= d[1] ? '#ef4444' : '#22c55e',
@@ -499,7 +507,7 @@ def generate_stock_selection_html(result, df, end_date, industry_count):
                 legend: {{ data: ['K', 'D', 'J'], bottom: 0 }},
                 grid: {{ left: '10%', right: '10%', top: '40px', bottom: '40px' }},
                 xAxis: {{ type: 'category', data: data.dates }},
-                yAxis: {{ type: 'value', min: 0, max: 100 }},
+                yAxis: {{ type: 'value', scale: true }},
                 series: [
                     {{ type: 'line', data: data.kdj_k, name: 'K', smooth: true, lineStyle: {{ color: '#3b82f6' }} }},
                     {{ type: 'line', data: data.kdj_d, name: 'D', smooth: true, lineStyle: {{ color: '#f59e0b' }} }},
@@ -532,8 +540,7 @@ def generate_stock_selection_html(result, df, end_date, industry_count):
     
     # 保存HTML文件
     filename = os.path.join(html_dir, f"stock_selection_{end_date}.html")
-    with open(filename, 'w', encoding='utf-8') as f:
-        f.write(html_content)
+    write_report(filename, html_content)
     
     print(f"\n📊 已生成交互式选股报告: {filename}")
     print(f"   包含功能: 表格排序、CSV下载、行业分布统计、个股K线/成交额/KDJ图表")
@@ -569,8 +576,7 @@ def generate_c154_html(result, df, end_date, funnel_stats, industry_count):
 </body>
 </html>"""
         filename = os.path.join(html_dir, f"c154_selection_{end_date}.html")
-        with open(filename, 'w', encoding='utf-8') as f:
-            f.write(html_content)
+        write_report(filename, html_content)
         print(f"  C154 报告(空): {filename}")
         return
 
@@ -914,7 +920,7 @@ def generate_c154_html(result, df, end_date, funnel_stats, industry_count):
         }}
         if(kc)kc.dispose(); if(vc)vc.dispose(); if(kdjc)kdjc.dispose();
         kc=echarts.init(document.getElementById('klineChart'));
-        const cd=d.candlestick.map(c=>({{value:[c[1],c[2],c[3],c[4]],itemStyle:{{color:c[2]>=c[1]?'#ef4444':'#22c55e',color0:c[2]>=c[1]?'#ef4444':'#22c55e',borderColor:c[2]>=c[1]?'#ef4444':'#22c55e',borderColor0:c[2]>=c[1]?'#ef4444':'#22c55e'}}}}));
+        const cd=d.candlestick.map(c=>({{value:[c[1], c[2], c[4], c[3]],itemStyle:{{color:c[2]>=c[1]?'#ef4444':'#22c55e',color0:c[2]>=c[1]?'#ef4444':'#22c55e',borderColor:c[2]>=c[1]?'#ef4444':'#22c55e',borderColor0:c[2]>=c[1]?'#ef4444':'#22c55e'}}}}));
         kc.setOption({{
             title:{{text:'K线 + MA60 + 知行多空',left:'center',textStyle:{{fontSize:14}}}},
             tooltip:{{trigger:'axis',axisPointer:{{type:'cross'}},
@@ -971,7 +977,7 @@ def generate_c154_html(result, df, end_date, funnel_stats, industry_count):
             legend:{{data:['K','D','J'],bottom:0}},
             grid:{{left:'10%',right:'10%',top:'40px',bottom:'40px'}},
             xAxis:{{type:'category',data:d.dates}},
-            yAxis:{{type:'value',min:0,max:100}},
+            yAxis:{{type:'value',scale: true}},
             series:[
                 {{type:'line',data:d.kdj_k,name:'K',smooth:true,lineStyle:{{color:'#3b82f6'}}}},
                 {{type:'line',data:d.kdj_d,name:'D',smooth:true,lineStyle:{{color:'#f59e0b'}}}},
@@ -987,8 +993,7 @@ def generate_c154_html(result, df, end_date, funnel_stats, industry_count):
 </html>"""
 
     filename = os.path.join(html_dir, f"c154_selection_{end_date}.html")
-    with open(filename, 'w', encoding='utf-8') as f:
-        f.write(html_content)
+    write_report(filename, html_content)
     print(f"  C154 HTML 报告: {filename}")
 
 
@@ -1022,8 +1027,7 @@ def generate_c432_html(result, df, end_date, funnel_stats, industry_count):
 </body>
 </html>"""
         filename = os.path.join(html_dir, f"c432_selection_{end_date}.html")
-        with open(filename, 'w', encoding='utf-8') as f:
-            f.write(html_content)
+        write_report(filename, html_content)
         print(f"  C432 报告(空): {filename}")
         return
 
@@ -1369,7 +1373,7 @@ def generate_c432_html(result, df, end_date, funnel_stats, industry_count):
         }}
         if(kc)kc.dispose(); if(vc)vc.dispose(); if(kdjc)kdjc.dispose();
         kc=echarts.init(document.getElementById('klineChart'));
-        const cd=d.candlestick.map(c=>({{value:[c[1],c[2],c[3],c[4]],itemStyle:{{color:c[2]>=c[1]?'#ef4444':'#22c55e',color0:c[2]>=c[1]?'#ef4444':'#22c55e',borderColor:c[2]>=c[1]?'#ef4444':'#22c55e',borderColor0:c[2]>=c[1]?'#ef4444':'#22c55e'}}}}));
+        const cd=d.candlestick.map(c=>({{value:[c[1], c[2], c[4], c[3]],itemStyle:{{color:c[2]>=c[1]?'#ef4444':'#22c55e',color0:c[2]>=c[1]?'#ef4444':'#22c55e',borderColor:c[2]>=c[1]?'#ef4444':'#22c55e',borderColor0:c[2]>=c[1]?'#ef4444':'#22c55e'}}}}));
         kc.setOption({{
             title:{{text:'K线 + MA60 + 知行多空 + 中期线',left:'center',textStyle:{{fontSize:14}}}},
             tooltip:{{trigger:'axis',axisPointer:{{type:'cross'}},
@@ -1444,8 +1448,7 @@ def generate_c432_html(result, df, end_date, funnel_stats, industry_count):
 </html>"""
 
     filename = os.path.join(html_dir, f"c432_selection_{end_date}.html")
-    with open(filename, 'w', encoding='utf-8') as f:
-        f.write(html_content)
+    write_report(filename, html_content)
     print(f"  C432 HTML 报告: {filename}")
 
 
@@ -1479,8 +1482,7 @@ def generate_macd_html(result, df, end_date, funnel_stats, industry_count):
 </body>
 </html>"""
         filename = os.path.join(html_dir, f"macd_selection_{end_date}.html")
-        with open(filename, 'w', encoding='utf-8') as f:
-            f.write(html_content)
+        write_report(filename, html_content)
         print(f"  MACD 报告(空): {filename}")
         return
 
@@ -1654,7 +1656,7 @@ def generate_macd_html(result, df, end_date, funnel_stats, industry_count):
             // K线图
             if (kc) kc.dispose();
             kc = echarts.init(document.getElementById('klineChart'));
-            const cd = d.candlestick.map(c => ({{value: [c[1],c[2],c[3],c[4]], itemStyle: {{color: c[2]>=c[1]?'#ef4444':'#22c55e', color0: c[2]>=c[1]?'#ef4444':'#22c55e', borderColor: c[2]>=c[1]?'#ef4444':'#22c55e', borderColor0: c[2]>=c[1]?'#ef4444':'#22c55e'}}}}));
+            const cd = d.candlestick.map(c => ({{value: [c[1], c[2], c[4], c[3]], itemStyle: {{color: c[2]>=c[1]?'#ef4444':'#22c55e', color0: c[2]>=c[1]?'#ef4444':'#22c55e', borderColor: c[2]>=c[1]?'#ef4444':'#22c55e', borderColor0: c[2]>=c[1]?'#ef4444':'#22c55e'}}}}));
             kc.setOption({{
                 title: {{ text: 'K线图 - 黄线(多空) 白线(中期)', left: 'center', textStyle: {{ fontSize: 14 }} }},
                 tooltip: {{ trigger: 'axis', axisPointer: {{ type: 'cross' }} }},
@@ -1687,7 +1689,7 @@ def generate_macd_html(result, df, end_date, funnel_stats, industry_count):
             // 成交额
             if (vc) vc.dispose();
             const vd = d.volume.map((v, i) => ({{
-                value: v.amount, itemStyle: {{ color: v.is_double ? '#a855f7' : '#3b82f6' }}
+                value: v.value, itemStyle: {{ color: v.is_double ? '#a855f7' : '#3b82f6' }}
             }}));
             vc = echarts.init(document.getElementById('volumeChart'));
             vc.setOption({{
@@ -1738,8 +1740,7 @@ def generate_macd_html(result, df, end_date, funnel_stats, industry_count):
 </html>"""
 
     filename = os.path.join(html_dir, f"macd_selection_{end_date}.html")
-    with open(filename, 'w', encoding='utf-8') as f:
-        f.write(html_content)
+    write_report(filename, html_content)
     print(f"  MACD HTML 报告: {filename}")
 
 
@@ -1786,8 +1787,7 @@ def generate_multi_indicator_html(result, df, end_date, funnel_stats, industry_c
 </body>
 </html>"""
         filename = os.path.join(html_dir, f"multi_indicator_selection_{end_date}.html")
-        with open(filename, 'w', encoding='utf-8') as f:
-            f.write(html_content)
+        write_report(filename, html_content)
         print(f"  多指标联合选股报告(空): {filename}")
         return
 
@@ -1998,7 +1998,7 @@ def generate_multi_indicator_html(result, df, end_date, funnel_stats, industry_c
 
         setTimeout(() => {{
             if (kc) kc.dispose();
-            const cd = d.candlestick.map(c => ({{value: [c[1],c[2],c[3],c[4]], itemStyle: {{color: c[2]>=c[1]?'#ef4444':'#22c55e', color0: c[2]>=c[1]?'#ef4444':'#22c55e', borderColor: c[2]>=c[1]?'#ef4444':'#22c55e', borderColor0: c[2]>=c[1]?'#ef4444':'#22c55e'}}}}));
+            const cd = d.candlestick.map(c => ({{value: [c[1], c[2], c[4], c[3]], itemStyle: {{color: c[2]>=c[1]?'#ef4444':'#22c55e', color0: c[2]>=c[1]?'#ef4444':'#22c55e', borderColor: c[2]>=c[1]?'#ef4444':'#22c55e', borderColor0: c[2]>=c[1]?'#ef4444':'#22c55e'}}}}));
             kc = echarts.init(document.getElementById('klineChart'));
             kc.setOption({{
                 title: {{ text: 'K线图', left: 'center', textStyle: {{ fontSize: 14 }} }},
@@ -2010,7 +2010,7 @@ def generate_multi_indicator_html(result, df, end_date, funnel_stats, industry_c
             }});
 
             if (vc) vc.dispose();
-            const vd = d.volume.map(v => ({{ value: v.amount, itemStyle: {{ color: v.is_double ? '#a855f7' : '#3b82f6' }} }})));
+            const vd = d.volume.map(v => ({{ value: v.value, itemStyle: {{ color: v.is_double ? '#a855f7' : '#3b82f6' }} }}));
             vc = echarts.init(document.getElementById('volumeChart'));
             vc.setOption({{
                 tooltip: {{ trigger: 'axis', formatter: function(params) {{
@@ -2035,8 +2035,7 @@ def generate_multi_indicator_html(result, df, end_date, funnel_stats, industry_c
 </html>"""
 
     filename = os.path.join(html_dir, f"multi_indicator_selection_{end_date}.html")
-    with open(filename, 'w', encoding='utf-8') as f:
-        f.write(html_content)
+    write_report(filename, html_content)
     print(f"  多指标联合选股 HTML 报告: {filename}")
 
 

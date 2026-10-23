@@ -1,0 +1,43 @@
+name: Static site regression
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: pip install -r requirements-dev.txt
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Unit and generator regression
+        run: |
+          python -m pytest -q test/test_static_site.py test/test_static_report_generators.py test/test_generate_reports_json_multi_indicator.py test/test_generate_multi_indicator_trend_html.py test/test_generate_multi_indicator_trend_html_integration.py test/test_multi_indicator_pick.py test/test_generate_email_sentiment.py
+      - name: Build and inspect every public artifact
+        run: |
+          python static_site.py optimize
+          python generate_reports_json.py
+          npm run build:css
+          python static_site.py build
+          python scripts/validate_static_site.py --root dist
+          node scripts/validate_site_js.cjs dist
+      - run: python -m playwright install --with-deps chromium
+      - name: Browser regression
+        run: python scripts/test_static_site_browser.py --root dist --output test-results
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: static-site-validation
+          path: test-results

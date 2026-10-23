@@ -59,6 +59,18 @@ def test_scan_empty_dir():
         assert scan_hints_files(tmp) == []
 
 
+def test_scan_legacy_and_current_directories_are_merged(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / 'hints').mkdir()
+    (tmp_path / 'multi_indicator_hints_20261021.json').write_text('[]')
+    (tmp_path / 'multi_indicator_hints_20261022.json').write_text('[]')
+    current = tmp_path / 'hints/multi_indicator_hints_20261022.json'
+    current.write_text('[]')
+    files = scan_hints_files()
+    assert [date for date, _ in files] == ['20261021', '20261022']
+    assert files[-1][1].resolve() == current
+
+
 # ============================================================================
 # parse_hints_file
 # ============================================================================

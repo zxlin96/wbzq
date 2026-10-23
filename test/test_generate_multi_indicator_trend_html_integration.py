@@ -94,6 +94,19 @@ def test_full_flow_all_empty_lists():
             assert "暂无超阈值行业数据" in html
 
 
+def test_stock_details_keep_their_own_date():
+    """较旧 CSV 不能被标为最新行业提示的日期。"""
+    with tempfile.TemporaryDirectory() as tmp:
+        with _Chdir(tmp):
+            _write_hints(Path('multi_indicator_hints_20261022.json'), [{'industry':'电子','count':5}])
+            Path('multi_indicator_result_20261020.csv').write_text(
+                'ts_code,name,industry_name\n600000.SH,测试,电子\n', encoding='utf-8')
+            generate_multi_indicator_trend_html()
+            html = Path('html/multi_indicator_trend/index.html').read_text()
+            assert '个股明细来自 2026-10-20' in html
+            assert '20261022' in html
+
+
 if __name__ == "__main__":
     import pytest
     sys.exit(pytest.main([__file__, "-v"]))

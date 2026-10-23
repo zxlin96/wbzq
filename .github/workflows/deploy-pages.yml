@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
@@ -18,10 +18,40 @@ concurrency:
 
 jobs:
   deploy:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_branch || github.ref }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Install CSS compiler
+        run: npm ci --ignore-scripts --no-audit --no-fund
+
+      - name: Build and validate public site
+        run: |
+          python static_site.py optimize
+          python generate_reports_json.py
+          npm run build:css
+          python -m unittest discover -s test -p test_static_site.py -v
+          python static_site.py build
+          python scripts/validate_static_site.py --root dist
+          node scripts/validate_site_js.cjs dist
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -29,7 +59,7 @@ jobs:
       - name: Upload to GitHub Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: dist
 
       - name: Deploy to GitHub Pages
         id: deployment

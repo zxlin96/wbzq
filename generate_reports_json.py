@@ -1,125 +1,85 @@
 #!/usr/bin/env python3
-"""
-生成 GitHub Pages 索引文件
-"""
-
-import os
-import json
-import re
+"""Generate the complete, shared schema consumed by the report homepage."""
 import csv
 from datetime import datetime
+import json
 from pathlib import Path
+import re
+from zoneinfo import ZoneInfo
+
+REPORT_TYPES = {
+    'stockSelection': 'stock_selection_{date}.html',
+    'c154Html': 'c154_selection_{date}.html',
+    'c432Html': 'c432_selection_{date}.html',
+    'macdHtml': 'macd_selection_{date}.html',
+    'industryTrend': 'industry_total_amount_trend.html',
+    'j13Trend': 'first_j13_step_daily_count.html',
+    'sentimentRebound': 'sentiment_rebound_strategy.html',
+    'multiIndicator': 'multi_indicator_selection_{date}.html',
+}
+CSV_TYPES = {'c154Result': 'c154', 'c432Result': 'c432', 'macdResult': 'macd'}
+
+
+def _stock_count(html_path, csv_path=None):
+    if html_path:
+        text = Path(html_path).read_text(encoding='utf-8')
+        match = re.search(r'<meta name="report-stock-count" content="(\d+)"', text)
+        if not match:
+            match = re.search(r'共选出\s*(\d+)\s*只|共\s*(\d+)\s*只', text)
+        if match:
+            return int(next(g for g in match.groups() if g is not None))
+        if any(word in text for word in ['无符合', '未选出', '暂无股票', '没有符合', '无入选']):
+            return 0
+    if csv_path:
+        with Path(csv_path).open(encoding='utf-8-sig', newline='') as stream:
+            return sum(1 for row in csv.DictReader(stream) if any(row.values()))
+    return None  # Missing output differs from a successfully generated empty report.
 
 
 def generate_reports_json():
-    """生成 reports.json 索引文件，包含主策略和 MACD 策略结果"""
-    
-    reports = []
-    
-    # 查找 html/ 目录下的所有日期目录
-    html_base_dir = Path('html')
-    if not html_base_dir.exists():
-        print("⚠️  html/ 目录不存在，跳过生成索引")
+    base = Path('html')
+    if not base.exists():
+        print('⚠️ html/ 目录不存在，跳过生成索引')
         return
-    
-    # 获取所有日期目录并按日期排序
-    date_dirs = sorted([d for d in html_base_dir.iterdir()
-                        if d.is_dir() and d.name.isdigit() and len(d.name) == 8],
-                       key=lambda x: x.name, reverse=True)
-    
-    for date_dir in date_dirs:
-        date_str = date_dir.name
-        
-        # 检查该日期目录下的文件
-        stock_selection_file = date_dir / f"stock_selection_{date_str}.html"
-        industry_trend_file = date_dir / "industry_total_amount_trend.html"
-        j13_trend_file = date_dir / "first_j13_step_daily_count.html"
-        macd_csv_file = Path(f"macd_result_{date_str}.csv")
-        macd_html_file = date_dir / f"macd_selection_{date_str}.html"
-        sentiment_rebound_file = date_dir / "sentiment_rebound_strategy.html"
-        multi_indicator_file = date_dir / f"multi_indicator_selection_{date_str}.html"
-        
-        # 添加所有日期（包括没有选股的）
-        reports.append({
-            'date': date_str,
-            'stockSelection': f"html/{date_str}/stock_selection_{date_str}.html" if stock_selection_file.exists() else None,
-            'industryTrend': f"html/{date_str}/industry_total_amount_trend.html" if industry_trend_file.exists() else None,
-            'j13Trend': f"html/{date_str}/first_j13_step_daily_count.html" if j13_trend_file.exists() else None,
-            'macdResult': f"macd_result_{date_str}.csv" if macd_csv_file.exists() else None,
-            'macdHtml': f"html/{date_str}/macd_selection_{date_str}.html" if macd_html_file.exists() else None,
-            'sentimentRebound': f"html/{date_str}/sentiment_rebound_strategy.html" if sentiment_rebound_file.exists() else None,
-            'multiIndicator': f"html/{date_str}/multi_indicator_selection_{date_str}.html" if multi_indicator_file.exists() else None,
-        })
-    
-    # 扫描根目录下的 macd_result_*.csv，补充 html 中没有对应目录的日期
-    existing_dates = {r['date'] for r in reports}
-    for csv_file in sorted(Path('.').glob('macd_result_*.csv'), reverse=True):
-        date_str = csv_file.stem.replace('macd_result_', '')
-        if date_str not in existing_dates:
-            macd_html_path = html_base_dir / date_str / f"macd_selection_{date_str}.html"
-            sentiment_rebound_path = html_base_dir / date_str / "sentiment_rebound_strategy.html"
-            reports.append({
-                'date': date_str,
-                'stockSelection': None,
-                'industryTrend': None,
-                'j13Trend': None,
-                'macdResult': str(csv_file),
-                'macdHtml': f"html/{date_str}/macd_selection_{date_str}.html" if macd_html_path.exists() else None,
-                'sentimentRebound': f"html/{date_str}/sentiment_rebound_strategy.html" if sentiment_rebound_path.exists() else None,
-                'multiIndicator': None,
-            })
-            existing_dates.add(date_str)
-    
-    # 按日期降序重新排序
-    reports.sort(key=lambda x: x['date'], reverse=True)
-    
-    # 统计信息
-    total_stocks = 0
-    macd_stocks = 0
-    if reports:
-        try:
-            latest_report = reports[0]
-            stock_selection_file = latest_report['stockSelection']
-            if stock_selection_file and os.path.exists(stock_selection_file):
-                with open(stock_selection_file, 'r', encoding='utf-8') as f:
-                    content = f.read()
-                    if '共选出' in content:
-                        match = re.search(r'共选出 (\d+) 只', content)
-                        if match:
-                            total_stocks = int(match.group(1))
-        except:
-            pass
-        try:
-            latest_report = reports[0]
-            macd_file = latest_report.get('macdResult')
-            if macd_file and os.path.exists(macd_file):
-                with open(macd_file, 'r', encoding='utf-8-sig') as f:
-                    reader = csv.reader(f)
-                    rows = list(reader)
-                    macd_stocks = max(0, len(rows) - 1)
-        except:
-            pass
-    
-    latest_date = reports[0]['date'] if reports else '-'
-    
-    data = {
-        'lastUpdate': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-        'totalStocks': total_stocks,
-        'macdStocks': macd_stocks,
-        'totalReports': len(reports),
-        'latestDate': latest_date,
-        'reports': reports
+    dates = {p.name for p in base.iterdir()
+             if p.is_dir() and re.fullmatch(r'\d{8}', p.name)}
+    for prefix in CSV_TYPES.values():
+        for path in Path('.').glob(f'{prefix}_result_*.csv'):
+            match = re.fullmatch(prefix + r'_result_(\d{8})\.csv', path.name)
+            if match:
+                dates.add(match[1])
+    reports = []
+    for date in sorted(dates, reverse=True):
+        report = {'date': date}
+        for key, pattern in REPORT_TYPES.items():
+            path = base / date / pattern.format(date=date)
+            report[key] = path.as_posix() if path.is_file() else None
+        for key, prefix in CSV_TYPES.items():
+            path = Path(f'{prefix}_result_{date}.csv')
+            report[key] = path.as_posix() if path.is_file() else None
+        reports.append(report)
+    latest = reports[0] if reports else {}
+    counts = {
+        'stockSelection': _stock_count(latest.get('stockSelection')),
+        'c154Html': _stock_count(latest.get('c154Html'), latest.get('c154Result')),
+        'c432Html': _stock_count(latest.get('c432Html'), latest.get('c432Result')),
+        'macdHtml': _stock_count(latest.get('macdHtml'), latest.get('macdResult')),
+        'multiIndicator': _stock_count(latest.get('multiIndicator')),
     }
-    
-    # 写入 JSON 文件
-    with open('reports.json', 'w', encoding='utf-8') as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
-    
-    print(f"✅ 已生成索引文件: reports.json")
-    print(f"   - 报告数量: {len(reports)}")
-    print(f"   - 最新日期: {latest_date}")
-    print(f"   - 主策略选股: {total_stocks} 只")
-    print(f"   - MACD 零轴金叉: {macd_stocks} 只")
+    now = datetime.now(ZoneInfo('Asia/Shanghai'))
+    data = {
+        'schemaVersion': 2,
+        'lastUpdate': now.strftime('%Y-%m-%d %H:%M:%S') + ' 北京时间',
+        'generatedAt': now.isoformat(timespec='seconds'),
+        'totalStocks': counts['stockSelection'],
+        'c154Stocks': counts['c154Html'], 'c432Stocks': counts['c432Html'],
+        'macdStocks': counts['macdHtml'], 'multiIndicatorStocks': counts['multiIndicator'],
+        'latestCounts': counts, 'totalReports': len(reports),
+        'latestDate': latest.get('date', '-'), 'reports': reports,
+    }
+    Path('reports.json').write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding='utf-8')
+    print(f"✅ 已生成索引: {len(reports)} 个日期，最新 {data['latestDate']}")
+    return data
 
 
 if __name__ == '__main__':

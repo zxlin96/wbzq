@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>情绪反弹策略分析报告</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/tailwind.css">
     <style>
         body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
         .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
@@ -15,8 +14,10 @@
         .brick-green { background: #22c55e; }
         .brick-red { background: #ef4444; }
     </style>
+<link rel="stylesheet" href="../../assets/site.css">
+<script src="../../assets/site.js" defer></script>
 </head>
-<body class="p-4 md:p-8">
+<body data-static-version="3" class="p-4 md:p-8">
     <div class="max-w-7xl mx-auto">
         <!-- 标题 -->
         <div class="glass p-6 mb-6">
@@ -26,13 +27,13 @@
                     <p class="text-gray-500 mt-1">ETF: 563300.SH | 策略版本: v1.0</p>
                 </div>
                 <div class="flex gap-3">
-                    <a href="index.html" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                    <a href="../../index.html" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
                         ← 返回首页
                     </a>
                 </div>
             </div>
         </div>
-        
+
         <!-- 策略说明 -->
         <div class="glass p-6 mb-6">
             <h2 class="text-xl font-bold text-gray-800 mb-4">📋 策略说明</h2>
@@ -57,7 +58,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- J13统计 -->
         <div class="glass p-6 mb-6">
             <h2 class="text-xl font-bold text-gray-800 mb-4">📈 J13市场统计</h2>
@@ -80,13 +81,13 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- 当前信号 -->
         <div class="glass p-6 mb-6">
             <h2 class="text-xl font-bold text-gray-800 mb-4">⚡ 当前交易信号</h2>
             <p class="text-gray-500">暂无交易信号</p>
         </div>
-        
+
         <!-- 历史交易记录 -->
         <div class="glass p-6 mb-6">
             <h2 class="text-xl font-bold text-gray-800 mb-4">📜 历史交易记录</h2>
@@ -98,7 +99,7 @@
             <td class="px-4 py-3">2000</td>
             <td class="px-4 py-3 text-sm text-gray-600">J13数量(2839)超过90%分位数(2458.6)</td>
         </tr>
-        
+
         <tr class="hover:bg-gray-50">
             <td class="px-4 py-3">20260320</td>
             <td class="px-4 py-3 font-bold text-green-600">BUY</td>
@@ -106,7 +107,7 @@
             <td class="px-4 py-3">4000</td>
             <td class="px-4 py-3 text-sm text-gray-600">J13数量(4114)超过90%分位数(2460.8)</td>
         </tr>
-        
+
         <tr class="hover:bg-gray-50">
             <td class="px-4 py-3">20260323</td>
             <td class="px-4 py-3 font-bold text-green-600">BUY</td>
@@ -114,7 +115,7 @@
             <td class="px-4 py-3">8000</td>
             <td class="px-4 py-3 text-sm text-gray-600">J13数量(4703)超过90%分位数(2780.5)</td>
         </tr>
-        
+
         <tr class="hover:bg-gray-50">
             <td class="px-4 py-3">20260324</td>
             <td class="px-4 py-3 font-bold text-green-600">BUY</td>
@@ -122,7 +123,7 @@
             <td class="px-4 py-3">16000</td>
             <td class="px-4 py-3 text-sm text-gray-600">J13数量(3339)超过90%分位数(2842.2)</td>
         </tr>
-        
+
         <tr class="hover:bg-gray-50">
             <td class="px-4 py-3">20260521</td>
             <td class="px-4 py-3 font-bold text-green-600">BUY</td>
@@ -130,7 +131,7 @@
             <td class="px-4 py-3">2000</td>
             <td class="px-4 py-3 text-sm text-gray-600">J13数量(3223)超过90%分位数(2843.4)</td>
         </tr>
-        
+
         <tr class="hover:bg-gray-50">
             <td class="px-4 py-3">20260521</td>
             <td class="px-4 py-3 font-bold text-red-600">SELL</td>
@@ -138,7 +139,7 @@
             <td class="px-4 py-3">1.583</td>
             <td class="px-4 py-3 text-sm text-gray-600">红转绿，连续红柱0根（未满4根）</td>
         </tr>
-        
+
         <tr class="hover:bg-gray-50">
             <td class="px-4 py-3">20260527</td>
             <td class="px-4 py-3 font-bold text-green-600">BUY</td>
@@ -146,7 +147,7 @@
             <td class="px-4 py-3">2000</td>
             <td class="px-4 py-3 text-sm text-gray-600">J13数量(3146)超过90%分位数(2901.2)</td>
         </tr>
-        
+
         <tr class="hover:bg-gray-50">
             <td class="px-4 py-3">20260529</td>
             <td class="px-4 py-3 font-bold text-red-600">SELL</td>
@@ -154,7 +155,7 @@
             <td class="px-4 py-3">1.557</td>
             <td class="px-4 py-3 text-sm text-gray-600">红转绿，连续红柱1根（未满4根）</td>
         </tr>
-        
+
         <tr class="hover:bg-gray-50">
             <td class="px-4 py-3">20260626</td>
             <td class="px-4 py-3 font-bold text-green-600">BUY</td>
@@ -162,7 +163,7 @@
             <td class="px-4 py-3">2000</td>
             <td class="px-4 py-3 text-sm text-gray-600">J13数量(3195)超过90%分位数(2580.9)</td>
         </tr>
-        
+
         <tr class="hover:bg-gray-50">
             <td class="px-4 py-3">20260706</td>
             <td class="px-4 py-3 font-bold text-red-600">SELL</td>
@@ -170,7 +171,7 @@
             <td class="px-4 py-3">1.572</td>
             <td class="px-4 py-3 text-sm text-gray-600">连续3根绿柱，确认趋势反转</td>
         </tr>
-        
+
         <tr class="hover:bg-gray-50">
             <td class="px-4 py-3">20260720</td>
             <td class="px-4 py-3 font-bold text-green-600">BUY</td>
@@ -178,7 +179,7 @@
             <td class="px-4 py-3">2000</td>
             <td class="px-4 py-3 text-sm text-gray-600">J13数量(2682)超过90%分位数(2579.3)</td>
         </tr>
-        
+
         <tr class="hover:bg-gray-50">
             <td class="px-4 py-3">20260724</td>
             <td class="px-4 py-3 font-bold text-red-600">SELL</td>
@@ -189,14 +190,14 @@
         </tbody></table>
         </div>
 
-        
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+
+    <script src="../../assets/vendor/echarts-5.5.0.min.js"></script>
     <div class="glass p-6 mb-6">
         <h2 class="text-xl font-bold text-gray-800 mb-4">📈 563300.SH K线图</h2>
         <div id="klineChart" class="chart-container"></div>
         <div id="volChart" class="chart-container" style="height:180px;"></div>
     </div>
-    
+
         <div class="glass p-6 mb-6">
             <h2 class="text-xl font-bold text-gray-800 mb-4">🧱 知行砖形图</h2>
             <div id="brickChart" class="chart-container"></div>

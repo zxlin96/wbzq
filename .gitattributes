@@ -1,0 +1,2 @@
+# Preserve vendored JavaScript and embedded shader sources byte for byte.
+assets/vendor/* -whitespace

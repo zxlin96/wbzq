@@ -15,6 +15,7 @@ import tempfile
 
 import numpy as np
 import pandas as pd
+import pytest
 
 # 将项目根目录加入 sys.path
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -40,6 +41,13 @@ from generate_email_report import (
 # ============================================================================
 
 END_DATE = "20250620"
+
+
+@pytest.fixture(autouse=True)
+def isolated_report_directory(tmp_path, monkeypatch):
+    """Report tests must not read or overwrite the repository's actual history."""
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "hints").mkdir()
 
 
 def make_stock(ts_code, name, industry, kdj_j=10.0, macd_dif=0.5, close=25.0,
@@ -342,32 +350,83 @@ def test_count_hints_sort_tiebreak():
 
 
 def test_count_hints_industry_col_missing():
-    """industry_name 列缺失应归'未知行业'，无 KeyError。"""
+    """industry_name 列缺失应归'未知行业'，但未知行业不生成提示。"""
     result = pd.DataFrame([{'ts_code': f'{i}.SH'} for i in range(11)])
     hints = generate_industry_count_hints(result, 10)
-    assert len(hints) == 1
-    assert hints[0]['industry'] == '未知行业'
+    assert len(hints) == 0
 
 
 def test_count_hints_nan_industry():
-    """industry_name 含 NaN 应归'未知行业'。"""
+    """industry_name 含 NaN 应归'未知行业'，但未知行业不生成提示。"""
     result = pd.DataFrame([{'ts_code': f'{i}.SH', 'industry_name': np.nan} for i in range(12)])
     hints = generate_industry_count_hints(result, 10)
-    assert len(hints) == 1
-    assert hints[0]['industry'] == '未知行业'
+    assert len(hints) == 0
 
 
 def test_count_hints_no_etf_config_dependency():
-    """提示生成不依赖 etf_config.json（无映射行业也提示）。"""
+    """提示生成不依赖 etf_config.json，但未知行业不生成提示。"""
     result = pd.DataFrame(
         [{'ts_code': f'c{i}.SH', 'industry_name': '通信'} for i in range(12)] +
         [{'ts_code': f'x{i}.SH', 'industry_name': '未知行业'} for i in range(15)]
     )
     hints = generate_industry_count_hints(result, 10)
-    assert len(hints) == 2
+    assert len(hints) == 1
     industries = {h['industry'] for h in hints}
     assert '通信' in industries
-    assert '未知行业' in industries
+    assert '未知行业' not in industries
+
+
+def test_count_hints_insurance_special_rule():
+    """保险行业 >= 2 只即触发，不论总个股数。"""
+    basic = pd.DataFrame([
+        {'ts_code': 'p1.SH', 'name': '保1', 'industry_name': '保险'},
+        {'ts_code': 'p2.SH', 'name': '保2', 'industry_name': '保险'},
+        {'ts_code': 'p3.SH', 'name': '保3', 'industry_name': '保险'},
+    ])
+    result_two = pd.DataFrame([
+        {'ts_code': 'p1.SH', 'industry_name': '保险'},
+        {'ts_code': 'p2.SH', 'industry_name': '保险'},
+    ])
+    hints = generate_industry_count_hints(result_two, 10, basic)
+    assert len(hints) == 1
+    assert hints[0]['industry'] == '保险'
+    assert hints[0]['count'] == 2
+
+    result_one = pd.DataFrame([{'ts_code': 'p1.SH', 'industry_name': '保险'}])
+    hints = generate_industry_count_hints(result_one, 10, basic)
+    assert len(hints) == 0
+
+
+def test_count_hints_percentage_rule():
+    """非保险行业：总个股 > 50 且 入选数 > max(总个股*10%, 10) 才触发。"""
+    basic = pd.DataFrame([
+        {'ts_code': f'e{i}.SH', 'name': f'电{i}', 'industry_name': '电气设备'}
+        for i in range(60)
+    ] + [
+        {'ts_code': f'b{i}.SH', 'name': f'大{i}', 'industry_name': '大行业'}
+        for i in range(200)
+    ] + [
+        {'ts_code': f's{i}.SH', 'name': f'小{i}', 'industry_name': '小行业'}
+        for i in range(30)
+    ])
+    # 电气设备：60 只，阈值 max(6, 10)=10，入选 11 只触发
+    result_electrical = pd.DataFrame([
+        {'ts_code': f'e{i}.SH', 'industry_name': '电气设备'} for i in range(11)
+    ])
+    # 大行业：200 只，阈值 max(20, 10)=20，入选 21 只触发
+    result_big = pd.DataFrame([
+        {'ts_code': f'b{i}.SH', 'industry_name': '大行业'} for i in range(21)
+    ])
+    # 小行业：30 只，总个股 <=50，不触发
+    result_small = pd.DataFrame([
+        {'ts_code': f's{i}.SH', 'industry_name': '小行业'} for i in range(4)
+    ])
+    result = pd.concat([result_electrical, result_big, result_small], ignore_index=True)
+    hints = generate_industry_count_hints(result, 10, basic)
+    assert len(hints) == 2
+    industries = {h['industry'] for h in hints}
+    assert '电气设备' in industries
+    assert '大行业' in industries
 
 
 # ============================================================================
@@ -379,7 +438,7 @@ def test_save_hints_normal():
     hints = [{'industry': '银行', 'count': 15}, {'industry': '通信', 'count': 12}]
     json_path = save_multi_indicator_hints(hints, END_DATE)
     try:
-        assert json_path == f"multi_indicator_hints_{END_DATE}.json"
+        assert json_path == f"hints/multi_indicator_hints_{END_DATE}.json"
         assert os.path.exists(json_path)
         with open(json_path, 'r', encoding='utf-8') as f:
             content = f.read()
@@ -403,6 +462,13 @@ def test_save_hints_empty():
     finally:
         if os.path.exists(json_path):
             os.unlink(json_path)
+
+
+def test_save_hints_creates_missing_directory(tmp_path):
+    (tmp_path / 'hints').rmdir()
+    path = save_multi_indicator_hints([], END_DATE)
+    assert path == f'hints/multi_indicator_hints_{END_DATE}.json'
+    assert os.path.exists(path)
 
 
 def test_save_hints_returns_path():
@@ -482,10 +548,11 @@ def test_hint_section_empty():
 
 
 def test_hint_section_non_empty():
-    """非空清单应含 2 列表格，行数正确。"""
+    """非空清单应含行业、入选数量、相关 ETF 三列，行数正确。"""
     hints = [{'industry': '银行', 'count': 15}, {'industry': '通信', 'count': 12}]
     html = generate_multi_indicator_hint_section(hints)
     assert html.count('<tr') == 3
+    assert html.count('<th ') == 3
     assert '行业' in html
     assert '入选数量' in html
 
@@ -499,11 +566,13 @@ def test_hint_section_escape_html():
     assert '&gt;' in html
 
 
-def test_hint_section_no_etf_text():
-    """HTML 不应包含 ETF 字样。"""
+def test_hint_section_related_etf_mapping():
+    """已有的行业 ETF 功能应保留，并展示传入映射的名称及代码。"""
     hints = [{'industry': '银行', 'count': 15}]
-    html = generate_multi_indicator_hint_section(hints)
-    assert 'ETF' not in html
+    html = generate_multi_indicator_hint_section(hints, {'银行': {'name': '银行ETF', 'ts_code': '512800.SH'}})
+    assert '相关行业ETF' in html
+    assert '银行ETF' in html
+    assert '512800.SH' in html
 
 
 # ============================================================================

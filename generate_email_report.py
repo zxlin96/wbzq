@@ -71,10 +71,11 @@ def load_multi_indicator_hints():
     Returns:
         list: 提示清单 list[dict]；文件缺失或损坏时返回 []。
     """
-    files = sorted(glob.glob("hints/multi_indicator_hints_*.json"))
+    from generate_multi_indicator_trend_html import scan_hints_files
+    files = scan_hints_files()
     if not files:
         return []
-    latest = files[-1]
+    latest = files[-1][1]
     try:
         with open(latest, "r", encoding="utf-8") as f:
             data = json.load(f)
@@ -543,7 +544,9 @@ def generate_email_report(status="success", repo="", ref="", run_url=""):
 
     # 概览数据
     latest_date = reports.get("latestDate", "") if reports else ""
-    total_stocks = reports.get("totalStocks", 0) if reports else 0
+    total_stocks = reports.get("totalStocks") if reports else None
+    if total_stocks is None:
+        total_stocks = "—"
 
     report_url = "https://zxlin96.github.io/wbzq/"
 

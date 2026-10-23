@@ -4,15 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>行业总成交额趋势 - 20261009</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/tailwind.css">
+    <script src="../../assets/vendor/echarts-5.5.0.min.js"></script>
     <style>
         body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
         .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
     </style>
+<link rel="stylesheet" href="../../assets/site.css">
+<script src="../../assets/site.js" defer></script>
 </head>
-<body class="p-4 md:p-8">
+<body data-static-version="3" class="p-4 md:p-8">
     <div class="max-w-7xl mx-auto">
         <!-- 标题 -->
         <div class="glass p-6 mb-6">
@@ -25,13 +26,11 @@
                     <a href="../../index.html" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
                         ← 返回首页
                     </a>
-                    <a href="stock_selection_20261009.html" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
-                        查看选股 →
-                    </a>
+                    <span class="site-unavailable" data-unavailable-href="stock_selection_20261009.html" title="该日期尚无此报告">暂无报告</span>
                 </div>
             </div>
         </div>
-        
+
         <!-- 统计卡片 -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <div class="glass p-4">
@@ -47,12 +46,12 @@
                 <div class="text-2xl font-bold text-purple-600">30 天</div>
             </div>
         </div>
-        
+
         <!-- 图表 -->
         <div class="glass p-6">
             <div id="chart" style="width: 100%; height: 600px;"></div>
         </div>
-        
+
         <!-- 数据表格 -->
         <div class="glass p-6 mt-6">
             <h2 class="text-lg font-semibold text-gray-800 mb-4">📋 行业成交额详情</h2>
@@ -67,14 +66,14 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
-                        
+
             <tr class="hover:bg-gray-50">
                 <td class="px-4 py-3 font-medium">专用机械</td>
                 <td class="px-4 py-3 text-right">1,108.23</td>
                 <td class="px-4 py-3 text-right">3,390.36</td>
                 <td class="px-4 py-3 text-right">154.85</td>
             </tr>
-        
+
 
             <tr class="hover:bg-gray-50">
                 <td class="px-4 py-3 font-medium">互联网</td>
@@ -82,7 +81,7 @@
                 <td class="px-4 py-3 text-right">1,634.33</td>
                 <td class="px-4 py-3 text-right">6.30</td>
             </tr>
-        
+
 
             <tr class="hover:bg-gray-50">
                 <td class="px-4 py-3 font-medium">元器件</td>
@@ -90,7 +89,7 @@
                 <td class="px-4 py-3 text-right">11,956.10</td>
                 <td class="px-4 py-3 text-right">63.28</td>
             </tr>
-        
+
 
             <tr class="hover:bg-gray-50">
                 <td class="px-4 py-3 font-medium">化工原料</td>
@@ -98,7 +97,7 @@
                 <td class="px-4 py-3 text-right">2,848.39</td>
                 <td class="px-4 py-3 text-right">101.30</td>
             </tr>
-        
+
 
             <tr class="hover:bg-gray-50">
                 <td class="px-4 py-3 font-medium">半导体</td>
@@ -106,7 +105,7 @@
                 <td class="px-4 py-3 text-right">13,129.71</td>
                 <td class="px-4 py-3 text-right">13.31</td>
             </tr>
-        
+
 
             <tr class="hover:bg-gray-50">
                 <td class="px-4 py-3 font-medium">小金属</td>
@@ -114,7 +113,7 @@
                 <td class="px-4 py-3 text-right">3,011.23</td>
                 <td class="px-4 py-3 text-right">24.32</td>
             </tr>
-        
+
 
             <tr class="hover:bg-gray-50">
                 <td class="px-4 py-3 font-medium">电气设备</td>
@@ -122,7 +121,7 @@
                 <td class="px-4 py-3 text-right">4,181.37</td>
                 <td class="px-4 py-3 text-right">943.29</td>
             </tr>
-        
+
 
             <tr class="hover:bg-gray-50">
                 <td class="px-4 py-3 font-medium">证券</td>
@@ -130,7 +129,7 @@
                 <td class="px-4 py-3 text-right">2,366.18</td>
                 <td class="px-4 py-3 text-right">14.69</td>
             </tr>
-        
+
 
             <tr class="hover:bg-gray-50">
                 <td class="px-4 py-3 font-medium">软件服务</td>
@@ -138,7 +137,7 @@
                 <td class="px-4 py-3 text-right">3,078.01</td>
                 <td class="px-4 py-3 text-right">25.92</td>
             </tr>
-        
+
 
             <tr class="hover:bg-gray-50">
                 <td class="px-4 py-3 font-medium">通信设备</td>
@@ -146,16 +145,16 @@
                 <td class="px-4 py-3 text-right">6,160.57</td>
                 <td class="px-4 py-3 text-right">4.23</td>
             </tr>
-        
+
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-    
+
     <script>
         const chart = echarts.init(document.getElementById('chart'));
-        
+
         const option = {
             title: {
                 text: '行业总成交额趋势（Top 10）',
@@ -210,9 +209,9 @@
             },
             series: [{"name": "半导体", "type": "line", "data": [6930.22, 9102.18, 7839.8, 6410.43, 851.37, 719.66, 283.1, 1792.46, 2534.37, 3326.8, 5513.8, 3155.12, 3012.84, 3026.26, 3348.56, 3318.81, 2466.06, 1584.89, 331.51, 13.31, null, null, 87.35, null, 446.32, 1558.3, 3574.66, 7143.32, 11567.25, 13129.71], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#5470c6"}, "emphasis": {"focus": "series"}}, {"name": "元器件", "type": "line", "data": [6262.79, 7918.23, 5554.33, 4420.96, 1976.02, 1404.35, 353.39, 1647.27, 1313.08, 2001.34, 3547.1, 1196.47, 1787.74, 1835.61, 2331.07, 1506.51, 1957.62, 1983.4, 1360.29, 647.59, 115.53, 63.28, 77.72, 155.18, 1371.1, 5861.07, 6083.32, 7513.57, 10893.92, 11956.1], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#91cc75"}, "emphasis": {"focus": "series"}}, {"name": "电气设备", "type": "line", "data": [2983.83, 3474.68, 3716.1, 2667.51, 3975.79, 4060.42, 4172.51, 3289.05, 3796.63, 3332.74, 3305.8, 2600.33, 3463.33, 1455.61, 1824.89, 2352.42, 943.29, 1870.74, 3453.44, 1956.37, 1472.56, 1590.81, 1618.88, 1568.87, 2115.79, 3624.91, 3274.6, 2358.16, 4181.37, 2961.41], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#fac858"}, "emphasis": {"focus": "series"}}, {"name": "通信设备", "type": "line", "data": [1475.16, 1704.26, 1609.17, 2222.35, 125.49, 120.52, null, 22.48, 385.35, 687.37, 1231.99, 582.01, 692.68, 448.16, 500.27, 699.03, 1065.19, 1061.21, 704.97, 792.31, 170.14, null, 4.23, 112.27, 1324.45, 4507.75, 4663.47, 3521.77, 6160.57, 5585.25], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#ee6666"}, "emphasis": {"focus": "series"}}, {"name": "化工原料", "type": "line", "data": [2369.26, 2848.39, 2829.64, 1902.93, 428.14, 293.75, 101.3, 684.63, 735.74, 730.1, 1643.44, 1178.04, 986.32, 935.05, 1274.76, 2070.11, 955.7, 1072.07, 1101.91, 719.81, 791.36, 449.33, 423.3, 267.93, 558.19, 1516.9, 1770.65, 2071.78, 2318.96, 2531.51], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#73c0de"}, "emphasis": {"focus": "series"}}, {"name": "软件服务", "type": "line", "data": [2507.09, 3078.01, 2222.66, 1528.09, 1193.2, 1164.0, 265.06, 112.88, 165.87, 38.4, 39.66, 46.98, 547.41, 1388.61, 1893.42, 3029.18, 1884.89, 2071.49, 1919.99, 1315.67, 736.02, 95.52, 27.01, 25.92, 185.34, 656.06, 838.61, 1267.07, 2053.75, 1063.17], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#3ba272"}, "emphasis": {"focus": "series"}}, {"name": "专用机械", "type": "line", "data": [1636.76, 1300.75, 987.93, 821.91, 352.81, 281.2, 154.85, 447.4, 583.25, 792.08, 2065.14, 680.34, 1252.32, 1080.72, 1322.44, 1927.66, 1161.87, 1149.1, 903.7, 687.68, 380.02, 238.86, 324.51, 305.26, 330.12, 1086.3, 2131.6, 2292.6, 3177.42, 3390.36], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#fc8452"}, "emphasis": {"focus": "series"}}, {"name": "小金属", "type": "line", "data": [2172.2, 1661.68, 2053.85, 1721.43, 62.98, 56.11, 48.88, 88.89, 1282.58, 1525.02, 3011.23, 2053.84, 1233.05, 773.88, 994.99, 1625.01, 774.2, 910.13, 609.16, 411.69, 279.05, 196.16, 33.67, 24.32, 495.34, 1146.37, 1286.24, 1014.48, 1522.79, 1199.76], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#9a60b4"}, "emphasis": {"focus": "series"}}, {"name": "证券", "type": "line", "data": [968.36, 499.32, 487.21, null, null, null, null, null, null, null, null, 66.53, 682.34, 982.23, 768.95, 2366.18, 1203.76, 1014.32, 1150.98, 1014.85, 232.92, 22.58, null, 14.69, 165.04, 483.88, 864.85, 745.87, 1373.57, 236.14], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#ea7ccc"}, "emphasis": {"focus": "series"}}, {"name": "互联网", "type": "line", "data": [1220.64, 1634.33, 1011.11, 791.78, 501.11, 432.03, 72.78, 29.29, null, null, 36.98, 6.3, 36.72, 160.3, 451.81, 1109.77, 1073.88, 1107.37, 1244.81, 1064.48, 779.24, 404.27, 174.83, 412.34, 423.68, 1122.12, 718.65, 707.05, 1072.48, 197.86], "smooth": true, "symbol": "circle", "symbolSize": 6, "lineStyle": {"width": 2}, "itemStyle": {"color": "#ff9f7f"}, "emphasis": {"focus": "series"}}]
         };
-        
+
         chart.setOption(option);
-        
+
         window.addEventListener('resize', () => chart.resize());
     </script>
 </body>

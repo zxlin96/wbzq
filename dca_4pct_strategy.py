@@ -29,6 +29,8 @@
   - html/dca_4pct/strategy_summary.json 邮件摘要（generate_email_report.py 读取）
 """
 
+from static_site import write_report
+
 import os
 import json
 import logging
@@ -450,8 +452,7 @@ window.addEventListener('resize', function() {{
 </script>
 </body>
 </html>"""
-    with open(out_path, 'w', encoding='utf-8') as f:
-        f.write(html)
+    write_report(out_path, html)
 
 
 if __name__ == '__main__':

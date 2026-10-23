@@ -9,6 +9,8 @@ ECharts 趋势图与统计表格至 html/multi_indicator_trend/index.html。
     python generate_multi_indicator_trend_html.py
 """
 
+from static_site import write_report
+
 import json
 import glob
 import os
@@ -21,27 +23,24 @@ from pathlib import Path
 logging.basicConfig(level=logging.INFO, format="[%(asctime)s] %(levelname)s | %(message)s")
 
 
-def scan_hints_files(base_dir: str = "hints") -> list:
+def scan_hints_files(base_dir=None) -> list:
     """扫描 multi_indicator_hints_*.json 文件并按日期升序排序。
 
     Args:
-        base_dir: 扫描基准目录，默认当前目录
+        base_dir: 指定目录；默认合并旧版根目录和 hints/，同日优先 hints/
 
     Returns:
         list[tuple[str, Path]]: [(date_str, file_path), ...] 按日期升序。
         文件名非 8 位数字的跳过，无匹配时返回 []。
     """
-    pattern = os.path.join(base_dir, "multi_indicator_hints_*.json")
-    results = []
-    for fpath in glob.glob(pattern):
-        fname = os.path.basename(fpath)
-        match = re.match(r"multi_indicator_hints_(\d{8})\.json", fname)
-        if not match:
-            continue
-        date_str = match.group(1)
-        results.append((date_str, Path(fpath)))
-    results.sort(key=lambda x: x[0])
-    return results
+    results = {}
+    for directory in ([".", "hints"] if base_dir is None else [base_dir]):
+        pattern = os.path.join(directory, "multi_indicator_hints_*.json")
+        for fpath in glob.glob(pattern):
+            match = re.fullmatch(r"multi_indicator_hints_(\d{8})\.json", os.path.basename(fpath))
+            if match:
+                results[match[1]] = Path(fpath)
+    return sorted(results.items())
 
 
 def parse_hints_file(file_path) -> list:
@@ -250,7 +249,7 @@ def build_echarts_options(matrix_data: dict, metrics: dict) -> dict:
 
 
 def render_trend_html(matrix_data: dict, metrics: dict, echarts_options: dict,
-                      stock_details: list = None) -> str:
+                      stock_details: list = None, stock_details_date=None) -> str:
     """渲染完整 HTML 字符串。
 
     Args:
@@ -354,15 +353,21 @@ def render_trend_html(matrix_data: dict, metrics: dict, echarts_options: dict,
         f'<option value="{ind}">{ind}</option>' for ind in stock_industries
     )
 
-    latest_date_label = f"{dates[-1][:4]}-{dates[-1][4:6]}-{dates[-1][6:]}" if dates else ""
+    detail_date = stock_details_date or (dates[-1] if dates else "")
+    latest_date_label = f"{detail_date[:4]}-{detail_date[4:6]}-{detail_date[6:]}" if detail_date else ""
+    stock_notice = ""
+    if stock_details and dates and detail_date != dates[-1]:
+        stock_notice = (f'<p class="text-sm text-amber-700 mb-3">个股明细来自 {latest_date_label}；'
+                        '行业趋势更新日期见页首。</p>')
     stock_section = f"""
         <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
             <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
-                <h2 class="text-lg font-semibold text-gray-900">📋 最新入选个股明细（{latest_date_label}，<span id="stockCount">{len(stock_details)}</span> / {len(stock_details)} 只）</h2>
+                <h2 class="text-lg font-semibold text-gray-900">📋 最新可用入选个股明细（{latest_date_label}，<span id="stockCount">{len(stock_details)}</span> / {len(stock_details)} 只）</h2>
                 <select id="industryFilter" onchange="filterStocks()" class="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     {industry_options}
                 </select>
             </div>
+            {stock_notice}
             <div class="overflow-x-auto" style="max-height:500px;overflow-y:auto;">
                 <table class="w-full text-sm text-left">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 sticky top-0">
@@ -530,6 +535,7 @@ def generate_multi_indicator_trend_html() -> None:
     logging.info("扫描完成: %d 个文件, 有效 %d, 跳过 %d", len(files), len(valid_records), skipped)
 
     stock_details = []
+    latest_csv_date = None
     csv_files = scan_result_csvs()
     if csv_files:
         latest_csv_date, latest_csv_path = csv_files[-1]
@@ -540,13 +546,12 @@ def generate_multi_indicator_trend_html() -> None:
     metrics = compute_trend_metrics(matrix_data)
     echarts_options = build_echarts_options(matrix_data, metrics)
     html_content = render_trend_html(matrix_data, metrics, echarts_options,
-                                     stock_details=stock_details)
+                                     stock_details=stock_details, stock_details_date=latest_csv_date)
 
     output_dir = Path("html/multi_indicator_trend")
     output_dir.mkdir(parents=True, exist_ok=True)
     output_path = output_dir / "index.html"
-    with open(output_path, "w", encoding="utf-8") as f:
-        f.write(html_content)
+    write_report(output_path, html_content)
 
     logging.info("汇总页面已生成: %s (日期数=%d, 行业数=%d)",
                  output_path, len(matrix_data["dates"]), len(matrix_data["industries"]))

@@ -29,6 +29,8 @@
     python main_par2.py --backtest --hold-days 5     # 执行回测
 """
 
+from static_site import write_report
+
 # ========== 标准库导入 ==========
 import argparse
 import concurrent.futures
@@ -1521,8 +1523,7 @@ def generate_industry_visualization(df, daily_stats, end_date):
     os.makedirs(html_dir, exist_ok=True)
     
     html_content = generate_industry_trend_html(trend_df, end_date, top_n=PLOT_N)
-    with open(os.path.join(html_dir, "industry_total_amount_trend.html"), 'w', encoding='utf-8') as f:
-        f.write(html_content)
+    write_report(os.path.join(html_dir, "industry_total_amount_trend.html"), html_content)
     print(f"\n📈 已生成行业总成交额趋势图: {html_dir}/industry_total_amount_trend.html")
 
 
@@ -1568,8 +1569,7 @@ def generate_j13_trend(df, end_date):
     os.makedirs(html_dir, exist_ok=True)
     
     html_content = generate_j13_trend_html(daily_first_j13_counts, end_date)
-    with open(os.path.join(html_dir, "first_j13_step_daily_count.html"), 'w', encoding='utf-8') as f:
-        f.write(html_content)
+    write_report(os.path.join(html_dir, "first_j13_step_daily_count.html"), html_content)
     print(f"📈 已生成趋势图: {html_dir}/first_j13_step_daily_count.html")
 
 

@@ -4,6 +4,8 @@
 生成 V7 vs V6 对比验证报告 HTML（读 results/v7/ 下的矩阵/敏感性/聚合结果）
 输出：html/v7_compare/V7_vs_V6_对比报告.html
 """
+
+from static_site import write_report
 import json
 import os
 
@@ -236,8 +238,7 @@ window.addEventListener('resize', ()=>{{location.reload()}});
 </script>
 </body></html>"""
     os.makedirs(os.path.dirname(HTML_PATH), exist_ok=True)
-    with open(HTML_PATH, 'w', encoding='utf-8') as f:
-        f.write(html)
+    write_report(HTML_PATH, html)
     print(f"已生成 {HTML_PATH}（{len(etfs)} 标的，{len(etf_rows)} 行矩阵）")
 
 

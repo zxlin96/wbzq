@@ -1,0 +1,12 @@
+{
+  "name": "wbzq-static-reports",
+  "private": true,
+  "scripts": {
+    "build:css": "tailwindcss -i assets/tailwind.input.css -o assets/tailwind.css --minify",
+    "validate:js": "node scripts/validate_site_js.cjs"
+  },
+  "devDependencies": {
+    "echarts": "5.5.0",
+    "tailwindcss": "3.4.17"
+  }
+}

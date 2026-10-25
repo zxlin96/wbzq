@@ -15,9 +15,9 @@
  "next_trigger": null,
  "next_trigger_pct": null,
  "next_desc": "门开后投第1份",
- "pe_ttm": 10.8291,
- "pe_pct": 60.08,
- "pe_date": "20261016",
+ "pe_ttm": 10.7664,
+ "pe_pct": 57.52,
+ "pe_date": "20261022",
  "gate_enabled": true,
  "gate_open": false,
  "wallet": 20000.0,
@@ -3703,10 +3703,10 @@
    60.6,
    60.6,
    60.1,
-   null,
-   null,
-   null,
-   null
+   65.5,
+   64.6,
+   57.8,
+   57.5
   ],
   "buys": [],
   "sells": []

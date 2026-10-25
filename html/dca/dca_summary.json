@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2026-10-23",
+  "lastUpdate": "2026-10-25",
   "etf_list": [
     {
       "name": "红利低波",
@@ -14,8 +14,8 @@
       "positions": [
         {
           "round_id": 1,
-          "shares": 63764.7697,
-          "avg_cost": 0.9619,
+          "shares": 69257.615,
+          "avg_cost": 0.9475,
           "sell_stage": 0,
           "j_peak": 79.81,
           "dca_active": false,
@@ -25,9 +25,9 @@
           "action_label": "持有（仓位50%）",
           "action_color": "#3498db",
           "action_detail": "周线J=79.81，未触发100/0，维持当前仓位50%",
-          "return_pct": 53.0,
+          "return_pct": 66.18,
           "total_invested": 100000.0,
-          "portfolio_value": 152997.22
+          "portfolio_value": 166176.76
         }
       ],
       "last_date": "20261023",
@@ -35,12 +35,12 @@
       "weekly_j": 79.81,
       "weekly_k": 74.93,
       "weekly_d": 72.48,
-      "shares": 63764.7697,
-      "avg_cost": 0.9619,
-      "loss_pct": 53.0,
+      "shares": 69257.615,
+      "avg_cost": 0.9475,
+      "loss_pct": 66.18,
       "total_invested": 100000.0,
-      "total_return": 52997.22,
-      "return_pct": 53.0,
+      "total_return": 66176.76,
+      "return_pct": 66.18,
       "trade_count": 17,
       "decision_source": "ledger"
     },
@@ -423,25 +423,25 @@
       "action_label": "R1 已卖50%·永久持有",
       "action_color": "#3498db",
       "action": "v6h_stage_3",
-      "action_detail": "R1 已卖满50%，剩余2059份永久持有，不再触发卖出 | R2 已卖满50%，剩余2230份永久持有，不再触发卖出 | R3 已卖满50%，剩余2537份永久持有，不再触发卖出 | R4 已卖满50%，剩余2535份永久持有，不再触发卖出 | R5 已卖满50%，剩余2408份永久持有，不再触发卖出 | R6 已卖满50%，剩余2061份永久持有，不再触发卖出 | R7 已卖满50%，剩余2121份永久持有，不再触发卖出 | R8 已卖满50%，剩余1765份永久持有，不再触发卖出 | R9 已卖满50%，剩余1774份永久持有，不再触发卖出 | R10 已卖满50%，剩余1766份永久持有，不再触发卖出 | R11 已卖满50%，剩余1352份永久持有，不再触发卖出 | R12 已卖满50%，剩余1326份永久持有，不再触发卖出 | R13 已卖满50%，剩余1103份永久持有，不再触发卖出 ｜ 依据20261016收盘周线（下次更新：下周首个交易日） ｜ 本周盘中预览J=23.65(未确认)",
+      "action_detail": "R1 已卖满50%，剩余2053份永久持有，不再触发卖出 | R2 已卖满50%，剩余2230份永久持有，不再触发卖出 | R3 已卖满50%，剩余2537份永久持有，不再触发卖出 | R4 已卖满50%，剩余2535份永久持有，不再触发卖出 | R5 已卖满50%，剩余2408份永久持有，不再触发卖出 | R6 已卖满50%，剩余2061份永久持有，不再触发卖出 | R7 已卖满50%，剩余2121份永久持有，不再触发卖出 | R8 已卖满50%，剩余1765份永久持有，不再触发卖出 | R9 已卖满50%，剩余1774份永久持有，不再触发卖出 | R10 已卖满50%，剩余1766份永久持有，不再触发卖出 | R11 已卖满50%，剩余1352份永久持有，不再触发卖出 | R12 已卖满50%，剩余1326份永久持有，不再触发卖出 | R13 已卖满50%，剩余1103份永久持有，不再触发卖出 ｜ 依据20261016收盘周线（下次更新：下周首个交易日） ｜ 本周盘中预览J=23.65(未确认)",
       "signal_week_date": "20261016",
       "preview_weekly_j": 23.65,
       "positions": [
         {
           "round_id": 1,
-          "shares": 2059.4139,
-          "avg_cost": 1.2139,
+          "shares": 2053.4663,
+          "avg_cost": 1.2175,
           "sell_stage": 3,
           "j_peak": 31.76,
           "dca_active": true,
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": 38.16,
+          "return_pct": 37.76,
           "action": "v6h_stage_3",
           "action_label": "R1 已卖50%·永久持有",
           "action_color": "#3498db",
-          "action_detail": "R1 已卖满50%，剩余2059份永久持有，不再触发卖出"
+          "action_detail": "R1 已卖满50%，剩余2053份永久持有，不再触发卖出"
         },
         {
           "round_id": 2,
@@ -641,12 +641,12 @@
       "weekly_j": 54.38,
       "weekly_k": 57.11,
       "weekly_d": 58.47,
-      "shares": 25039.1434,
-      "avg_cost": 1.298,
-      "loss_pct": 67.95,
+      "shares": 25033.1958,
+      "avg_cost": 1.2983,
+      "loss_pct": 67.91,
       "total_invested": 65000.0,
-      "total_return": 25456.52,
-      "return_pct": 39.16,
+      "total_return": 25429.56,
+      "return_pct": 39.12,
       "trade_count": 91,
       "decision_source": "ledger"
     },
@@ -898,8 +898,8 @@
       "avg_cost": 0.522,
       "loss_pct": -1.53,
       "total_invested": 61000.0,
-      "total_return": 14723.51,
-      "return_pct": 24.14,
+      "total_return": 14701.28,
+      "return_pct": 24.1,
       "trade_count": 74,
       "decision_source": "ledger"
     },
@@ -1066,8 +1066,8 @@
       "avg_cost": 1.5943,
       "loss_pct": -6.73,
       "total_invested": 63000.0,
-      "total_return": 1148.94,
-      "return_pct": 1.82,
+      "total_return": 1137.9,
+      "return_pct": 1.81,
       "trade_count": 79,
       "decision_source": "ledger"
     },

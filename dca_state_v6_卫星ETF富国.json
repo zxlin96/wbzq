@@ -122,6 +122,17 @@
       "reason": "周线J=7.45, 金额=1000",
       "total_shares": 1049.3179,
       "avg_cost": 0.953
+    },
+    {
+      "date": "20261023",
+      "action": "BUY",
+      "price": 0.98,
+      "amount": 4000.0,
+      "shares": 4081.6327,
+      "round": 3,
+      "reason": "J回升=21.40, 剩余预算投入=4000",
+      "total_shares": 5130.9506,
+      "avg_cost": 0.9745
     }
   ],
   "positions": [
@@ -204,10 +215,10 @@
         }
       ],
       "week_invested": [
+        "20260703",
         "20260612",
         "20260618",
-        "20260626",
-        "20260703"
+        "20260626"
       ]
     },
     {
@@ -289,20 +300,20 @@
         }
       ],
       "week_invested": [
-        "20260724",
         "20260717",
         "20260807",
-        "20260731"
+        "20260731",
+        "20260724"
       ]
     },
     {
       "round_id": 3,
-      "shares": 1049.3179433368311,
-      "total_cost": 1000.0,
-      "total_invested": 1000.0,
+      "shares": 5130.9505963980555,
+      "total_cost": 5000.0,
+      "total_invested": 5000.0,
       "total_sell_amount": 0.0,
       "dca_active": true,
-      "j_peak": 7.44918400750052,
+      "j_peak": 21.401929230997816,
       "pullback_sold": false,
       "sell_stage": 0,
       "waiting_golden": false,
@@ -310,10 +321,10 @@
       "price_below_dk_sold": false,
       "round_budget": 5000,
       "round_periods": 5,
-      "buy_count": 1,
-      "dca_exited": false,
-      "dca_exit_date": "",
-      "dca_exit_amount": 0.0,
+      "buy_count": 2,
+      "dca_exited": true,
+      "dca_exit_date": "20261023",
+      "dca_exit_amount": 4000.0,
       "cycle_low": 0.953,
       "j_high_done": false,
       "trades": [
@@ -327,9 +338,21 @@
           "reason": "周线J=7.45, 金额=1000",
           "total_shares": 1049.3179,
           "avg_cost": 0.953
+        },
+        {
+          "date": "20261023",
+          "action": "BUY",
+          "price": 0.98,
+          "amount": 4000.0,
+          "shares": 4081.6327,
+          "round": 3,
+          "reason": "J回升=21.40, 剩余预算投入=4000",
+          "total_shares": 5130.9506,
+          "avg_cost": 0.9745
         }
       ],
       "week_invested": [
+        "20261023",
         "20261016"
       ]
     }

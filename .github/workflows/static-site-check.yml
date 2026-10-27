@@ -25,6 +25,8 @@ jobs:
       - name: Unit and generator regression
         run: |
           python -m pytest -q test/test_static_site.py test/test_static_report_generators.py test/test_generate_reports_json_multi_indicator.py test/test_generate_multi_indicator_trend_html.py test/test_generate_multi_indicator_trend_html_integration.py test/test_multi_indicator_pick.py test/test_generate_email_sentiment.py
+      - name: Sentiment daily counting regression
+        run: python -m pytest -q test/test_sentiment_daily_counting.py
       - name: Build and inspect every public artifact
         run: |
           python static_site.py optimize

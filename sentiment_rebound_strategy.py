@@ -26,6 +26,11 @@ from typing import Dict, List, Tuple, Optional
 logging.basicConfig(level=logging.INFO, format='%(message)s')
 
 
+def advance_bar_counts(red_count: int, green_count: int, is_rising: bool) -> Tuple[int, int]:
+    """逐日更新连续柱数；非红柱立即中断红柱，红柱立即中断绿柱。"""
+    return (red_count + 1, 0) if is_rising else (0, green_count + 1)
+
+
 class SentimentReboundStrategy:
     """情绪反弹策略类"""
     
@@ -59,6 +64,7 @@ class SentimentReboundStrategy:
         self.green_bar_count = 0  # 连续绿柱计数
         self.last_signal = None  # 上次信号
         self.last_trade_date = None  # 上次交易日期
+        self.last_bar_date = None  # 上次已计数日期，防止重启或重复调用后重复累计
         
         # 交易记录
         self.trades = []
@@ -79,6 +85,7 @@ class SentimentReboundStrategy:
                 self.red_bar_count = state.get('red_bar_count', 0)
                 self.green_bar_count = state.get('green_bar_count', 0)
                 self.last_trade_date = state.get('last_trade_date')
+                self.last_bar_date = state.get('last_bar_date')
                 self.trades = state.get('trades', [])
                 
                 logging.info(f"已加载策略状态: 级别={self.investment_level_idx}, 持仓={self.position}")
@@ -103,12 +110,13 @@ class SentimentReboundStrategy:
                 return obj
         
         state = {
-            'position': int(self.position),
+            'position': float(self.position),
             'position_cost': float(self.position_cost),
             'investment_level_idx': int(self.investment_level_idx),
             'red_bar_count': int(self.red_bar_count),
             'green_bar_count': int(self.green_bar_count),
             'last_trade_date': self.last_trade_date,
+            'last_bar_date': self.last_bar_date,
             'trades': convert_to_serializable(self.trades),
             'saved_at': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         }
@@ -173,6 +181,11 @@ class SentimentReboundStrategy:
             'reason': f"J13数量({j13_stats['current']:.0f})超过{self.percentile_threshold*100:.0f}%分位数({j13_stats['percentile_90']:.1f})"
         }
         
+        # 新一轮建仓从下一持仓日开始计数，不继承此前空仓期的柱。
+        if self.position <= 0:
+            self.red_bar_count = self.green_bar_count = 0
+            self.last_bar_date = current_date
+
         # 更新持仓（假设每2000元买1份）
         shares_bought = investment_amount / 2000
         self.position += shares_bought
@@ -187,6 +200,57 @@ class SentimentReboundStrategy:
         
         return signal
     
+    def update_bar_counts(self, brick_data: pd.DataFrame, current_date: str) -> Optional[pd.Series]:
+        """持仓期间每天计数（包含买入日），并补齐未运行日期的历史柱。
+
+        旧状态没有 last_bar_date 时，从最近一次买入建仓或卖出重置处
+        重建计数，避免继承此前跨过买入日绿柱的错误累计。
+        """
+        if self.position <= 0 or brick_data is None or brick_data.empty:
+            return None
+        if 'zhixing_brick_rising' not in brick_data.columns:
+            return None
+        if self.last_bar_date and current_date < self.last_bar_date:
+            return None
+        if 'trade_date' in brick_data.columns:
+            bars = brick_data[['trade_date', 'zhixing_brick_rising']].copy()
+            bars['trade_date'] = pd.to_datetime(bars['trade_date'].astype(str)).dt.strftime('%Y%m%d')
+            bars = bars[bars['trade_date'] <= current_date].sort_values('trade_date')
+            bars = bars.drop_duplicates('trade_date', keep='last')
+            if bars.empty or bars.iloc[-1]['trade_date'] != current_date:
+                return None  # 不把昨日行情当作今天再计一次
+        else:
+            bars = pd.DataFrame({'trade_date': [current_date],
+                                 'zhixing_brick_rising': [brick_data.iloc[-1]['zhixing_brick_rising']]})
+        latest = bars.iloc[-1]
+        if self.last_bar_date == current_date:
+            return latest if pd.notna(latest['zhixing_brick_rising']) else None
+        anchor = self.last_bar_date
+        if anchor is None:
+            holding = False
+            for trade in self.trades:
+                if trade['date'] >= current_date:
+                    break
+                if trade['action'] == 'BUY':
+                    if not holding:
+                        anchor = trade['date']
+                    holding = True
+                elif trade['action'] == 'SELL':
+                    anchor = trade['date']
+                    holding = trade.get('ratio', 1) < 1
+            if anchor is not None:
+                self.red_bar_count = self.green_bar_count = 0
+        pending = bars[bars['trade_date'] > anchor] if anchor else bars.tail(1)
+        for row in pending.itertuples(index=False):
+            if pd.isna(row.zhixing_brick_rising):
+                # 无法判定方向时不能跨过这天继续累计连续柱数。
+                self.red_bar_count = self.green_bar_count = 0
+            else:
+                self.red_bar_count, self.green_bar_count = advance_bar_counts(
+                    self.red_bar_count, self.green_bar_count, bool(row.zhixing_brick_rising))
+        self.last_bar_date = current_date
+        return latest if pd.notna(latest['zhixing_brick_rising']) else None
+
     def generate_sell_signal(self,
                             brick_data: pd.DataFrame,
                             current_date: str,
@@ -206,25 +270,12 @@ class SentimentReboundStrategy:
         Returns:
             卖出信号字典或None
         """
-        if brick_data.empty or 'zhixing_brick_rising' not in brick_data.columns:
+        latest = self.update_bar_counts(brick_data, current_date)
+        if latest is None:
             return None
-
-        # 需要至少2条数据来判断红/绿
-        if len(brick_data) < 2:
-            return None
-
-        # 获取最近两天的数据
-        latest = brick_data.iloc[-1]
-        is_rising = latest['zhixing_brick_rising']
+        is_rising = bool(latest['zhixing_brick_rising'])
 
         signal = None
-
-        # 红绿柱计数
-        if is_rising:
-            self.red_bar_count += 1
-            self.green_bar_count = 0
-        else:
-            self.green_bar_count += 1
 
         # 连续3根绿柱 → 全卖
         if self.green_bar_count >= 3 and self.position > 0:
@@ -247,7 +298,7 @@ class SentimentReboundStrategy:
             self.save_state()
 
         # 红柱满4根 → 卖一半
-        if self.red_bar_count == 4 and self.position > 0:
+        if is_rising and self.red_bar_count >= 4 and self.position > 0:
             signal = {
                 'date': current_date,
                 'action': 'SELL',
@@ -255,7 +306,7 @@ class SentimentReboundStrategy:
                 'ratio': 0.5,
                 'red_bars': self.red_bar_count,
                 'price': current_price,
-                'reason': "连续红柱达到4根，卖出一半"
+                'reason': f"连续红柱达到{self.red_bar_count}根，卖出一半"
             }
             # 卖一半后重置红柱计数（后续继续观察绿柱）
             self.position = self.position * 0.5
@@ -263,10 +314,7 @@ class SentimentReboundStrategy:
             self.green_bar_count = 0  # 卖一半后绿柱计数也重置
             self.save_state()
 
-        # 绿柱时重置红柱计数
-        if not is_rising:
-            self.red_bar_count = 0
-
+        self.save_state()
         return signal
     
     def generate_current_signal(self,
@@ -299,6 +347,9 @@ class SentimentReboundStrategy:
             logging.info(f"当前日期({current_date})与上次交易日期相同，已处理过")
             return signals
         
+        # 先更新已有持仓的逐日柱数；买入优先只跳过卖出，不跳过计数。
+        self.update_bar_counts(brick_data, current_date)
+
         # 生成买入信号
         bought_today = False
         if j13_stats.get('is_above_threshold'):
@@ -313,8 +364,6 @@ class SentimentReboundStrategy:
             if self.investment_level_idx > 0:
                 logging.info(f"J13数量({j13_stats['current']:.0f})低于阈值({j13_stats['percentile_90']:.1f})，重置投资级别")
             self.investment_level_idx = 0
-            self.last_trade_date = current_date
-            self.save_state()
         
         # 生成卖出信号（如果有持仓且提供了砖型图数据，且当日未买入）
         if self.position > 0 and not bought_today and brick_data is not None and not brick_data.empty:
@@ -323,7 +372,10 @@ class SentimentReboundStrategy:
                 signals.append(sell_signal)
                 self.trades.append(sell_signal)
                 logging.info(f"卖出信号: {current_date} - {sell_signal['type']}")
-        
+
+        # 记录当日最终状态，包含安静日的柱数、卖出结果及完整交易记录。
+        self.last_trade_date = current_date
+        self.save_state()
         return signals
     
     def execute_strategy(self, 
@@ -352,9 +404,15 @@ class SentimentReboundStrategy:
         etf_data = etf_data.copy()
         
         if 'trade_date' in j13_data.columns:
-            j13_data['trade_date'] = pd.to_datetime(j13_data['trade_date']).dt.strftime('%Y%m%d')
+            j13_data['trade_date'] = pd.to_datetime(j13_data['trade_date'].astype(str)).dt.strftime('%Y%m%d')
         if 'trade_date' in etf_data.columns:
-            etf_data['trade_date'] = pd.to_datetime(etf_data['trade_date']).dt.strftime('%Y%m%d')
+            etf_data['trade_date'] = pd.to_datetime(etf_data['trade_date'].astype(str)).dt.strftime('%Y%m%d')
+        j13_data = j13_data.sort_values('trade_date').reset_index(drop=True)
+        etf_data = etf_data.sort_values('trade_date').reset_index(drop=True)
+        if brick_data is not None and not brick_data.empty:
+            brick_data = brick_data.copy()
+            brick_data['trade_date'] = pd.to_datetime(brick_data['trade_date'].astype(str)).dt.strftime('%Y%m%d')
+            brick_data = brick_data.sort_values('trade_date').reset_index(drop=True)
         
         # 遍历每一天（从lookback_days开始，确保有足够的历史数据计算分位数）
         for i in range(self.lookback_days, len(j13_data)):
@@ -371,30 +429,12 @@ class SentimentReboundStrategy:
             j13_stats['current'] = j13_data['count'].iloc[i]
             j13_stats['is_above_threshold'] = j13_stats['current'] >= j13_stats['percentile_90']
             
-            # 生成买入信号
-            if j13_stats['is_above_threshold']:
-                buy_signal = self.generate_buy_signal(j13_stats, current_date)
-                if buy_signal:
-                    signals.append(buy_signal)
-                    self.trades.append(buy_signal)
-                    logging.info(f"买入信号: {current_date} - 金额¥{buy_signal['amount']:,.0f} (第{buy_signal['level']}级)")
-            else:
-                # 如果J13数量低于阈值，重置投资级别
-                if self.investment_level_idx > 0:
-                    logging.info(f"J13数量({j13_stats['current']:.0f})低于阈值({j13_stats['percentile_90']:.1f})，重置投资级别")
-                self.investment_level_idx = 0
-            
-            # 生成卖出信号（如果有持仓且提供了砖型图数据）
-            if self.position > 0 and brick_data is not None and not brick_data.empty:
-                # 找到对应日期的砖型图数据
-                date_brick = brick_data[brick_data['trade_date'] == current_date]
-                if not date_brick.empty:
-                    current_price = date_brick['close'].iloc[0] if 'close' in date_brick.columns else 0
-                    sell_signal = self.generate_sell_signal(date_brick, current_date, current_price)
-                    if sell_signal:
-                        signals.append(sell_signal)
-                        self.trades.append(sell_signal)
-                        logging.info(f"卖出信号: {current_date} - {sell_signal['type']}")
+            prices = etf_data[etf_data['trade_date'] == current_date]
+            if prices.empty:
+                continue
+            current_price = float(prices.iloc[-1].get('close_qfq', prices.iloc[-1].get('close', 0)))
+            history = brick_data[brick_data['trade_date'] <= current_date] if brick_data is not None else None
+            signals.extend(self.generate_current_signal(j13_stats, current_date, history, current_price))
         
         return signals
     
@@ -417,6 +457,8 @@ class SentimentReboundStrategy:
         self.red_bar_count = 0
         self.green_bar_count = 0
         self.last_signal = None
+        self.last_trade_date = None
+        self.last_bar_date = None
         self.trades = []
 
 

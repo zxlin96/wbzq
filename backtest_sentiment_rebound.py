@@ -30,6 +30,7 @@ from typing import Dict, List, Optional, Tuple
 # ─── 项目模块 ───
 from data_manager import DataManager
 from config import APIConfig
+from sentiment_rebound_strategy import advance_bar_counts
 import tushare as ts
 
 ts.set_token(APIConfig.get_token())
@@ -215,6 +216,17 @@ class BacktestEngine:
                 continue
             threshold = past_j13['count'].quantile(self.percentile_threshold)
 
+            # 买入优先不代表跳过当天柱数；持仓期间每根柱都必须计数。
+            brick_row = brick_idx.get(date)
+            valid_brick = brick_row is not None and pd.notna(brick_row.get('zhixing_brick_rising'))
+            is_rising = bool(brick_row['zhixing_brick_rising']) if valid_brick else False
+            if self.position_shares > 0:
+                if valid_brick:
+                    self.red_bar_count, self.green_bar_count = advance_bar_counts(
+                        self.red_bar_count, self.green_bar_count, is_rising)
+                else:
+                    self.red_bar_count = self.green_bar_count = 0
+
             # ─── 买入逻辑 ───
             if current_j13 >= threshold:
                 buy_amount = self.investment_levels[min(self.invest_level_idx, len(self.investment_levels) - 1)]
@@ -248,7 +260,7 @@ class BacktestEngine:
                 }
                 self.trades.append(trade)
                 self.open_buys.append(trade)
-                continue  # 买入日不检查卖出
+                continue  # 买入日已更新柱数，只跳过卖出
 
             # ─── J13低于阈值 → 重置投资级别 ───
             if self.invest_level_idx > 0:
@@ -258,17 +270,8 @@ class BacktestEngine:
             if self.position_shares <= 0:
                 continue
 
-            brick_row = brick_idx.get(date)
-            if brick_row is None:
+            if not valid_brick:
                 continue
-
-            is_rising = bool(brick_row.get('zhixing_brick_rising', False))
-
-            if is_rising:
-                self.red_bar_count += 1
-                self.green_bar_count = 0
-            else:
-                self.green_bar_count += 1
 
             # 连续3根绿柱 → 全卖
             if self.green_bar_count >= 3 and self.position_shares > 0:
@@ -299,7 +302,7 @@ class BacktestEngine:
                 continue
 
             # 红柱满4根 → 卖一半
-            if is_rising and self.red_bar_count == 4 and self.position_shares > 0:
+            if is_rising and self.red_bar_count >= 4 and self.position_shares > 0:
                 sell_shares = self.position_shares * 0.5
                 sell_price = current_price
                 sell_value = sell_shares * 2000 * (sell_price / self.position_cost) if self.position_cost > 0 else 0
@@ -315,7 +318,7 @@ class BacktestEngine:
                     'red_bars': self.red_bar_count,
                     'sell_value': sell_value,
                     'pnl': pnl,
-                    'reason': '连续红柱达到4根，卖出一半',
+                    'reason': f'连续红柱达到{self.red_bar_count}根，卖出一半',
                 }
                 self.trades.append(trade)
                 self._close_round_trips(sell_price, date, trade, ratio=0.5)
@@ -329,10 +332,6 @@ class BacktestEngine:
                     self.invest_level_idx = 0
                 self.red_bar_count = 0
                 self.green_bar_count = 0
-
-            # 绿柱时重置红柱计数
-            if not is_rising:
-                self.red_bar_count = 0
 
     def _close_round_trips(self, sell_price: float, sell_date: str, sell_trade: Dict, ratio: float = 1.0):
         """将未平仓的买入记录配对为完整交易"""

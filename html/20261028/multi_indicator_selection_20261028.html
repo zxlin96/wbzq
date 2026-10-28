@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多指标联合选股 - 20261028</title>
+    <link rel="stylesheet" href="../../assets/tailwind.css">
+    <style>
+        body { font-family: Inter, sans-serif; }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }
+        .modal-content { background: #fff; margin: 2% auto; width: 92%; max-width: 1100px; border-radius: 12px; max-height: 90vh; overflow-y: auto; }
+        .close { float: right; font-size: 28px; cursor: pointer; padding: 8px 16px; }
+        .chart-container { width: 100%; height: 400px; }
+    </style>
+<meta name="report-stock-count" content="13">
+<link rel="stylesheet" href="../../assets/site.css">
+<script src="../../assets/site.js" defer></script>
+</head>
+<body data-static-version="3" data-echarts-src="../../assets/vendor/echarts-5.5.0.min.js" data-chart-base="multi_indicator_selection_20261028.data/" class="bg-gray-50 min-h-screen">
+<nav class="site-nav" aria-label="页面导航"><a href="../../index.html">← 返回首页</a></nav>
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <!-- 标题 -->
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+            <h1 class="text-2xl font-bold text-blue-600">多指标联合选股</h1>
+            <p class="text-gray-500 mt-1">日期: 20261028 | 条件: KDJ-J&lt;13 &amp; MACD-DIF&gt;0 &amp; 非ST &amp; 收盘&gt;MA60 &amp; 涨跌幅∈(-3%,3%) &amp; 成交额前60% &amp; 市值&gt;50亿 &amp; 振幅&lt;7% | 共 13 只</p>
+        </div>
+
+        <!-- 漏斗统计 -->
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+            <h2 class="text-lg font-semibold mb-3">漏斗统计</h2>
+            <div class="flex items-center gap-2"><span class="text-gray-600 min-w-[120px]">全市场</span><div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-blue-500 rounded-full h-2" style="width:100.0%"></div></div><span class="font-semibold min-w-[40px] text-right">5570</span></div><div class="flex items-center gap-2"><span class="text-gray-600 min-w-[120px]">+KDJ-J&lt;13</span><div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-blue-500 rounded-full h-2" style="width:16.31956912028725%"></div></div><span class="font-semibold min-w-[40px] text-right">909</span></div><div class="flex items-center gap-2"><span class="text-gray-600 min-w-[120px]">+MACD-DIF&gt;0</span><div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-blue-500 rounded-full h-2" style="width:1.8312387791741473%"></div></div><span class="font-semibold min-w-[40px] text-right">102</span></div><div class="flex items-center gap-2"><span class="text-gray-600 min-w-[120px]">+非ST</span><div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-blue-500 rounded-full h-2" style="width:1.7235188509874326%"></div></div><span class="font-semibold min-w-[40px] text-right">96</span></div><div class="flex items-center gap-2"><span class="text-gray-600 min-w-[120px]">+收盘&gt;MA60</span><div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-blue-500 rounded-full h-2" style="width:1.1310592459605027%"></div></div><span class="font-semibold min-w-[40px] text-right">63</span></div><div class="flex items-center gap-2"><span class="text-gray-600 min-w-[120px]">+涨跌幅&lt;上限</span><div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-blue-500 rounded-full h-2" style="width:0.8438061041292639%"></div></div><span class="font-semibold min-w-[40px] text-right">47</span></div><div class="flex items-center gap-2"><span class="text-gray-600 min-w-[120px]">+涨跌幅&gt;下限</span><div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-blue-500 rounded-full h-2" style="width:0.6822262118491921%"></div></div><span class="font-semibold min-w-[40px] text-right">38</span></div><div class="flex items-center gap-2"><span class="text-gray-600 min-w-[120px]">+成交额前60%</span><div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-blue-500 rounded-full h-2" style="width:0.5026929982046678%"></div></div><span class="font-semibold min-w-[40px] text-right">28</span></div><div class="flex items-center gap-2"><span class="text-gray-600 min-w-[120px]">+市值&gt;下限</span><div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-blue-500 rounded-full h-2" style="width:0.2872531418312388%"></div></div><span class="font-semibold min-w-[40px] text-right">16</span></div><div class="flex items-center gap-2"><span class="text-gray-600 min-w-[120px]">+振幅&lt;上限</span><div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-blue-500 rounded-full h-2" style="width:0.23339317773788149%"></div></div><span class="font-semibold min-w-[40px] text-right">13</span></div><div class="flex items-center gap-2"><span class="text-gray-600 min-w-[120px]">最终</span><div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-blue-500 rounded-full h-2" style="width:0.23339317773788149%"></div></div><span class="font-semibold min-w-[40px] text-right">13</span></div>
+        </div>
+
+        <!-- 行业分布 -->
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+            <h2 class="text-lg font-semibold mb-3">行业分布</h2>
+            <div class="flex items-center gap-2"><span class="text-gray-600 min-w-[100px]">元器件</span><div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-indigo-500 rounded-full h-2" style="width:100.0%"></div></div><span class="font-semibold min-w-[30px] text-right">2</span></div><div class="flex items-center gap-2"><span class="text-gray-600 min-w-[100px]">火力发电</span><div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-indigo-500 rounded-full h-2" style="width:100.0%"></div></div><span class="font-semibold min-w-[30px] text-right">2</span></div><div class="flex items-center gap-2"><span class="text-gray-600 min-w-[100px]">航空</span><div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-indigo-500 rounded-full h-2" style="width:100.0%"></div></div><span class="font-semibold min-w-[30px] text-right">2</span></div><div class="flex items-center gap-2"><span class="text-gray-600 min-w-[100px]">出版业</span><div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-indigo-500 rounded-full h-2" style="width:50.0%"></div></div><span class="font-semibold min-w-[30px] text-right">1</span></div><div class="flex items-center gap-2"><span class="text-gray-600 min-w-[100px]">通信设备</span><div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-indigo-500 rounded-full h-2" style="width:50.0%"></div></div><span class="font-semibold min-w-[30px] text-right">1</span></div><div class="flex items-center gap-2"><span class="text-gray-600 min-w-[100px]">生物制药</span><div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-indigo-500 rounded-full h-2" style="width:50.0%"></div></div><span class="font-semibold min-w-[30px] text-right">1</span></div><div class="flex items-center gap-2"><span class="text-gray-600 min-w-[100px]">纺织机械</span><div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-indigo-500 rounded-full h-2" style="width:50.0%"></div></div><span class="font-semibold min-w-[30px] text-right">1</span></div><div class="flex items-center gap-2"><span class="text-gray-600 min-w-[100px]">机械基件</span><div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-indigo-500 rounded-full h-2" style="width:50.0%"></div></div><span class="font-semibold min-w-[30px] text-right">1</span></div><div class="flex items-center gap-2"><span class="text-gray-600 min-w-[100px]">中成药</span><div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-indigo-500 rounded-full h-2" style="width:50.0%"></div></div><span class="font-semibold min-w-[30px] text-right">1</span></div><div class="flex items-center gap-2"><span class="text-gray-600 min-w-[100px]">广告包装</span><div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-indigo-500 rounded-full h-2" style="width:50.0%"></div></div><span class="font-semibold min-w-[30px] text-right">1</span></div>
+        </div>
+
+
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+            <h2 class="text-lg font-semibold mb-3 text-amber-600">超阈值行业提示</h2>
+            <p class="text-gray-500">暂无超阈值行业。</p>
+        </div>
+
+        <!-- 结果表格 -->
+        <div class="bg-white rounded-xl shadow-sm p-6 overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="px-3 py-2 text-left">代码</th>
+                        <th class="px-3 py-2 text-left">名称</th>
+                        <th class="px-3 py-2 text-left">行业</th>
+                        <th class="px-3 py-2 text-right">收盘价</th>
+                        <th class="px-3 py-2 text-right">MA60</th>
+                        <th class="px-3 py-2 text-right">KDJ-J</th>
+                        <th class="px-3 py-2 text-right">MACD-DIF</th>
+                        <th class="px-3 py-2 text-right">涨跌幅</th>
+                        <th class="px-3 py-2 text-right">成交额</th>
+                        <th class="px-3 py-2 text-right">总市值(亿)</th>
+                        <th class="px-3 py-2 text-right">振幅(%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td class="px-3 py-2 border-b"><a href="javascript:void(0)" onclick="openChart('601811.SH')" class="text-blue-600 hover:underline">601811.SH</a></td><td class="px-3 py-2 border-b">新华文轩</td><td class="px-3 py-2 border-b">出版业</td><td class="px-3 py-2 border-b">17.86</td><td class="px-3 py-2 border-b">15.23</td><td class="px-3 py-2 border-b">-18.07</td><td class="px-3 py-2 border-b">1.0883</td><td class="px-3 py-2 border-b">0.45%</td><td class="px-3 py-2 border-b">57万</td><td class="px-3 py-2 border-b">220.4</td><td class="px-3 py-2 border-b">0.00%</td></tr><tr><td class="px-3 py-2 border-b"><a href="javascript:void(0)" onclick="openChart('603386.SH')" class="text-blue-600 hover:underline">603386.SH</a></td><td class="px-3 py-2 border-b">骏亚科技</td><td class="px-3 py-2 border-b">元器件</td><td class="px-3 py-2 border-b">16.40</td><td class="px-3 py-2 border-b">15.62</td><td class="px-3 py-2 border-b">-14.15</td><td class="px-3 py-2 border-b">0.2726</td><td class="px-3 py-2 border-b">0.06%</td><td class="px-3 py-2 border-b">35万</td><td class="px-3 py-2 border-b">53.5</td><td class="px-3 py-2 border-b">0.00%</td></tr><tr><td class="px-3 py-2 border-b"><a href="javascript:void(0)" onclick="openChart('301132.SZ')" class="text-blue-600 hover:underline">301132.SZ</a></td><td class="px-3 py-2 border-b">满坤科技</td><td class="px-3 py-2 border-b">元器件</td><td class="px-3 py-2 border-b">50.88</td><td class="px-3 py-2 border-b">48.75</td><td class="px-3 py-2 border-b">-13.38</td><td class="px-3 py-2 border-b">0.0258</td><td class="px-3 py-2 border-b">1.76%</td><td class="px-3 py-2 border-b">47万</td><td class="px-3 py-2 border-b">75.3</td><td class="px-3 py-2 border-b">0.00%</td></tr><tr><td class="px-3 py-2 border-b"><a href="javascript:void(0)" onclick="openChart('688192.SH')" class="text-blue-600 hover:underline">688192.SH</a></td><td class="px-3 py-2 border-b">迪哲医药</td><td class="px-3 py-2 border-b">生物制药</td><td class="px-3 py-2 border-b">58.10</td><td class="px-3 py-2 border-b">57.82</td><td class="px-3 py-2 border-b">-4.40</td><td class="px-3 py-2 border-b">0.6066</td><td class="px-3 py-2 border-b">1.22%</td><td class="px-3 py-2 border-b">22万</td><td class="px-3 py-2 border-b">270.3</td><td class="px-3 py-2 border-b">0.00%</td></tr><tr><td class="px-3 py-2 border-b"><a href="javascript:void(0)" onclick="openChart('000690.SZ')" class="text-blue-600 hover:underline">000690.SZ</a></td><td class="px-3 py-2 border-b">宝新能源</td><td class="px-3 py-2 border-b">火力发电</td><td class="px-3 py-2 border-b">5.15</td><td class="px-3 py-2 border-b">5.11</td><td class="px-3 py-2 border-b">-3.58</td><td class="px-3 py-2 border-b">0.0266</td><td class="px-3 py-2 border-b">-0.96%</td><td class="px-3 py-2 border-b">32万</td><td class="px-3 py-2 border-b">112.1</td><td class="px-3 py-2 border-b">0.00%</td></tr><tr><td class="px-3 py-2 border-b"><a href="javascript:void(0)" onclick="openChart('600562.SH')" class="text-blue-600 hover:underline">600562.SH</a></td><td class="px-3 py-2 border-b">国睿科技</td><td class="px-3 py-2 border-b">通信设备</td><td class="px-3 py-2 border-b">27.60</td><td class="px-3 py-2 border-b">27.43</td><td class="px-3 py-2 border-b">-1.84</td><td class="px-3 py-2 border-b">0.3759</td><td class="px-3 py-2 border-b">-2.13%</td><td class="px-3 py-2 border-b">23万</td><td class="px-3 py-2 border-b">342.8</td><td class="px-3 py-2 border-b">0.00%</td></tr><tr><td class="px-3 py-2 border-b"><a href="javascript:void(0)" onclick="openChart('600023.SH')" class="text-blue-600 hover:underline">600023.SH</a></td><td class="px-3 py-2 border-b">浙能电力</td><td class="px-3 py-2 border-b">火力发电</td><td class="px-3 py-2 border-b">5.19</td><td class="px-3 py-2 border-b">5.05</td><td class="px-3 py-2 border-b">0.45</td><td class="px-3 py-2 border-b">0.0427</td><td class="px-3 py-2 border-b">0.58%</td><td class="px-3 py-2 border-b">22万</td><td class="px-3 py-2 border-b">695.9</td><td class="px-3 py-2 border-b">0.00%</td></tr><tr><td class="px-3 py-2 border-b"><a href="javascript:void(0)" onclick="openChart('600843.SH')" class="text-blue-600 hover:underline">600843.SH</a></td><td class="px-3 py-2 border-b">上工申贝</td><td class="px-3 py-2 border-b">纺织机械</td><td class="px-3 py-2 border-b">7.66</td><td class="px-3 py-2 border-b">7.39</td><td class="px-3 py-2 border-b">2.56</td><td class="px-3 py-2 border-b">0.1224</td><td class="px-3 py-2 border-b">2.68%</td><td class="px-3 py-2 border-b">17万</td><td class="px-3 py-2 border-b">54.6</td><td class="px-3 py-2 border-b">0.00%</td></tr><tr><td class="px-3 py-2 border-b"><a href="javascript:void(0)" onclick="openChart('300581.SZ')" class="text-blue-600 hover:underline">300581.SZ</a></td><td class="px-3 py-2 border-b">晨曦航空</td><td class="px-3 py-2 border-b">航空</td><td class="px-3 py-2 border-b">10.46</td><td class="px-3 py-2 border-b">10.36</td><td class="px-3 py-2 border-b">4.05</td><td class="px-3 py-2 border-b">0.1246</td><td class="px-3 py-2 border-b">2.65%</td><td class="px-3 py-2 border-b">31万</td><td class="px-3 py-2 border-b">57.5</td><td class="px-3 py-2 border-b">0.00%</td></tr><tr><td class="px-3 py-2 border-b"><a href="javascript:void(0)" onclick="openChart('605100.SH')" class="text-blue-600 hover:underline">605100.SH</a></td><td class="px-3 py-2 border-b">华丰股份</td><td class="px-3 py-2 border-b">机械基件</td><td class="px-3 py-2 border-b">34.64</td><td class="px-3 py-2 border-b">34.16</td><td class="px-3 py-2 border-b">6.92</td><td class="px-3 py-2 border-b">0.4526</td><td class="px-3 py-2 border-b">2.49%</td><td class="px-3 py-2 border-b">16万</td><td class="px-3 py-2 border-b">82.6</td><td class="px-3 py-2 border-b">0.00%</td></tr><tr><td class="px-3 py-2 border-b"><a href="javascript:void(0)" onclick="openChart('000999.SZ')" class="text-blue-600 hover:underline">000999.SZ</a></td><td class="px-3 py-2 border-b">华润三九</td><td class="px-3 py-2 border-b">中成药</td><td class="px-3 py-2 border-b">24.91</td><td class="px-3 py-2 border-b">24.40</td><td class="px-3 py-2 border-b">6.98</td><td class="px-3 py-2 border-b">0.2956</td><td class="px-3 py-2 border-b">0.16%</td><td class="px-3 py-2 border-b">25万</td><td class="px-3 py-2 border-b">414.6</td><td class="px-3 py-2 border-b">0.00%</td></tr><tr><td class="px-3 py-2 border-b"><a href="javascript:void(0)" onclick="openChart('600316.SH')" class="text-blue-600 hover:underline">600316.SH</a></td><td class="px-3 py-2 border-b">洪都航空</td><td class="px-3 py-2 border-b">航空</td><td class="px-3 py-2 border-b">33.77</td><td class="px-3 py-2 border-b">31.42</td><td class="px-3 py-2 border-b">7.38</td><td class="px-3 py-2 border-b">0.9510</td><td class="px-3 py-2 border-b">0.45%</td><td class="px-3 py-2 border-b">77万</td><td class="px-3 py-2 border-b">242.2</td><td class="px-3 py-2 border-b">0.00%</td></tr><tr><td class="px-3 py-2 border-b"><a href="javascript:void(0)" onclick="openChart('600210.SH')" class="text-blue-600 hover:underline">600210.SH</a></td><td class="px-3 py-2 border-b">紫江企业</td><td class="px-3 py-2 border-b">广告包装</td><td class="px-3 py-2 border-b">6.35</td><td class="px-3 py-2 border-b">6.27</td><td class="px-3 py-2 border-b">12.58</td><td class="px-3 py-2 border-b">0.0420</td><td class="px-3 py-2 border-b">-0.47%</td><td class="px-3 py-2 border-b">17万</td><td class="px-3 py-2 border-b">96.3</td><td class="px-3 py-2 border-b">0.00%</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 模态框 -->
+    <div id="chartModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center p-4 border-b">
+                <h2 class="text-lg font-bold" id="modalTitle">股票图表</h2>
+                <button type="button" class="close" aria-label="关闭图表" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modalBody" class="p-4">
+                <div id="detailTable" class="mb-4"></div>
+                <div id="klineChart" class="chart-container mb-4"></div>
+                <div id="volumeChart" class="chart-container mb-4" style="height: 150px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+    const detailsData = {"601811.SH": "<tr><td class=\"font-medium\">KDJ-J</td><td>-18.07</td></tr><tr><td class=\"font-medium\">MACD-DIF</td><td>1.0883</td></tr><tr><td class=\"font-medium\">收盘价</td><td>17.86</td></tr><tr><td class=\"font-medium\">60日均线</td><td>15.23</td></tr><tr><td class=\"font-medium\">涨跌幅</td><td>0.45%</td></tr><tr><td class=\"font-medium\">成交额</td><td>566434</td></tr><tr><td class=\"font-medium\">总市值</td><td>220.4亿</td></tr><tr><td class=\"font-medium\">振幅</td><td>0.00%</td></tr>", "603386.SH": "<tr><td class=\"font-medium\">KDJ-J</td><td>-14.15</td></tr><tr><td class=\"font-medium\">MACD-DIF</td><td>0.2726</td></tr><tr><td class=\"font-medium\">收盘价</td><td>16.40</td></tr><tr><td class=\"font-medium\">60日均线</td><td>15.62</td></tr><tr><td class=\"font-medium\">涨跌幅</td><td>0.06%</td></tr><tr><td class=\"font-medium\">成交额</td><td>351406</td></tr><tr><td class=\"font-medium\">总市值</td><td>53.5亿</td></tr><tr><td class=\"font-medium\">振幅</td><td>0.00%</td></tr>", "301132.SZ": "<tr><td class=\"font-medium\">KDJ-J</td><td>-13.38</td></tr><tr><td class=\"font-medium\">MACD-DIF</td><td>0.0258</td></tr><tr><td class=\"font-medium\">收盘价</td><td>50.88</td></tr><tr><td class=\"font-medium\">60日均线</td><td>48.75</td></tr><tr><td class=\"font-medium\">涨跌幅</td><td>1.76%</td></tr><tr><td class=\"font-medium\">成交额</td><td>465756</td></tr><tr><td class=\"font-medium\">总市值</td><td>75.3亿</td></tr><tr><td class=\"font-medium\">振幅</td><td>0.00%</td></tr>", "688192.SH": "<tr><td class=\"font-medium\">KDJ-J</td><td>-4.40</td></tr><tr><td class=\"font-medium\">MACD-DIF</td><td>0.6066</td></tr><tr><td class=\"font-medium\">收盘价</td><td>58.10</td></tr><tr><td class=\"font-medium\">60日均线</td><td>57.82</td></tr><tr><td class=\"font-medium\">涨跌幅</td><td>1.22%</td></tr><tr><td class=\"font-medium\">成交额</td><td>222642</td></tr><tr><td class=\"font-medium\">总市值</td><td>270.3亿</td></tr><tr><td class=\"font-medium\">振幅</td><td>0.00%</td></tr>", "000690.SZ": "<tr><td class=\"font-medium\">KDJ-J</td><td>-3.58</td></tr><tr><td class=\"font-medium\">MACD-DIF</td><td>0.0266</td></tr><tr><td class=\"font-medium\">收盘价</td><td>5.15</td></tr><tr><td class=\"font-medium\">60日均线</td><td>5.11</td></tr><tr><td class=\"font-medium\">涨跌幅</td><td>-0.96%</td></tr><tr><td class=\"font-medium\">成交额</td><td>322693</td></tr><tr><td class=\"font-medium\">总市值</td><td>112.1亿</td></tr><tr><td class=\"font-medium\">振幅</td><td>0.00%</td></tr>", "600562.SH": "<tr><td class=\"font-medium\">KDJ-J</td><td>-1.84</td></tr><tr><td class=\"font-medium\">MACD-DIF</td><td>0.3759</td></tr><tr><td class=\"font-medium\">收盘价</td><td>27.60</td></tr><tr><td class=\"font-medium\">60日均线</td><td>27.43</td></tr><tr><td class=\"font-medium\">涨跌幅</td><td>-2.13%</td></tr><tr><td class=\"font-medium\">成交额</td><td>227114</td></tr><tr><td class=\"font-medium\">总市值</td><td>342.8亿</td></tr><tr><td class=\"font-medium\">振幅</td><td>0.00%</td></tr>", "600023.SH": "<tr><td class=\"font-medium\">KDJ-J</td><td>0.45</td></tr><tr><td class=\"font-medium\">MACD-DIF</td><td>0.0427</td></tr><tr><td class=\"font-medium\">收盘价</td><td>5.19</td></tr><tr><td class=\"font-medium\">60日均线</td><td>5.05</td></tr><tr><td class=\"font-medium\">涨跌幅</td><td>0.58%</td></tr><tr><td class=\"font-medium\">成交额</td><td>215332</td></tr><tr><td class=\"font-medium\">总市值</td><td>695.9亿</td></tr><tr><td class=\"font-medium\">振幅</td><td>0.00%</td></tr>", "600843.SH": "<tr><td class=\"font-medium\">KDJ-J</td><td>2.56</td></tr><tr><td class=\"font-medium\">MACD-DIF</td><td>0.1224</td></tr><tr><td class=\"font-medium\">收盘价</td><td>7.66</td></tr><tr><td class=\"font-medium\">60日均线</td><td>7.39</td></tr><tr><td class=\"font-medium\">涨跌幅</td><td>2.68%</td></tr><tr><td class=\"font-medium\">成交额</td><td>170580</td></tr><tr><td class=\"font-medium\">总市值</td><td>54.6亿</td></tr><tr><td class=\"font-medium\">振幅</td><td>0.00%</td></tr>", "300581.SZ": "<tr><td class=\"font-medium\">KDJ-J</td><td>4.05</td></tr><tr><td class=\"font-medium\">MACD-DIF</td><td>0.1246</td></tr><tr><td class=\"font-medium\">收盘价</td><td>10.46</td></tr><tr><td class=\"font-medium\">60日均线</td><td>10.36</td></tr><tr><td class=\"font-medium\">涨跌幅</td><td>2.65%</td></tr><tr><td class=\"font-medium\">成交额</td><td>309740</td></tr><tr><td class=\"font-medium\">总市值</td><td>57.5亿</td></tr><tr><td class=\"font-medium\">振幅</td><td>0.00%</td></tr>", "605100.SH": "<tr><td class=\"font-medium\">KDJ-J</td><td>6.92</td></tr><tr><td class=\"font-medium\">MACD-DIF</td><td>0.4526</td></tr><tr><td class=\"font-medium\">收盘价</td><td>34.64</td></tr><tr><td class=\"font-medium\">60日均线</td><td>34.16</td></tr><tr><td class=\"font-medium\">涨跌幅</td><td>2.49%</td></tr><tr><td class=\"font-medium\">成交额</td><td>159228</td></tr><tr><td class=\"font-medium\">总市值</td><td>82.6亿</td></tr><tr><td class=\"font-medium\">振幅</td><td>0.00%</td></tr>", "000999.SZ": "<tr><td class=\"font-medium\">KDJ-J</td><td>6.98</td></tr><tr><td class=\"font-medium\">MACD-DIF</td><td>0.2956</td></tr><tr><td class=\"font-medium\">收盘价</td><td>24.91</td></tr><tr><td class=\"font-medium\">60日均线</td><td>24.40</td></tr><tr><td class=\"font-medium\">涨跌幅</td><td>0.16%</td></tr><tr><td class=\"font-medium\">成交额</td><td>249558</td></tr><tr><td class=\"font-medium\">总市值</td><td>414.6亿</td></tr><tr><td class=\"font-medium\">振幅</td><td>0.00%</td></tr>", "600316.SH": "<tr><td class=\"font-medium\">KDJ-J</td><td>7.38</td></tr><tr><td class=\"font-medium\">MACD-DIF</td><td>0.9510</td></tr><tr><td class=\"font-medium\">收盘价</td><td>33.77</td></tr><tr><td class=\"font-medium\">60日均线</td><td>31.42</td></tr><tr><td class=\"font-medium\">涨跌幅</td><td>0.45%</td></tr><tr><td class=\"font-medium\">成交额</td><td>768892</td></tr><tr><td class=\"font-medium\">总市值</td><td>242.2亿</td></tr><tr><td class=\"font-medium\">振幅</td><td>0.00%</td></tr>", "600210.SH": "<tr><td class=\"font-medium\">KDJ-J</td><td>12.58</td></tr><tr><td class=\"font-medium\">MACD-DIF</td><td>0.0420</td></tr><tr><td class=\"font-medium\">收盘价</td><td>6.35</td></tr><tr><td class=\"font-medium\">60日均线</td><td>6.27</td></tr><tr><td class=\"font-medium\">涨跌幅</td><td>-0.47%</td></tr><tr><td class=\"font-medium\">成交额</td><td>166637</td></tr><tr><td class=\"font-medium\">总市值</td><td>96.3亿</td></tr><tr><td class=\"font-medium\">振幅</td><td>0.00%</td></tr>"};
+    let kc, vc;
+
+    async function openChart(tsCode) {
+        const d = await SiteReports.loadStock(tsCode);
+        if (!d) return;
+        document.getElementById('modalTitle').textContent = tsCode + ' - ' + d.name;
+        document.getElementById('detailTable').innerHTML = '<table class="w-full text-sm mb-4"><tbody>' + (detailsData[tsCode] || '') + '</tbody></table>';
+        document.getElementById('chartModal').style.display = 'block';
+
+        requestAnimationFrame(() => { if (!SiteReports.isCurrent(d)) return;
+            if (kc) kc.dispose();
+            const cd = d.candlestick.map(c => ({value: [c[1], c[2], c[4], c[3]], itemStyle: {color: c[2]>=c[1]?'#ef4444':'#22c55e', color0: c[2]>=c[1]?'#ef4444':'#22c55e', borderColor: c[2]>=c[1]?'#ef4444':'#22c55e', borderColor0: c[2]>=c[1]?'#ef4444':'#22c55e'}}));
+            kc = echarts.init(document.getElementById('klineChart'));
+            kc.setOption({
+                title: { text: 'K线图', left: 'center', textStyle: { fontSize: 14 } },
+                tooltip: { trigger: 'axis', axisPointer: { type: 'cross' } },
+                grid: { left: '8%', right: '8%', top: '50px', bottom: '30px' },
+                xAxis: { type: 'category', data: d.dates, axisTick: { alignWithLabel: true } },
+                yAxis: { type: 'value', scale: true },
+                series: [{ type: 'candlestick', name: 'K线', data: cd, itemStyle: { color: '#ef4444', color0: '#22c55e', borderColor: '#ef4444', borderColor0: '#22c55e' } }]
+            });
+
+            if (vc) vc.dispose();
+            const vd = d.volume.map(v => ({ value: v.value, itemStyle: { color: v.is_double ? '#a855f7' : '#3b82f6' } }));
+            vc = echarts.init(document.getElementById('volumeChart'));
+            vc.setOption({
+                tooltip: { trigger: 'axis', formatter: function(params) {
+                    const i = params[0].dataIndex;
+                    const vol = d.volume[i];
+                    return params[0].axisValue + '<br/>成交额: ' + params[0].value.toFixed(2) + ' 万元<br/>是否倍量: ' + (vol.is_double ? '是' : '否');
+                }},
+                grid: { left: '8%', right: '8%', top: '40px', bottom: '30px' },
+                xAxis: { type: 'category', data: d.dates, show: false },
+                yAxis: { type: 'value' },
+                series: [{ type: 'bar', data: vd }]
+            });
+
+
+        });
+    }
+
+    function closeModal() { SiteReports.cancel(); document.getElementById('chartModal').style.display = 'none'; }
+    window.onclick = function(e) { if (e.target == document.getElementById('chartModal')) document.getElementById('chartModal').style.display = 'none'; }
+    </script>
+</body>
+</html>

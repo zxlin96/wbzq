@@ -2,9 +2,9 @@
   "position": 4,
   "position_cost": 2000.0,
   "investment_level_idx": 0,
-  "red_bar_count": 1,
-  "green_bar_count": 0,
-  "last_trade_date": "20261028",
+  "red_bar_count": 0,
+  "green_bar_count": 1,
+  "last_trade_date": "20261029",
   "trades": [
     {
       "date": "20260319",
@@ -231,5 +231,5 @@
       "reason": "连续红柱达到4根，卖出一半"
     }
   ],
-  "saved_at": "2026-10-28 12:23:45"
+  "saved_at": "2026-10-29 12:24:10"
 }

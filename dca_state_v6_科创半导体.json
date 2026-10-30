@@ -210,6 +210,17 @@
       "reason": "周线J=6.24, 金额=1000",
       "total_shares": 2553.0244,
       "avg_cost": 0.7834
+    },
+    {
+      "date": "20261030",
+      "action": "BUY",
+      "price": 0.586,
+      "amount": 1000.0,
+      "shares": 1706.4846,
+      "round": 4,
+      "reason": "周线J=-4.93, 金额=1000",
+      "total_shares": 4259.509,
+      "avg_cost": 0.7043
     }
   ],
   "positions": [
@@ -303,9 +314,9 @@
         }
       ],
       "week_invested": [
+        "20251212",
         "20251128",
-        "20251205",
-        "20251212"
+        "20251205"
       ]
     },
     {
@@ -409,10 +420,10 @@
         }
       ],
       "week_invested": [
+        "20260320",
         "20260410",
         "20260403",
-        "20260327",
-        "20260320"
+        "20260327"
       ]
     },
     {
@@ -489,9 +500,9 @@
     },
     {
       "round_id": 4,
-      "shares": 2553.024351924588,
-      "total_cost": 2000.0,
-      "total_invested": 2000.0,
+      "shares": 4259.508993562813,
+      "total_cost": 3000.0,
+      "total_invested": 3000.0,
       "total_sell_amount": 0.0,
       "dca_active": true,
       "j_peak": 9.530241475314355,
@@ -502,11 +513,11 @@
       "price_below_dk_sold": false,
       "round_budget": 5000,
       "round_periods": 5,
-      "buy_count": 2,
+      "buy_count": 3,
       "dca_exited": false,
       "dca_exit_date": "",
       "dca_exit_amount": 0.0,
-      "cycle_low": 0.628,
+      "cycle_low": 0.586,
       "j_high_done": false,
       "trades": [
         {
@@ -530,11 +541,23 @@
           "reason": "周线J=6.24, 金额=1000",
           "total_shares": 2553.0244,
           "avg_cost": 0.7834
+        },
+        {
+          "date": "20261030",
+          "action": "BUY",
+          "price": 0.586,
+          "amount": 1000.0,
+          "shares": 1706.4846,
+          "round": 4,
+          "reason": "周线J=-4.93, 金额=1000",
+          "total_shares": 4259.509,
+          "avg_cost": 0.7043
         }
       ],
       "week_invested": [
+        "20261016",
         "20261023",
-        "20261016"
+        "20261030"
       ]
     }
   ]

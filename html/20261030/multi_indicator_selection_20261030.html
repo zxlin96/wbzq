@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多指标联合选股 - 20261030</title>
+    <link rel="stylesheet" href="../../assets/tailwind.css">
+    <style>
+        body { font-family: Inter, sans-serif; }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }
+        .modal-content { background: #fff; margin: 2% auto; width: 92%; max-width: 1100px; border-radius: 12px; max-height: 90vh; overflow-y: auto; }
+        .close { float: right; font-size: 28px; cursor: pointer; padding: 8px 16px; }
+        .chart-container { width: 100%; height: 400px; }
+    </style>
+<meta name="report-stock-count" content="3">
+<link rel="stylesheet" href="../../assets/site.css">
+<script src="../../assets/site.js" defer></script>
+</head>
+<body data-static-version="3" data-echarts-src="../../assets/vendor/echarts-5.5.0.min.js" data-chart-base="multi_indicator_selection_20261030.data/" class="bg-gray-50 min-h-screen">
+<nav class="site-nav" aria-label="页面导航"><a href="../../index.html">← 返回首页</a></nav>
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <!-- 标题 -->
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+            <h1 class="text-2xl font-bold text-blue-600">多指标联合选股</h1>
+            <p class="text-gray-500 mt-1">日期: 20261030 | 条件: KDJ-J&lt;13 &amp; MACD-DIF&gt;0 &amp; 非ST &amp; 收盘&gt;MA60 &amp; 涨跌幅∈(-3%,3%) &amp; 成交额前60% &amp; 市值&gt;50亿 &amp; 振幅&lt;7% | 共 3 只</p>
+        </div>
+
+        <!-- 漏斗统计 -->
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+            <h2 class="text-lg font-semibold mb-3">漏斗统计</h2>
+            <div class="flex items-center gap-2"><span class="text-gray-600 min-w-[120px]">全市场</span><div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-blue-500 rounded-full h-2" style="width:100.0%"></div></div><span class="font-semibold min-w-[40px] text-right">5571</span></div><div class="flex items-center gap-2"><span class="text-gray-600 min-w-[120px]">+KDJ-J&lt;13</span><div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-blue-500 rounded-full h-2" style="width:54.49649973074852%"></div></div><span class="font-semibold min-w-[40px] text-right">3036</span></div><div class="flex items-center gap-2"><span class="text-gray-600 min-w-[120px]">+MACD-DIF&gt;0</span><div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-blue-500 rounded-full h-2" style="width:2.5668641177526474%"></div></div><span class="font-semibold min-w-[40px] text-right">143</span></div><div class="flex items-center gap-2"><span class="text-gray-600 min-w-[120px]">+非ST</span><div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-blue-500 rounded-full h-2" style="width:2.495063722850476%"></div></div><span class="font-semibold min-w-[40px] text-right">139</span></div><div class="flex items-center gap-2"><span class="text-gray-600 min-w-[120px]">+收盘&gt;MA60</span><div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-blue-500 rounded-full h-2" style="width:0.7539041464728056%"></div></div><span class="font-semibold min-w-[40px] text-right">42</span></div><div class="flex items-center gap-2"><span class="text-gray-600 min-w-[120px]">+涨跌幅&lt;上限</span><div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-blue-500 rounded-full h-2" style="width:0.7000538502961766%"></div></div><span class="font-semibold min-w-[40px] text-right">39</span></div><div class="flex items-center gap-2"><span class="text-gray-600 min-w-[120px]">+涨跌幅&gt;下限</span><div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-blue-500 rounded-full h-2" style="width:0.2154011847065159%"></div></div><span class="font-semibold min-w-[40px] text-right">12</span></div><div class="flex items-center gap-2"><span class="text-gray-600 min-w-[120px]">+成交额前60%</span><div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-blue-500 rounded-full h-2" style="width:0.10770059235325795%"></div></div><span class="font-semibold min-w-[40px] text-right">6</span></div><div class="flex items-center gap-2"><span class="text-gray-600 min-w-[120px]">+市值&gt;下限</span><div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-blue-500 rounded-full h-2" style="width:0.07180039490217197%"></div></div><span class="font-semibold min-w-[40px] text-right">4</span></div><div class="flex items-center gap-2"><span class="text-gray-600 min-w-[120px]">+振幅&lt;上限</span><div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-blue-500 rounded-full h-2" style="width:0.053850296176628974%"></div></div><span class="font-semibold min-w-[40px] text-right">3</span></div><div class="flex items-center gap-2"><span class="text-gray-600 min-w-[120px]">最终</span><div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-blue-500 rounded-full h-2" style="width:0.053850296176628974%"></div></div><span class="font-semibold min-w-[40px] text-right">3</span></div>
+        </div>
+
+        <!-- 行业分布 -->
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+            <h2 class="text-lg font-semibold mb-3">行业分布</h2>
+            <div class="flex items-center gap-2"><span class="text-gray-600 min-w-[100px]">电气设备</span><div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-indigo-500 rounded-full h-2" style="width:100.0%"></div></div><span class="font-semibold min-w-[30px] text-right">2</span></div><div class="flex items-center gap-2"><span class="text-gray-600 min-w-[100px]">种植业</span><div class="flex-1 bg-gray-200 rounded-full h-2"><div class="bg-indigo-500 rounded-full h-2" style="width:50.0%"></div></div><span class="font-semibold min-w-[30px] text-right">1</span></div>
+        </div>
+
+
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+            <h2 class="text-lg font-semibold mb-3 text-amber-600">超阈值行业提示</h2>
+            <p class="text-gray-500">暂无超阈值行业。</p>
+        </div>
+
+        <!-- 结果表格 -->
+        <div class="bg-white rounded-xl shadow-sm p-6 overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="px-3 py-2 text-left">代码</th>
+                        <th class="px-3 py-2 text-left">名称</th>
+                        <th class="px-3 py-2 text-left">行业</th>
+                        <th class="px-3 py-2 text-right">收盘价</th>
+                        <th class="px-3 py-2 text-right">MA60</th>
+                        <th class="px-3 py-2 text-right">KDJ-J</th>
+                        <th class="px-3 py-2 text-right">MACD-DIF</th>
+                        <th class="px-3 py-2 text-right">涨跌幅</th>
+                        <th class="px-3 py-2 text-right">成交额</th>
+                        <th class="px-3 py-2 text-right">总市值(亿)</th>
+                        <th class="px-3 py-2 text-right">振幅(%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td class="px-3 py-2 border-b"><a href="javascript:void(0)" onclick="openChart('600598.SH')" class="text-blue-600 hover:underline">600598.SH</a></td><td class="px-3 py-2 border-b">北大荒</td><td class="px-3 py-2 border-b">种植业</td><td class="px-3 py-2 border-b">13.22</td><td class="px-3 py-2 border-b">12.93</td><td class="px-3 py-2 border-b">8.00</td><td class="px-3 py-2 border-b">0.1648</td><td class="px-3 py-2 border-b">-1.34%</td><td class="px-3 py-2 border-b">16万</td><td class="px-3 py-2 border-b">235.0</td><td class="px-3 py-2 border-b">0.00%</td></tr><tr><td class="px-3 py-2 border-b"><a href="javascript:void(0)" onclick="openChart('603583.SH')" class="text-blue-600 hover:underline">603583.SH</a></td><td class="px-3 py-2 border-b">捷昌驱动</td><td class="px-3 py-2 border-b">电气设备</td><td class="px-3 py-2 border-b">26.20</td><td class="px-3 py-2 border-b">26.09</td><td class="px-3 py-2 border-b">8.47</td><td class="px-3 py-2 border-b">0.2183</td><td class="px-3 py-2 border-b">-0.61%</td><td class="px-3 py-2 border-b">22万</td><td class="px-3 py-2 border-b">101.3</td><td class="px-3 py-2 border-b">0.00%</td></tr><tr><td class="px-3 py-2 border-b"><a href="javascript:void(0)" onclick="openChart('600312.SH')" class="text-blue-600 hover:underline">600312.SH</a></td><td class="px-3 py-2 border-b">平高电气</td><td class="px-3 py-2 border-b">电气设备</td><td class="px-3 py-2 border-b">20.54</td><td class="px-3 py-2 border-b">19.89</td><td class="px-3 py-2 border-b">12.45</td><td class="px-3 py-2 border-b">0.3379</td><td class="px-3 py-2 border-b">1.53%</td><td class="px-3 py-2 border-b">42万</td><td class="px-3 py-2 border-b">278.7</td><td class="px-3 py-2 border-b">0.00%</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 模态框 -->
+    <div id="chartModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center p-4 border-b">
+                <h2 class="text-lg font-bold" id="modalTitle">股票图表</h2>
+                <button type="button" class="close" aria-label="关闭图表" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modalBody" class="p-4">
+                <div id="detailTable" class="mb-4"></div>
+                <div id="klineChart" class="chart-container mb-4"></div>
+                <div id="volumeChart" class="chart-container mb-4" style="height: 150px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+    const detailsData = {"600598.SH": "<tr><td class=\"font-medium\">KDJ-J</td><td>8.00</td></tr><tr><td class=\"font-medium\">MACD-DIF</td><td>0.1648</td></tr><tr><td class=\"font-medium\">收盘价</td><td>13.22</td></tr><tr><td class=\"font-medium\">60日均线</td><td>12.93</td></tr><tr><td class=\"font-medium\">涨跌幅</td><td>-1.34%</td></tr><tr><td class=\"font-medium\">成交额</td><td>157498</td></tr><tr><td class=\"font-medium\">总市值</td><td>235.0亿</td></tr><tr><td class=\"font-medium\">振幅</td><td>0.00%</td></tr>", "603583.SH": "<tr><td class=\"font-medium\">KDJ-J</td><td>8.47</td></tr><tr><td class=\"font-medium\">MACD-DIF</td><td>0.2183</td></tr><tr><td class=\"font-medium\">收盘价</td><td>26.20</td></tr><tr><td class=\"font-medium\">60日均线</td><td>26.09</td></tr><tr><td class=\"font-medium\">涨跌幅</td><td>-0.61%</td></tr><tr><td class=\"font-medium\">成交额</td><td>218370</td></tr><tr><td class=\"font-medium\">总市值</td><td>101.3亿</td></tr><tr><td class=\"font-medium\">振幅</td><td>0.00%</td></tr>", "600312.SH": "<tr><td class=\"font-medium\">KDJ-J</td><td>12.45</td></tr><tr><td class=\"font-medium\">MACD-DIF</td><td>0.3379</td></tr><tr><td class=\"font-medium\">收盘价</td><td>20.54</td></tr><tr><td class=\"font-medium\">60日均线</td><td>19.89</td></tr><tr><td class=\"font-medium\">涨跌幅</td><td>1.53%</td></tr><tr><td class=\"font-medium\">成交额</td><td>415534</td></tr><tr><td class=\"font-medium\">总市值</td><td>278.7亿</td></tr><tr><td class=\"font-medium\">振幅</td><td>0.00%</td></tr>"};
+    let kc, vc;
+
+    async function openChart(tsCode) {
+        const d = await SiteReports.loadStock(tsCode);
+        if (!d) return;
+        document.getElementById('modalTitle').textContent = tsCode + ' - ' + d.name;
+        document.getElementById('detailTable').innerHTML = '<table class="w-full text-sm mb-4"><tbody>' + (detailsData[tsCode] || '') + '</tbody></table>';
+        document.getElementById('chartModal').style.display = 'block';
+
+        requestAnimationFrame(() => { if (!SiteReports.isCurrent(d)) return;
+            if (kc) kc.dispose();
+            const cd = d.candlestick.map(c => ({value: [c[1], c[2], c[4], c[3]], itemStyle: {color: c[2]>=c[1]?'#ef4444':'#22c55e', color0: c[2]>=c[1]?'#ef4444':'#22c55e', borderColor: c[2]>=c[1]?'#ef4444':'#22c55e', borderColor0: c[2]>=c[1]?'#ef4444':'#22c55e'}}));
+            kc = echarts.init(document.getElementById('klineChart'));
+            kc.setOption({
+                title: { text: 'K线图', left: 'center', textStyle: { fontSize: 14 } },
+                tooltip: { trigger: 'axis', axisPointer: { type: 'cross' } },
+                grid: { left: '8%', right: '8%', top: '50px', bottom: '30px' },
+                xAxis: { type: 'category', data: d.dates, axisTick: { alignWithLabel: true } },
+                yAxis: { type: 'value', scale: true },
+                series: [{ type: 'candlestick', name: 'K线', data: cd, itemStyle: { color: '#ef4444', color0: '#22c55e', borderColor: '#ef4444', borderColor0: '#22c55e' } }]
+            });
+
+            if (vc) vc.dispose();
+            const vd = d.volume.map(v => ({ value: v.value, itemStyle: { color: v.is_double ? '#a855f7' : '#3b82f6' } }));
+            vc = echarts.init(document.getElementById('volumeChart'));
+            vc.setOption({
+                tooltip: { trigger: 'axis', formatter: function(params) {
+                    const i = params[0].dataIndex;
+                    const vol = d.volume[i];
+                    return params[0].axisValue + '<br/>成交额: ' + params[0].value.toFixed(2) + ' 万元<br/>是否倍量: ' + (vol.is_double ? '是' : '否');
+                }},
+                grid: { left: '8%', right: '8%', top: '40px', bottom: '30px' },
+                xAxis: { type: 'category', data: d.dates, show: false },
+                yAxis: { type: 'value' },
+                series: [{ type: 'bar', data: vd }]
+            });
+
+
+        });
+    }
+
+    function closeModal() { SiteReports.cancel(); document.getElementById('chartModal').style.display = 'none'; }
+    window.onclick = function(e) { if (e.target == document.getElementById('chartModal')) document.getElementById('chartModal').style.display = 'none'; }
+    </script>
+</body>
+</html>

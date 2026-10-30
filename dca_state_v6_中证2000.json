@@ -1,5 +1,5 @@
 {
-  "next_round_id": 5,
+  "next_round_id": 6,
   "total_sell_amount": 21024.85743145956,
   "trades": [
     {
@@ -276,6 +276,17 @@
       "reason": "R4 收盘(1.4170)<多空线(1.4432)全清",
       "total_shares": 0.0,
       "profit": 108.24
+    },
+    {
+      "date": "20261030",
+      "action": "BUY",
+      "price": 1.201,
+      "amount": 1000.0,
+      "shares": 832.6395,
+      "round": 5,
+      "reason": "周线J=-6.41, 金额=1000",
+      "total_shares": 832.6395,
+      "avg_cost": 1.201
     }
   ],
   "positions": [
@@ -369,10 +380,10 @@
         }
       ],
       "week_invested": [
-        "20240705",
-        "20240628",
-        "20240719",
         "20240712",
+        "20240705",
+        "20240719",
+        "20240628",
         "20240621"
       ]
     },
@@ -479,8 +490,8 @@
       "week_invested": [
         "20250124",
         "20250117",
-        "20250103",
-        "20250110"
+        "20250110",
+        "20250103"
       ]
     },
     {
@@ -562,8 +573,8 @@
         }
       ],
       "week_invested": [
-        "20260410",
-        "20260403"
+        "20260403",
+        "20260410"
       ]
     },
     {
@@ -667,10 +678,48 @@
         }
       ],
       "week_invested": [
-        "20260724",
         "20260731",
+        "20260724",
         "20260717",
         "20260807"
+      ]
+    },
+    {
+      "round_id": 5,
+      "shares": 832.639467110741,
+      "total_cost": 1000.0,
+      "total_invested": 1000.0,
+      "total_sell_amount": 0.0,
+      "dca_active": true,
+      "j_peak": 0.0,
+      "pullback_sold": false,
+      "sell_stage": 0,
+      "waiting_golden": false,
+      "golden_confirmed": false,
+      "price_below_dk_sold": false,
+      "round_budget": 5000,
+      "round_periods": 5,
+      "buy_count": 1,
+      "dca_exited": false,
+      "dca_exit_date": "",
+      "dca_exit_amount": 0.0,
+      "cycle_low": 1.201,
+      "j_high_done": false,
+      "trades": [
+        {
+          "date": "20261030",
+          "action": "BUY",
+          "price": 1.201,
+          "amount": 1000.0,
+          "shares": 832.6395,
+          "round": 5,
+          "reason": "周线J=-6.41, 金额=1000",
+          "total_shares": 832.6395,
+          "avg_cost": 1.201
+        }
+      ],
+      "week_invested": [
+        "20261030"
       ]
     }
   ]

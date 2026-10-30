@@ -34,6 +34,8 @@ import os
 import numpy as np
 import pandas as pd
 
+from weekly_completion import confirmed_week_dates
+
 from weekly_dca_strategy_v4 import WeeklyDCAStrategyV4 as _V4
 from weekly_dca_strategy_v5 import NoMultiplierPosition
 from weekly_dca_strategy_v6 import WeeklyDCAStrategyV6 as _V6
@@ -288,14 +290,8 @@ class WeeklyDCAStrategyV7(_V6):
         if not sorted_weekly_dates:
             logging.warning(f"[{self.name}] 无周线KDJ数据")
             return
-        # 决策只消费"已收盘周线"（与 V4 相同）：跳过本周半成品 bar
-        max_daily_date = all_dates[-1] if all_dates else None
-        decision_weekly_dates = [wd for wd in sorted_weekly_dates
-                                 if max_daily_date and wd < max_daily_date]
-        if len(decision_weekly_dates) < len(sorted_weekly_dates):
-            logging.info(f"[{self.name}] 本周周线尚未收盘，决策沿用 "
-                         f"{decision_weekly_dates[-1] if decision_weekly_dates else '无'} 收盘周线"
-                         f"（跳过半成品bar: {sorted_weekly_dates[-1]}）")
+        # 本周最后一个交易日收盘即确认，不等待下一条日线。
+        decision_weekly_dates = confirmed_week_dates(weekly_kdj, daily_df)
         for d in all_dates:
             best_wd = None
             for wd in decision_weekly_dates:

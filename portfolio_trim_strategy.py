@@ -39,6 +39,7 @@ import os
 
 import pandas as pd
 
+from weekly_completion import CONFIRMATION_RULE, mark_week_completion
 from weekly_dca_strategy import calc_kdj
 
 
@@ -152,8 +153,7 @@ class PortfolioTrimStrategy:
         w['week_key'] = (w['date'].dt.isocalendar().year.astype(str) + '_'
                          + w['date'].dt.isocalendar().week.astype(str).str.zfill(2))
         w['exec_date'] = w['week_key'].map(nxt)
-        if 'week_completed' not in w.columns:
-            w['week_completed'] = True
+        w = mark_week_completion(w, daily_df)
         return d, w
 
     def backtest(self, daily_df: pd.DataFrame, weekly_df: pd.DataFrame,
@@ -294,6 +294,7 @@ class PortfolioTrimStrategy:
             'weekly_j': round(j, 2), 'weekly_k': round(float(last_w.get('K', 0)), 2),
             'weekly_d': round(float(last_w.get('D', 0)), 2),
             'signal_week_date': str(last_w['trade_date']),
+            'confirmation_rule': CONFIRMATION_RULE,
             'preview_weekly_j': None,
             'shares': round(self.shares, 4), 'avg_cost': round(self.avg_cost, 4),
             'loss_pct': round(ret_pct, 2),

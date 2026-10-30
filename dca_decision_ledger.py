@@ -5,7 +5,8 @@
 
 解决"邮件操作建议每天漂移"的持久化层：每个ETF、每根已收盘周线对应一条
 不可变决策记录。一旦某天邮件发出过基于某周收盘周线的建议，后续任何一天的
-重放都不得撤销或改写它——只允许在新的一周收盘后追加新记录。
+重放不得改写同一确认规则下的建议。确认规则升级时，将旧记录归档到
+superseded_decisions，再记录新规则的建议，保留完整审计历史。
 
 账本文件: html/dca/decision_ledger.json
 结构:
@@ -67,6 +68,7 @@ def sync_ledger(summary_data: dict, path: str = DEFAULT_LEDGER_PATH) -> dict:
          保证"发出去的建议不可撤销"；若回放结果与账本不一致，记警告日志。
       3. 账本中没有 → 追加新记录（source='live'），即本周新确认的决策。
       4. 无 signal_week 的 ETF 跳过（例如数据不足）。
+      5. confirmation_rule 升级时归档原记录后重新确认；同一规则内仍锁定建议。
 
     Returns:
         传入的 summary_data（就地修改并返回，便于链式调用）。
@@ -87,10 +89,21 @@ def sync_ledger(summary_data: dict, path: str = DEFAULT_LEDGER_PATH) -> dict:
             'weekly_j': item.get('weekly_j', 0),
             'recorded_at': now_str,
             'source': 'live',
+            'confirmation_rule': item.get('confirmation_rule'),
         }
         etf_book = etfs.setdefault(name, {'current_week': None, 'weeks': {}})
         weeks = etf_book.setdefault('weeks', {})
         existing = weeks.get(signal_week)
+        rule = item.get('confirmation_rule')
+        if existing is not None and rule and existing.get('confirmation_rule') != rule:
+            # A corrected confirmation policy must not be locked to an old,
+            # incorrectly selected action. Keep the original decision for audit.
+            etf_book.setdefault('superseded_decisions', []).append({
+                **existing, 'superseded_at': now_str,
+                'reason': f"周线确认规则升级为 {rule}",
+            })
+            existing = None
+            entry_live['source'] = 'rule_migration'
         if existing is None:
             weeks[signal_week] = entry_live
             etf_book['current_week'] = signal_week
@@ -109,7 +122,7 @@ def sync_ledger(summary_data: dict, path: str = DEFAULT_LEDGER_PATH) -> dict:
             detail = item.get('action_detail', '')
             mark = f"依据{signal_week}收盘周线"
             if mark not in detail:
-                item['action_detail'] = f"{detail} ｜ {mark}（已确认）"
+                item['action_detail'] = f"{detail} ｜ {mark}（已确认；同一信号仅执行一次）"
             item['decision_source'] = 'ledger'
             etf_book['current_week'] = signal_week
 

@@ -117,6 +117,16 @@ def _position_return_info(position, etf_last_price=0):
     return 0, total_invested, holding_value
 
 
+def _dca_buy_note(position, etf):
+    if position.get('action') not in ('buy', 'invest_remaining'):
+        return ''
+    detail = escape_html(position.get('action_detail', ''))
+    week = escape_html(etf.get('signal_week_date') or '')
+    source = f'依据{week}收盘周线；' if week else ''
+    return (f'<div style="font-size:11px;font-weight:normal;margin-top:4px">{detail}'
+            f'<br>{source}同一信号仅执行一次，已执行请勿重复买入。</div>')
+
+
 def generate_dca_section(dca_summary):
     """生成 ETF 定投汇总 HTML（支持多轮持仓）"""
     if not dca_summary:
@@ -159,7 +169,7 @@ def generate_dca_section(dca_summary):
             rows += f"""
             <tr>
                 <td><strong>{name}</strong><br><span style="color:#999;font-size:11px">{ts_code}</span></td>
-                <td style="color:{color};font-weight:bold">{label}</td>
+                <td style="color:{color};font-weight:bold">{label}{_dca_buy_note(pos, etf)}</td>
                 <td style="color:{pos_ret_color};font-weight:bold">{pos_ret_str}</td>
                 <td>{pos_remaining:.0f}元</td>
             </tr>"""
@@ -220,7 +230,7 @@ def generate_dca_section(dca_summary):
                 rows += f"""
             <tr style="background:#fafafa">
                 <td style="padding-left:24px;color:#888;font-size:12px">↳ R{round_id} | {shares:.0f}份 | 成本{avg_cost:.3f}</td>
-                <td style="color:{color};font-size:12px">{label}</td>
+                <td style="color:{color};font-size:12px">{label}{_dca_buy_note(pos, etf)}</td>
                 <td style="color:{pos_ret_color};font-size:12px">{pos_ret_str}</td>
                 <td style="font-size:12px;color:#666">{pos_remaining:.0f}元</td>
             </tr>"""

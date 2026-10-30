@@ -6,7 +6,7 @@
 测试方法：把同一批历史数据分别截断到同一周内的多个交易日（0914~0918）
 以及下周初（0921），各跑一遍完整回测+get_next_action，断言：
 
-  A. 同一周内任意截断日，已收盘周线集合相同 → 交易信号与操作建议必须完全一致；
+  A. 周一至周四已收盘周线集合相同；周五收盘后应立即确认本周周线；
   B. 下周初(0921)的run与本周(0918)的run相比，fill日期<=0917的交易必须一致
      （新一周只允许引入基于0918收盘周线的新决策，不得改写历史）；
   C. signal_week_date 必须指向最后一根已收盘周线，而非本周半成品bar。
@@ -76,7 +76,7 @@ def check_etf(etf, daily_full):
         s, ai = run_one(etf, daily_full, d)
         results[d] = (s, ai)
 
-    intra = TRUNCATION_DATES[:5]          # 同一周 0914~0918
+    intra = TRUNCATION_DATES[:4]          # 周一至周四；周五收盘应确认新周线
     first = intra[0]
 
     # 断言A1：同周内交易信号一致（fill日期<=0916，避开末日fill回退差异）
@@ -105,16 +105,17 @@ def check_etf(etf, daily_full):
         ok = False
         print(f"  ❌ B失败: 0921截断改写了<=0917的历史交易\n     0918: {t0918}\n     0921: {t0921}")
 
-    # 断言C：signal_week_date 是最后一根已收盘周线
+    # 断言C：周一至周四沿用前周；周五收盘与下周一均使用本周。
     for d in intra:
         sw = results[d][1].get('signal_week_date')
-        if sw != '20260911':   # 0914~0918本周的上一根已收盘周线是0911
+        if sw != '20260911':   # 0914~0917的上一根已收盘周线是0911
             ok = False
             print(f"  ❌ C失败: {d}截断的signal_week_date={sw}, 期望20260911")
-    sw = results['20260921'][1].get('signal_week_date')
-    if sw != '20260918':
-        ok = False
-        print(f"  ❌ C失败: 0921截断的signal_week_date={sw}, 期望20260918")
+    for d in ('20260918', '20260921'):
+        sw = results[d][1].get('signal_week_date')
+        if sw != '20260918':
+            ok = False
+            print(f"  ❌ C失败: {d}截断的signal_week_date={sw}, 期望20260918")
 
     # 输出观察表
     print(f"\n[{name}] {'✅ 通过' if ok else '❌ 未通过'}")
@@ -153,7 +154,7 @@ def main():
             print(f"[{etf['name']}] ❌ 异常: {e}")
 
     print('\n' + '=' * 60)
-    print('总体结果:', '✅ 全部通过 — 同周内建议不随截断日漂移' if all_ok else '❌ 存在失败项')
+    print('总体结果:', '✅ 全部通过 — 周中稳定、周末收盘立即确认' if all_ok else '❌ 存在失败项')
     sys.exit(0 if all_ok else 1)
 
 

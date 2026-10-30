@@ -25,6 +25,8 @@ import logging
 
 import pandas as pd
 
+from weekly_completion import confirmed_week_dates
+
 from weekly_dca_strategy_v2 import (
     WeeklyDCAStrategy,
     calc_kdj,
@@ -111,14 +113,8 @@ class WeeklyDCAStrategyV4(WeeklyDCAStrategy):
         if not sorted_weekly_dates:
             logging.warning(f"[{self.name}] 无周线KDJ数据")
             return
-        # 决策只消费"已收盘周线"：本周半成品bar（标签==最新交易日）不参与判断，
-        # 避免同一周内J值每日漂移造成"前一天卖出、后一天不卖"的信号抖动。
-        max_daily_date = all_dates[-1] if all_dates else None
-        decision_weekly_dates = [wd for wd in sorted_weekly_dates
-                                 if max_daily_date and wd < max_daily_date]
-        if len(decision_weekly_dates) < len(sorted_weekly_dates):
-            logging.info(f"[{self.name}] 本周周线尚未收盘，决策沿用 {decision_weekly_dates[-1] if decision_weekly_dates else '无'} 收盘周线"
-                         f"（跳过半成品bar: {sorted_weekly_dates[-1]}）")
+        # 本周最后一个交易日收盘即确认，不等待下一条日线。
+        decision_weekly_dates = confirmed_week_dates(weekly_kdj, daily_df)
         for d in all_dates:
             best_wd = None
             for wd in decision_weekly_dates:

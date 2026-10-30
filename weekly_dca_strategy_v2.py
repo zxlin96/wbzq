@@ -28,6 +28,10 @@ import logging
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Tuple
 
+from weekly_completion import (CONFIRMATION_RULE, attach_exchange_calendar,
+    mark_week_completion, confirmed_weeks, confirmed_week_dates,
+    refresh_action_summary, waiting_for_week_close, display_weekly_value)
+
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s | %(message)s')
 
 try:
@@ -99,12 +103,12 @@ def _get_etf_data(ts_code: str, start_date, end_date) -> pd.DataFrame:
         df['close_qfq'] = df['close']
     logging.info(f"获取ETF数据 {ts_code}: {len(df)} 条, "
                  f"{df['trade_date'].iloc[0]} ~ {df['trade_date'].iloc[-1]}")
-    return df
+    return attach_exchange_calendar(df, pro)
 
 
-def resample_to_weekly(df: pd.DataFrame) -> pd.DataFrame:
-    df = df.copy()
-    df['date'] = pd.to_datetime(df['trade_date'], format='%Y%m%d')
+def resample_to_weekly(df: pd.DataFrame, *, as_of=None, trade_calendar=None) -> pd.DataFrame:
+    df = df.sort_values('trade_date').copy().reset_index(drop=True)
+    df['date'] = pd.to_datetime(df['trade_date'].astype(str), format='%Y%m%d')
     df['week_key'] = df['date'].dt.isocalendar().year.astype(str) + '_' + \
                      df['date'].dt.isocalendar().week.astype(str).str.zfill(2)
     weekly = df.groupby('week_key').agg({
@@ -117,11 +121,8 @@ def resample_to_weekly(df: pd.DataFrame) -> pd.DataFrame:
     }).reset_index(drop=True)
     weekly = weekly.sort_values('date').reset_index(drop=True)
     weekly = weekly.dropna(subset=['open_qfq', 'high_qfq', 'low_qfq', 'close_qfq'])
-    # 标记本周"半成品"周线：bar日期==数据集最新日期 → 本周尚未收盘。
-    # 决策只应使用 week_completed=True 的bar，避免盘中J值漂移导致信号抖动。
-    latest_date = df['date'].max()
-    weekly['week_completed'] = weekly['date'] < latest_date
-    return weekly
+    weekly.attrs.update(df.attrs)
+    return mark_week_completion(weekly, df, as_of=as_of, trade_calendar=trade_calendar)
 
 
 def calc_kdj(df: pd.DataFrame, n: int = 9) -> pd.DataFrame:
@@ -567,16 +568,8 @@ class WeeklyDCAStrategy:
         if not sorted_weekly_dates:
             logging.warning(f"[{self.name}] 无周线KDJ数据")
             return
-        # 决策只消费"已收盘周线"：周线bar以该周最后交易日为标签，
-        # 标签日期 < 最新交易日 的bar才是已完成周。本周半成品bar
-        # （标签==最新交易日）只用于展示预览，不参与买卖判断——
-        # 否则同一周内J值每日漂移，会出现"前一天卖出、后一天不卖"的信号抖动。
-        max_daily_date = all_dates[-1] if all_dates else None
-        decision_weekly_dates = [wd for wd in sorted_weekly_dates
-                                 if max_daily_date and wd < max_daily_date]
-        if len(decision_weekly_dates) < len(sorted_weekly_dates):
-            logging.info(f"[{self.name}] 本周周线尚未收盘，决策沿用 {decision_weekly_dates[-1] if decision_weekly_dates else '无'} 收盘周线"
-                         f"（跳过半成品bar: {sorted_weekly_dates[-1]}）")
+        # 本周最后一个交易日收盘即确认，不等待下一条日线。
+        decision_weekly_dates = confirmed_week_dates(weekly_kdj, daily_df)
         for d in all_dates:
             best_wd = None
             for wd in decision_weekly_dates:
@@ -790,12 +783,10 @@ class WeeklyDCAStrategy:
         last_daily = daily_with_dk.iloc[-1]
         last_price = last_daily['close_qfq']
         last_date = last_daily['trade_date']
-        # 决策只使用已收盘周线；本周半成品周线的J仅作为"盘中预览"展示，
-        # 避免建议随盘中数据每日漂移。
-        max_daily_date = str(daily_with_dk['trade_date'].max())
-        completed = weekly_kdj[weekly_kdj['trade_date'] < max_daily_date]
-        last_weekly = completed.iloc[-1] if not completed.empty else weekly_kdj.iloc[0]
-        forming = weekly_kdj[weekly_kdj['trade_date'] >= max_daily_date]
+        completed, forming = confirmed_weeks(weekly_kdj, daily_df)
+        if completed.empty:
+            return waiting_for_week_close(self, daily_with_dk, forming)
+        last_weekly = completed.iloc[-1]
         preview_j = forming.iloc[-1].get('J') if not forming.empty else None
         weekly_j = last_weekly.get('J')
         if weekly_j is None or pd.isna(weekly_j):
@@ -816,6 +807,7 @@ class WeeklyDCAStrategy:
             'weekly_k': round(float(last_weekly.get('K', 0)), 2),
             'weekly_d': round(float(last_weekly.get('D', 0)), 2),
             'signal_week_date': signal_week_date,
+            'confirmation_rule': CONFIRMATION_RULE,
             'preview_weekly_j': (round(float(preview_j), 2)
                                  if preview_j is not None and not pd.isna(preview_j)
                                  else None),
@@ -975,7 +967,7 @@ class WeeklyDCAStrategy:
             result['action_color'] = first.get('action_color', '#95a5a6')
             details = [p.get('action_detail', '') for p in result['positions']]
             result['action_detail'] = ' | '.join(details)
-        return result
+        return refresh_action_summary(result)
 
     def calc_nav_curve(self, daily_df: pd.DataFrame) -> pd.DataFrame:
         trade_map = {}
@@ -1186,9 +1178,9 @@ h2 {{ color: #333; font-size: 18px; margin: 15px 0 10px; }}
 </div>
 <div class="action-detail">{na['action_detail']}</div>
 <div class="action-metrics">
-    <div class="action-metric">周线K={na['weekly_k']:.2f}</div>
-    <div class="action-metric">周线D={na['weekly_d']:.2f}</div>
-    <div class="action-metric">周线J={na['weekly_j']:.2f}</div>
+    <div class="action-metric">周线K={display_weekly_value(na['weekly_k'])}</div>
+    <div class="action-metric">周线D={display_weekly_value(na['weekly_d'])}</div>
+    <div class="action-metric">周线J={display_weekly_value(na['weekly_j'])}</div>
     {"<div class='action-metric'>" + mid_dk_diff + "</div>" if mid_dk_diff else ""}
     {"<div class='action-metric'>" + position_info + "</div>" if position_info else ""}
 </div>

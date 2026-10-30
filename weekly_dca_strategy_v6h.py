@@ -44,6 +44,8 @@ import logging
 
 import pandas as pd
 
+from weekly_completion import confirmed_week_dates, refresh_action_summary
+
 from weekly_dca_strategy import calc_kdj, calc_zhixing_duokong
 from weekly_dca_strategy_v5 import NoMultiplierPosition
 from weekly_dca_strategy_v6 import WeeklyDCAStrategyV6
@@ -167,7 +169,7 @@ class WeeklyDCAStrategyV6H(WeeklyDCAStrategyV6):
             res['action_color'] = first.get('action_color', res.get('action_color'))
             res['action_detail'] = ' | '.join(
                 p.get('action_detail', '') for p in res['positions'])
-        return res
+        return refresh_action_summary(res)
 
     def backtest(self, daily_df: pd.DataFrame, weekly_df: pd.DataFrame,
                  backtest_start: str = None):
@@ -213,10 +215,8 @@ class WeeklyDCAStrategyV6H(WeeklyDCAStrategyV6):
         if not sorted_weekly_dates:
             logging.warning(f"[{self.name}] 无周线KDJ数据")
             return
-        # 决策只消费"已收盘周线"，跳过本周半成品 bar（沿用 V4 口径）
-        max_daily_date = all_dates[-1] if all_dates else None
-        decision_weekly_dates = [wd for wd in sorted_weekly_dates
-                                 if max_daily_date and wd < max_daily_date]
+        # 本周最后一个交易日收盘即确认，不等待下一条日线。
+        decision_weekly_dates = confirmed_week_dates(weekly_kdj, daily_df)
         for d in all_dates:
             best_wd = None
             for wd in decision_weekly_dates:

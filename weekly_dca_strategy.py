@@ -1720,6 +1720,7 @@ window.addEventListener('resize', function() {{ chart.resize(); }});
 
 
 def _generate_dca_summary(results: dict, output_dir: str) -> dict:
+    from email_digest import weekly_comparison
     name_to_tscode = {}
     try:
         with open('etf_config.json', 'r', encoding='utf-8') as f:
@@ -1744,7 +1745,7 @@ def _generate_dca_summary(results: dict, output_dir: str) -> dict:
             nav_last = nav_curve.iloc[-1] if nav_curve is not None and not nav_curve.empty else None
             cum_invested = nav_last.get('cum_invested', strategy.total_invested) if nav_last is not None else strategy.total_invested
             total_value = nav_last.get('total_value', 0) if nav_last is not None else 0
-            total_return = total_value + strategy.total_sell_amount - cum_invested
+            total_return = float(total_value + strategy.total_sell_amount - cum_invested)
             return_pct = (total_return / cum_invested * 100) if cum_invested > 0 else 0
             action_info = {}
             daily_df = getattr(strategy, '_daily_df', None)
@@ -1780,6 +1781,12 @@ def _generate_dca_summary(results: dict, output_dir: str) -> dict:
                 'return_pct': round(return_pct, 2),
                 'trade_count': len(strategy.trades),
             }
+            # Presentation data only; preserve the original strategy and ledger.
+            cutoff = (pd.Timestamp(item['last_date']) - pd.Timedelta(days=28)).strftime('%Y%m%d') if item['last_date'] else ''
+            item['recent_trades'] = [t.copy() for t in strategy.trades if str(t['date']) >= cutoff]
+            if weekly_df is not None and daily_df is not None:
+                completed, _ = confirmed_weeks(calc_kdj(weekly_df), daily_df)
+                item.update(weekly_comparison(completed))
             # 标注建议依据的已收盘周线与有效期，杜绝" silently 改口"
             sw = item.get('signal_week_date')
             if sw:

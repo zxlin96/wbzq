@@ -174,6 +174,15 @@ def advance(etf: dict, start_date: str, end_date: str, budget: float,
 
     holding_value = st['shares'] * last_px
     total_assets = st['wallet'] + holding_value
+    # Read-only valuation comparison; use only observations available by last_date.
+    previous_pe = previous_pct = previous_pe_date = None
+    if pe_df is not None and pe_date is not None:
+        previous = pe_df[(pe_df['trade_date'] < pe_date) & pe_df['pe_pct'].notna()].tail(1)
+        if not previous.empty:
+            previous_pe = float(previous.iloc[0]['pe_ttm'])
+            previous_pct = float(previous.iloc[0]['pe_pct']) * 100
+            previous_pe_date = str(previous.iloc[0]['trade_date'])
+    budget_remaining = (st['parts_left'] * st['part_amt'] if st['in_round'] else st['wallet'])
 
     # ---- 图表数据：近五年价格 × PE分位（对齐到同一组日期）+ 策略买卖点 ----
     chart_df = df_all.tail(1220)
@@ -219,6 +228,10 @@ def advance(etf: dict, start_date: str, end_date: str, budget: float,
         'pe_ttm': pe_now,
         'pe_pct': pe_pct_now,
         'pe_date': pe_date if pe_pct_now is not None else None,
+        'previous_pe_ttm': previous_pe,
+        'previous_pe_pct': previous_pct,
+        'previous_pe_date': previous_pe_date,
+        'budget_remaining': round(float(budget_remaining), 2),
         'gate_enabled': etf['index_code'] is not None,
         'gate_open': bool(gate[-1]) if gate is not None else None,
         'wallet': st['wallet'],
@@ -275,7 +288,8 @@ def main():
         'pool': [{k: r[k] for k in ('name', 'ts_code', 'last_date', 'last_price',
                                     'action_label', 'action_color', 'today_action',
                                     'parts_bought', 'n_parts', 'avg_cost', 'vs_cost_pct',
-                                    'next_desc', 'pe_ttm', 'pe_pct', 'gate_enabled',
+                                    'next_desc', 'pe_ttm', 'pe_pct', 'pe_date', 'gate_enabled', 'gate_open',
+                                    'previous_pe_ttm', 'previous_pe_pct', 'previous_pe_date', 'budget_remaining',
                                     'wallet', 'holding_value', 'total_profit',
                                     'phase', 'start_date')}
                  for r in results],

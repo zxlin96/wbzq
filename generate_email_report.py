@@ -535,98 +535,50 @@ def generate_backtest_c_section(start_date: str, end_date: str):
         return ""
 
 
-def generate_email_report(status="success", repo="", ref="", run_url=""):
-    """生成完整邮件 HTML"""
-    # 加载数据
-    reports = load_reports_json()
-    strategy_state = load_strategy_state()
-    dca_summary = load_dca_summary()
-    pct_summary = load_4pct_summary()
-    multi_hints = load_multi_indicator_hints()
-
-    # 状态图标和颜色
-    status_map = {
-        "success": ("✅ 成功", "#27ae60"),
-        "failure": ("❌ 失败", "#e74c3c"),
-        "cancelled": ("⚠️ 取消", "#f39c12"),
-    }
-    status_text, status_color = status_map.get(status, (status, "#333"))
-
-    # 概览数据
-    latest_date = reports.get("latestDate", "") if reports else ""
-    total_stocks = reports.get("totalStocks") if reports else None
-    if total_stocks is None:
-        total_stocks = "—"
-
-    report_url = "https://zxlin96.github.io/wbzq/"
-
-    html = f"""<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"></head>
-<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-             color: #333; max-width: 700px; margin: 0 auto; padding: 16px;">
-
-<h2 style="border-bottom:2px solid #3498db;padding-bottom:8px">
-    📊 股票策略执行通知
-</h2>
-
-<table style="font-size:14px;margin-bottom:20px">
-    <tr>
-        <td style="padding:4px 12px"><strong>📅 日期:</strong></td>
-        <td style="padding:4px 12px">{latest_date}</td>
-    </tr>
-    <tr>
-        <td style="padding:4px 12px"><strong>📋 状态:</strong></td>
-        <td style="padding:4px 12px;color:{status_color};font-weight:bold">{status_text}</td>
-    </tr>
-</table>
-
-<h3 style="color:#2c3e50;border-left:4px solid #3498db;padding-left:10px;margin-top:24px">
-    📈 选股结果概览
-</h3>
-<table style="border-collapse:collapse;font-size:14px;margin-bottom:16px">
-    <tr>
-        <td style="padding:8px 16px;background:#ebf5fb;text-align:center;border-radius:4px;margin:4px">
-            <div style="font-size:24px;font-weight:bold;color:#2980b9">{total_stocks}</div>
-            <div style="font-size:12px;color:#666">主策略</div>
-        </td>
-    </tr>
-</table>
-
-<h3 style="color:#2c3e50;border-left:4px solid #9b59b6;padding-left:10px;margin-top:24px">
-    📊 情绪反弹策略
-</h3>
-{generate_sentiment_section(strategy_state, latest_date)}
-
-<h3 style="color:#2c3e50;border-left:4px solid #e67e22;padding-left:10px;margin-top:24px">
-    🏷️ 策略3 超阈值行业提示
-</h3>
-{generate_multi_indicator_hint_section(multi_hints, load_backtest_etf_map())}
-
-<h3 style="color:#2c3e50;border-left:4px solid #27ae60;padding-left:10px;margin-top:24px">
-    💰 ETF 定投策略汇总
-</h3>
-{generate_dca_section(dca_summary)}
-
-<h3 style="color:#2c3e50;border-left:4px solid #c0392b;padding-left:10px;margin-top:24px">
-    🎯 4%定投策略（估值门版）
-</h3>
-{generate_4pct_section(pct_summary)}
-
-<hr style="border:none;border-top:1px solid #ddd;margin:20px 0">
-<p style="font-size:13px">
-    📈 <a href="{report_url}" style="color:#3498db">查看完整报告</a>
-    &nbsp;&nbsp;|&nbsp;&nbsp;
-    🔍 <a href="{run_url}" style="color:#3498db">查看执行详情</a>
-</p>
-<p style="color:#999;font-size:11px;margin-top:16px">
-    此邮件由 GitHub Actions 自动发送 · {repo} · {ref}
-</p>
-
-</body>
-</html>"""
-
-    return html
+def generate_email_report(status="success", repo="", ref="", run_url="", as_of=None):
+    """Render a read-only digest; as_of controls notification windows, not strategy runs."""
+    from email_digest import (report_time, date_key, enrich_archived_summary, enrich_valuation_summary, load_market_context,
+                              collect_events, render_actions, render_market, render_holdings,
+                              render_valuation, fmt)
+    from html import escape
+    stamp = report_time(as_of)
+    reports = load_reports_json() or {}
+    state = load_strategy_state() or {}
+    summary = enrich_archived_summary(load_dca_summary() or {})
+    valuation = enrich_valuation_summary(load_4pct_summary() or {})
+    latest_date = date_key(reports.get('latestDate'))
+    context = load_market_context('.', latest_date)
+    events = collect_events(summary, state, valuation, latest_date, stamp)
+    status_text = {'success':'运行成功','failure':'运行失败','cancelled':'运行取消'}.get(status,status)
+    total = reports.get('totalStocks')
+    count_text = str(total) if total is not None else '—'
+    def section(title, content):
+        return (f'<section style="margin-top:24px"><h2 style="font-size:18px;color:#172d48;'
+                f'border-bottom:2px solid #e6eef8;padding-bottom:8px">{title}</h2>{content}</section>')
+    holdings = render_holdings(summary)
+    position = fmt(state.get('position'), 2) if state else '暂无数据'
+    sentiment = (f'<p style="font-size:13px">数据截至 {escape(str(state.get("last_trade_date") or "—"))} · '
+                 f'仓位 {position} 个记账单位 · 红柱 {fmt(state.get("red_bar_count"),0)} · '
+                 f'绿柱 {fmt(state.get("green_bar_count"),0)}</p>')
+    action_title = '本次操作' + (f'（{len(events)}项记录）' if events else '')
+    body = section(action_title, render_actions(events, stamp))
+    body += section('市场情绪与持仓', render_market(context)+sentiment)
+    body += section('ETF持仓简表', holdings)
+    body += section('估值定投 · 独立检查', render_valuation(valuation, latest_date))
+    body += section('选股与行业提示',f'<p style="font-size:13px">主策略选股：{escape(count_text)}只</p>'+
+                    generate_multi_indicator_hint_section(load_multi_indicator_hints(), load_backtest_etf_map()))
+    run_link = f' · <a href="{escape(run_url,quote=True)}">查看执行详情</a>' if run_url else ''
+    return f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;background:#f3f6fb;color:#26364a;font-family:Arial,'Microsoft YaHei',sans-serif;line-height:1.5">
+<div style="max-width:720px;margin:0 auto;padding:20px 12px;background:#fff">
+<h1 style="font-size:24px;margin:0 0 8px">股票策略日报</h1>
+<p style="font-size:12px;color:#64748b;margin:0">生成于 {stamp.strftime('%Y-%m-%d %H:%M')} 北京时间 · {escape(status_text)}<br>最新报告数据：{escape(latest_date or '暂无')}</p>
+{body}
+<p style="text-align:center;margin:26px 0"><a href="https://zxlin96.github.io/wbzq/" style="display:inline-block;background:#1765c1;color:white;padding:12px 20px;text-decoration:none;border-radius:6px">查看全部持仓与完整报告 →</a></p>
+<p style="font-size:11px;color:#64748b;border-top:1px solid #e2e8f0;padding-top:12px">记录日期为策略记录日期，不代表券商成交确认。同一信号仅执行一次，已执行请勿重复操作。周日是本周信号复核；逐轮明细、历史记录和图表见完整报告。</p>
+<p style="font-size:11px;color:#64748b">{escape(repo)} · {escape(ref)}{run_link}</p>
+</div></body></html>'''
 
 
 def main():
@@ -639,6 +591,7 @@ def main():
                         help="分支")
     parser.add_argument("--run-url", type=str, default="",
                         help="Action Run URL")
+    parser.add_argument("--as-of", help="邮件生成时点（ISO时间；无时区按北京时间），用于复现提醒窗口")
     args = parser.parse_args()
 
     html = generate_email_report(
@@ -646,6 +599,7 @@ def main():
         repo=args.repo,
         ref=args.ref,
         run_url=args.run_url,
+        as_of=args.as_of,
     )
 
     output_path = "email_report.html"

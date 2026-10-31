@@ -1,5 +1,5 @@
 {
- "last_update": "2026-10-31 22:20",
+ "last_update": "2026-10-31 22:50",
  "gate_threshold": 50.0,
  "budget": 20000.0,
  "pool": [
@@ -11,6 +11,7 @@
    "action_label": "等待估值门",
    "action_color": "#95a5a6",
    "today_action": null,
+   "recent_trades": [],
    "parts_bought": 0,
    "n_parts": 10,
    "avg_cost": null,
@@ -39,6 +40,7 @@
    "action_label": "等待估值门",
    "action_color": "#95a5a6",
    "today_action": null,
+   "recent_trades": [],
    "parts_bought": 0,
    "n_parts": 10,
    "avg_cost": null,
@@ -67,6 +69,7 @@
    "action_label": "等待估值门",
    "action_color": "#95a5a6",
    "today_action": null,
+   "recent_trades": [],
    "parts_bought": 0,
    "n_parts": 10,
    "avg_cost": null,

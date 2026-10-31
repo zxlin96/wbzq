@@ -7,6 +7,7 @@
  "action_label": "等待估值门",
  "action_color": "#95a5a6",
  "today_action": null,
+ "recent_trades": [],
  "parts_bought": 0,
  "n_parts": 10,
  "part_amount": 2000.0,

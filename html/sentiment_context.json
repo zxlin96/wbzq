@@ -1,0 +1,13 @@
+{
+  "data_date": "20261030",
+  "j13_count": 3036.0,
+  "previous_count": 1770.0,
+  "previous_date": "20261029",
+  "change": 1266.0,
+  "change_pct": 71.52542372881356,
+  "reference_p90": 2670.1,
+  "previous_reference_p90": 2670.1,
+  "reference_window": 60,
+  "strategy_threshold": 2576.8,
+  "strategy_trigger": true
+}

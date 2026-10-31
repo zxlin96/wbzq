@@ -541,6 +541,7 @@ def generate_email_report(status="success", repo="", ref="", run_url="", as_of=N
                               collect_events, render_actions, render_market, render_holdings,
                               render_valuation, fmt)
     from html import escape
+    from datetime import timedelta
     stamp = report_time(as_of)
     reports = load_reports_json() or {}
     state = load_strategy_state() or {}
@@ -548,7 +549,9 @@ def generate_email_report(status="success", repo="", ref="", run_url="", as_of=N
     valuation = enrich_valuation_summary(load_4pct_summary() or {})
     latest_date = date_key(reports.get('latestDate'))
     context = load_market_context('.', latest_date)
-    events = collect_events(summary, state, valuation, latest_date, stamp)
+    events = collect_events(summary, state, valuation, latest_date, stamp, include_week_history=True)
+    signal_date = min(latest_date, stamp.strftime('%Y%m%d'))
+    current_events = [e for e in events if e['date'] == signal_date]
     status_text = {'success':'运行成功','failure':'运行失败','cancelled':'运行取消'}.get(status,status)
     total = reports.get('totalStocks')
     count_text = str(total) if total is not None else '—'
@@ -560,13 +563,33 @@ def generate_email_report(status="success", repo="", ref="", run_url="", as_of=N
     sentiment = (f'<p style="font-size:13px">数据截至 {escape(str(state.get("last_trade_date") or "—"))} · '
                  f'仓位 {position} 个记账单位 · 红柱 {fmt(state.get("red_bar_count"),0)} · '
                  f'绿柱 {fmt(state.get("green_bar_count"),0)}</p>')
-    action_title = '本次操作' + (f'（{len(events)}项记录）' if events else '')
-    body = section(action_title, render_actions(events, stamp))
+    action_title = '本次操作' + (f'（{len(current_events)}项记录）' if current_events else '')
+    signal_label = f'{signal_date[:4]}-{signal_date[4:6]}-{signal_date[6:8]}' if signal_date else '暂无数据'
+    current_note = f'最新已收盘数据日 {signal_label} 的操作信号。'
+    if stamp.weekday() == 6:
+        week_start = (stamp - timedelta(days=stamp.weekday())).strftime('%Y%m%d')
+        if signal_date >= week_start:
+            friday = (stamp - timedelta(days=2)).strftime('%Y%m%d')
+            origin = '周五已确认信号' if signal_date == friday else '最近数据日信号'
+            current_note = f'{origin}（{signal_label}），供下周操作准备。'
+        else:
+            current_note = f'最新数据日 {signal_label}；尚无本周新数据。'
+    body = section(action_title, render_actions(current_events, current_note))
     body += section('市场情绪与持仓', render_market(context)+sentiment)
     body += section('ETF持仓简表', holdings)
     body += section('估值定投 · 独立检查', render_valuation(valuation, latest_date))
     body += section('选股与行业提示',f'<p style="font-size:13px">主策略选股：{escape(count_text)}只</p>'+
                     generate_multi_indicator_hint_section(load_multi_indicator_hints(), load_backtest_etf_map()))
+    if stamp.weekday() in (4, 6):
+        start = stamp - timedelta(days=stamp.weekday())
+        end = start + timedelta(days=6)
+        label = '本周信号复核' if stamp.weekday() == 6 else '本周记录核对'
+        week_note = (f'{start:%Y-%m-%d} 至 {end:%Y-%m-%d} · {label}。'
+                     '汇总周线定投、情绪反弹和估值定投，含本次已列记录。')
+        week_title = '本周操作汇总／复核' + (f'（{len(events)}项记录）' if events else '')
+        body += section(week_title, render_actions(events, week_note, '本周暂无操作记录'))
+    else:
+        body += section('本周操作汇总／复核', '<p style="font-size:13px;color:#64748b">周五、周日提供本周操作汇总。</p>')
     run_link = f' · <a href="{escape(run_url,quote=True)}">查看执行详情</a>' if run_url else ''
     return f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"></head>

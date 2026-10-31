@@ -35,6 +35,7 @@ from static_site import write_report
 import argparse
 import concurrent.futures
 import glob
+import json
 import logging
 import os
 import pickle
@@ -1607,10 +1608,14 @@ def run_sentiment_rebound_strategy(df, end_date, data_manager):
         count_series = daily_first_j13_counts.set_index('trade_date')['count']
         observation_dates = sorted(df['trade_date'].unique())
         observations = [dict(trade_date=str(d), count=int(count_series.get(d, 0))) for d in observation_dates]
-        context = market_context(observations, j13_stats)
-        os.makedirs('html', exist_ok=True)
-        with open(os.path.join('html', 'sentiment_context.json'), 'w', encoding='utf-8') as context_file:
-            json.dump(context, context_file, ensure_ascii=False, indent=2, allow_nan=False)
+        try:
+            context = market_context(observations, j13_stats)
+            payload = json.dumps(context, ensure_ascii=False, indent=2, allow_nan=False)
+            os.makedirs('html', exist_ok=True)
+            with open(os.path.join('html', 'sentiment_context.json'), 'w', encoding='utf-8') as context_file:
+                context_file.write(payload)
+        except (OSError, ValueError, TypeError) as e:
+            logging.warning(f'邮件情绪统计导出失败，继续执行策略: {e}')
         
         print(f"\n📈 J13市场统计:")
         print(f"  当前J13数量: {j13_stats['current']:.0f} 只")

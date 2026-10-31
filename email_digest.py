@@ -139,6 +139,8 @@ def enrich_valuation_summary(summary, root=Path('.')):
             for key in ('pe_date','gate_open','previous_pe_ttm','previous_pe_pct','previous_pe_date','budget_remaining'):
                 if key not in etf and key in saved:
                     etf[key] = saved[key]
+            if 'recent_trades' not in etf:
+                etf['recent_trades'] = saved.get('recent_trades', saved.get('trades', []))
             if 'budget_remaining' not in etf:
                 state = saved.get('state', {})
                 if state.get('in_round'):
@@ -150,7 +152,8 @@ def enrich_valuation_summary(summary, root=Path('.')):
     return summary
 
 
-def collect_events(summary, sentiment, valuation, latest_date, as_of=None):
+def collect_events(summary, sentiment, valuation, latest_date, as_of=None, *, include_week_history=False):
+    """Read reminder records, optionally including daily strategies' week history."""
     stamp = report_time(as_of)
     today = stamp.strftime('%Y%m%d')
     start = (stamp-timedelta(days=stamp.weekday())).strftime('%Y%m%d')
@@ -175,14 +178,28 @@ def collect_events(summary, sentiment, valuation, latest_date, as_of=None):
             for trade in etf.get('recent_trades',[]):
                 add('周线定投', etf, trade, 'week')
     state = sentiment or {}
-    if date_key(state.get('last_trade_date')) == cutoff:
+    state_date = date_key(state.get('last_trade_date'))
+    if include_week_history or state_date == cutoff:
         for trade in state.get('trades',[]):
-            if date_key(trade.get('date'))==cutoff:
+            trade_date = date_key(trade.get('date'))
+            if (include_week_history and trade_date <= state_date) or trade_date == cutoff == state_date:
                 add('情绪反弹',dict(name='中证2000',ts_code='563300.SH'),trade,'latest')
     for etf in (valuation or {}).get('pool',[]):
-        trade = etf.get('today_action')
-        if trade and date_key(etf.get('last_date'))==cutoff and date_key(trade.get('date'))==cutoff:
-            add('估值定投',etf,trade,'latest')
+        source_date = date_key(etf.get('last_date'))
+        trades = list(etf.get('recent_trades') or []) if include_week_history else []
+        today_action = etf.get('today_action')
+        # today_action is a projection of the last full trade (without shares).
+        # Prefer the full record so the projection cannot create a second signal.
+        if today_action and not any(
+                date_key(t.get('date')) == date_key(today_action.get('date'))
+                and t.get('action') == today_action.get('action')
+                and number(t.get('amount')) == number(today_action.get('amount'))
+                and t.get('reason', '') == today_action.get('reason', '') for t in trades):
+            trades.append(today_action)
+        for trade in trades:
+            trade_date = date_key(trade.get('date'))
+            if (include_week_history and trade_date <= source_date) or trade_date == cutoff == source_date:
+                add('估值定投',etf,trade,'latest')
     # Include amounts/shares/round/reason: same-day partial sales are distinct events.
     unique = {json.dumps(e,sort_keys=True,ensure_ascii=False):e for e in events}
     order = {'情绪反弹':0,'周线定投':1,'估值定投':2}
@@ -199,7 +216,7 @@ def small(text):
     return f'<div style="color:#64748b;font-size:11px;margin-top:3px">{escape(str(text))}</div>'
 
 
-def render_actions(events, as_of):
+def render_actions(events, note='', empty_text='本次无新增操作'):
     rows=[]
     for e in events:
         amount = '¥'+fmt(e['amount'],0) if e['amount'] is not None else '—'
@@ -209,10 +226,7 @@ def render_actions(events, as_of):
             amount += small(f"仓位比例 {e['ratio']:.0%}")
         name = escape(e['name'])+small(e['strategy']+(f" · 轮次/级别 {e['round']}" if e['round'] is not None else ''))
         rows.append([name,'买入' if e['action']=='BUY' else '卖出',amount,escape(e['date'])])
-    note = '周线：本周信号复核。' if as_of.weekday()==6 else '周线：汇总本周记录。'
-    if as_of.weekday() not in (4,6):
-        note = '周线买卖于周五、周日汇总；情绪反弹及估值定投独立提醒。'
-    body = table(['标的／策略','动作','金额／份额','记录日'], rows) if rows else '<p>本次无新增操作</p>'
+    body = table(['标的／策略','动作','金额／份额','记录日'], rows) if rows else f'<p>{escape(empty_text)}</p>'
     return small(note)+body
 
 

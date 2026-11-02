@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2026-11-01",
+  "lastUpdate": "2026-11-02",
   "etf_list": [
     {
       "name": "红利低波",
@@ -15,8 +15,8 @@
       "positions": [
         {
           "round_id": 1,
-          "shares": 72802.2961,
-          "avg_cost": 0.9393,
+          "shares": 74563.642,
+          "avg_cost": 0.9355,
           "sell_stage": 0,
           "j_peak": 79.63,
           "dca_active": false,
@@ -26,9 +26,9 @@
           "action_label": "持有（仓位51%）",
           "action_color": "#3498db",
           "action_detail": "周线J=79.63，未触发100/0，维持当前仓位51%",
-          "return_pct": 77.74,
+          "return_pct": 82.04,
           "total_invested": 100000.0,
-          "portfolio_value": 177739.56
+          "portfolio_value": 182039.71
         }
       ],
       "last_date": "20261030",
@@ -36,12 +36,12 @@
       "weekly_j": 79.63,
       "weekly_k": 74.01,
       "weekly_d": 71.21,
-      "shares": 72802.2961,
-      "avg_cost": 0.9393,
-      "loss_pct": 77.74,
+      "shares": 74563.642,
+      "avg_cost": 0.9355,
+      "loss_pct": 82.04,
       "total_invested": 100000.0,
-      "total_return": 77739.55,
-      "return_pct": 77.74,
+      "total_return": 82039.7,
+      "return_pct": 82.04,
       "trade_count": 17,
       "recent_trades": [],
       "previous_week_date": "20261023",
@@ -500,26 +500,26 @@
       "action_label": "R14 建议定投(1x)",
       "action_color": "#e74c3c",
       "action": "buy",
-      "action_detail": "R1 已卖满50%，剩余2037份永久持有，不再触发卖出 | R2 已卖满50%，剩余2230份永久持有，不再触发卖出 | R3 已卖满50%，剩余2537份永久持有，不再触发卖出 | R4 已卖满50%，剩余2535份永久持有，不再触发卖出 | R5 已卖满50%，剩余2408份永久持有，不再触发卖出 | R6 已卖满50%，剩余2061份永久持有，不再触发卖出 | R7 已卖满50%，剩余2121份永久持有，不再触发卖出 | R8 已卖满50%，剩余1765份永久持有，不再触发卖出 | R9 已卖满50%，剩余1774份永久持有，不再触发卖出 | R10 已卖满50%，剩余1766份永久持有，不再触发卖出 | R11 已卖满50%，剩余1352份永久持有，不再触发卖出 | R12 已卖满50%，剩余1326份永久持有，不再触发卖出 | R13 已卖满50%，剩余1103份永久持有，不再触发卖出 | R14 定投中，浮亏0.00%，建议买入1000元(1x) ｜ 依据20261030收盘周线（下次周线更新：本周最后一个交易日收盘后）",
+      "action_detail": "R1 已卖满50%，剩余2038份永久持有，不再触发卖出 | R2 已卖满50%，剩余2230份永久持有，不再触发卖出 | R3 已卖满50%，剩余2537份永久持有，不再触发卖出 | R4 已卖满50%，剩余2535份永久持有，不再触发卖出 | R5 已卖满50%，剩余2408份永久持有，不再触发卖出 | R6 已卖满50%，剩余2061份永久持有，不再触发卖出 | R7 已卖满50%，剩余2121份永久持有，不再触发卖出 | R8 已卖满50%，剩余1765份永久持有，不再触发卖出 | R9 已卖满50%，剩余1774份永久持有，不再触发卖出 | R10 已卖满50%，剩余1766份永久持有，不再触发卖出 | R11 已卖满50%，剩余1352份永久持有，不再触发卖出 | R12 已卖满50%，剩余1326份永久持有，不再触发卖出 | R13 已卖满50%，剩余1103份永久持有，不再触发卖出 | R14 定投中，浮亏0.00%，建议买入1000元(1x) ｜ 依据20261030收盘周线（下次周线更新：本周最后一个交易日收盘后）",
       "signal_week_date": "20261030",
       "confirmation_rule": "exchange_week_close_v2",
       "preview_weekly_j": null,
       "positions": [
         {
           "round_id": 1,
-          "shares": 2037.4985,
-          "avg_cost": 1.227,
+          "shares": 2038.1681,
+          "avg_cost": 1.2266,
           "sell_stage": 3,
           "j_peak": 31.76,
           "dca_active": true,
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": 36.69,
+          "return_pct": 36.73,
           "action": "v6h_stage_3",
           "action_label": "R1 已卖50%·永久持有",
           "action_color": "#3498db",
-          "action_detail": "R1 已卖满50%，剩余2037份永久持有，不再触发卖出"
+          "action_detail": "R1 已卖满50%，剩余2038份永久持有，不再触发卖出"
         },
         {
           "round_id": 2,
@@ -735,11 +735,11 @@
       "weekly_j": 9.19,
       "weekly_k": 34.51,
       "weekly_d": 47.17,
-      "shares": 25475.9436,
-      "avg_cost": 1.315,
-      "loss_pct": 65.78,
+      "shares": 25476.6132,
+      "avg_cost": 1.3149,
+      "loss_pct": 65.79,
       "total_invested": 66000.0,
-      "total_return": 25357.26,
+      "total_return": 25360.3,
       "return_pct": 38.42,
       "trade_count": 91,
       "recent_trades": [
@@ -1531,8 +1531,8 @@
       "avg_cost": 1.5286,
       "loss_pct": -8.74,
       "total_invested": 65000.0,
-      "total_return": 1041.45,
-      "return_pct": 1.6,
+      "total_return": 1047.8,
+      "return_pct": 1.61,
       "trade_count": 80,
       "recent_trades": [
         {

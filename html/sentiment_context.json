@@ -1,13 +1,13 @@
 {
-  "data_date": "20261030",
-  "j13_count": 3036.0,
-  "previous_count": 1770.0,
-  "previous_date": "20261029",
-  "change": 1266.0,
-  "change_pct": 71.52542372881356,
-  "reference_p90": 2670.1,
+  "data_date": "20261102",
+  "j13_count": 1832.0,
+  "previous_count": 3036.0,
+  "previous_date": "20261030",
+  "change": -1204.0,
+  "change_pct": -39.657444005270094,
+  "reference_p90": 2714.1,
   "previous_reference_p90": 2670.1,
   "reference_window": 60,
-  "strategy_threshold": 2577.0,
-  "strategy_trigger": true
+  "strategy_threshold": 2576.8,
+  "strategy_trigger": false
 }

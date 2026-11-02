@@ -216,6 +216,62 @@
         </div>
 
 
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+            <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+                <h2 class="text-lg font-semibold text-gray-900">📋 最新可用入选个股明细（2026-11-02，<span id="stockCount">4</span> / 4 只）</h2>
+                <select id="industryFilter" onchange="filterStocks()" class="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <option value="">全部行业</option><option value="化学制药">化学制药</option><option value="染料涂料">染料涂料</option><option value="航空">航空</option><option value="钢加工">钢加工</option>
+                </select>
+            </div>
+
+            <div class="overflow-x-auto" style="max-height:500px;overflow-y:auto;">
+                <table class="w-full text-sm text-left">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 sticky top-0">
+                        <tr>
+                            <th class="px-4 py-3">代码</th>
+                            <th class="px-4 py-3">名称</th>
+                            <th class="px-4 py-3">行业</th>
+                        </tr>
+                    </thead>
+                    <tbody id="stockBody" class="divide-y divide-gray-200">
+
+            <tr class="hover:bg-gray-50" data-industry="染料涂料">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">301190.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">善水科技</td>
+                <td class="px-4 py-2 text-gray-700">染料涂料</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="钢加工">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">002541.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">鸿路钢构</td>
+                <td class="px-4 py-2 text-gray-700">钢加工</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="航空">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">302132.SZ</td>
+                <td class="px-4 py-2 font-medium text-gray-900">中航成飞</td>
+                <td class="px-4 py-2 text-gray-700">航空</td>
+            </tr>
+            <tr class="hover:bg-gray-50" data-industry="化学制药">
+                <td class="px-4 py-2 font-mono text-xs text-gray-600">600267.SH</td>
+                <td class="px-4 py-2 font-medium text-gray-900">海正药业</td>
+                <td class="px-4 py-2 text-gray-700">化学制药</td>
+            </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <script>
+        function filterStocks() {
+            const sel = document.getElementById('industryFilter').value;
+            const rows = document.querySelectorAll('#stockBody tr[data-industry]');
+            let visible = 0;
+            rows.forEach(r => {
+                const show = !sel || r.getAttribute('data-industry') === sel;
+                r.style.display = show ? '' : 'none';
+                if (show) visible++;
+            });
+            document.getElementById('stockCount').textContent = visible;
+        }
+        </script>
 
         <div class="text-center mt-8 text-gray-500 text-sm">
             <p>多指标联合选股趋势汇总 · 自动生成</p>

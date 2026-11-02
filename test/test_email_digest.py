@@ -195,12 +195,17 @@ def test_full_digest_has_one_reminder_and_compact_holdings(monkeypatch,tmp_path)
     monkeypatch.setattr(mail,'load_reports_json',lambda:dict(latestDate='20261030',totalStocks=3))
     monkeypatch.setattr(mail,'load_strategy_state',lambda:dict(last_trade_date='20261030',position=9,trades=[trade(amount=2000)]))
     monkeypatch.setattr(mail,'load_dca_summary',lambda:weekly())
-    monkeypatch.setattr(mail,'load_4pct_summary',lambda:{'pool':[dict(name='估值ETF',last_date='20261030',n_parts=10,parts_bought=0)]})
+    monkeypatch.setattr(mail,'load_4pct_summary',lambda:{'pool':[dict(name='估值ETF',ts_code='510300.SH',last_date='20261030',n_parts=10,parts_bought=0)]})
     monkeypatch.setattr(mail,'load_multi_indicator_hints',lambda:[])
     html=mail.generate_email_report(as_of='2026-11-01 18:00',repo='<repo>')
     assert html.count('同一信号仅执行一次')==1
     for text in ['本周信号复核','情绪反弹','估值定投','ETF持仓简表','2,000','1,000','记录日','&lt;repo&gt;']:
         assert text in html
+    sections=re.findall(r'<section[^>]*>(.*?)</section>',html,re.S)
+    for action_section in (sections[0],sections[-1]):
+        assert '000001.SH' in action_section and '563300.SH' in action_section
+    for title,code in [('市场情绪与持仓','563300.SH'),('ETF持仓简表','000001.SH'),('估值定投 · 独立检查','510300.SH')]:
+        assert code in next(s for s in sections if title in s)
     assert '0x' not in html and '建议买入0元' not in html
     monday=mail.generate_email_report(as_of='2026-11-02 20:00')
     assert '本次无新增操作' in monday

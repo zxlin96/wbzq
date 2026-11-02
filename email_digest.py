@@ -216,6 +216,10 @@ def small(text):
     return f'<div style="color:#64748b;font-size:11px;margin-top:3px">{escape(str(text))}</div>'
 
 
+def etf_label(etf):
+    return escape(str(etf.get('name') or ''))+small(etf.get('ts_code') or '代码暂无')
+
+
 def render_actions(events, note='', empty_text='本次无新增操作'):
     rows=[]
     for e in events:
@@ -224,7 +228,7 @@ def render_actions(events, note='', empty_text='本次无新增操作'):
             amount += small(fmt(e['shares'],2)+'份')
         if e['ratio'] is not None:
             amount += small(f"仓位比例 {e['ratio']:.0%}")
-        name = escape(e['name'])+small(e['strategy']+(f" · 轮次/级别 {e['round']}" if e['round'] is not None else ''))
+        name = etf_label(e)+small(e['strategy']+(f" · 轮次/级别 {e['round']}" if e['round'] is not None else ''))
         rows.append([name,'买入' if e['action']=='BUY' else '卖出',amount,escape(e['date'])])
     body = table(['标的／策略','动作','金额／份额','记录日'], rows) if rows else f'<p>{escape(empty_text)}</p>'
     return small(note)+body
@@ -261,7 +265,7 @@ def render_holdings(summary):
             status='预算已用完 · 持有' if budgets and all(b is not None and b<=0 for b in budgets) else f'持有 · {len(positions)}轮'
         value=sum((number(p.get('portfolio_value')) if p.get('portfolio_value') is not None else (number(p.get('shares')) or 0)*(number(e.get('last_price')) or 0)) or 0 for p in positions)
         j=fmt(e.get('weekly_j'))+small('前周 '+fmt(e.get('previous_weekly_j')))+small(delta(e.get('weekly_j'),e.get('previous_weekly_j'),'点'))
-        name=escape(e.get('name',''))
+        name=etf_label(e)
         if not shared_dates:
             name+=small('行情 '+str(e.get('last_date') or '—'))
             j+=small('周线 '+str(e.get('signal_week_date') or '—'))
@@ -291,5 +295,5 @@ def render_valuation(summary, latest_date):
         dates=f"行情 {e.get('last_date') or '—'} · PE {pe_date or '—'}"
         if date_key(e.get('last_date'))<date_key(latest_date):dates+=' · 数据较报告日期滞后'
         if pe_date and date_key(pe_date)<date_key(e.get('last_date')):dates+=' · PE较行情滞后'
-        rows.append([escape(e.get('name',''))+small(dates),pe,progress,status])
+        rows.append([etf_label(e)+small(dates),pe,progress,status])
     return table(['估值定投','PE与变化','投入进度','阶段／下一触发'],rows) if rows else '<p>暂无估值定投数据</p>'

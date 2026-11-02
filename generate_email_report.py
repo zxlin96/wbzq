@@ -560,7 +560,8 @@ def generate_email_report(status="success", repo="", ref="", run_url="", as_of=N
                 f'border-bottom:2px solid #e6eef8;padding-bottom:8px">{title}</h2>{content}</section>')
     holdings = render_holdings(summary)
     position = fmt(state.get('position'), 2) if state else '暂无数据'
-    sentiment = (f'<p style="font-size:13px">数据截至 {escape(str(state.get("last_trade_date") or "—"))} · '
+    sentiment = (f'<p style="font-size:13px">中证2000ETF（563300.SH） · '
+                 f'数据截至 {escape(str(state.get("last_trade_date") or "—"))} · '
                  f'仓位 {position} 个记账单位 · 红柱 {fmt(state.get("red_bar_count"),0)} · '
                  f'绿柱 {fmt(state.get("green_bar_count"),0)}</p>')
     action_title = '本次操作' + (f'（{len(current_events)}项记录）' if current_events else '')

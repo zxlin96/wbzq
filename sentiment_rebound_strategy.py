@@ -21,6 +21,7 @@ import pandas as pd
 import numpy as np
 import logging
 from datetime import datetime, timedelta
+from html import escape
 from typing import Dict, List, Tuple, Optional
 
 logging.basicConfig(level=logging.INFO, format='%(message)s')
@@ -335,6 +336,16 @@ class SentimentReboundStrategy:
             交易信号列表
         """
         signals = []
+        # Live callers provide observed input dates. Reject mismatches before
+        # deduplication or counters can turn an unconfirmed run into a processed day.
+        from sentiment_confirmation import date_key
+        if j13_stats.get('signal_status'):
+            logging.warning(f"行情尚未确认，跳过信号: {j13_stats['signal_status']}")
+            return signals
+        for key in ('data_date', 'price_date'):
+            if key in j13_stats and date_key(j13_stats[key]) != date_key(current_date):
+                logging.warning(f'行情日期不一致，跳过信号: {key}={j13_stats[key]}, signal_date={current_date}')
+                return signals
         
         # 检查日期顺序，防止回退到过去
         if self.last_trade_date and current_date < self.last_trade_date:
@@ -632,6 +643,13 @@ def generate_strategy_report(strategy: SentimentReboundStrategy,
     """
     
     position_summary = strategy.get_position_summary()
+    confirmation_notice = ''
+    trigger_label = '是' if j13_stats.get('is_above_threshold') else '否'
+    if j13_stats.get('signal_status'):
+        trigger_label = '待确认'
+        confirmation_notice = (f'<div class="glass p-6 mb-6" role="status">'
+                               f'数据尚未确认：{escape(j13_stats["signal_status"])}。'
+                               '本次仅展示行情，未更新策略状态。</div>')
     
     # 生成交易记录表格
     trades_html = ""
@@ -696,6 +714,7 @@ def generate_strategy_report(strategy: SentimentReboundStrategy,
             </div>
         </div>
         
+        {confirmation_notice}
         <!-- 策略说明 -->
         <div class="glass p-6 mb-6">
             <h2 class="text-xl font-bold text-gray-800 mb-4">📋 策略说明</h2>
@@ -739,7 +758,7 @@ def generate_strategy_report(strategy: SentimentReboundStrategy,
                 </div>
                 <div class="glass p-4 stat-card">
                     <div class="text-sm text-gray-500">是否触发买入</div>
-                    <div class="text-2xl font-bold {'text-red-600' if j13_stats.get('is_above_threshold') else 'text-gray-400'}">{'是' if j13_stats.get('is_above_threshold') else '否'}</div>
+                    <div class="text-2xl font-bold {'text-red-600' if j13_stats.get('is_above_threshold') else 'text-gray-400'}">{trigger_label}</div>
                 </div>
             </div>
         </div>

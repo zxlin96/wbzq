@@ -1,0 +1,53 @@
+{
+  "date": "2026-11-03",
+  "signal_date": "20261102",
+  "reason": "Intraday run used 20261030 inputs as a 20261102 signal; same-day deduplication blocked the valid evening update.",
+  "user_confirmed_order_not_executed": true,
+  "baseline_commit": "845aa4156d680d865d1a505c4e911d33c89614f0",
+  "invalid_run": "https://github.com/zxlin96/wbzq/actions/runs/41373604658",
+  "closing_run": "https://github.com/zxlin96/wbzq/actions/runs/41442830147",
+  "removed_trade": {
+    "date": "20261102",
+    "action": "BUY",
+    "type": "倍投",
+    "amount": 4000,
+    "level": 2,
+    "j13_count": 3036,
+    "threshold": 2577.0,
+    "reason": "J13数量(3036)超过90%分位数(2577.0)"
+  },
+  "before": {
+    "position": 11.0,
+    "position_cost": 2000.0,
+    "investment_level_idx": 2,
+    "red_bar_count": 0,
+    "green_bar_count": 2,
+    "last_trade_date": "20261102",
+    "last_bar_date": "20261030"
+  },
+  "after": {
+    "position": 9.0,
+    "position_cost": 2000.0,
+    "investment_level_idx": 0,
+    "red_bar_count": 1,
+    "green_bar_count": 0,
+    "last_trade_date": "20261102",
+    "last_bar_date": "20261102"
+  },
+  "market": {
+    "data_date": "20261102",
+    "j13_count": 1832,
+    "threshold": 2576.8,
+    "trigger": false
+  },
+  "etf": {
+    "ts_code": "563300.SH",
+    "price_date": "20261102",
+    "close": 1.229,
+    "brick_rising": true
+  },
+  "retained_trade_count": 23,
+  "next_trigger_base_amount": 2000,
+  "historical_trades_unchanged": true,
+  "source_report_sha256": "60e978afaa1b947939f6e5618601e65c8c584cb0eb74610add76f0bd60b93108"
+}

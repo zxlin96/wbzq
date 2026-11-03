@@ -236,7 +236,11 @@ def test_sentiment_entry_exports_context_without_interrupting_strategy(monkeypat
     strategy.generate_current_signal.return_value=[]
     strategy.get_position_summary.return_value=dict(investment_level=0,position=1,red_bar_count=0,total_trades=0)
     monkeypatch.setattr(runner,'SentimentReboundStrategy',lambda **kw:strategy)
-    monkeypatch.setattr(runner,'pro',SimpleNamespace(fund_daily=lambda **kw:None))
+    quotes=pd.DataFrame(dict(trade_date=['20261028','20261029','20261030'],
+                             open=1.,close=1.,high=1.,low=1.))
+    monkeypatch.setattr(runner,'pro',SimpleNamespace(fund_daily=lambda **kw:quotes))
+    monkeypatch.setattr(runner,'calculate_zhixing_brick_indicator',lambda frame:frame.assign(
+                        zhixing_brick=1.,zhixing_brick_rising=True,zhixing_brick_xg=False))
     report=Mock()
     monkeypatch.setattr(runner,'generate_strategy_report',report)
     monkeypatch.setattr('sentiment_rebound_strategy.generate_etf_chart_data',lambda *a,**kw:None)
@@ -245,7 +249,7 @@ def test_sentiment_entry_exports_context_without_interrupting_strategy(monkeypat
             raise OSError('context file unavailable')
         monkeypatch.setattr(runner,'open',unavailable,raising=False)
     data=pd.DataFrame(dict(trade_date=['20261028','20261029','20261030'],kdj_qfq=[1,20,1]))
-    runner.run_sentiment_rebound_strategy(data,'20261030',None)
+    runner.run_sentiment_rebound_strategy(data,'20261030',None,as_of='2026-10-30 20:00')
     strategy.generate_current_signal.assert_called_once()
     strategy.save_state.assert_called_once()
     report.assert_called_once()

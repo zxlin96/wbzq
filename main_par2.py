@@ -1574,7 +1574,7 @@ def generate_j13_trend(df, end_date):
     print(f"📈 已生成趋势图: {html_dir}/first_j13_step_daily_count.html")
 
 
-def run_sentiment_rebound_strategy(df, end_date, data_manager):
+def run_sentiment_rebound_strategy(df, end_date, data_manager, *, as_of=None):
     """
     执行情绪反弹策略
     
@@ -1586,6 +1586,14 @@ def run_sentiment_rebound_strategy(df, end_date, data_manager):
     print('='*70)
     
     try:
+        from sentiment_confirmation import confirmation_error, date_key
+        end_date = date_key(end_date)
+        df = df[['trade_date', 'kdj_qfq']].copy()
+        df['trade_date'] = df['trade_date'].map(date_key)
+        df = df[df['trade_date'] <= end_date]
+        if df.empty:
+            print('⚠️ 无可用行情，跳过情绪策略，不更新状态')
+            return
         # 初始化策略
         strategy = SentimentReboundStrategy(
             etf_code='563300.SH',
@@ -1597,25 +1605,22 @@ def run_sentiment_rebound_strategy(df, end_date, data_manager):
         # 准备J13数据
         daily_first_j13_counts = df[df['kdj_qfq'] < 13].groupby('trade_date').size().reset_index(name='count')
         
-        if daily_first_j13_counts.empty:
-            print("⚠️ 无J13数据，跳过策略分析")
-            return
-        
-        # 计算J13统计
-        j13_stats = strategy.calculate_j13_stats(daily_first_j13_counts)
+        observation_dates = sorted(df['trade_date'].unique())
+        market_date = observation_dates[-1]
+        count_series = daily_first_j13_counts.set_index('trade_date')['count']
+        # Keep the existing threshold sample; a zero-count current session must
+        # not silently reuse the previous nonzero session's count.
+        sample = daily_first_j13_counts
+        if sample.empty:
+            sample = pd.DataFrame({'trade_date': observation_dates, 'count': 0})
+        j13_stats = strategy.calculate_j13_stats(sample)
+        j13_stats['current'] = int(count_series.get(market_date, 0))
+        j13_stats['data_date'] = market_date
+        j13_stats['is_above_threshold'] = bool(not daily_first_j13_counts.empty and
+                                               j13_stats['current'] >= j13_stats['percentile_90'])
         from email_digest import market_context
         # Include zero-count sessions in the informational reference series only.
-        count_series = daily_first_j13_counts.set_index('trade_date')['count']
-        observation_dates = sorted(df['trade_date'].unique())
         observations = [dict(trade_date=str(d), count=int(count_series.get(d, 0))) for d in observation_dates]
-        try:
-            context = market_context(observations, j13_stats)
-            payload = json.dumps(context, ensure_ascii=False, indent=2, allow_nan=False)
-            os.makedirs('html', exist_ok=True)
-            with open(os.path.join('html', 'sentiment_context.json'), 'w', encoding='utf-8') as context_file:
-                context_file.write(payload)
-        except (OSError, ValueError, TypeError) as e:
-            logging.warning(f'邮件情绪统计导出失败，继续执行策略: {e}')
         
         print(f"\n📈 J13市场统计:")
         print(f"  当前J13数量: {j13_stats['current']:.0f} 只")
@@ -1631,7 +1636,9 @@ def run_sentiment_rebound_strategy(df, end_date, data_manager):
                                    start_date=(datetime.strptime(end_date, '%Y%m%d') - timedelta(days=120)).strftime('%Y%m%d'),
                                    end_date=end_date)
             if etf_df is not None and not etf_df.empty:
-                etf_data = etf_df.sort_values('trade_date').reset_index(drop=True)
+                etf_data = etf_df.copy()
+                etf_data['trade_date'] = etf_data['trade_date'].map(date_key)
+                etf_data = etf_data[etf_data['trade_date'] <= end_date].sort_values('trade_date').reset_index(drop=True)
                 etf_data['open_qfq'] = etf_data['open']
                 etf_data['close_qfq'] = etf_data['close']
                 etf_data['high_qfq'] = etf_data['high']
@@ -1652,16 +1659,29 @@ def run_sentiment_rebound_strategy(df, end_date, data_manager):
             print(f"  是否上升(红柱): {'是' if latest_brick['zhixing_brick_rising'] else '否'}")
             print(f"  XG信号: {'是' if latest_brick['zhixing_brick_xg'] else '否'}")
         
-        # 生成当前日期的交易信号
+        # Confirm the close and both input dates before the same-day deduplication
+        # or any buy, sell, counter update or processed-date write can occur.
         current_date = end_date
         current_price = etf_data['close'].iloc[-1] if etf_data is not None and not etf_data.empty else 0
-        
-        if etf_data is not None and not etf_data.empty:
-            signals = strategy.generate_current_signal(j13_stats, current_date, brick_data, current_price)
+        price_date = etf_data['trade_date'].iloc[-1] if etf_data is not None and not etf_data.empty else None
+        problem = confirmation_error(current_date, market_date, price_date, current_price, as_of=as_of)
+        j13_stats.update(signal_status=problem, price_date=price_date)
+        try:
+            context = market_context(observations, j13_stats)
+            context.update(requested_date=current_date, price_date=price_date, signal_status=problem)
+            if problem:
+                context['strategy_trigger'] = None
+            payload = json.dumps(context, ensure_ascii=False, indent=2, allow_nan=False)
+            os.makedirs('html', exist_ok=True)
+            with open(os.path.join('html', 'sentiment_context.json'), 'w', encoding='utf-8') as context_file:
+                context_file.write(payload)
+        except (OSError, ValueError, TypeError) as e:
+            logging.warning(f'邮件情绪统计导出失败，继续执行策略: {e}')
+        if problem:
+            logging.warning(f'情绪策略输入未确认：{problem}；仅展示行情，不更新策略状态')
+            signals = []
         else:
-            # ETF数据获取失败，仅基于J13数据生成买入信号
-            print("\n⚠️ ETF数据获取失败，仅基于J13数据生成买入信号")
-            signals = strategy.generate_current_signal(j13_stats, current_date, None, 0)
+            signals = strategy.generate_current_signal(j13_stats, current_date, brick_data, current_price)
         
         # 显示交易信号
         if signals:
@@ -1694,7 +1714,8 @@ def run_sentiment_rebound_strategy(df, end_date, data_manager):
         print(f"\n📄 策略报告已生成: {report_file}")
         
         # 保存策略状态
-        strategy.save_state()
+        if not problem:
+            strategy.save_state()
         
     except Exception as e:
         print(f"❌ 情绪反弹策略执行失败: {e}")

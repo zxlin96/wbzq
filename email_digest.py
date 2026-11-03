@@ -113,7 +113,7 @@ def load_market_context(root, day):
     root = Path(root)
     try:
         value = json.loads((root/'html/sentiment_context.json').read_text())
-        if date_key(value.get('data_date')) == day:
+        if date_key(value.get('requested_date') or value.get('data_date')) == day:
             return value
     except (OSError, ValueError):
         pass
@@ -242,7 +242,7 @@ def render_market(context):
         ['J13股票数量',fmt(c.get('j13_count'),0),delta(c.get('j13_count'),c.get('previous_count'),'只')],
         ['数量日变化率',fmt(c.get('change_pct'))+'%' if c.get('change_pct') is not None else '暂无对比','对比日 '+str(c.get('previous_date') or '—')],
         ['前60日90%参考阈值',fmt(c.get('reference_p90'),1),delta(c.get('reference_p90'),c.get('previous_reference_p90'),'只')],
-        ['策略本次触发阈值',fmt(c.get('strategy_threshold'),1),'已触发' if c.get('strategy_trigger') is True else '未触发' if c.get('strategy_trigger') is False else '暂无判断'],
+        ['策略本次触发阈值',fmt(c.get('strategy_threshold'),1),escape(c['signal_status']) if c.get('signal_status') else '已触发' if c.get('strategy_trigger') is True else '未触发' if c.get('strategy_trigger') is False else '暂无判断'],
     ]
     return small('数据截至 '+str(c.get('data_date','—')))+table(['指标','数值','变化／状态'],rows)+small('参考阈值仅使用此前60个交易日；策略本次阈值保留原有计算口径。')
 

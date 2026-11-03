@@ -26,7 +26,7 @@ jobs:
         run: |
           python -m pytest -q test/test_static_site.py test/test_static_report_generators.py test/test_generate_reports_json_multi_indicator.py test/test_generate_multi_indicator_trend_html.py test/test_generate_multi_indicator_trend_html_integration.py test/test_multi_indicator_pick.py test/test_generate_email_sentiment.py
       - name: Sentiment daily counting regression
-        run: python -m pytest -q test/test_sentiment_daily_counting.py
+        run: python -m pytest -q test/test_sentiment_daily_counting.py test/test_sentiment_confirmation.py
       - name: Weekly close and email regression
         run: python -m pytest -q test/test_weekly_completion.py test/test_email_digest.py
       - name: Build and inspect every public artifact

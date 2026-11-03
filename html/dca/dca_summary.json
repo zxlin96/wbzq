@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2026-11-02",
+  "lastUpdate": "2026-11-03",
   "etf_list": [
     {
       "name": "红利低波",
@@ -15,8 +15,8 @@
       "positions": [
         {
           "round_id": 1,
-          "shares": 74563.642,
-          "avg_cost": 0.9355,
+          "shares": 72993.8811,
+          "avg_cost": 0.9389,
           "sell_stage": 0,
           "j_peak": 79.63,
           "dca_active": false,
@@ -26,9 +26,9 @@
           "action_label": "持有（仓位51%）",
           "action_color": "#3498db",
           "action_detail": "周线J=79.63，未触发100/0，维持当前仓位51%",
-          "return_pct": 81.59,
+          "return_pct": 77.77,
           "total_invested": 100000.0,
-          "portfolio_value": 181592.33
+          "portfolio_value": 177769.33
         }
       ],
       "last_date": "20261102",
@@ -36,12 +36,12 @@
       "weekly_j": 79.63,
       "weekly_k": 74.01,
       "weekly_d": 71.21,
-      "shares": 74563.642,
-      "avg_cost": 0.9355,
-      "loss_pct": 81.59,
+      "shares": 72993.8811,
+      "avg_cost": 0.9389,
+      "loss_pct": 77.77,
       "total_invested": 100000.0,
-      "total_return": 81592.32,
-      "return_pct": 81.59,
+      "total_return": 77769.33,
+      "return_pct": 77.77,
       "trade_count": 17,
       "recent_trades": [],
       "previous_week_date": "20261023",
@@ -500,26 +500,26 @@
       "action_label": "R14 建议定投(1x)",
       "action_color": "#e74c3c",
       "action": "buy",
-      "action_detail": "R1 已卖满50%，剩余2038份永久持有，不再触发卖出 | R2 已卖满50%，剩余2230份永久持有，不再触发卖出 | R3 已卖满50%，剩余2537份永久持有，不再触发卖出 | R4 已卖满50%，剩余2535份永久持有，不再触发卖出 | R5 已卖满50%，剩余2408份永久持有，不再触发卖出 | R6 已卖满50%，剩余2061份永久持有，不再触发卖出 | R7 已卖满50%，剩余2121份永久持有，不再触发卖出 | R8 已卖满50%，剩余1765份永久持有，不再触发卖出 | R9 已卖满50%，剩余1774份永久持有，不再触发卖出 | R10 已卖满50%，剩余1766份永久持有，不再触发卖出 | R11 已卖满50%，剩余1352份永久持有，不再触发卖出 | R12 已卖满50%，剩余1326份永久持有，不再触发卖出 | R13 已卖满50%，剩余1103份永久持有，不再触发卖出 | R14 定投中，浮亏0.09%，建议买入1000元(1x) ｜ 依据20261030收盘周线（下次周线更新：本周最后一个交易日收盘后） ｜ 本周盘中预览J=3.01(未确认)",
+      "action_detail": "R1 已卖满50%，剩余2034份永久持有，不再触发卖出 | R2 已卖满50%，剩余2230份永久持有，不再触发卖出 | R3 已卖满50%，剩余2537份永久持有，不再触发卖出 | R4 已卖满50%，剩余2535份永久持有，不再触发卖出 | R5 已卖满50%，剩余2408份永久持有，不再触发卖出 | R6 已卖满50%，剩余2061份永久持有，不再触发卖出 | R7 已卖满50%，剩余2121份永久持有，不再触发卖出 | R8 已卖满50%，剩余1765份永久持有，不再触发卖出 | R9 已卖满50%，剩余1774份永久持有，不再触发卖出 | R10 已卖满50%，剩余1766份永久持有，不再触发卖出 | R11 已卖满50%，剩余1352份永久持有，不再触发卖出 | R12 已卖满50%，剩余1326份永久持有，不再触发卖出 | R13 已卖满50%，剩余1103份永久持有，不再触发卖出 | R14 定投中，浮亏0.09%，建议买入1000元(1x) ｜ 依据20261030收盘周线（下次周线更新：本周最后一个交易日收盘后） ｜ 本周盘中预览J=3.01(未确认)",
       "signal_week_date": "20261030",
       "confirmation_rule": "exchange_week_close_v2",
       "preview_weekly_j": 3.01,
       "positions": [
         {
           "round_id": 1,
-          "shares": 2038.1681,
-          "avg_cost": 1.2266,
+          "shares": 2034.1827,
+          "avg_cost": 1.229,
           "sell_stage": 3,
           "j_peak": 31.76,
           "dca_active": true,
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": 36.65,
+          "return_pct": 36.39,
           "action": "v6h_stage_3",
           "action_label": "R1 已卖50%·永久持有",
           "action_color": "#3498db",
-          "action_detail": "R1 已卖满50%，剩余2038份永久持有，不再触发卖出"
+          "action_detail": "R1 已卖满50%，剩余2034份永久持有，不再触发卖出"
         },
         {
           "round_id": 2,
@@ -735,12 +735,12 @@
       "weekly_j": 9.19,
       "weekly_k": 34.51,
       "weekly_d": 47.17,
-      "shares": 25476.6132,
-      "avg_cost": 1.3149,
-      "loss_pct": 65.64,
+      "shares": 25472.6278,
+      "avg_cost": 1.3151,
+      "loss_pct": 65.61,
       "total_invested": 66000.0,
-      "total_return": 25309.34,
-      "return_pct": 38.35,
+      "total_return": 25291.29,
+      "return_pct": 38.32,
       "trade_count": 91,
       "recent_trades": [
         {
@@ -1531,8 +1531,8 @@
       "avg_cost": 1.5286,
       "loss_pct": -9.39,
       "total_invested": 65000.0,
-      "total_return": 1015.09,
-      "return_pct": 1.56,
+      "total_return": 1007.15,
+      "return_pct": 1.55,
       "trade_count": 80,
       "recent_trades": [
         {

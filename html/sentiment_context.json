@@ -8,6 +8,9 @@
   "reference_p90": 2714.1,
   "previous_reference_p90": 2670.1,
   "reference_window": 60,
-  "strategy_threshold": 2576.8,
-  "strategy_trigger": false
+  "strategy_threshold": 2577.0,
+  "strategy_trigger": null,
+  "requested_date": "20261103",
+  "price_date": "20261102",
+  "signal_status": "等待北京时间15:00收盘"
 }

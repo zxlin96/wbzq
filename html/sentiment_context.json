@@ -1,16 +1,16 @@
 {
-  "data_date": "20261102",
-  "j13_count": 1832.0,
-  "previous_count": 3036.0,
-  "previous_date": "20261030",
-  "change": -1204.0,
-  "change_pct": -39.657444005270094,
+  "data_date": "20261103",
+  "j13_count": 1659.0,
+  "previous_count": 1832.0,
+  "previous_date": "20261102",
+  "change": -173.0,
+  "change_pct": -9.443231441048038,
   "reference_p90": 2714.1,
-  "previous_reference_p90": 2670.1,
+  "previous_reference_p90": 2714.1,
   "reference_window": 60,
-  "strategy_threshold": 2577.0,
-  "strategy_trigger": null,
+  "strategy_threshold": 2576.8,
+  "strategy_trigger": false,
   "requested_date": "20261103",
-  "price_date": "20261102",
-  "signal_status": "等待北京时间15:00收盘"
+  "price_date": "20261103",
+  "signal_status": null
 }

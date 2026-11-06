@@ -171,11 +171,11 @@
         }
       ],
       "week_invested": [
-        "20260724",
-        "20260703",
+        "20260717",
         "20260710",
         "20260731",
-        "20260717"
+        "20260703",
+        "20260724"
       ]
     },
     {
@@ -185,7 +185,7 @@
       "total_invested": 5000.0,
       "total_sell_amount": 0.0,
       "dca_active": true,
-      "j_peak": 17.526109821145518,
+      "j_peak": 26.564288814486915,
       "pullback_sold": false,
       "sell_stage": 0,
       "waiting_golden": false,

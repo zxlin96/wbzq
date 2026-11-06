@@ -221,6 +221,17 @@
       "reason": "周线J=-4.93, 金额=1000",
       "total_shares": 4259.509,
       "avg_cost": 0.7043
+    },
+    {
+      "date": "20261106",
+      "action": "BUY",
+      "price": 0.701,
+      "amount": 1000.0,
+      "shares": 1426.5335,
+      "round": 4,
+      "reason": "周线J=12.29, 金额=1000",
+      "total_shares": 5686.0425,
+      "avg_cost": 0.7035
     }
   ],
   "positions": [
@@ -314,8 +325,8 @@
         }
       ],
       "week_invested": [
-        "20251205",
         "20251128",
+        "20251205",
         "20251212"
       ]
     },
@@ -420,10 +431,10 @@
         }
       ],
       "week_invested": [
-        "20260403",
-        "20260320",
+        "20260327",
         "20260410",
-        "20260327"
+        "20260320",
+        "20260403"
       ]
     },
     {
@@ -500,12 +511,12 @@
     },
     {
       "round_id": 4,
-      "shares": 4259.508993562813,
-      "total_cost": 3000.0,
-      "total_invested": 3000.0,
+      "shares": 5686.042517100616,
+      "total_cost": 4000.0,
+      "total_invested": 4000.0,
       "total_sell_amount": 0.0,
       "dca_active": true,
-      "j_peak": 9.530241475314355,
+      "j_peak": 12.291475326749868,
       "pullback_sold": false,
       "sell_stage": 0,
       "waiting_golden": false,
@@ -513,7 +524,7 @@
       "price_below_dk_sold": false,
       "round_budget": 5000,
       "round_periods": 5,
-      "buy_count": 3,
+      "buy_count": 4,
       "dca_exited": false,
       "dca_exit_date": "",
       "dca_exit_amount": 0.0,
@@ -552,9 +563,21 @@
           "reason": "周线J=-4.93, 金额=1000",
           "total_shares": 4259.509,
           "avg_cost": 0.7043
+        },
+        {
+          "date": "20261106",
+          "action": "BUY",
+          "price": 0.701,
+          "amount": 1000.0,
+          "shares": 1426.5335,
+          "round": 4,
+          "reason": "周线J=12.29, 金额=1000",
+          "total_shares": 5686.0425,
+          "avg_cost": 0.7035
         }
       ],
       "week_invested": [
+        "20261106",
         "20261016",
         "20261030",
         "20261023"

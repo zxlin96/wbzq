@@ -26,12 +26,12 @@
  "next_trigger": 2.4067,
  "next_trigger_pct": -9.42,
  "next_desc": "再跌4.0%补1份@2.4067",
- "pe_ttm": 38.7514,
- "pe_pct": 65.60000000000001,
- "pe_date": "20261106",
- "previous_pe_ttm": 39.5656,
- "previous_pe_pct": 70.72,
- "previous_pe_date": "20261105",
+ "pe_ttm": 38.9305,
+ "pe_pct": 66.88,
+ "pe_date": "20261112",
+ "previous_pe_ttm": 39.6851,
+ "previous_pe_pct": 71.6,
+ "previous_pe_date": "20261111",
  "budget_remaining": 18000.0,
  "gate_enabled": true,
  "gate_open": false,
@@ -3728,10 +3728,10 @@
    66.2,
    70.7,
    65.6,
-   null,
-   null,
-   null,
-   null
+   65.4,
+   68.3,
+   71.6,
+   66.9
   ],
   "buys": [
    [

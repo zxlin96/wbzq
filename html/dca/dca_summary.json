@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2026-11-13",
+  "lastUpdate": "2026-11-15",
   "etf_list": [
     {
       "name": "红利低波",
@@ -15,8 +15,8 @@
       "positions": [
         {
           "round_id": 1,
-          "shares": 73380.0921,
-          "avg_cost": 0.938,
+          "shares": 74164.906,
+          "avg_cost": 0.9364,
           "sell_stage": 0,
           "j_peak": 89.51,
           "dca_active": false,
@@ -26,9 +26,9 @@
           "action_label": "持有（仓位51%）",
           "action_color": "#3498db",
           "action_detail": "周线J=89.51，未触发100/0，维持当前仓位51%",
-          "return_pct": 79.3,
+          "return_pct": 81.21,
           "total_invested": 100000.0,
-          "portfolio_value": 179296.95
+          "portfolio_value": 181214.57
         }
       ],
       "last_date": "20261113",
@@ -36,17 +36,18 @@
       "weekly_j": 89.51,
       "weekly_k": 79.87,
       "weekly_d": 75.05,
-      "shares": 73380.0921,
-      "avg_cost": 0.938,
-      "loss_pct": 79.3,
+      "shares": 74164.906,
+      "avg_cost": 0.9364,
+      "loss_pct": 81.21,
       "total_invested": 100000.0,
-      "total_return": 79296.94,
-      "return_pct": 79.3,
+      "total_return": 81214.57,
+      "return_pct": 81.21,
       "trade_count": 17,
       "recent_trades": [],
       "previous_week_date": "20261106",
       "previous_weekly_j": 81.2299047572406,
-      "weekly_j_change": 8.284021128483573
+      "weekly_j_change": 8.284021128483573,
+      "decision_source": "ledger"
     },
     {
       "name": "纳指100",
@@ -313,7 +314,8 @@
       ],
       "previous_week_date": "20261106",
       "previous_weekly_j": -7.328853687238492,
-      "weekly_j_change": 9.921813723263341
+      "weekly_j_change": 9.921813723263341,
+      "decision_source": "ledger"
     },
     {
       "name": "标普500",
@@ -526,7 +528,8 @@
       ],
       "previous_week_date": "20261106",
       "previous_weekly_j": 19.76529320000745,
-      "weekly_j_change": 23.869627911097396
+      "weekly_j_change": 23.869627911097396,
+      "decision_source": "ledger"
     },
     {
       "name": "日经225",
@@ -825,7 +828,8 @@
       ],
       "previous_week_date": "20261106",
       "previous_weekly_j": -4.989462913369607,
-      "weekly_j_change": 8.978862198089672
+      "weekly_j_change": 8.978862198089672,
+      "decision_source": "ledger"
     },
     {
       "name": "德国DAX",
@@ -1038,7 +1042,8 @@
       ],
       "previous_week_date": "20261106",
       "previous_weekly_j": 40.686109483103166,
-      "weekly_j_change": 43.16899190060229
+      "weekly_j_change": 43.16899190060229,
+      "decision_source": "ledger"
     },
     {
       "name": "中证2000",
@@ -1118,7 +1123,8 @@
       ],
       "previous_week_date": "20261106",
       "previous_weekly_j": 0.30225329255884503,
-      "weekly_j_change": 6.263357425966092
+      "weekly_j_change": 6.263357425966092,
+      "decision_source": "ledger"
     },
     {
       "name": "通信",
@@ -1220,7 +1226,8 @@
       ],
       "previous_week_date": "20261106",
       "previous_weekly_j": -10.667306930590364,
-      "weekly_j_change": 3.9943296818301164
+      "weekly_j_change": 3.9943296818301164,
+      "decision_source": "ledger"
     },
     {
       "name": "创新药",
@@ -1289,7 +1296,8 @@
       ],
       "previous_week_date": "20261106",
       "previous_weekly_j": 42.29334521419852,
-      "weekly_j_change": -3.4545864629641656
+      "weekly_j_change": -3.4545864629641656,
+      "decision_source": "ledger"
     },
     {
       "name": "电力",
@@ -1347,7 +1355,8 @@
       ],
       "previous_week_date": "20261106",
       "previous_weekly_j": 48.929078655952125,
-      "weekly_j_change": -6.00829755274124
+      "weekly_j_change": -6.00829755274124,
+      "decision_source": "ledger"
     },
     {
       "name": "科创半导体",
@@ -1460,7 +1469,8 @@
       ],
       "previous_week_date": "20261106",
       "previous_weekly_j": 12.291475326749868,
-      "weekly_j_change": 10.240377070959745
+      "weekly_j_change": 10.240377070959745,
+      "decision_source": "ledger"
     },
     {
       "name": "卫星ETF富国",
@@ -1529,7 +1539,8 @@
       ],
       "previous_week_date": "20261106",
       "previous_weekly_j": 14.620226385251662,
-      "weekly_j_change": 6.8107826297138985
+      "weekly_j_change": 6.8107826297138985,
+      "decision_source": "ledger"
     },
     {
       "name": "有色金属",
@@ -1569,8 +1580,8 @@
       "avg_cost": 1.5286,
       "loss_pct": -10.05,
       "total_invested": 65000.0,
-      "total_return": 887.99,
-      "return_pct": 1.37,
+      "total_return": 925.07,
+      "return_pct": 1.42,
       "trade_count": 78,
       "recent_trades": [
         {
@@ -1609,7 +1620,8 @@
       ],
       "previous_week_date": "20261106",
       "previous_weekly_j": 4.127270072573765,
-      "weekly_j_change": -4.249769617412447
+      "weekly_j_change": -4.249769617412447,
+      "decision_source": "ledger"
     },
     {
       "name": "人工智能",
@@ -1678,7 +1690,8 @@
       ],
       "previous_week_date": "20261106",
       "previous_weekly_j": 5.836699287544235,
-      "weekly_j_change": 7.888191108047316
+      "weekly_j_change": 7.888191108047316,
+      "decision_source": "ledger"
     },
     {
       "name": "创业板新能源",
@@ -1724,7 +1737,8 @@
       "recent_trades": [],
       "previous_week_date": "20261106",
       "previous_weekly_j": 26.564288814486915,
-      "weekly_j_change": -5.322227466814567
+      "weekly_j_change": -5.322227466814567,
+      "decision_source": "ledger"
     },
     {
       "name": "机器人",
@@ -1765,7 +1779,8 @@
       ],
       "previous_week_date": "20261106",
       "previous_weekly_j": 45.39101148850099,
-      "weekly_j_change": 5.40723632968173
+      "weekly_j_change": 5.40723632968173,
+      "decision_source": "ledger"
     },
     {
       "name": "上证50",
@@ -1834,7 +1849,8 @@
       ],
       "previous_week_date": "20261106",
       "previous_weekly_j": 36.491001763336094,
-      "weekly_j_change": 6.654337181695162
+      "weekly_j_change": 6.654337181695162,
+      "decision_source": "ledger"
     },
     {
       "name": "沪深300",
@@ -1880,7 +1896,8 @@
       "recent_trades": [],
       "previous_week_date": "20261106",
       "previous_weekly_j": 10.24964620590633,
-      "weekly_j_change": -2.817002119175875
+      "weekly_j_change": -2.817002119175875,
+      "decision_source": "ledger"
     }
   ]
 }

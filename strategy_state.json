@@ -1,11 +1,11 @@
 {
-  "position": 4.5,
-  "position_cost": 2000.0,
+  "position": 0.0,
+  "position_cost": 0.0,
   "investment_level_idx": 0,
   "red_bar_count": 0,
-  "green_bar_count": 2,
-  "last_trade_date": "20261113",
-  "last_bar_date": "20261113",
+  "green_bar_count": 0,
+  "last_trade_date": "20261116",
+  "last_bar_date": "20261116",
   "trades": [
     {
       "date": "20260319",
@@ -240,7 +240,17 @@
       "red_bars": 4,
       "price": 1.252,
       "reason": "连续红柱达到4根，卖出一半"
+    },
+    {
+      "date": "20261116",
+      "action": "SELL",
+      "type": "全卖",
+      "ratio": 1.0,
+      "green_bars": 3,
+      "red_bars_before": 0,
+      "price": 1.211,
+      "reason": "连续3根绿柱，确认趋势反转"
     }
   ],
-  "saved_at": "2026-11-15 10:13:29"
+  "saved_at": "2026-11-16 12:25:23"
 }

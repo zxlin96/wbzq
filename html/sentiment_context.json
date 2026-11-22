@@ -8,7 +8,7 @@
   "reference_p90": 3053.1000000000004,
   "previous_reference_p90": 2825.4000000000005,
   "reference_window": 60,
-  "strategy_threshold": 2752.0,
+  "strategy_threshold": 2758.6000000000004,
   "strategy_trigger": true,
   "requested_date": "20261120",
   "price_date": "20261120",

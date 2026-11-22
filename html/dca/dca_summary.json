@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2026-11-20",
+  "lastUpdate": "2026-11-22",
   "etf_list": [
     {
       "name": "红利低波",
@@ -46,7 +46,8 @@
       "recent_trades": [],
       "previous_week_date": "20261113",
       "previous_weekly_j": 89.51392588572418,
-      "weekly_j_change": 10.854541635804651
+      "weekly_j_change": 10.854541635804651,
+      "decision_source": "ledger"
     },
     {
       "name": "纳指100",
@@ -302,7 +303,8 @@
       ],
       "previous_week_date": "20261113",
       "previous_weekly_j": 2.5929600360248486,
-      "weekly_j_change": -15.788926223939399
+      "weekly_j_change": -15.788926223939399,
+      "decision_source": "ledger"
     },
     {
       "name": "标普500",
@@ -597,7 +599,8 @@
       ],
       "previous_week_date": "20261113",
       "previous_weekly_j": 43.634921111104845,
-      "weekly_j_change": -33.1802153863281
+      "weekly_j_change": -33.1802153863281,
+      "decision_source": "ledger"
     },
     {
       "name": "日经225",
@@ -896,7 +899,8 @@
       ],
       "previous_week_date": "20261113",
       "previous_weekly_j": 3.989399284720065,
-      "weekly_j_change": -11.698767325224239
+      "weekly_j_change": -11.698767325224239,
+      "decision_source": "ledger"
     },
     {
       "name": "德国DAX",
@@ -1109,7 +1113,8 @@
       ],
       "previous_week_date": "20261113",
       "previous_weekly_j": 83.85510138370546,
-      "weekly_j_change": -48.779334935322325
+      "weekly_j_change": -48.779334935322325,
+      "decision_source": "ledger"
     },
     {
       "name": "中证2000",
@@ -1200,7 +1205,8 @@
       ],
       "previous_week_date": "20261113",
       "previous_weekly_j": 6.565610718524937,
-      "weekly_j_change": -12.387577799923648
+      "weekly_j_change": -12.387577799923648,
+      "decision_source": "ledger"
     },
     {
       "name": "通信",
@@ -1291,7 +1297,8 @@
       ],
       "previous_week_date": "20261113",
       "previous_weekly_j": -6.6729772487602474,
-      "weekly_j_change": -2.4584248252115906
+      "weekly_j_change": -2.4584248252115906,
+      "decision_source": "ledger"
     },
     {
       "name": "创新药",
@@ -1349,7 +1356,8 @@
       ],
       "previous_week_date": "20261113",
       "previous_weekly_j": 38.83875875123435,
-      "weekly_j_change": -26.84992807390075
+      "weekly_j_change": -26.84992807390075,
+      "decision_source": "ledger"
     },
     {
       "name": "电力",
@@ -1395,7 +1403,8 @@
       "recent_trades": [],
       "previous_week_date": "20261113",
       "previous_weekly_j": 42.920781103210885,
-      "weekly_j_change": 21.51928433891095
+      "weekly_j_change": 21.51928433891095,
+      "decision_source": "ledger"
     },
     {
       "name": "科创半导体",
@@ -1486,7 +1495,8 @@
       ],
       "previous_week_date": "20261113",
       "previous_weekly_j": 22.531852397709613,
-      "weekly_j_change": 1.0898851367730344
+      "weekly_j_change": 1.0898851367730344,
+      "decision_source": "ledger"
     },
     {
       "name": "卫星ETF富国",
@@ -1544,7 +1554,8 @@
       ],
       "previous_week_date": "20261113",
       "previous_weekly_j": 21.43100901496556,
-      "weekly_j_change": -15.787308488223076
+      "weekly_j_change": -15.787308488223076,
+      "decision_source": "ledger"
     },
     {
       "name": "有色金属",
@@ -1613,7 +1624,8 @@
       ],
       "previous_week_date": "20261113",
       "previous_weekly_j": -0.12249954483868208,
-      "weekly_j_change": -2.0487105242362276
+      "weekly_j_change": -2.0487105242362276,
+      "decision_source": "ledger"
     },
     {
       "name": "人工智能",
@@ -1671,7 +1683,8 @@
       ],
       "previous_week_date": "20261113",
       "previous_weekly_j": 13.72489039559155,
-      "weekly_j_change": -11.015514998741466
+      "weekly_j_change": -11.015514998741466,
+      "decision_source": "ledger"
     },
     {
       "name": "创业板新能源",
@@ -1717,7 +1730,8 @@
       "recent_trades": [],
       "previous_week_date": "20261113",
       "previous_weekly_j": 21.242061347672347,
-      "weekly_j_change": -14.725663468325592
+      "weekly_j_change": -14.725663468325592,
+      "decision_source": "ledger"
     },
     {
       "name": "机器人",
@@ -1758,7 +1772,8 @@
       ],
       "previous_week_date": "20261113",
       "previous_weekly_j": 50.79824781818272,
-      "weekly_j_change": -32.781951774723275
+      "weekly_j_change": -32.781951774723275,
+      "decision_source": "ledger"
     },
     {
       "name": "上证50",
@@ -1816,7 +1831,8 @@
       ],
       "previous_week_date": "20261113",
       "previous_weekly_j": 43.145338945031256,
-      "weekly_j_change": 6.3334912829395265
+      "weekly_j_change": 6.3334912829395265,
+      "decision_source": "ledger"
     },
     {
       "name": "沪深300",
@@ -1862,7 +1878,8 @@
       "recent_trades": [],
       "previous_week_date": "20261113",
       "previous_weekly_j": 7.4326440867304555,
-      "weekly_j_change": -2.1804676457054306
+      "weekly_j_change": -2.1804676457054306,
+      "decision_source": "ledger"
     }
   ]
 }

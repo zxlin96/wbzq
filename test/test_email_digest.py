@@ -145,7 +145,7 @@ def test_weekday_sale_is_visible_in_full_email(monkeypatch,tmp_path):
     assert '卖出提醒（1项）' in current and '50.00 份' in current
     assert '测试ETF' in current and '第1轮（R1）' in current
     assert '20261026' not in current
-    assert '周线卖出每日提醒' in current
+    assert '下一交易日开盘执行' in current and '成交按执行日提醒' in current
 
 
 def test_sunday_replays_exact_week_without_generating_second_purchase():

@@ -1766,6 +1766,7 @@ def _generate_dca_summary(results: dict, output_dir: str) -> dict:
                 'action_detail': action_info.get('action_detail', ''),
                 'signal_week_date': action_info.get('signal_week_date'),
                 'confirmation_rule': action_info.get('confirmation_rule'),
+                'sell_policy': action_info.get('sell_policy'),
                 'preview_weekly_j': action_info.get('preview_weekly_j'),
                 'positions': action_info.get('positions', []),
                 'last_date': action_info.get('last_date', last_date),
@@ -1903,7 +1904,7 @@ def run_backtest_from_config(config_path: str = 'etf_config.json',
                 report_func = generate_trim_report
             elif strat_version == 'v6h':
                 # V6H：V6 买入端 + V1h 卖出哲学
-                # 三段各卖基准 1/6（合计 50%），剩余 1/2 永久持有；无倍投。
+                # 周末统一确认累计目标（最多50%），跨档合并后下一交易日开盘执行。
                 from weekly_dca_strategy_v6h import WeeklyDCAStrategyV6H
                 # 标的参数覆盖全局基础金额，确保实际预算与报告中的单次金额一致。
                 v6h_params = {'base_amount': base_amount, **(etf.get('v6h_params', {}) or {})}

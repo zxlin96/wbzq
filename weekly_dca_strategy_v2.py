@@ -1106,6 +1106,8 @@ def generate_backtest_report(strategy: WeeklyDCAStrategy,
         else:
             stage_labels = {0: '定投中', 1: '已卖1/3', 2: '已卖2/3'}
         stage_text = stage_labels.get(pos_data.get('sell_stage', 0), '已清仓')
+        if pos_data.get('pending_sell'):
+            stage_text = '减仓待执行'
         pos_shares = pos_data.get('shares', 0)
         pos_cost = pos_data.get('avg_cost', 0)
         pos_j_peak = pos_data.get('j_peak', 0)
@@ -1122,6 +1124,12 @@ def generate_backtest_report(strategy: WeeklyDCAStrategy,
         <span>J峰值: {pos_j_peak:.2f}</span>
     </div>
 </div>"""
+    sell_rule = (f'J>={strategy.j_sell_half_threshold}卖1/3 | '
+                 f'回撤止盈(peak>={strategy.j_peak_min},回落>={strategy.j_pullback}) | '
+                 '收盘<中期线:中期>多空卖1/3,中期<多空全清 | 已卖2/3后收盘<多空线全清')
+    if getattr(strategy, 'hold_half', False) and hasattr(strategy, '_plan_weekly_sell'):
+        sell_rule = ('周末收盘统一检查：J过热/回撤/止损 → 收盘<中期线 → 收盘<多空线 | '
+                     '累计卖出目标1/6、1/3、1/2，可跨档合并，下一交易日开盘执行')
     html = f"""<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -1167,10 +1175,7 @@ h2 {{ color: #333; font-size: 18px; margin: 15px 0 10px; }}
 <body>
 <div class="container">
 <h1>周线KDJ定投策略回测报告</h1>
-<div class="subtitle">{strategy.name} | 基础金额: {strategy.base_amount} | "
-    f"J<={strategy.j_buy_threshold}定投 | J>={strategy.j_sell_half_threshold}卖1/3 | "
-    f"回撤止盈(peak>={strategy.j_peak_min},回落>={strategy.j_pullback}) | "
-    f"收盘<中期线:中期>多空卖1/3,中期<多空全清 | 已卖2/3后收盘<多空线全清</div>
+<div class="subtitle">{strategy.name} | 基础金额: {strategy.base_amount} | J&lt;={strategy.j_buy_threshold}定投 | {sell_rule}</div>
 <div class="action-box">
 <div class="action-header">
     <div class="action-label">下一交易日: {na['action_label']}</div>

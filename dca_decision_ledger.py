@@ -69,6 +69,8 @@ def sync_ledger(summary_data: dict, path: str = DEFAULT_LEDGER_PATH) -> dict:
       3. 账本中没有 → 追加新记录（source='live'），即本周新确认的决策。
       4. 无 signal_week 的 ETF 跳过（例如数据不足）。
       5. confirmation_rule 升级时归档原记录后重新确认；同一规则内仍锁定建议。
+      6. V6H 周末合并卖出保存原始订单，当前执行进度取回放状态，避免成交后
+         仍被周末的“待执行”文案覆盖；卖出规则升级同样保留旧记录再迁移。
 
     Returns:
         传入的 summary_data（就地修改并返回，便于链式调用）。
@@ -90,17 +92,24 @@ def sync_ledger(summary_data: dict, path: str = DEFAULT_LEDGER_PATH) -> dict:
             'recorded_at': now_str,
             'source': 'live',
             'confirmation_rule': item.get('confirmation_rule'),
+            'sell_policy': item.get('sell_policy'),
         }
+        weekly_orders = item.get('sell_policy') == 'weekly_aggregate_next_open_v1'
+        if weekly_orders:
+            entry_live['sell_orders'] = [dict(round_id=p.get('round_id'), **p['pending_sell'])
+                                         for p in item.get('positions', []) if p.get('pending_sell')]
         etf_book = etfs.setdefault(name, {'current_week': None, 'weeks': {}})
         weeks = etf_book.setdefault('weeks', {})
         existing = weeks.get(signal_week)
         rule = item.get('confirmation_rule')
-        if existing is not None and rule and existing.get('confirmation_rule') != rule:
+        policy_changed = (item.get('sell_policy')
+                          and (existing or {}).get('sell_policy') != item['sell_policy'])
+        if existing is not None and ((rule and existing.get('confirmation_rule') != rule) or policy_changed):
             # A corrected confirmation policy must not be locked to an old,
             # incorrectly selected action. Keep the original decision for audit.
             etf_book.setdefault('superseded_decisions', []).append({
                 **existing, 'superseded_at': now_str,
-                'reason': f"周线确认规则升级为 {rule}",
+                'reason': f"策略规则升级：{rule} / {item.get('sell_policy') or '原卖出规则'}",
             })
             existing = None
             entry_live['source'] = 'rule_migration'
@@ -110,6 +119,12 @@ def sync_ledger(summary_data: dict, path: str = DEFAULT_LEDGER_PATH) -> dict:
             logging.info(f"[decision_ledger] {name} 新决策入账: 周{signal_week} "
                          f"{entry_live['action_label']} (J={entry_live['weekly_j']})")
         else:
+            if weekly_orders:
+                # The weekly decision remains immutable in the ledger. Its
+                # pending label must not overwrite Monday's executed state.
+                item['decision_source'] = 'live_execution_state'
+                etf_book['current_week'] = signal_week
+                continue
             # 已有不可变记录：以账本为准，回放结果只作对照
             if (existing.get('action') != entry_live['action']
                     or existing.get('action_label') != entry_live['action_label']):

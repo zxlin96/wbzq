@@ -528,7 +528,8 @@ def generate_backtest_c_section(start_date: str, end_date: str):
 def generate_email_report(status="success", repo="", ref="", run_url="", as_of=None):
     """Render a read-only digest; as_of controls notification windows, not strategy runs."""
     from email_digest import (report_time, date_key, enrich_archived_summary, enrich_valuation_summary, load_market_context,
-                              collect_events, collect_portfolio_actions, render_actions, render_market, render_holdings,
+                              collect_events, collect_portfolio_actions, collect_weekly_sell_actions,
+                              render_actions, render_market, render_holdings,
                               render_valuation, fmt)
     from html import escape
     from datetime import timedelta
@@ -541,7 +542,9 @@ def generate_email_report(status="success", repo="", ref="", run_url="", as_of=N
     context = load_market_context('.', latest_date)
     events = collect_events(summary, state, valuation, latest_date, stamp, include_week_history=True)
     signal_date = min(latest_date, stamp.strftime('%Y%m%d'))
-    current_events = collect_portfolio_actions(summary,latest_date,stamp)+[e for e in events if e['date'] == signal_date]
+    current_events = (collect_portfolio_actions(summary,latest_date,stamp)
+                      + collect_weekly_sell_actions(summary,latest_date,stamp)
+                      + [e for e in events if e['date'] == signal_date])
     status_text = {'success':'运行成功','failure':'运行失败','cancelled':'运行取消'}.get(status,status)
     status_background, status_color = {
         'success': ('#e2ebfb', '#456faf'),
@@ -575,7 +578,7 @@ def generate_email_report(status="success", repo="", ref="", run_url="", as_of=N
             current_note = f'{origin}（{signal_label}），供下周操作准备。'
         else:
             current_note = f'最新数据日 {signal_label}；尚无本周新数据。'
-    current_note += ' 周线卖出每日提醒；周线买入周五提醒、周日复核。'
+    current_note += ' 周线卖出：本周最后交易日收盘确认，跨档合并，下一交易日开盘执行；成交按执行日提醒。周线买入周五提醒、周日复核。'
     body = section(action_title, render_actions(current_events, current_note), highlighted=True)
     body += section('周线定投', holdings)
     body += section('市场情绪与持仓', render_market(context)+sentiment)

@@ -187,7 +187,8 @@ def collect_events(summary, sentiment, valuation, latest_date, as_of=None, *, in
     for etf in (summary or {}).get('etf_list',[]):
         for trade in etf.get('recent_trades',[]):
             # Weekly purchase reminders keep their Friday/Sunday schedule.
-            # Sales also depend on daily prices and must reach the daily email.
+            # Report sales on their simulated execution date, including a
+            # Monday opening fill of the previous week's confirmed order.
             if (stamp.weekday() in (4,6)
                     or (trade.get('action') == 'SELL'
                         and (include_week_history or date_key(trade.get('date')) == cutoff))):
@@ -248,6 +249,31 @@ def collect_portfolio_actions(summary, latest_date, as_of=None):
     return actions
 
 
+def collect_weekly_sell_actions(summary, latest_date, as_of=None):
+    """Show confirmed V6H orders, separately from simulated opening fills."""
+    stamp = report_time(as_of)
+    today = stamp.strftime('%Y%m%d')
+    cutoff = min(date_key(latest_date), today)
+    start = (stamp-timedelta(days=stamp.weekday()+7)).strftime('%Y%m%d')
+    actions = []
+    for etf in (summary or {}).get('etf_list', []):
+        if date_key(etf.get('last_date')) != cutoff or (cutoff == today and stamp.hour < 15):
+            continue
+        for position in etf.get('positions', []):
+            order = position.get('pending_sell') or {}
+            signal = date_key(order.get('signal_date'))
+            shares, target = number(order.get('shares')), number(order.get('target_sold_ratio'))
+            if (not start <= signal <= cutoff or shares is None or shares <= 0
+                    or target is None or not 0 < target <= 1):
+                continue
+            actions.append(dict(strategy='周线定投', name=etf.get('name', ''),
+                ts_code=etf.get('ts_code', ''), date=signal, action='SELL', amount=None,
+                shares=shares, ratio=None, round=position.get('round_id'),
+                reason=order.get('reason', ''), scope='pending', pending=True,
+                target_sold_ratio=target, execution_date=order.get('execution_date')))
+    return actions
+
+
 def table(headers, rows, column_widths=None, *, compact=False):
     alignments = ['right' if h in ('金额／份额', '持有市值', '入选数量') else 'left' for h in headers]
     head_padding='8px 6px' if compact else '10px 6px'
@@ -305,7 +331,9 @@ def render_actions(events, note='', empty_text='本次无新增操作'):
                 round_label = (f"第{e['round']}轮（R{e['round']}）" if e['strategy'] == '周线定投'
                                else f"第{e['round']}级")
             quantities = []
-            if e.get('pending'):
+            if e.get('target_sold_ratio') is not None:
+                quantities.append(f"累计卖出目标：本轮原始份额的 {e['target_sold_ratio']:.2%}")
+            elif e.get('pending'):
                 target=f"目标仓位 {e['target_ratio']:.2%}"
                 if e.get('current_ratio') is not None:
                     target=f"模拟仓位 {e['current_ratio']:.2%} → "+target
@@ -322,7 +350,9 @@ def render_actions(events, note='', empty_text='本次无新增操作'):
             reason = small('触发原因：'+str(e.get('reason') or '未记录'))
             record_note=(f"{e.get('ts_code') or '代码暂无'} · {e['strategy']} · "
                          +('信号周 ' if e.get('pending') else '记录日 ')+e['date'])
-            pending_note=(_badge('策略待执行建议')+small('下一交易日开盘；已操作请勿重复。')) if e.get('pending') else ''
+            execution = e.get('execution_date')
+            execution_note = (f'{execution}（下一交易日）开盘' if execution else '下一交易日开盘')
+            pending_note=(_badge('策略待执行建议')+small(execution_note+'；已操作请勿重复。')) if e.get('pending') else ''
             body += (f'<div data-trade-action="{action}" style="margin:10px 0;padding:14px;'
                      f'border:1px solid {"#efdcd5" if action == "SELL" else "#dce5f5"};border-left:3px solid {color};'
                      f'border-radius:10px;background:{background};overflow-wrap:anywhere">'
@@ -356,7 +386,12 @@ def _round_progress(position):
     remaining = number(position.get('budget_remaining'))
     if remaining is None and target is not None and target > 0 and invested is not None:
         remaining = max(target-invested, 0)
-    if action in ('hold_long_term', 'v6h_stage_3'):
+    if position.get('pending_sell'):
+        order = position['pending_sell']
+        target = number(order.get('target_sold_ratio'))
+        kind, label = 'selling', '减仓待执行'
+        detail = ('累计卖出目标 '+f'{target:.2%}' if target is not None else '周末已确认')+' · 下一交易日开盘'
+    elif action in ('hold_long_term', 'v6h_stage_3'):
         kind, label, detail = 'retained', '', ''
     elif position.get('portfolio_value') is not None or action in ('trim', 'refill'):
         kind, label, detail = 'portfolio', '', ''

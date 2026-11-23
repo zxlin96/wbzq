@@ -396,13 +396,15 @@ def generate_multi_indicator_hint_section(hints, etf_map=None):
     Returns:
         str: HTML 片段字符串。
     """
+    from email_digest import table
+
     if etf_map is None:
         etf_map = load_backtest_etf_map()
 
     if not hints:
-        return '<p style="color:#999;font-size:13px">暂无超阈值行业</p>'
+        return '<p style="color:#718096;font-size:14px">暂无超阈值行业</p>'
 
-    rows = ""
+    rows = []
     for h in hints:
         industry = escape_html(h.get("industry", ""))
         count = h.get("count", 0)
@@ -410,27 +412,15 @@ def generate_multi_indicator_hint_section(hints, etf_map=None):
         etf_name = etf_info.get("name", "")
         ts_code = etf_info.get("ts_code", "")
         if etf_name and ts_code:
-            etf_cell = f"{escape_html(etf_name)} <span style='color:#888'>({ts_code})</span>"
+            etf_cell = (f"<strong style='color:#304665'>{escape_html(etf_name)}</strong> "
+                        f"<span style='color:#718096;font-size:12px'>({escape_html(ts_code)})</span>")
         elif etf_name:
             etf_cell = escape_html(etf_name)
         else:
-            etf_cell = "<span style='color:#bbb'>暂无对应ETF</span>"
-        rows += f"""
-        <tr>
-            <td style="padding:6px 8px;border:1px solid #ddd;text-align:left">{industry}</td>
-            <td style="padding:6px 8px;border:1px solid #ddd;text-align:right">{count}</td>
-            <td style="padding:6px 8px;border:1px solid #ddd;text-align:left">{etf_cell}</td>
-        </tr>"""
+            etf_cell = "<span style='color:#718096'>暂无对应ETF</span>"
+        rows.append([industry, escape_html(count), etf_cell])
 
-    return f"""
-    <table style="border-collapse:collapse;width:100%;font-size:13px;margin-bottom:16px">
-        <tr style="background:#f5f5f5">
-            <th style="padding:6px 8px;border:1px solid #ddd;text-align:left">行业</th>
-            <th style="padding:6px 8px;border:1px solid #ddd;text-align:right">入选数量</th>
-            <th style="padding:6px 8px;border:1px solid #ddd;text-align:left">相关行业ETF</th>
-        </tr>
-        {rows}
-    </table>"""
+    return table(['行业', '入选数量', '相关行业ETF'], rows)
 
 
 def load_backtest_etf_map():
@@ -538,7 +528,7 @@ def generate_backtest_c_section(start_date: str, end_date: str):
 def generate_email_report(status="success", repo="", ref="", run_url="", as_of=None):
     """Render a read-only digest; as_of controls notification windows, not strategy runs."""
     from email_digest import (report_time, date_key, enrich_archived_summary, enrich_valuation_summary, load_market_context,
-                              collect_events, render_actions, render_market, render_holdings,
+                              collect_events, collect_portfolio_actions, render_actions, render_market, render_holdings,
                               render_valuation, fmt)
     from html import escape
     from datetime import timedelta
@@ -551,20 +541,30 @@ def generate_email_report(status="success", repo="", ref="", run_url="", as_of=N
     context = load_market_context('.', latest_date)
     events = collect_events(summary, state, valuation, latest_date, stamp, include_week_history=True)
     signal_date = min(latest_date, stamp.strftime('%Y%m%d'))
-    current_events = [e for e in events if e['date'] == signal_date]
+    current_events = collect_portfolio_actions(summary,latest_date,stamp)+[e for e in events if e['date'] == signal_date]
     status_text = {'success':'运行成功','failure':'运行失败','cancelled':'运行取消'}.get(status,status)
+    status_background, status_color = {
+        'success': ('#e2ebfb', '#456faf'),
+        'failure': ('#fce7e4', '#a04e50'),
+    }.get(status, ('#eef1f6', '#6d788d'))
     total = reports.get('totalStocks')
     count_text = str(total) if total is not None else '—'
-    def section(title, content):
-        return (f'<section style="margin-top:24px"><h2 style="font-size:18px;color:#172d48;'
-                f'border-bottom:2px solid #e6eef8;padding-bottom:8px">{title}</h2>{content}</section>')
-    holdings = render_holdings(summary)
+    def section(title, content, *, highlighted=False, anchor=''):
+        background = '#ffffff' if highlighted else '#ffffff'
+        border = '#dce5f2' if highlighted else '#e7ebf2'
+        section_id=f' id="{escape(anchor,quote=True)}"' if anchor else ''
+        return (f'<section{section_id} style="margin-top:18px;padding:18px 14px;background:{background};'
+                f'border:1px solid {border};border-radius:10px">'
+                f'<h2 style="font-size:18px;line-height:1.5;color:#304665;margin:0 0 12px;'
+                f'border-left:3px solid #b1c4e5;padding-left:10px">{title}</h2>{content}</section>')
+    holdings = render_holdings(summary, latest_date)
     position = fmt(state.get('position'), 2) if state else '暂无数据'
-    sentiment = (f'<p style="font-size:13px">中证2000ETF（563300.SH） · '
+    sentiment = (f'<p style="font-size:14px;margin:14px 0 0;padding:12px;background:#f5f7fb;'
+                 f'border-left:3px solid #c3d0e5;border-radius:8px">中证2000ETF（563300.SH） · '
                  f'数据截至 {escape(str(state.get("last_trade_date") or "—"))} · '
                  f'仓位 {position} 个记账单位 · 红柱 {fmt(state.get("red_bar_count"),0)} · '
                  f'绿柱 {fmt(state.get("green_bar_count"),0)}</p>')
-    action_title = '本次操作' + (f'（{len(current_events)}项记录）' if current_events else '')
+    action_title = '本次操作' + (f'（{len(current_events)}项）' if current_events else '')
     signal_label = f'{signal_date[:4]}-{signal_date[4:6]}-{signal_date[6:8]}' if signal_date else '暂无数据'
     current_note = f'最新已收盘数据日 {signal_label} 的操作信号。'
     if stamp.weekday() == 6:
@@ -575,11 +575,12 @@ def generate_email_report(status="success", repo="", ref="", run_url="", as_of=N
             current_note = f'{origin}（{signal_label}），供下周操作准备。'
         else:
             current_note = f'最新数据日 {signal_label}；尚无本周新数据。'
-    body = section(action_title, render_actions(current_events, current_note))
+    current_note += ' 周线卖出每日提醒；周线买入周五提醒、周日复核。'
+    body = section(action_title, render_actions(current_events, current_note), highlighted=True)
+    body += section('周线定投', holdings)
     body += section('市场情绪与持仓', render_market(context)+sentiment)
-    body += section('ETF持仓简表', holdings)
-    body += section('估值定投 · 独立检查', render_valuation(valuation, latest_date))
-    body += section('选股与行业提示',f'<p style="font-size:13px">主策略选股：{escape(count_text)}只</p>'+
+    body += section('估值定投 · 独立检查', render_valuation(valuation, latest_date), anchor='valuation')
+    body += section('选股与行业提示',f'<p style="font-size:14px">主策略选股：{escape(count_text)}只</p>'+
                     generate_multi_indicator_hint_section(load_multi_indicator_hints(), load_backtest_etf_map()))
     if stamp.weekday() in (4, 6):
         start = stamp - timedelta(days=stamp.weekday())
@@ -590,18 +591,23 @@ def generate_email_report(status="success", repo="", ref="", run_url="", as_of=N
         week_title = '本周操作汇总／复核' + (f'（{len(events)}项记录）' if events else '')
         body += section(week_title, render_actions(events, week_note, '本周暂无操作记录'))
     else:
-        body += section('本周操作汇总／复核', '<p style="font-size:13px;color:#64748b">周五、周日提供本周操作汇总。</p>')
-    run_link = f' · <a href="{escape(run_url,quote=True)}">查看执行详情</a>' if run_url else ''
+        body += section('本周操作汇总／复核', '<p style="font-size:14px;color:#718096">周五、周日提供本周操作汇总。</p>')
+    run_link = (f' · <a href="{escape(run_url,quote=True)}" style="color:#5478b4;'
+                f'text-decoration:underline">查看执行详情</a>') if run_url else ''
     return f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;background:#f3f6fb;color:#26364a;font-family:Arial,'Microsoft YaHei',sans-serif;line-height:1.5">
-<div style="max-width:720px;margin:0 auto;padding:20px 12px;background:#fff">
-<h1 style="font-size:24px;margin:0 0 8px">股票策略日报</h1>
-<p style="font-size:12px;color:#64748b;margin:0">生成于 {stamp.strftime('%Y-%m-%d %H:%M')} 北京时间 · {escape(status_text)}<br>最新报告数据：{escape(latest_date or '暂无')}</p>
+<body style="margin:0;background:#f7f9fc;color:#3d4c62;font-family:Arial,'Microsoft YaHei',sans-serif;font-size:14px;line-height:1.65">
+<div style="max-width:720px;margin:0 auto;padding:20px 12px">
+<div style="padding:26px 20px;background:#edf3fc;border:1px solid #dce5f4;border-radius:14px">
+<h1 style="font-size:26px;line-height:1.4;color:#304665;margin:0 0 12px">股票策略日报</h1>
+<p style="font-size:12px;line-height:2.2;color:#6f809a;margin:0">生成于 {stamp.strftime('%Y-%m-%d %H:%M')} 北京时间 · <span style="display:inline-block;padding:1px 8px;border-radius:4px;font-weight:600;background:{status_background};color:{status_color}">{escape(status_text)}</span><br>最新报告数据：{escape(latest_date or '暂无')}</p>
+</div>
 {body}
-<p style="text-align:center;margin:26px 0"><a href="https://zxlin96.github.io/wbzq/" style="display:inline-block;background:#1765c1;color:white;padding:12px 20px;text-decoration:none;border-radius:6px">查看全部持仓与完整报告 →</a></p>
-<p style="font-size:11px;color:#64748b;border-top:1px solid #e2e8f0;padding-top:12px">记录日期为策略记录日期，不代表券商成交确认。同一信号仅执行一次，已执行请勿重复操作。周日是本周信号复核；逐轮明细、历史记录和图表见完整报告。</p>
-<p style="font-size:11px;color:#64748b">{escape(repo)} · {escape(ref)}{run_link}</p>
+<p style="text-align:center;margin:26px 0"><a href="https://zxlin96.github.io/wbzq/" style="display:inline-block;max-width:100%;box-sizing:border-box;background:#5478b4;color:#ffffff;padding:14px 20px;font-size:14px;font-weight:600;text-decoration:none;border-radius:10px">查看全部持仓与完整报告 →</a></p>
+<div style="padding:14px;background:#f1f4f9;border:1px solid #e2e8f1;border-radius:10px;font-size:12px;line-height:1.8;color:#718096;overflow-wrap:anywhere">
+<p style="margin:0 0 10px">记录日期为策略记录日期，不代表券商成交确认。同一信号仅执行一次，已执行请勿重复操作。周日是本周信号复核；历史交易和图表见完整报告。</p>
+<p style="margin:0">{escape(repo)} · {escape(ref)}{run_link}</p>
+</div>
 </div></body></html>'''
 
 

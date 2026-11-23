@@ -18,6 +18,11 @@
       "name": "纳指100",
       "target": "nasdaq_timing",
       "strategy": "v6h",
+      "v6h_params": {
+        "base_amount": 3000,
+        "round_budget": 15000,
+        "round_periods": 5
+      },
       "enabled": true
     },
     {
@@ -39,90 +44,6 @@
       "name": "德国DAX",
       "target": "german_dax",
       "strategy": "v6h",
-      "enabled": true
-    },
-    {
-      "ts_code": "563300.SH",
-      "name": "中证2000",
-      "target": "zz2000",
-      "strategy": "v6",
-      "enabled": true
-    },
-    {
-      "ts_code": "515880.SH",
-      "name": "通信",
-      "target": "telecom",
-      "strategy": "v6",
-      "enabled": true
-    },
-    {
-      "ts_code": "516080.SH",
-      "name": "创新药",
-      "target": "innovative_medicine",
-      "strategy": "v6",
-      "enabled": true
-    },
-    {
-      "ts_code": "159611.SZ",
-      "name": "电力",
-      "target": "electricity",
-      "strategy": "v6",
-      "enabled": true
-    },
-    {
-      "ts_code": "588170.SH",
-      "name": "科创半导体",
-      "target": "kechuang_semi",
-      "strategy": "v6",
-      "enabled": true
-    },
-    {
-      "ts_code": "563230.SH",
-      "name": "卫星ETF富国",
-      "target": "satellite",
-      "strategy": "v6",
-      "enabled": true
-    },
-    {
-      "ts_code": "512400.SH",
-      "name": "有色金属",
-      "target": "nonferrous_metals",
-      "strategy": "v6",
-      "enabled": true
-    },
-    {
-      "ts_code": "159819.SZ",
-      "name": "人工智能",
-      "target": "ai",
-      "strategy": "v6",
-      "enabled": true
-    },
-    {
-      "ts_code": "159387.SZ",
-      "name": "创业板新能源",
-      "target": "cyb_new_energy",
-      "strategy": "v6",
-      "enabled": true
-    },
-    {
-      "ts_code": "562500.SH",
-      "name": "机器人",
-      "target": "robot",
-      "strategy": "v6",
-      "enabled": true
-    },
-    {
-      "ts_code": "510050.SH",
-      "name": "上证50",
-      "target": "sz50",
-      "strategy": "v6",
-      "enabled": true
-    },
-    {
-      "ts_code": "510300.SH",
-      "name": "沪深300",
-      "target": "hs300",
-      "strategy": "v6",
       "enabled": true
     }
   ],

@@ -11,7 +11,7 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import generate_email_report as mail
-from email_digest import (collect_events, market_context, render_holdings, render_valuation,
+from email_digest import (collect_events, collect_portfolio_actions, market_context, render_actions, render_holdings, render_valuation,
                           report_time, weekly_comparison, enrich_archived_summary,
                           enrich_valuation_summary, load_market_context)
 
@@ -27,13 +27,125 @@ def weekly(records=None):
         positions=[dict(shares=100,avg_cost=10,budget_remaining=0,action='buy',action_label='建议定投(0x)')])]}
 
 
+def portfolio(action='trim',ratio=.5147):
+    target={'trim':.5,'refill':1.,'hold':None}[action]
+    label={'trim':'建议减仓至50%','refill':'建议补满仓','hold':'持有（仓位50%）'}[action]
+    return {'etf_list':[dict(name='红利低波',ts_code='512890.SH',last_date='20261120',
+        signal_week_date='20261120',weekly_j=-1 if action=='refill' else 100.37,
+        last_price=1.,portfolio_rules=dict(trim_j=100,refill_j=0,keep_ratio=.5),recent_trades=[],
+        positions=[dict(round_id=1,shares=ratio*10000,portfolio_value=10000,
+                        position_ratio=ratio,target_ratio=target,action=action,action_label=label,
+                        action_detail='下一交易日开盘调整至目标仓位')])]}
+
+
+@pytest.mark.parametrize('action,direction,target',[('trim','SELL',.5),('refill','BUY',1.)])
+def test_portfolio_pending_advice_is_visible_without_fabricating_a_fill(action,direction,target):
+    source=portfolio(action);before=copy.deepcopy(source)
+    events=collect_portfolio_actions(source,'20261120','2026-11-20 21:00')
+    assert len(events)==1
+    event=events[0]
+    assert event['action']==direction and event['target_ratio']==target
+    assert event['pending'] is True and event['scope']=='pending'
+    assert event['amount'] is None and event['shares'] is None and event['round'] is None
+    html=render_actions(events)
+    for text in ['红利低波','策略待执行建议','模拟仓位 51.47%',f'目标仓位 {target:.2%}',
+                 '下一交易日开盘','信号周 20261120']:
+        assert text in html
+    assert '买入金额' not in html and '参考金额' not in html and source==before
+
+
+def test_portfolio_at_half_with_no_new_advice_has_no_pending_sell():
+    source=portfolio('hold',.5)
+    assert not collect_portfolio_actions(source,'20261120','2026-11-20 21:00')
+    assert '模拟仓位 50.00%' in render_holdings(source)
+    source=portfolio()
+    del source['etf_list'][0]['positions'][0]['target_ratio']
+    del source['etf_list'][0]['portfolio_rules']
+    assert not collect_portfolio_actions(source,'20261120','2026-11-20 21:00')
+
+
+@pytest.mark.parametrize('when,latest,count',[
+    ('2026-11-20 14:00','20261120',0),('2026-11-19 21:00','20261120',0),
+    ('2026-11-23 21:00','20261123',0),('2026-11-23 09:00','20261120',1),
+    ('2026-12-07 21:00','20261120',0),
+])
+def test_pending_portfolio_reminders_use_confirmed_current_data_and_survive_the_weekend(when,latest,count):
+    assert len(collect_portfolio_actions(portfolio(),latest,when))==count
+
+
+def test_dividend_pending_advice_reaches_the_top_of_the_email_and_ratio_can_be_derived(monkeypatch,tmp_path):
+    monkeypatch.chdir(tmp_path)
+    source=portfolio()
+    del source['etf_list'][0]['positions'][0]['position_ratio']
+    monkeypatch.setattr(mail,'load_reports_json',lambda:dict(latestDate='20261120'))
+    monkeypatch.setattr(mail,'load_dca_summary',lambda:source)
+    monkeypatch.setattr(mail,'load_strategy_state',lambda:{})
+    monkeypatch.setattr(mail,'load_4pct_summary',lambda:{})
+    monkeypatch.setattr(mail,'load_multi_indicator_hints',lambda:[])
+    html=mail.generate_email_report(as_of='2026-11-20 21:00')
+    current=re.findall(r'<section[^>]*>(.*?)</section>',html,re.S)[0]
+    assert '卖出提醒（1项）' in current and '红利低波' in current
+    assert '模拟仓位 51.47% → 目标仓位 50.00%' in current and '策略待执行建议' in current
+    assert source['etf_list'][0]['recent_trades']==[]
+
+
+@pytest.mark.parametrize('j,ratio,action,target',[
+    (100.37,.5147,'trim',.5),(100.37,.5,'hold',None),(-1.,.5,'refill',1.),(50.,1.,'hold',None),
+])
+def test_portfolio_signal_exports_current_and_target_allocation_without_execution(monkeypatch,j,ratio,action,target):
+    from portfolio_trim_strategy import PortfolioTrimStrategy
+    daily=pd.DataFrame([dict(trade_date='20261120',close_qfq=1.)])
+    weekly_frame=pd.DataFrame([dict(trade_date='20261120',week_completed=True,J=j,K=50.,D=50.)])
+    monkeypatch.setattr(PortfolioTrimStrategy,'_prepare',staticmethod(lambda *args:(daily,weekly_frame)))
+    strategy=PortfolioTrimStrategy('红利低波')
+    strategy.shares=ratio*10000
+    strategy.cash=(1-ratio)*10000
+    strategy.last_price=1.
+    result=strategy.get_next_action(daily,weekly_frame)['positions'][0]
+    assert result['action']==action and result['position_ratio']==pytest.approx(ratio)
+    assert result['target_ratio']==target and not strategy.trades
+
+
 @pytest.mark.parametrize('when,count',[
-    ('2026-10-26 20:00',0),('2026-10-27 20:00',0),('2026-10-28 20:00',0),
+    ('2026-10-26 20:00',0),('2026-10-27 20:00',1),('2026-10-28 20:00',0),
     ('2026-10-29 20:00',0),('2026-10-30 20:00',2),('2026-10-31 20:00',0),
     ('2026-11-01 18:00',2),('2026-10-30T16:00:00Z',0),
 ])
-def test_weekly_notifications_only_friday_sunday(when,count):
+def test_weekly_sales_daily_and_purchases_friday_sunday(when,count):
     assert len(collect_events(weekly(),{}, {},'20261030',when))==count
+
+
+@pytest.mark.parametrize('day',['20261026','20261027','20261028','20261029','20261030'])
+def test_weekly_sale_reaches_daily_mail_without_repeating_old_sale(day):
+    source=weekly([trade(day,'SELL',500,shares=50),trade('20261023','SELL',600),
+                   trade(day,amount=1000)])
+    source['etf_list'][0]['last_date']=day
+    before=copy.deepcopy(source)
+    stamp=datetime.strptime(day,'%Y%m%d').replace(hour=20)
+    events=collect_events(source,{}, {},day,stamp)
+    sales=[e for e in events if e['action']=='SELL']
+    assert [(e['date'],e['shares']) for e in sales]==[(day,50)]
+    assert source==before
+    if stamp.weekday()!=4:
+        assert all(e['action']=='SELL' for e in events)
+    assert not collect_events(source,{}, {},day,stamp.replace(hour=14))
+
+
+def test_weekday_sale_is_visible_in_full_email(monkeypatch,tmp_path):
+    monkeypatch.chdir(tmp_path)
+    source=weekly([trade('20261027','SELL',500,shares=50),trade('20261026','SELL',200)])
+    source['etf_list'][0]['last_date']='20261027'
+    monkeypatch.setattr(mail,'load_reports_json',lambda:dict(latestDate='20261027'))
+    monkeypatch.setattr(mail,'load_dca_summary',lambda:source)
+    monkeypatch.setattr(mail,'load_strategy_state',lambda:{})
+    monkeypatch.setattr(mail,'load_4pct_summary',lambda:{})
+    monkeypatch.setattr(mail,'load_multi_indicator_hints',lambda:[])
+    html=mail.generate_email_report(as_of='2026-10-27 20:00')
+    current=re.findall(r'<section[^>]*>(.*?)</section>',html,re.S)[0]
+    assert '卖出提醒（1项）' in current and '50.00 份' in current
+    assert '测试ETF' in current and '第1轮（R1）' in current
+    assert '20261026' not in current
+    assert '周线卖出每日提醒' in current
 
 
 def test_sunday_replays_exact_week_without_generating_second_purchase():
@@ -82,7 +194,7 @@ def test_zero_remaining_budget_does_not_hide_final_buy_or_create_zero_order():
     source=weekly([trade(amount=1000),trade(amount=0)])
     events=collect_events(source,{}, {},'20261030','2026-10-30 20:00')
     assert [e['amount'] for e in events]==[1000]
-    assert '预算已用完' in render_holdings(source)
+    assert '预算已投完' in render_holdings(source)
     assert '0x' not in render_holdings(source)
 
 
@@ -117,8 +229,126 @@ def test_market_reference_excludes_current_day_and_keeps_actual_rule_separate():
 def test_weekly_j_changes_are_points_including_negative_values():
     c=weekly_comparison(pd.DataFrame([dict(trade_date='20261023',J=-5),dict(trade_date='20261030',J=12)]))
     assert c['weekly_j_change']==17 and c['previous_week_date']=='20261023'
-    html=render_holdings(weekly())
-    assert '前周 -4.00' in html and '+15.00点' in html
+
+
+def test_pending_rounds_hide_retained_and_cleared_positions_and_omit_market_value():
+    source=weekly([])
+    source['etf_list'][0]['positions']=[
+        dict(round_id=7,shares=0,action='sell_all'),
+        dict(round_id=8,shares=80,avg_cost=9,action='v6h_stage_3'),
+        dict(round_id=9,shares=90,avg_cost=10,action='hold_long_term'),
+        dict(round_id=12,shares=120,avg_cost=11,action='v6h_stage_1',sell_stage=1),
+        dict(round_id=13,shares=130,avg_cost=12,action='buy',round_budget=5000,budget_remaining=1000),
+    ]
+    source['etf_list'].append(dict(name='空仓ETF',last_date='20261030',signal_week_date='20261030',positions=[]))
+    before=copy.deepcopy(source)
+    html=render_holdings(source,'20261102')
+    for text in ['R12','R13','已减1/6','定投未完成','待完成 2 轮',
+                 '剩余预算 ¥1,000','策略模拟进度','数据滞后','20261030']:
+        assert text in html
+    for text in ['R7','R8','R9','持有市值','长期保留','长期持有','成本','120.00份','前周','空仓ETF']:
+        assert text not in html
+    assert source==before
+
+
+def test_cash_only_portfolio_does_not_invent_an_unfinished_round_or_show_value():
+    source=weekly([])
+    source['etf_list'][0]['positions']=[dict(round_id=1,shares=0,portfolio_value=10000)]
+    html=render_holdings(source)
+    assert '暂无待完成轮次' in html
+    assert '¥10,000' not in html and 'R1' not in html
+
+
+@pytest.mark.parametrize('changes,label,detail',[
+    ({'total_invested':2000,'budget_remaining':3000}, '定投未完成', '剩余预算 ¥3,000'),
+    ({'total_invested':5000,'budget_remaining':0}, '持有待卖', '预算已投完'),
+    ({'action':'v6h_stage_1','sell_stage':1,'total_invested':5000,'budget_remaining':0},
+     '减仓未完成', '已减1/6'),
+    ({'action':'v6h_stage_2','sell_stage':2,'total_invested':5000,'budget_remaining':0},
+     '减仓未完成', '已减1/3'),
+])
+def test_pending_rounds_keep_funding_and_selling_progress_without_claiming_execution(changes,label,detail):
+    source=weekly([])
+    position=dict(round_id=12,shares=100,avg_cost=10,action='buy',round_budget=5000)
+    position.update(changes)
+    source['etf_list'][0]['positions']=[position]
+    before=copy.deepcopy(source)
+    html=render_holdings(source)
+    assert label in html and detail in html and 'R12' in html
+    assert '策略模拟进度' in html and '实际成交请自行核对' in html
+    assert source==before
+
+
+def test_pending_list_excludes_retained_cleared_and_portfolio_rounds():
+    source=weekly([])
+    source['etf_list'][0]['positions']=[
+        dict(round_id=1,shares=10,round_budget=5000,budget_remaining=1000,action='buy'),
+        dict(round_id=2,shares=20,round_budget=5000,budget_remaining=0,action='buy'),
+        dict(round_id=3,shares=30,round_budget=5000,budget_remaining=1000,sell_stage=1,action='v6h_stage_1'),
+        dict(round_id=4,shares=40,sell_stage=3,action='v6h_stage_3'),
+        dict(round_id=5,shares=0,action='sell_all'),
+        dict(round_id=6,shares=60,portfolio_value=600,action='hold'),
+    ]
+    html=render_holdings(source)
+    for text in ['待完成 3 轮','定投未完成','持有待卖','减仓未完成','R1','R2','R3','data-portfolio-strategy="true"']:
+        assert text in html
+    for text in ['R4','R5','R6','长期保留','组合总值','持有市值']:
+        assert text not in html
+
+
+@pytest.mark.parametrize('action,label,shares',[
+    ('trim','建议减仓至50%',100),('refill','建议补满仓',0),('hold','持有（仓位50%）',50),
+])
+def test_dividend_strategy_rules_and_current_signal_remain_visible_without_round_or_value(action,label,shares):
+    source={'etf_list':[dict(name='红利低波',ts_code='512890.SH',last_date='20261120',
+        signal_week_date='20261120',weekly_j=100.37,
+        portfolio_rules=dict(trim_j=100,refill_j=0,keep_ratio=.5),
+        positions=[dict(round_id=1,shares=shares,portfolio_value=100000,
+                        action=action,action_label=label)])]}
+    before=copy.deepcopy(source)
+    html=render_holdings(source)
+    for text in ['红利低波','512890.SH',label,'周J&gt;100减至50%','周J&lt;0补满',
+                 '确认周J 100.37','data-portfolio-strategy="true"','暂无待完成轮次']:
+        assert text in html
+    for text in ['R1','持有市值','组合总值','100,000','成本','长期保留']:
+        assert text not in html
+    assert source==before
+
+
+def test_final_sale_still_reminds_even_when_the_round_is_removed_from_tracking():
+    source=weekly([trade(action='SELL',amount=500,shares=50)])
+    source['etf_list'][0]['positions']=[dict(round_id=1,shares=50,action='v6h_stage_3',sell_stage=3)]
+    html=render_holdings(source)
+    assert '暂无待完成轮次' in html and 'R1' not in html and '测试ETF' not in html
+    events=collect_events(source,{}, {},'20261030','2026-10-30 20:00')
+    assert len(events)==1 and events[0]['action']=='SELL'
+    assert '卖出 50.00 份' in render_actions(events)
+
+
+def test_missing_round_budget_is_unknown_and_available_budget_progress_can_be_derived():
+    source=weekly([])
+    source['etf_list'][0]['positions']=[dict(round_id=1,shares=10,action='buy')]
+    html=render_holdings(source)
+    assert '进度待核对' in html and '预算数据不足' in html
+    assert '持有待卖' not in html
+    source['etf_list'][0]['positions'][0].update(round_budget=5000,total_invested=2000)
+    html=render_holdings(source)
+    assert '定投未完成' in html and '剩余预算 ¥3,000' in html
+
+
+def test_buy_sell_groups_show_direction_amount_round_and_escaped_reason():
+    source=weekly([trade(),trade(action='SELL',amount=500,shares=50,ratio=.5)])
+    events=collect_events(source,{}, {},'20261030','2026-10-30 20:00')
+    events[0]['reason']='<script>unsafe</script>'
+    before=copy.deepcopy(events)
+    html=render_actions(events)
+    assert html.index('卖出提醒（1项）')<html.index('买入提醒（1项）')
+    for text in ['data-trade-action="SELL"','data-trade-action="BUY"','卖出 50.00 份',
+                 '卖出比例 50%','参考金额 ¥500.00','买入金额 ¥1,000.00',
+                 '第1轮（R1）','触发原因：','记录日 20261030','000001.SH']:
+        assert text in html
+    assert '<script>' not in html and '&lt;script&gt;' in html
+    assert events==before
 
 
 def test_valuation_shows_dates_gate_and_missing_comparison():
@@ -137,6 +367,69 @@ def test_valuation_shows_dates_gate_and_missing_comparison():
     assert 'PE —' in missing and '五年分位 暂无数据' in missing
 
 
+@pytest.mark.parametrize('pe,previous_pe,pct,previous_pct,pe_change,rank_change',[
+    (13.531,13.4824,75.84,75.12,'▲ +0.05','▲ +0.72个百分点'),
+    (36.1526,36.4059,47.12,49.6,'▼ -0.25','▼ -2.48个百分点'),
+    (12.,12.,50.,50.,'→ +0.00','→ +0.00个百分点'),
+])
+def test_valuation_graph_preserves_exact_values_direction_units_and_comparison_dates(
+        pe,previous_pe,pct,previous_pct,pe_change,rank_change):
+    source={'gate_threshold':50,'pool':[dict(name='估值ETF',last_date='20261118',pe_date='20261118',
+        pe_ttm=pe,previous_pe_ttm=previous_pe,pe_pct=pct,previous_pe_pct=previous_pct,
+        previous_pe_date='20261117',gate_enabled=True,parts_bought=1,n_parts=10,budget_remaining=18000)]}
+    before=copy.deepcopy(source)
+    html=render_valuation(source,'20261120')
+    assert pe_change in html and rank_change in html
+    assert f'data-percentile-meter="current" data-percentile="{pct:g}"' in html
+    assert 'data-percentile-meter="previous"' not in html
+    assert f'前次{previous_pct:.2f}%→本次{pct:.2f}%' in html
+    assert '竖线：50%门槛' in html and '对比 20261117' in html and '数据滞后' in html
+    assert '1/10份' in html and '18,000' in html and source==before
+
+
+@pytest.mark.parametrize('pct,gate',[(0,'估值门开'),(50,'估值门关'),(100,'估值门关')])
+def test_valuation_scale_endpoints_and_gate_equality(pct,gate):
+    source={'gate_threshold':50,'pool':[dict(name='估值ETF',pe_pct=pct,last_date='20261118')]}
+    html=render_valuation(source,'20261118')
+    assert f'data-percentile="{pct:g}"' in html
+    assert 'data-percentile-meter="previous"' not in html
+    assert gate in html and '暂无对比' in html
+
+
+def test_disabled_or_missing_gate_never_invents_a_threshold_on_the_chart():
+    source={'gate_threshold':50,'pool':[dict(name='估值ETF',pe_pct=47.12,gate_enabled=False)]}
+    html=render_valuation(source,'20261118')
+    assert '未设估值门' in html and 'data-percentile-meter="current"' in html
+    assert '竖线：' not in html and 'border-right:2px' not in html
+    del source['gate_threshold']
+    source['pool'][0]['gate_enabled']=True
+    html=render_valuation(source,'20261118')
+    assert '估值门状态未知' in html and '竖线：' not in html
+
+
+@pytest.mark.parametrize('pct',[-1,101])
+def test_out_of_range_percentiles_are_reported_instead_of_drawn_as_valid(pct):
+    source={'gate_threshold':50,'pool':[dict(name='估值ETF',pe_pct=pct)]}
+    html=render_valuation(source,'20261118')
+    assert '分位超出0–100%，请核对' in html and 'data-percentile-meter=' not in html
+
+
+def test_compact_valuation_has_one_meter_per_etf_and_shared_dates_only_once():
+    source={'gate_threshold':50,'pool':[dict(name=name,ts_code=code,last_date='20261118',
+        pe_date='20261118',previous_pe_date='20261117',pe_ttm=13.53,previous_pe_ttm=13.48,
+        pe_pct=pct,previous_pe_pct=pct-1,parts_bought=1,n_parts=10,budget_remaining=18000,
+        next_desc='等待下一触发') for name,code,pct in (
+            ('沪深300','510300.SH',75.84),('上证50','510050.SH',96.48),('中证1000','512100.SH',47.12))]}
+    before=copy.deepcopy(source)
+    html=render_valuation(source,'20261120')
+    assert html.count('data-percentile-meter="current"')==3
+    assert html.count('行情/PE 20261118')==1 and html.count('对比 20261117')==1
+    assert 'data-percentile-meter="previous"' not in html and '阶段／下一触发' not in html
+    for e in source['pool']:
+        assert e['name'] in html and e['ts_code'] in html
+    assert source==before
+
+
 def test_old_summary_is_enriched_read_only_from_matching_state(tmp_path):
     (tmp_path/'etf_config.json').write_text(json.dumps({'etf_list':[dict(name='旧ETF',strategy='v6')]}))
     path=tmp_path/'dca_state_v6_旧ETF.json';path.write_text(json.dumps({'trades':[trade()]}))
@@ -151,6 +444,42 @@ def test_old_summary_is_enriched_read_only_from_matching_state(tmp_path):
     value=enrich_valuation_summary({'pool':[dict(name='旧ETF',last_date='20261028')]},tmp_path)['pool'][0]
     assert value['budget_remaining']==21000 and value['pe_date']=='20261027'
     assert value['recent_trades']==[trade('20261027')] and path.read_bytes()==before
+
+
+def test_archived_weekly_summary_follows_enabled_configuration_without_rewriting_history(tmp_path):
+    config={'base_amount':1000,'etf_list':[
+        dict(name='纳指100',strategy='v6h',v6h_params=dict(base_amount=3000,round_budget=15000)),
+        dict(name='标普500',strategy='v6h'),
+        dict(name='已禁用ETF',enabled=False),
+    ]}
+    (tmp_path/'etf_config.json').write_text(json.dumps(config))
+    source={'etf_list':[dict(name=name,recent_trades=[trade()],previous_weekly_j=5)
+                        for name in ('纳指100','标普500','已移除ETF','已禁用ETF')]}
+    before=copy.deepcopy(source)
+    result=enrich_archived_summary(source,tmp_path)
+    assert [e['name'] for e in result['etf_list']]==['纳指100','标普500']
+    assert [e['scheduled_investment_amount'] for e in result['etf_list']]==[3000,1000]
+    assert result['etf_list'][0]['recent_trades'][0]['amount']==1000
+    assert source==before
+
+
+def test_removed_weekly_etf_is_absent_from_email_while_separate_daily_strategy_remains(monkeypatch,tmp_path):
+    monkeypatch.chdir(tmp_path)
+    config={'etf_list':[dict(name='测试ETF',strategy='v6h',v6h_params=dict(base_amount=3000))]}
+    (tmp_path/'etf_config.json').write_text(json.dumps(config))
+    source=weekly()
+    removed=copy.deepcopy(source['etf_list'][0])
+    removed['name']='不再跟踪的ETF'
+    source['etf_list'].append(removed)
+    monkeypatch.setattr(mail,'load_reports_json',lambda:dict(latestDate='20261030'))
+    monkeypatch.setattr(mail,'load_dca_summary',lambda:source)
+    monkeypatch.setattr(mail,'load_strategy_state',lambda:dict(last_trade_date='20261030',trades=[trade(amount=2000)]))
+    monkeypatch.setattr(mail,'load_4pct_summary',lambda:{})
+    monkeypatch.setattr(mail,'load_multi_indicator_hints',lambda:[])
+    html=mail.generate_email_report(as_of='2026-10-30 20:00')
+    assert '不再跟踪的ETF' not in html
+    assert '待完成 1 轮' in html and '常规定投 ¥3,000/周' in html
+    assert '中证2000' in html and '情绪反弹' in html
 
 
 @pytest.mark.parametrize('when,current_count,week_count',[
@@ -171,8 +500,8 @@ def test_current_signals_are_separate_from_week_review(monkeypatch,tmp_path,when
     current,history=sections[0],sections[-1]
     assert '本次操作' in current
     assert '本周操作汇总' in history
-    assert current.count('<tr>')==(current_count+1 if current_count else 0)
-    assert history.count('<tr>')==(week_count+1 if week_count else 0)
+    assert current.count('data-trade-action=')==current_count
+    assert history.count('data-trade-action=')==week_count
     if not current_count:
         assert '本次无新增操作' in current
     if when=='2026-11-01 18:00':
@@ -199,13 +528,13 @@ def test_full_digest_has_one_reminder_and_compact_holdings(monkeypatch,tmp_path)
     monkeypatch.setattr(mail,'load_multi_indicator_hints',lambda:[])
     html=mail.generate_email_report(as_of='2026-11-01 18:00',repo='<repo>')
     assert html.count('同一信号仅执行一次')==1
-    for text in ['本周信号复核','情绪反弹','估值定投','ETF持仓简表','2,000','1,000','记录日','&lt;repo&gt;']:
+    for text in ['本周信号复核','情绪反弹','估值定投','周线定投','2,000','1,000','记录日','&lt;repo&gt;']:
         assert text in html
     sections=re.findall(r'<section[^>]*>(.*?)</section>',html,re.S)
     for action_section in (sections[0],sections[-1]):
         assert '000001.SH' in action_section and '563300.SH' in action_section
-    for title,code in [('市场情绪与持仓','563300.SH'),('ETF持仓简表','000001.SH'),('估值定投 · 独立检查','510300.SH')]:
-        assert code in next(s for s in sections if title in s)
+    for title,code in [('市场情绪与持仓','563300.SH'),('周线定投','000001.SH'),('估值定投 · 独立检查','510300.SH')]:
+        assert code in next(s for s in sections if re.search(r'<h2[^>]*>'+re.escape(title)+r'</h2>',s))
     assert '0x' not in html and '建议买入0元' not in html
     monday=mail.generate_email_report(as_of='2026-11-02 20:00')
     assert '本次无新增操作' in monday

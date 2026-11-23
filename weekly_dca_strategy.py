@@ -1905,10 +1905,11 @@ def run_backtest_from_config(config_path: str = 'etf_config.json',
                 # V6H：V6 买入端 + V1h 卖出哲学
                 # 三段各卖基准 1/6（合计 50%），剩余 1/2 永久持有；无倍投。
                 from weekly_dca_strategy_v6h import WeeklyDCAStrategyV6H
+                # 标的参数覆盖全局基础金额，确保实际预算与报告中的单次金额一致。
+                v6h_params = {'base_amount': base_amount, **(etf.get('v6h_params', {}) or {})}
                 strategy = WeeklyDCAStrategyV6H(
                     name=name,
-                    base_amount=base_amount,
-                    **(etf.get('v6h_params', {}) or {}),
+                    **v6h_params,
                 )
                 report_func = generate_backtest_report_v6
             elif strat_version == 'v1h':

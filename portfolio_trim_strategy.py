@@ -278,6 +278,7 @@ class PortfolioTrimStrategy:
                       f"维持当前仓位{ratio:.0%}")
 
         ret_pct = (self.portfolio_value - self.initial_capital) / self.initial_capital * 100
+        target_ratio = self.keep_ratio if action == 'trim' else 1.0 if action == 'refill' else None
         pos = {
             'round_id': 1, 'shares': round(self.shares, 4), 'avg_cost': round(self.avg_cost, 4),
             'sell_stage': 0, 'j_peak': round(j, 2), 'dca_active': False,
@@ -285,6 +286,8 @@ class PortfolioTrimStrategy:
             'action': action, 'action_label': label, 'action_color': color,
             'action_detail': detail, 'return_pct': round(ret_pct, 2),
             'total_invested': self.initial_capital,
+            'position_ratio': round(ratio, 6),
+            'target_ratio': target_ratio,
             # 组合口径：邮件/报表用它显示"组合总值"，避免只显示持仓市值而漏掉现金
             'portfolio_value': round(self.portfolio_value, 2),
         }

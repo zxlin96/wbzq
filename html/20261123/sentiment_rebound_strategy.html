@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>情绪反弹策略分析报告</title>
+    <link rel="stylesheet" href="../../assets/tailwind.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
+        .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
+        .stat-card { transition: transform 0.2s; }
+        .stat-card:hover { transform: translateY(-2px); }
+        .chart-container { height: 400px; }
+        .brick-green { background: #22c55e; }
+        .brick-red { background: #ef4444; }
+    </style>
+<link rel="stylesheet" href="../../assets/site.css">
+<script src="../../assets/site.js" defer></script>
+</head>
+<body data-static-version="3" class="p-4 md:p-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- 标题 -->
+        <div class="glass p-6 mb-6">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold text-gray-800">📊 情绪反弹策略分析报告</h1>
+                    <p class="text-gray-500 mt-1">ETF: 563300.SH | 策略版本: v1.0</p>
+                </div>
+                <div class="flex gap-3">
+                    <a href="../../index.html" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        ← 返回首页
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 策略说明 -->
+        <div class="glass p-6 mb-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">📋 策略说明</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="font-semibold text-green-700 mb-2">买入逻辑</h3>
+                    <ul class="text-gray-600 space-y-1 text-sm">
+                        <li>• 监控标的: 563300.SH</li>
+                        <li>• 触发条件: J13数量 > 90%分位数</li>
+                        <li>• 投资阶梯: ¥2,000 → ¥4,000 → ¥8,000 → ¥16,000</li>
+                        <li>• 当前级别: 第 4 级</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-red-700 mb-2">卖出逻辑（砖型图）</h3>
+                    <ul class="text-gray-600 space-y-1 text-sm">
+                        <li>• 红柱满4根 → 卖一半</li>
+                        <li>• 连续3根绿柱 → 全卖（容忍2天回调）</li>
+                        <li>• 当前红柱: 1 根 | 绿柱: 0 根</li>
+                        <li>• 持仓状态: 有持仓</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- J13统计 -->
+        <div class="glass p-6 mb-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">📈 J13市场统计</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="glass p-4 stat-card">
+                    <div class="text-sm text-gray-500">当前J13数量</div>
+                    <div class="text-2xl font-bold text-red-600">3920 只</div>
+                </div>
+                <div class="glass p-4 stat-card">
+                    <div class="text-sm text-gray-500">90%分位数</div>
+                    <div class="text-2xl font-bold text-purple-600">2775.2 只</div>
+                </div>
+                <div class="glass p-4 stat-card">
+                    <div class="text-sm text-gray-500">平均值</div>
+                    <div class="text-2xl font-bold text-green-600">1335.6 只</div>
+                </div>
+                <div class="glass p-4 stat-card">
+                    <div class="text-sm text-gray-500">是否触发买入</div>
+                    <div class="text-2xl font-bold text-red-600">是</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 当前信号 -->
+        <div class="glass p-6 mb-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">⚡ 当前交易信号</h2>
+            <table class="w-full"><thead class="bg-gray-50"><tr><th class="px-4 py-3 text-left">日期</th><th class="px-4 py-3 text-left">操作</th><th class="px-4 py-3 text-left">类型</th><th class="px-4 py-3 text-left">金额/价格</th><th class="px-4 py-3 text-left">原因</th></tr></thead><tbody class="divide-y divide-gray-200">
+        <tr class="hover:bg-gray-50 bg-yellow-50">
+            <td class="px-4 py-3">20261123</td>
+            <td class="px-4 py-3 font-bold text-green-600">BUY</td>
+            <td class="px-4 py-3">倍投</td>
+            <td class="px-4 py-3">16000</td>
+            <td class="px-4 py-3 text-sm text-gray-600">J13数量(3920)超过90%分位数(2775.2)</td>
+        </tr>
+        </tbody></table>
+        </div>
+
+        <!-- 历史交易记录 -->
+        <div class="glass p-6 mb-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">📜 历史交易记录</h2>
+            <table class="w-full"><thead class="bg-gray-50"><tr><th class="px-4 py-3 text-left">日期</th><th class="px-4 py-3 text-left">操作</th><th class="px-4 py-3 text-left">类型</th><th class="px-4 py-3 text-left">金额/价格</th><th class="px-4 py-3 text-left">原因</th></tr></thead><tbody class="divide-y divide-gray-200">
+        <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">20260319</td>
+            <td class="px-4 py-3 font-bold text-green-600">BUY</td>
+            <td class="px-4 py-3">倍投</td>
+            <td class="px-4 py-3">2000</td>
+            <td class="px-4 py-3 text-sm text-gray-600">J13数量(2839)超过90%分位数(2458.6)</td>
+        </tr>
+
+        <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">20260320</td>
+            <td class="px-4 py-3 font-bold text-green-600">BUY</td>
+            <td class="px-4 py-3">倍投</td>
+            <td class="px-4 py-3">4000</td>
+            <td class="px-4 py-3 text-sm text-gray-600">J13数量(4114)超过90%分位数(2460.8)</td>
+        </tr>
+
+        <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">20260323</td>
+            <td class="px-4 py-3 font-bold text-green-600">BUY</td>
+            <td class="px-4 py-3">倍投</td>
+            <td class="px-4 py-3">8000</td>
+            <td class="px-4 py-3 text-sm text-gray-600">J13数量(4703)超过90%分位数(2780.5)</td>
+        </tr>
+
+        <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">20260324</td>
+            <td class="px-4 py-3 font-bold text-green-600">BUY</td>
+            <td class="px-4 py-3">倍投</td>
+            <td class="px-4 py-3">16000</td>
+            <td class="px-4 py-3 text-sm text-gray-600">J13数量(3339)超过90%分位数(2842.2)</td>
+        </tr>
+
+        <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">20260521</td>
+            <td class="px-4 py-3 font-bold text-green-600">BUY</td>
+            <td class="px-4 py-3">倍投</td>
+            <td class="px-4 py-3">2000</td>
+            <td class="px-4 py-3 text-sm text-gray-600">J13数量(3223)超过90%分位数(2843.4)</td>
+        </tr>
+
+        <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">20260521</td>
+            <td class="px-4 py-3 font-bold text-red-600">SELL</td>
+            <td class="px-4 py-3">全卖</td>
+            <td class="px-4 py-3">1.583</td>
+            <td class="px-4 py-3 text-sm text-gray-600">红转绿，连续红柱0根（未满4根）</td>
+        </tr>
+
+        <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">20260527</td>
+            <td class="px-4 py-3 font-bold text-green-600">BUY</td>
+            <td class="px-4 py-3">倍投</td>
+            <td class="px-4 py-3">2000</td>
+            <td class="px-4 py-3 text-sm text-gray-600">J13数量(3146)超过90%分位数(2901.2)</td>
+        </tr>
+
+        <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">20260529</td>
+            <td class="px-4 py-3 font-bold text-red-600">SELL</td>
+            <td class="px-4 py-3">全卖</td>
+            <td class="px-4 py-3">1.557</td>
+            <td class="px-4 py-3 text-sm text-gray-600">红转绿，连续红柱1根（未满4根）</td>
+        </tr>
+
+        <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">20260626</td>
+            <td class="px-4 py-3 font-bold text-green-600">BUY</td>
+            <td class="px-4 py-3">倍投</td>
+            <td class="px-4 py-3">2000</td>
+            <td class="px-4 py-3 text-sm text-gray-600">J13数量(3195)超过90%分位数(2580.9)</td>
+        </tr>
+
+        <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">20260706</td>
+            <td class="px-4 py-3 font-bold text-red-600">SELL</td>
+            <td class="px-4 py-3">全卖</td>
+            <td class="px-4 py-3">1.572</td>
+            <td class="px-4 py-3 text-sm text-gray-600">连续3根绿柱，确认趋势反转</td>
+        </tr>
+
+        <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">20260720</td>
+            <td class="px-4 py-3 font-bold text-green-600">BUY</td>
+            <td class="px-4 py-3">倍投</td>
+            <td class="px-4 py-3">2000</td>
+            <td class="px-4 py-3 text-sm text-gray-600">J13数量(2682)超过90%分位数(2579.3)</td>
+        </tr>
+
+        <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">20260724</td>
+            <td class="px-4 py-3 font-bold text-red-600">SELL</td>
+            <td class="px-4 py-3">卖一半</td>
+            <td class="px-4 py-3">1.256</td>
+            <td class="px-4 py-3 text-sm text-gray-600">连续红柱达到4根，卖出一半</td>
+        </tr>
+
+        <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">20260824</td>
+            <td class="px-4 py-3 font-bold text-green-600">BUY</td>
+            <td class="px-4 py-3">倍投</td>
+            <td class="px-4 py-3">2000</td>
+            <td class="px-4 py-3 text-sm text-gray-600">J13数量(2808)超过90%分位数(2592.6)</td>
+        </tr>
+
+        <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">20260828</td>
+            <td class="px-4 py-3 font-bold text-red-600">SELL</td>
+            <td class="px-4 py-3">卖一半</td>
+            <td class="px-4 py-3">1.44</td>
+            <td class="px-4 py-3 text-sm text-gray-600">连续红柱达到4根，卖出一半</td>
+        </tr>
+
+        <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">20260915</td>
+            <td class="px-4 py-3 font-bold text-green-600">BUY</td>
+            <td class="px-4 py-3">倍投</td>
+            <td class="px-4 py-3">2000</td>
+            <td class="px-4 py-3 text-sm text-gray-600">J13数量(3258)超过90%分位数(2592.6)</td>
+        </tr>
+
+        <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">20260916</td>
+            <td class="px-4 py-3 font-bold text-green-600">BUY</td>
+            <td class="px-4 py-3">倍投</td>
+            <td class="px-4 py-3">4000</td>
+            <td class="px-4 py-3 text-sm text-gray-600">J13数量(2715)超过90%分位数(2592.6)</td>
+        </tr>
+
+        <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">20260922</td>
+            <td class="px-4 py-3 font-bold text-red-600">SELL</td>
+            <td class="px-4 py-3">卖一半</td>
+            <td class="px-4 py-3">1.485</td>
+            <td class="px-4 py-3 text-sm text-gray-600">连续红柱达到4根，卖出一半</td>
+        </tr>
+
+        <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">20260929</td>
+            <td class="px-4 py-3 font-bold text-red-600">SELL</td>
+            <td class="px-4 py-3">全卖</td>
+            <td class="px-4 py-3">1.432</td>
+            <td class="px-4 py-3 text-sm text-gray-600">连续3根绿柱，确认趋势反转</td>
+        </tr>
+
+        <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">20261015</td>
+            <td class="px-4 py-3 font-bold text-green-600">BUY</td>
+            <td class="px-4 py-3">倍投</td>
+            <td class="px-4 py-3">2000</td>
+            <td class="px-4 py-3 text-sm text-gray-600">J13数量(3274)超过90%分位数(2609.1)</td>
+        </tr>
+
+        <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">20261016</td>
+            <td class="px-4 py-3 font-bold text-green-600">BUY</td>
+            <td class="px-4 py-3">倍投</td>
+            <td class="px-4 py-3">4000</td>
+            <td class="px-4 py-3 text-sm text-gray-600">J13数量(3274)超过90%分位数(2611.2)</td>
+        </tr>
+
+        <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">20261019</td>
+            <td class="px-4 py-3 font-bold text-green-600">BUY</td>
+            <td class="px-4 py-3">倍投</td>
+            <td class="px-4 py-3">8000</td>
+            <td class="px-4 py-3 text-sm text-gray-600">J13数量(2778)超过90%分位数(2545.8)</td>
+        </tr>
+
+        <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">20261022</td>
+            <td class="px-4 py-3 font-bold text-green-600">BUY</td>
+            <td class="px-4 py-3">倍投</td>
+            <td class="px-4 py-3">2000</td>
+            <td class="px-4 py-3 text-sm text-gray-600">J13数量(2666)超过90%分位数(2575.0)</td>
+        </tr>
+
+        <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">20261030</td>
+            <td class="px-4 py-3 font-bold text-green-600">BUY</td>
+            <td class="px-4 py-3">倍投</td>
+            <td class="px-4 py-3">2000</td>
+            <td class="px-4 py-3 text-sm text-gray-600">J13数量(3036)超过90%分位数(2599.2)</td>
+        </tr>
+
+        <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">20261109</td>
+            <td class="px-4 py-3 font-bold text-red-600">SELL</td>
+            <td class="px-4 py-3">卖一半</td>
+            <td class="px-4 py-3">1.252</td>
+            <td class="px-4 py-3 text-sm text-gray-600">连续红柱达到4根，卖出一半</td>
+        </tr>
+
+        <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">20261116</td>
+            <td class="px-4 py-3 font-bold text-red-600">SELL</td>
+            <td class="px-4 py-3">全卖</td>
+            <td class="px-4 py-3">1.211</td>
+            <td class="px-4 py-3 text-sm text-gray-600">连续3根绿柱，确认趋势反转</td>
+        </tr>
+
+        <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">20261117</td>
+            <td class="px-4 py-3 font-bold text-green-600">BUY</td>
+            <td class="px-4 py-3">倍投</td>
+            <td class="px-4 py-3">2000</td>
+            <td class="px-4 py-3 text-sm text-gray-600">J13数量(3576)超过90%分位数(2657.1)</td>
+        </tr>
+
+        <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">20261118</td>
+            <td class="px-4 py-3 font-bold text-green-600">BUY</td>
+            <td class="px-4 py-3">倍投</td>
+            <td class="px-4 py-3">4000</td>
+            <td class="px-4 py-3 text-sm text-gray-600">J13数量(4171)超过90%分位数(2693.0)</td>
+        </tr>
+
+        <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">20261119</td>
+            <td class="px-4 py-3 font-bold text-green-600">BUY</td>
+            <td class="px-4 py-3">倍投</td>
+            <td class="px-4 py-3">8000</td>
+            <td class="px-4 py-3 text-sm text-gray-600">J13数量(4532)超过90%分位数(2705.9)</td>
+        </tr>
+
+        <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">20261120</td>
+            <td class="px-4 py-3 font-bold text-green-600">BUY</td>
+            <td class="px-4 py-3">倍投</td>
+            <td class="px-4 py-3">16000</td>
+            <td class="px-4 py-3 text-sm text-gray-600">J13数量(4824)超过90%分位数(2752.0)</td>
+        </tr>
+
+        <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">20261123</td>
+            <td class="px-4 py-3 font-bold text-green-600">BUY</td>
+            <td class="px-4 py-3">倍投</td>
+            <td class="px-4 py-3">16000</td>
+            <td class="px-4 py-3 text-sm text-gray-600">J13数量(3920)超过90%分位数(2775.2)</td>
+        </tr>
+        </tbody></table>
+        </div>
+
+
+    <script src="../../assets/vendor/echarts-5.5.0.min.js"></script>
+    <div class="glass p-6 mb-6">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">📈 563300.SH K线图</h2>
+        <div id="klineChart" class="chart-container"></div>
+        <div id="volChart" class="chart-container" style="height:180px;"></div>
+    </div>
+
+        <div class="glass p-6 mb-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">🧱 知行砖形图</h2>
+            <div id="brickChart" class="chart-container"></div>
+        </div>
+    </div>
+
+    <script>
+var kc = echarts.init(document.getElementById('klineChart'));
+kc.setOption({
+  title:{text:'K线走势',left:'center',textStyle:{fontSize:14}},
+  tooltip:{trigger:'axis',axisPointer:{type:'cross'},formatter:function(params){var c=params[0];if(!c)return '';var d=c.dataIndex;var raw=[[1.253, 1.31, 1.25, 1.31], [1.29, 1.284, 1.275, 1.317], [1.283, 1.287, 1.26, 1.295], [1.276, 1.235, 1.234, 1.291], [1.269, 1.278, 1.261, 1.3], [1.277, 1.289, 1.273, 1.295], [1.296, 1.327, 1.291, 1.333], [1.327, 1.364, 1.322, 1.37], [1.353, 1.38, 1.349, 1.384], [1.382, 1.403, 1.357, 1.404], [1.41, 1.417, 1.394, 1.42], [1.409, 1.414, 1.399, 1.429], [1.414, 1.438, 1.408, 1.441], [1.443, 1.423, 1.422, 1.451], [1.423, 1.437, 1.413, 1.437], [1.437, 1.468, 1.428, 1.469], [1.469, 1.461, 1.444, 1.472], [1.448, 1.387, 1.38, 1.448], [1.397, 1.405, 1.39, 1.415], [1.397, 1.406, 1.375, 1.412], [1.404, 1.394, 1.368, 1.414], [1.375, 1.413, 1.37, 1.418], [1.415, 1.412, 1.395, 1.419], [1.412, 1.439, 1.408, 1.441], [1.439, 1.44, 1.435, 1.454], [1.419, 1.453, 1.419, 1.457], [1.452, 1.451, 1.441, 1.459], [1.436, 1.44, 1.429, 1.451], [1.447, 1.445, 1.433, 1.456], [1.452, 1.425, 1.415, 1.462], [1.427, 1.451, 1.427, 1.455], [1.452, 1.46, 1.445, 1.462], [1.461, 1.454, 1.444, 1.462], [1.441, 1.431, 1.431, 1.446], [1.416, 1.403, 1.378, 1.419], [1.389, 1.419, 1.389, 1.425], [1.416, 1.4, 1.398, 1.423], [1.399, 1.43, 1.39, 1.434], [1.428, 1.431, 1.418, 1.436], [1.439, 1.459, 1.439, 1.46], [1.459, 1.486, 1.458, 1.487], [1.495, 1.485, 1.48, 1.497], [1.485, 1.487, 1.481, 1.49], [1.482, 1.466, 1.464, 1.487], [1.46, 1.417, 1.409, 1.465], [1.415, 1.432, 1.409, 1.44], [1.435, 1.423, 1.42, 1.44], [1.423, 1.404, 1.394, 1.446], [1.399, 1.403, 1.346, 1.409], [1.399, 1.372, 1.372, 1.402], [1.351, 1.383, 1.328, 1.398], [1.377, 1.358, 1.355, 1.384], [1.324, 1.311, 1.308, 1.343], [1.326, 1.316, 1.307, 1.348], [1.315, 1.307, 1.277, 1.32], [1.297, 1.332, 1.297, 1.343], [1.348, 1.324, 1.322, 1.351], [1.327, 1.282, 1.282, 1.331], [1.265, 1.308, 1.212, 1.314], [1.29, 1.289, 1.279, 1.307], [1.296, 1.246, 1.246, 1.304], [1.255, 1.283, 1.245, 1.294], [1.273, 1.242, 1.241, 1.279], [1.217, 1.201, 1.2, 1.262], [1.207, 1.229, 1.182, 1.239], [1.224, 1.204, 1.196, 1.244], [1.201, 1.247, 1.19, 1.25], [1.237, 1.28, 1.23, 1.286], [1.236, 1.248, 1.228, 1.265], [1.264, 1.252, 1.252, 1.274], [1.274, 1.286, 1.271, 1.289], [1.285, 1.309, 1.28, 1.314], [1.308, 1.283, 1.283, 1.319], [1.291, 1.252, 1.246, 1.295], [1.24, 1.211, 1.205, 1.247], [1.2, 1.192, 1.182, 1.226], [1.194, 1.175, 1.162, 1.198], [1.171, 1.139, 1.138, 1.173], [1.111, 1.082, 1.08, 1.132], [1.06, 1.125, 1.053, 1.128]][d];return c.axisValue+'<br/>开:'+raw[0].toFixed(3)+' 收:'+raw[1].toFixed(3)+'<br/>低:'+raw[2].toFixed(3)+' 高:'+raw[3].toFixed(3);}},
+  grid:{left:'8%',right:'8%',top:'40px',bottom:'60px'},
+  xAxis:{type:'category',data:["20260727", "20260728", "20260729", "20260730", "20260731", "20260803", "20260804", "20260805", "20260806", "20260807", "20260810", "20260811", "20260812", "20260813", "20260814", "20260817", "20260818", "20260819", "20260820", "20260821", "20260824", "20260825", "20260826", "20260827", "20260828", "20260831", "20260901", "20260902", "20260903", "20260904", "20260907", "20260908", "20260909", "20260910", "20260911", "20260914", "20260915", "20260916", "20260917", "20260918", "20260921", "20260922", "20260923", "20260924", "20260928", "20260929", "20260930", "20261008", "20261009", "20261012", "20261013", "20261014", "20261015", "20261016", "20261019", "20261020", "20261021", "20261022", "20261023", "20261026", "20261027", "20261028", "20261029", "20261030", "20261102", "20261103", "20261104", "20261105", "20261106", "20261109", "20261110", "20261111", "20261112", "20261113", "20261116", "20261117", "20261118", "20261119", "20261120", "20261123"]},
+  yAxis:{type:'value',scale:true},
+  dataZoom:[{type:'inside'},{type:'slider',start:70,end:100}],
+  series:[{type:'candlestick',data:[[1.253, 1.31, 1.25, 1.31], [1.29, 1.284, 1.275, 1.317], [1.283, 1.287, 1.26, 1.295], [1.276, 1.235, 1.234, 1.291], [1.269, 1.278, 1.261, 1.3], [1.277, 1.289, 1.273, 1.295], [1.296, 1.327, 1.291, 1.333], [1.327, 1.364, 1.322, 1.37], [1.353, 1.38, 1.349, 1.384], [1.382, 1.403, 1.357, 1.404], [1.41, 1.417, 1.394, 1.42], [1.409, 1.414, 1.399, 1.429], [1.414, 1.438, 1.408, 1.441], [1.443, 1.423, 1.422, 1.451], [1.423, 1.437, 1.413, 1.437], [1.437, 1.468, 1.428, 1.469], [1.469, 1.461, 1.444, 1.472], [1.448, 1.387, 1.38, 1.448], [1.397, 1.405, 1.39, 1.415], [1.397, 1.406, 1.375, 1.412], [1.404, 1.394, 1.368, 1.414], [1.375, 1.413, 1.37, 1.418], [1.415, 1.412, 1.395, 1.419], [1.412, 1.439, 1.408, 1.441], [1.439, 1.44, 1.435, 1.454], [1.419, 1.453, 1.419, 1.457], [1.452, 1.451, 1.441, 1.459], [1.436, 1.44, 1.429, 1.451], [1.447, 1.445, 1.433, 1.456], [1.452, 1.425, 1.415, 1.462], [1.427, 1.451, 1.427, 1.455], [1.452, 1.46, 1.445, 1.462], [1.461, 1.454, 1.444, 1.462], [1.441, 1.431, 1.431, 1.446], [1.416, 1.403, 1.378, 1.419], [1.389, 1.419, 1.389, 1.425], [1.416, 1.4, 1.398, 1.423], [1.399, 1.43, 1.39, 1.434], [1.428, 1.431, 1.418, 1.436], [1.439, 1.459, 1.439, 1.46], [1.459, 1.486, 1.458, 1.487], [1.495, 1.485, 1.48, 1.497], [1.485, 1.487, 1.481, 1.49], [1.482, 1.466, 1.464, 1.487], [1.46, 1.417, 1.409, 1.465], [1.415, 1.432, 1.409, 1.44], [1.435, 1.423, 1.42, 1.44], [1.423, 1.404, 1.394, 1.446], [1.399, 1.403, 1.346, 1.409], [1.399, 1.372, 1.372, 1.402], [1.351, 1.383, 1.328, 1.398], [1.377, 1.358, 1.355, 1.384], [1.324, 1.311, 1.308, 1.343], [1.326, 1.316, 1.307, 1.348], [1.315, 1.307, 1.277, 1.32], [1.297, 1.332, 1.297, 1.343], [1.348, 1.324, 1.322, 1.351], [1.327, 1.282, 1.282, 1.331], [1.265, 1.308, 1.212, 1.314], [1.29, 1.289, 1.279, 1.307], [1.296, 1.246, 1.246, 1.304], [1.255, 1.283, 1.245, 1.294], [1.273, 1.242, 1.241, 1.279], [1.217, 1.201, 1.2, 1.262], [1.207, 1.229, 1.182, 1.239], [1.224, 1.204, 1.196, 1.244], [1.201, 1.247, 1.19, 1.25], [1.237, 1.28, 1.23, 1.286], [1.236, 1.248, 1.228, 1.265], [1.264, 1.252, 1.252, 1.274], [1.274, 1.286, 1.271, 1.289], [1.285, 1.309, 1.28, 1.314], [1.308, 1.283, 1.283, 1.319], [1.291, 1.252, 1.246, 1.295], [1.24, 1.211, 1.205, 1.247], [1.2, 1.192, 1.182, 1.226], [1.194, 1.175, 1.162, 1.198], [1.171, 1.139, 1.138, 1.173], [1.111, 1.082, 1.08, 1.132], [1.06, 1.125, 1.053, 1.128]],name:'K线',itemStyle:{color:'#ef4444',color0:'#22c55e',borderColor:'#ef4444',borderColor0:'#22c55e'}}]
+});
+window.addEventListener('resize',function(){kc.resize();});
+
+var vc = echarts.init(document.getElementById('volChart'));
+vc.setOption({
+  title:{text:'成交额(万元)',left:'center',textStyle:{fontSize:12}},
+  tooltip:{trigger:'axis'},
+  grid:{left:'8%',right:'8%',top:'30px',bottom:'30px'},
+  xAxis:{type:'category',data:["20260727", "20260728", "20260729", "20260730", "20260731", "20260803", "20260804", "20260805", "20260806", "20260807", "20260810", "20260811", "20260812", "20260813", "20260814", "20260817", "20260818", "20260819", "20260820", "20260821", "20260824", "20260825", "20260826", "20260827", "20260828", "20260831", "20260901", "20260902", "20260903", "20260904", "20260907", "20260908", "20260909", "20260910", "20260911", "20260914", "20260915", "20260916", "20260917", "20260918", "20260921", "20260922", "20260923", "20260924", "20260928", "20260929", "20260930", "20261008", "20261009", "20261012", "20261013", "20261014", "20261015", "20261016", "20261019", "20261020", "20261021", "20261022", "20261023", "20261026", "20261027", "20261028", "20261029", "20261030", "20261102", "20261103", "20261104", "20261105", "20261106", "20261109", "20261110", "20261111", "20261112", "20261113", "20261116", "20261117", "20261118", "20261119", "20261120", "20261123"],show:false},
+  yAxis:{type:'value'},
+  series:[{type:'bar',data:[{"value": 81.25, "itemStyle": {"color": "#ef4444"}}, {"value": 95.7, "itemStyle": {"color": "#22c55e"}}, {"value": 115.05, "itemStyle": {"color": "#ef4444"}}, {"value": 103.68, "itemStyle": {"color": "#22c55e"}}, {"value": 92.34, "itemStyle": {"color": "#ef4444"}}, {"value": 92.89, "itemStyle": {"color": "#ef4444"}}, {"value": 139.9, "itemStyle": {"color": "#ef4444"}}, {"value": 125.34, "itemStyle": {"color": "#ef4444"}}, {"value": 147.35, "itemStyle": {"color": "#ef4444"}}, {"value": 107.78, "itemStyle": {"color": "#ef4444"}}, {"value": 77.19, "itemStyle": {"color": "#ef4444"}}, {"value": 103.2, "itemStyle": {"color": "#ef4444"}}, {"value": 74.1, "itemStyle": {"color": "#ef4444"}}, {"value": 90.24, "itemStyle": {"color": "#22c55e"}}, {"value": 98.66, "itemStyle": {"color": "#ef4444"}}, {"value": 56.82, "itemStyle": {"color": "#ef4444"}}, {"value": 74.35, "itemStyle": {"color": "#22c55e"}}, {"value": 96.68, "itemStyle": {"color": "#22c55e"}}, {"value": 66.73, "itemStyle": {"color": "#ef4444"}}, {"value": 60.15, "itemStyle": {"color": "#ef4444"}}, {"value": 63.54, "itemStyle": {"color": "#22c55e"}}, {"value": 108.92, "itemStyle": {"color": "#ef4444"}}, {"value": 101.92, "itemStyle": {"color": "#22c55e"}}, {"value": 86.14, "itemStyle": {"color": "#ef4444"}}, {"value": 70.42, "itemStyle": {"color": "#ef4444"}}, {"value": 75.67, "itemStyle": {"color": "#ef4444"}}, {"value": 61.18, "itemStyle": {"color": "#22c55e"}}, {"value": 105.6, "itemStyle": {"color": "#ef4444"}}, {"value": 76.22, "itemStyle": {"color": "#22c55e"}}, {"value": 83.32, "itemStyle": {"color": "#22c55e"}}, {"value": 70.47, "itemStyle": {"color": "#ef4444"}}, {"value": 43.85, "itemStyle": {"color": "#ef4444"}}, {"value": 44.2, "itemStyle": {"color": "#22c55e"}}, {"value": 40.47, "itemStyle": {"color": "#22c55e"}}, {"value": 131.44, "itemStyle": {"color": "#22c55e"}}, {"value": 46.93, "itemStyle": {"color": "#ef4444"}}, {"value": 53.83, "itemStyle": {"color": "#22c55e"}}, {"value": 82.81, "itemStyle": {"color": "#ef4444"}}, {"value": 49.4, "itemStyle": {"color": "#ef4444"}}, {"value": 46.43, "itemStyle": {"color": "#ef4444"}}, {"value": 54.0, "itemStyle": {"color": "#ef4444"}}, {"value": 59.44, "itemStyle": {"color": "#22c55e"}}, {"value": 50.74, "itemStyle": {"color": "#ef4444"}}, {"value": 58.79, "itemStyle": {"color": "#22c55e"}}, {"value": 86.54, "itemStyle": {"color": "#22c55e"}}, {"value": 63.21, "itemStyle": {"color": "#ef4444"}}, {"value": 41.13, "itemStyle": {"color": "#22c55e"}}, {"value": 56.93, "itemStyle": {"color": "#22c55e"}}, {"value": 95.01, "itemStyle": {"color": "#ef4444"}}, {"value": 51.41, "itemStyle": {"color": "#22c55e"}}, {"value": 85.6, "itemStyle": {"color": "#ef4444"}}, {"value": 54.08, "itemStyle": {"color": "#22c55e"}}, {"value": 54.73, "itemStyle": {"color": "#22c55e"}}, {"value": 104.78, "itemStyle": {"color": "#22c55e"}}, {"value": 57.56, "itemStyle": {"color": "#22c55e"}}, {"value": 127.08, "itemStyle": {"color": "#ef4444"}}, {"value": 81.75, "itemStyle": {"color": "#22c55e"}}, {"value": 83.0, "itemStyle": {"color": "#22c55e"}}, {"value": 138.99, "itemStyle": {"color": "#ef4444"}}, {"value": 101.24, "itemStyle": {"color": "#22c55e"}}, {"value": 106.12, "itemStyle": {"color": "#22c55e"}}, {"value": 83.76, "itemStyle": {"color": "#ef4444"}}, {"value": 78.65, "itemStyle": {"color": "#22c55e"}}, {"value": 79.79, "itemStyle": {"color": "#22c55e"}}, {"value": 101.62, "itemStyle": {"color": "#ef4444"}}, {"value": 124.74, "itemStyle": {"color": "#22c55e"}}, {"value": 124.95, "itemStyle": {"color": "#ef4444"}}, {"value": 93.36, "itemStyle": {"color": "#ef4444"}}, {"value": 78.95, "itemStyle": {"color": "#ef4444"}}, {"value": 58.26, "itemStyle": {"color": "#22c55e"}}, {"value": 86.76, "itemStyle": {"color": "#ef4444"}}, {"value": 99.31, "itemStyle": {"color": "#ef4444"}}, {"value": 92.77, "itemStyle": {"color": "#22c55e"}}, {"value": 101.33, "itemStyle": {"color": "#22c55e"}}, {"value": 70.93, "itemStyle": {"color": "#22c55e"}}, {"value": 79.03, "itemStyle": {"color": "#22c55e"}}, {"value": 70.81, "itemStyle": {"color": "#22c55e"}}, {"value": 59.52, "itemStyle": {"color": "#22c55e"}}, {"value": 83.17, "itemStyle": {"color": "#22c55e"}}, {"value": 142.25, "itemStyle": {"color": "#ef4444"}}]}]
+});
+window.addEventListener('resize',function(){vc.resize();});
+
+var bc = echarts.init(document.getElementById('brickChart'));
+var bVals = [0.0, 0.0, 0.0, 0.0, 13.361691664617894, 46.440806959617, 76.2955978394667, 99.14165784924367, 117.52604455622424, 132.96429475140957, 143.7908673802812, 144.62054703197026, 152.82572903237698, 137.0925920068956, 136.26168240877846, 147.70894788065635, 147.90471172235775, 112.58582671664, 95.88181694856719, 85.46529989044429, 77.64794312220339, 99.2539864649336, 113.22636724808106, 128.9714352215505, 134.1368018023153, 143.16568958987835, 145.61105387677685, 132.29869787612802, 128.5871950590453, 104.70301834478872, 113.5728466630137, 129.06686616984564, 134.31894014916662, 103.86986163527091, 90.2783237570283, 89.1468841949292, 80.11305015017054, 102.4115346526781, 117.07232421344992, 132.50966031665996, 144.36945364822392, 146.62111824205348, 147.57544868169572, 118.46669882502368, 91.49986720442467, 80.57015784945614, 67.02187811980548, 54.78726683880778, 66.08283720193961, 59.23388534474073, 64.06749210855895, 62.97154851130465, 45.886798956057916, 36.47800275070112, 38.0940605506472, 62.921613942157165, 74.51509353974305, 55.98693077465775, 72.52391118886202, 78.13094214504466, 69.49840776541303, 82.99913836728881, 60.177114197975826, 43.13161490114079, 50.087363963188466, 45.67921068151014, 70.54883062828529, 95.13484460807543, 97.26812267118743, 101.22565217361122, 119.06644970961986, 131.9967443530843, 118.74516729472123, 90.86429401550704, 68.78714003005466, 53.11767518191478, 42.30884493385693, 29.663740192280954, 20.21288800085091, 36.19011619765912];
+var bRise = [false, false, false, false, true, true, true, true, true, true, true, true, true, false, false, true, true, false, false, false, false, true, true, true, true, true, true, false, false, false, true, true, true, false, false, false, false, true, true, true, true, true, true, false, false, false, false, false, true, false, true, false, false, false, true, true, true, false, true, true, false, true, false, false, true, false, true, true, true, true, true, true, false, false, false, false, false, false, false, true];
+var bDates = ["20260727", "20260728", "20260729", "20260730", "20260731", "20260803", "20260804", "20260805", "20260806", "20260807", "20260810", "20260811", "20260812", "20260813", "20260814", "20260817", "20260818", "20260819", "20260820", "20260821", "20260824", "20260825", "20260826", "20260827", "20260828", "20260831", "20260901", "20260902", "20260903", "20260904", "20260907", "20260908", "20260909", "20260910", "20260911", "20260914", "20260915", "20260916", "20260917", "20260918", "20260921", "20260922", "20260923", "20260924", "20260928", "20260929", "20260930", "20261008", "20261009", "20261012", "20261013", "20261014", "20261015", "20261016", "20261019", "20261020", "20261021", "20261022", "20261023", "20261026", "20261027", "20261028", "20261029", "20261030", "20261102", "20261103", "20261104", "20261105", "20261106", "20261109", "20261110", "20261111", "20261112", "20261113", "20261116", "20261117", "20261118", "20261119", "20261120", "20261123"];
+var brickData = [];
+for (var i = 0; i < bVals.length; i++) {
+  var prev = i > 0 ? bVals[i-1] : bVals[i];
+  brickData.push({value: [i, Math.min(prev, bVals[i]), Math.max(prev, bVals[i]), bRise[i], bDates[i]]});
+}
+bc.setOption({
+  title:{text:'知行砖形图',left:'center',textStyle:{fontSize:14}},
+  tooltip:{formatter:function(p){var v=p.value;return v[4]+'<br/>砖值:'+bVals[p.dataIndex].toFixed(3)+'<br/>方向:'+(v[3]?'<span style="color:#ef4444">红(上升)</span>':'<span style="color:#22c55e">绿(下降)</span>');}},
+  grid:{left:'8%',right:'8%',top:'40px',bottom:'40px'},
+  xAxis:{type:'category',data:bDates,axisLabel:{show:false},axisTick:{show:false}},
+  yAxis:{type:'value',scale:true},
+  dataZoom:[{type:'inside'},{type:'slider',start:Math.max(0,100-30/bVals.length*100),end:100}],
+  series:[{type:'custom',name:'砖形图',data:brickData,
+    renderItem:function(params,api){
+      var idx=api.value(0),low=api.value(1),high=api.value(2),rise=api.value(3);
+      var pLow=api.coord([idx,low]);
+      var pHigh=api.coord([idx,high]);
+      var bw=api.size([1,0])[0]*0.82;
+      if(bw<4)bw=4;
+      var x0=pLow[0]-bw/2;
+      var yTop=pHigh[1];
+      var h=pLow[1]-pHigh[1];
+      if(h<2)h=2;
+      var fillColor=rise?'#ef4444':'#22c55e';
+      return{type:'rect',shape:{x:x0,y:yTop,width:bw,height:Math.max(h,2)},
+        style:{fill:fillColor,stroke:rise?'#dc2626':'#16a34a',lineWidth:1},
+        emphasis:{style:{fill:rise?'#fca5a5':'#86efac'}}};
+    }}]
+});
+window.addEventListener('resize',function(){bc.resize();});
+
+</script>
+</body>
+</html>

@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2026-11-23",
+  "lastUpdate": "2026-11-24",
   "etf_list": [
     {
       "name": "红利低波",
@@ -11,12 +11,13 @@
       "action_detail": "周线J=100.37，未触发100/0，维持当前仓位50% ｜ 依据20261120收盘周线（下次周线更新：本周最后一个交易日收盘后）",
       "signal_week_date": "20261120",
       "confirmation_rule": "exchange_week_close_v2",
+      "sell_policy": null,
       "preview_weekly_j": null,
       "positions": [
         {
           "round_id": 1,
-          "shares": 71138.6893,
-          "avg_cost": 0.9387,
+          "shares": 70213.6088,
+          "avg_cost": 0.9408,
           "sell_stage": 0,
           "j_peak": 100.37,
           "dca_active": false,
@@ -26,34 +27,34 @@
           "action_label": "持有（仓位50%）",
           "action_color": "#3498db",
           "action_detail": "周线J=100.37，未触发100/0，维持当前仓位50%",
-          "return_pct": 79.41,
+          "return_pct": 77.01,
           "total_invested": 100000.0,
-          "position_ratio": 0.498021,
+          "position_ratio": 0.497822,
           "target_ratio": null,
-          "portfolio_value": 179410.54
+          "portfolio_value": 177007.29
         }
       ],
-      "last_date": "20261123",
-      "last_price": 1.256,
+      "last_date": "20261124",
+      "last_price": 1.255,
       "weekly_j": 100.37,
       "weekly_k": 85.9,
       "weekly_d": 78.67,
-      "shares": 71138.6893,
-      "avg_cost": 0.9387,
-      "loss_pct": 79.41,
+      "shares": 70213.6088,
+      "avg_cost": 0.9408,
+      "loss_pct": 77.01,
       "total_invested": 100000.0,
-      "total_return": 79410.54,
-      "return_pct": 79.41,
+      "total_return": 77007.3,
+      "return_pct": 77.01,
       "trade_count": 18,
       "recent_trades": [
         {
           "date": "20261123",
           "action": "SELL",
           "price": 1.266,
-          "amount": 2469.19,
-          "shares": 1951.3629,
+          "amount": 2437.08,
+          "shares": 1925.9876,
           "reason": "周线J=100.37>100，减到50%",
-          "total_shares": 71138.6893,
+          "total_shares": 70213.6088,
           "ratio_after": 0.5
         }
       ],
@@ -69,10 +70,11 @@
       "action_label": "R12 建议定投(1x)",
       "action_color": "#e74c3c",
       "action": "buy",
-      "action_detail": "R1 已卖满50%，剩余7856份永久持有，不再触发卖出 | R2 已卖满50%，剩余8835份永久持有，不再触发卖出 | R3 已卖满50%，剩余9142份永久持有，不再触发卖出 | R4 已卖满50%，剩余9276份永久持有，不再触发卖出 | R5 已卖满50%，剩余6711份永久持有，不再触发卖出 | R6 已卖满50%，剩余6736份永久持有，不再触发卖出 | R7 已卖满50%，剩余6884份永久持有，不再触发卖出 | R8 已卖满50%，剩余5249份永久持有，不再触发卖出 | R9 已卖满50%，剩余5079份永久持有，不再触发卖出 | R10 已卖满50%，剩余4153份永久持有，不再触发卖出 | R11 已卖满50%，剩余3487份永久持有，不再触发卖出 | R12 定投中，浮亏4.74%，建议买入3000元(1x) ｜ 依据20261120收盘周线（下次周线更新：本周最后一个交易日收盘后） ｜ 本周盘中预览J=-8.5(未确认)",
+      "action_detail": "R1 已卖满50%，剩余7856份永久持有，不再触发卖出 | R2 已卖满50%，剩余8835份永久持有，不再触发卖出 | R3 已卖满50%，剩余9142份永久持有，不再触发卖出 | R4 已卖满50%，剩余9276份永久持有，不再触发卖出 | R5 已卖满50%，剩余6711份永久持有，不再触发卖出 | R6 已卖满50%，剩余6736份永久持有，不再触发卖出 | R7 已卖满50%，剩余6884份永久持有，不再触发卖出 | R8 已卖满50%，剩余5249份永久持有，不再触发卖出 | R9 已卖满50%，剩余5079份永久持有，不再触发卖出 | R10 已卖满50%，剩余4153份永久持有，不再触发卖出 | R11 已卖满50%，剩余3487份永久持有，不再触发卖出 | R12 定投中，浮亏0.98%，建议买入3000元(1x) ｜ 依据20261120收盘周线（下次周线更新：本周最后一个交易日收盘后） ｜ 本周盘中预览J=5.56(未确认)",
       "signal_week_date": "20261120",
       "confirmation_rule": "exchange_week_close_v2",
-      "preview_weekly_j": -8.5,
+      "sell_policy": "weekly_aggregate_next_open_v1",
+      "preview_weekly_j": 5.56,
       "positions": [
         {
           "round_id": 1,
@@ -84,10 +86,10 @@
           "round_budget": 15000,
           "budget_remaining": 0.0,
           "total_invested": 15000.0,
-          "return_pct": 54.81,
+          "return_pct": 58.64,
           "action": "v6h_stage_3",
           "action_label": "R1 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R1 已卖满50%，剩余7856份永久持有，不再触发卖出"
         },
         {
@@ -95,15 +97,15 @@
           "shares": 8835.2115,
           "avg_cost": 0.8489,
           "sell_stage": 3,
-          "j_peak": 46.84,
+          "j_peak": 110.85,
           "dca_active": true,
           "round_budget": 15000,
           "budget_remaining": 0.0,
           "total_invested": 15000.0,
-          "return_pct": 70.17,
+          "return_pct": 76.45,
           "action": "v6h_stage_3",
           "action_label": "R2 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R2 已卖满50%，剩余8835份永久持有，不再触发卖出"
         },
         {
@@ -116,10 +118,10 @@
           "round_budget": 15000,
           "budget_remaining": 0.0,
           "total_invested": 15000.0,
-          "return_pct": 76.76,
+          "return_pct": 80.82,
           "action": "v6h_stage_3",
           "action_label": "R3 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R3 已卖满50%，剩余9142份永久持有，不再触发卖出"
         },
         {
@@ -132,10 +134,10 @@
           "round_budget": 15000,
           "budget_remaining": 0.0,
           "total_invested": 15000.0,
-          "return_pct": 79.19,
+          "return_pct": 83.98,
           "action": "v6h_stage_3",
           "action_label": "R4 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R4 已卖满50%，剩余9276份永久持有，不再触发卖出"
         },
         {
@@ -148,10 +150,10 @@
           "round_budget": 15000,
           "budget_remaining": 0.0,
           "total_invested": 15000.0,
-          "return_pct": 40.49,
+          "return_pct": 44.06,
           "action": "v6h_stage_3",
           "action_label": "R5 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R5 已卖满50%，剩余6711份永久持有，不再触发卖出"
         },
         {
@@ -164,10 +166,10 @@
           "round_budget": 15000,
           "budget_remaining": 0.0,
           "total_invested": 15000.0,
-          "return_pct": 39.33,
+          "return_pct": 42.99,
           "action": "v6h_stage_3",
           "action_label": "R6 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R6 已卖满50%，剩余6736份永久持有，不再触发卖出"
         },
         {
@@ -180,10 +182,10 @@
           "round_budget": 15000,
           "budget_remaining": 0.0,
           "total_invested": 15000.0,
-          "return_pct": 49.02,
+          "return_pct": 52.63,
           "action": "v6h_stage_3",
           "action_label": "R7 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R7 已卖满50%，剩余6884份永久持有，不再触发卖出"
         },
         {
@@ -196,10 +198,10 @@
           "round_budget": 15000,
           "budget_remaining": 0.0,
           "total_invested": 15000.0,
-          "return_pct": 26.7,
+          "return_pct": 29.21,
           "action": "v6h_stage_3",
           "action_label": "R8 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R8 已卖满50%，剩余5249份永久持有，不再触发卖出"
         },
         {
@@ -212,10 +214,10 @@
           "round_budget": 15000,
           "budget_remaining": 0.0,
           "total_invested": 15000.0,
-          "return_pct": 17.03,
+          "return_pct": 20.76,
           "action": "v6h_stage_3",
           "action_label": "R9 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R9 已卖满50%，剩余5079份永久持有，不再触发卖出"
         },
         {
@@ -228,10 +230,10 @@
           "round_budget": 15000,
           "budget_remaining": 0.0,
           "total_invested": 15000.0,
-          "return_pct": 13.19,
+          "return_pct": 16.58,
           "action": "v6h_stage_3",
           "action_label": "R10 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R10 已卖满50%，剩余4153份永久持有，不再触发卖出"
         },
         {
@@ -244,10 +246,10 @@
           "round_budget": 15000,
           "budget_remaining": 0.0,
           "total_invested": 15000.0,
-          "return_pct": 0.67,
+          "return_pct": 1.77,
           "action": "v6h_stage_3",
           "action_label": "R11 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R11 已卖满50%，剩余3487份永久持有，不再触发卖出"
         },
         {
@@ -260,25 +262,25 @@
           "round_budget": 15000,
           "budget_remaining": 6000.0,
           "total_invested": 9000.0,
-          "return_pct": -4.74,
+          "return_pct": -0.98,
           "action": "buy",
           "action_label": "R12 建议定投(1x)",
           "action_color": "#e74c3c",
-          "action_detail": "R12 定投中，浮亏4.74%，建议买入3000元(1x)"
+          "action_detail": "R12 定投中，浮亏0.98%，建议买入3000元(1x)"
         }
       ],
-      "last_date": "20261123",
-      "last_price": 2.05,
+      "last_date": "20261124",
+      "last_price": 2.131,
       "weekly_j": -13.2,
       "weekly_k": 22.39,
       "weekly_d": 40.18,
       "shares": 77590.954,
       "avg_cost": 1.1793,
-      "loss_pct": 73.84,
+      "loss_pct": 80.71,
       "total_invested": 174000.0,
-      "total_return": 71791.21,
-      "return_pct": 41.26,
-      "trade_count": 78,
+      "total_return": 76093.55,
+      "return_pct": 43.73,
+      "trade_count": 65,
       "recent_trades": [
         {
           "date": "20261106",
@@ -316,8 +318,7 @@
       ],
       "previous_week_date": "20261113",
       "previous_weekly_j": 2.5929600360248486,
-      "weekly_j_change": -15.788926223939399,
-      "decision_source": "ledger"
+      "weekly_j_change": -15.788926223939399
     },
     {
       "name": "标普500",
@@ -326,10 +327,11 @@
       "action_label": "R11 建议定投(1x)",
       "action_color": "#e74c3c",
       "action": "buy",
-      "action_detail": "R1 已卖满50%，剩余1894份永久持有，不再触发卖出 | R2 已卖满50%，剩余1952份永久持有，不再触发卖出 | R3 已卖满50%，剩余2017份永久持有，不再触发卖出 | R4 已卖满50%，剩余1979份永久持有，不再触发卖出 | R5 已卖满50%，剩余1700份永久持有，不再触发卖出 | R6 已卖满50%，剩余1419份永久持有，不再触发卖出 | R7 已卖满50%，剩余1285份永久持有，不再触发卖出 | R8 已卖满50%，剩余1263份永久持有，不再触发卖出 | R9 已卖满50%，剩余1055份永久持有，不再触发卖出 | R10 已卖满50%，剩余945份永久持有，不再触发卖出 | R11 定投中，浮亏0.77%，建议买入1000元(1x) ｜ 依据20261120收盘周线（下次周线更新：本周最后一个交易日收盘后） ｜ 本周盘中预览J=4.1(未确认)",
+      "action_detail": "R1 已卖满50%，剩余1894份永久持有，不再触发卖出 | R2 已卖满50%，剩余1952份永久持有，不再触发卖出 | R3 已卖满50%，剩余2017份永久持有，不再触发卖出 | R4 已卖满50%，剩余1979份永久持有，不再触发卖出 | R5 已卖满50%，剩余1700份永久持有，不再触发卖出 | R6 已卖满50%，剩余1419份永久持有，不再触发卖出 | R7 已卖满50%，剩余1285份永久持有，不再触发卖出 | R8 已卖满50%，剩余1263份永久持有，不再触发卖出 | R9 已卖满50%，剩余1055份永久持有，不再触发卖出 | R10 已卖满50%，剩余945份永久持有，不再触发卖出 | R11 定投中，浮盈2.18%，建议买入1000元(1x) ｜ 依据20261120收盘周线（下次周线更新：本周最后一个交易日收盘后） ｜ 本周盘中预览J=20.05(未确认)",
       "signal_week_date": "20261120",
       "confirmation_rule": "exchange_week_close_v2",
-      "preview_weekly_j": 4.1,
+      "sell_policy": "weekly_aggregate_next_open_v1",
+      "preview_weekly_j": 20.05,
       "positions": [
         {
           "round_id": 1,
@@ -341,10 +343,10 @@
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": 43.84,
+          "return_pct": 46.37,
           "action": "v6h_stage_3",
           "action_label": "R1 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R1 已卖满50%，剩余1894份永久持有，不再触发卖出"
         },
         {
@@ -357,10 +359,10 @@
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": 43.23,
+          "return_pct": 46.67,
           "action": "v6h_stage_3",
           "action_label": "R2 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R2 已卖满50%，剩余1952份永久持有，不再触发卖出"
         },
         {
@@ -373,10 +375,10 @@
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": 52.27,
+          "return_pct": 54.55,
           "action": "v6h_stage_3",
           "action_label": "R3 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R3 已卖满50%，剩余2017份永久持有，不再触发卖出"
         },
         {
@@ -389,10 +391,10 @@
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": 47.37,
+          "return_pct": 50.35,
           "action": "v6h_stage_3",
           "action_label": "R4 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R4 已卖满50%，剩余1979份永久持有，不再触发卖出"
         },
         {
@@ -405,10 +407,10 @@
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": 38.62,
+          "return_pct": 40.61,
           "action": "v6h_stage_3",
           "action_label": "R5 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R5 已卖满50%，剩余1700份永久持有，不再触发卖出"
         },
         {
@@ -421,10 +423,10 @@
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": 24.29,
+          "return_pct": 25.49,
           "action": "v6h_stage_3",
           "action_label": "R6 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R6 已卖满50%，剩余1419份永久持有，不再触发卖出"
         },
         {
@@ -437,10 +439,10 @@
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": 13.61,
+          "return_pct": 16.81,
           "action": "v6h_stage_3",
           "action_label": "R7 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R7 已卖满50%，剩余1285份永久持有，不再触发卖出"
         },
         {
@@ -453,10 +455,10 @@
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": 16.33,
+          "return_pct": 19.25,
           "action": "v6h_stage_3",
           "action_label": "R8 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R8 已卖满50%，剩余1263份永久持有，不再触发卖出"
         },
         {
@@ -469,10 +471,10 @@
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": 4.3,
+          "return_pct": 3.77,
           "action": "v6h_stage_3",
           "action_label": "R9 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R9 已卖满50%，剩余1055份永久持有，不再触发卖出"
         },
         {
@@ -485,10 +487,10 @@
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": -5.06,
+          "return_pct": -5.99,
           "action": "v6h_stage_3",
           "action_label": "R10 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R10 已卖满50%，剩余945份永久持有，不再触发卖出"
         },
         {
@@ -501,25 +503,25 @@
           "round_budget": 5000,
           "budget_remaining": 4000.0,
           "total_invested": 1000.0,
-          "return_pct": -0.77,
+          "return_pct": 2.18,
           "action": "buy",
           "action_label": "R11 建议定投(1x)",
           "action_color": "#e74c3c",
-          "action_detail": "R11 定投中，浮亏0.77%，建议买入1000元(1x)"
+          "action_detail": "R11 定投中，浮盈2.18%，建议买入1000元(1x)"
         }
       ],
-      "last_date": "20261123",
-      "last_price": 2.455,
+      "last_date": "20261124",
+      "last_price": 2.528,
       "weekly_j": 10.45,
       "weekly_k": 31.02,
       "weekly_d": 41.31,
       "shares": 15912.2823,
       "avg_cost": 1.634,
-      "loss_pct": 50.25,
+      "loss_pct": 54.72,
       "total_invested": 51000.0,
-      "total_return": 14799.45,
-      "return_pct": 29.02,
-      "trade_count": 69,
+      "total_return": 14915.93,
+      "return_pct": 29.25,
+      "trade_count": 60,
       "recent_trades": [
         {
           "date": "20261030",
@@ -533,61 +535,6 @@
           "avg_cost": 2.6464
         },
         {
-          "date": "20261116",
-          "action": "SELL",
-          "price": 2.603,
-          "amount": 915.03,
-          "shares": 351.5306,
-          "round": 9,
-          "reason": "R9 收盘(2.6030)<中期线(2.6423) 减仓1/6",
-          "total_shares": 1406.1225,
-          "profit": 81.7
-        },
-        {
-          "date": "20261117",
-          "action": "SELL",
-          "price": 2.573,
-          "amount": 904.49,
-          "shares": 351.5306,
-          "round": 9,
-          "reason": "R9 收盘(2.5730)<多空线(2.6434) 减仓1/6",
-          "total_shares": 1054.5919,
-          "profit": 71.15
-        },
-        {
-          "date": "20261117",
-          "action": "SELL",
-          "price": 2.573,
-          "amount": 810.21,
-          "shares": 314.8891,
-          "round": 10,
-          "reason": "R10 止损减仓1/6: 收盘跌破多空线且创新低",
-          "total_shares": 1574.4454,
-          "profit": -23.12
-        },
-        {
-          "date": "20261118",
-          "action": "SELL",
-          "price": 2.567,
-          "amount": 808.32,
-          "shares": 314.8891,
-          "round": 10,
-          "reason": "R10 收盘(2.5670)<中期线(2.6347) 减仓1/6",
-          "total_shares": 1259.5563,
-          "profit": -25.01
-        },
-        {
-          "date": "20261119",
-          "action": "SELL",
-          "price": 2.57,
-          "amount": 809.26,
-          "shares": 314.8891,
-          "round": 10,
-          "reason": "R10 收盘(2.5700)<多空线(2.6357) 减仓1/6",
-          "total_shares": 944.6672,
-          "profit": -24.07
-        },
-        {
           "date": "20261120",
           "action": "BUY",
           "price": 2.474,
@@ -597,12 +544,41 @@
           "reason": "周线J=10.45, 金额=1000",
           "total_shares": 404.2037,
           "avg_cost": 2.474
+        },
+        {
+          "date": "20261123",
+          "action": "SELL",
+          "price": 2.448,
+          "amount": 1721.09,
+          "shares": 703.0612,
+          "round": 9,
+          "reason": "R9 周线统一减仓（信号20261120，累计卖出目标50.00%）：收盘(2.4740)<中期线(2.6209)；收盘(2.4740)<多空线(2.6288)",
+          "total_shares": 1054.5919,
+          "profit": 54.43,
+          "signal_date": "20261120",
+          "execution": "next_session_open",
+          "target_stage": 3,
+          "target_sold_ratio": 0.5
+        },
+        {
+          "date": "20261123",
+          "action": "SELL",
+          "price": 2.448,
+          "amount": 2312.55,
+          "shares": 944.6672,
+          "round": 10,
+          "reason": "R10 周线统一减仓（信号20261120，累计卖出目标50.00%）：V4止损：收盘跌破多空线且创新低；收盘(2.4740)<中期线(2.6209)；收盘(2.4740)<多空线(2.6288)",
+          "total_shares": 944.6672,
+          "profit": -187.45,
+          "signal_date": "20261120",
+          "execution": "next_session_open",
+          "target_stage": 3,
+          "target_sold_ratio": 0.5
         }
       ],
       "previous_week_date": "20261113",
       "previous_weekly_j": 43.634921111104845,
-      "weekly_j_change": -33.1802153863281,
-      "decision_source": "ledger"
+      "weekly_j_change": -33.1802153863281
     },
     {
       "name": "日经225",
@@ -611,10 +587,11 @@
       "action_label": "R14 建议定投(1x)",
       "action_color": "#e74c3c",
       "action": "buy",
-      "action_detail": "R1 已卖满50%，剩余2122份永久持有，不再触发卖出 | R2 已卖满50%，剩余2230份永久持有，不再触发卖出 | R3 已卖满50%，剩余2537份永久持有，不再触发卖出 | R4 已卖满50%，剩余2535份永久持有，不再触发卖出 | R5 已卖满50%，剩余2408份永久持有，不再触发卖出 | R6 已卖满50%，剩余2061份永久持有，不再触发卖出 | R7 已卖满50%，剩余2121份永久持有，不再触发卖出 | R8 已卖满50%，剩余1765份永久持有，不再触发卖出 | R9 已卖满50%，剩余1774份永久持有，不再触发卖出 | R10 已卖满50%，剩余1766份永久持有，不再触发卖出 | R11 已卖满50%，剩余1352份永久持有，不再触发卖出 | R12 已卖满50%，剩余1326份永久持有，不再触发卖出 | R13 已卖满50%，剩余1103份永久持有，不再触发卖出 | R14 定投中，浮亏6.18%，建议买入1000元(1x) ｜ 依据20261120收盘周线（下次周线更新：本周最后一个交易日收盘后） ｜ 本周盘中预览J=-6.08(未确认)",
+      "action_detail": "R1 已卖满50%，剩余2122份永久持有，不再触发卖出 | R2 已卖满50%，剩余2230份永久持有，不再触发卖出 | R3 已卖满50%，剩余2537份永久持有，不再触发卖出 | R4 已卖满50%，剩余2535份永久持有，不再触发卖出 | R5 已卖满50%，剩余2408份永久持有，不再触发卖出 | R6 已卖满50%，剩余2061份永久持有，不再触发卖出 | R7 已卖满50%，剩余2121份永久持有，不再触发卖出 | R8 已卖满50%，剩余1765份永久持有，不再触发卖出 | R9 已卖满50%，剩余1774份永久持有，不再触发卖出 | R10 已卖满50%，剩余1766份永久持有，不再触发卖出 | R11 已卖满50%，剩余1352份永久持有，不再触发卖出 | R12 已卖满50%，剩余1326份永久持有，不再触发卖出 | R13 已卖满50%，剩余1103份永久持有，不再触发卖出 | R14 定投中，浮亏2.37%，建议买入1000元(1x) ｜ 依据20261120收盘周线（下次周线更新：本周最后一个交易日收盘后） ｜ 本周盘中预览J=5.24(未确认)",
       "signal_week_date": "20261120",
       "confirmation_rule": "exchange_week_close_v2",
-      "preview_weekly_j": -6.08,
+      "sell_policy": "weekly_aggregate_next_open_v1",
+      "preview_weekly_j": 5.24,
       "positions": [
         {
           "round_id": 1,
@@ -626,10 +603,10 @@
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": 30.69,
+          "return_pct": 34.04,
           "action": "v6h_stage_3",
           "action_label": "R1 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R1 已卖满50%，剩余2122份永久持有，不再触发卖出"
         },
         {
@@ -637,15 +614,15 @@
           "shares": 2230.0345,
           "avg_cost": 1.1211,
           "sell_stage": 3,
-          "j_peak": 46.8,
+          "j_peak": 48.71,
           "dca_active": true,
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": 33.52,
+          "return_pct": 35.76,
           "action": "v6h_stage_3",
           "action_label": "R2 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R2 已卖满50%，剩余2230份永久持有，不再触发卖出"
         },
         {
@@ -658,10 +635,10 @@
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": 51.06,
+          "return_pct": 54.1,
           "action": "v6h_stage_3",
           "action_label": "R3 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R3 已卖满50%，剩余2537份永久持有，不再触发卖出"
         },
         {
@@ -674,10 +651,10 @@
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": 51.14,
+          "return_pct": 54.76,
           "action": "v6h_stage_3",
           "action_label": "R4 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R4 已卖满50%，剩余2535份永久持有，不再触发卖出"
         },
         {
@@ -690,10 +667,10 @@
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": 48.72,
+          "return_pct": 52.86,
           "action": "v6h_stage_3",
           "action_label": "R5 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R5 已卖满50%，剩余2408份永久持有，不再触发卖出"
         },
         {
@@ -706,10 +683,10 @@
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": 27.79,
+          "return_pct": 30.46,
           "action": "v6h_stage_3",
           "action_label": "R6 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R6 已卖满50%，剩余2061份永久持有，不再触发卖出"
         },
         {
@@ -722,10 +699,10 @@
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": 35.46,
+          "return_pct": 40.25,
           "action": "v6h_stage_3",
           "action_label": "R7 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R7 已卖满50%，剩余2121份永久持有，不再触发卖出"
         },
         {
@@ -738,10 +715,10 @@
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": 18.43,
+          "return_pct": 22.2,
           "action": "v6h_stage_3",
           "action_label": "R8 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R8 已卖满50%，剩余1765份永久持有，不再触发卖出"
         },
         {
@@ -754,10 +731,10 @@
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": 19.16,
+          "return_pct": 21.12,
           "action": "v6h_stage_3",
           "action_label": "R9 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R9 已卖满50%，剩余1774份永久持有，不再触发卖出"
         },
         {
@@ -770,10 +747,10 @@
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": 22.97,
+          "return_pct": 26.26,
           "action": "v6h_stage_3",
           "action_label": "R10 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R10 已卖满50%，剩余1766份永久持有，不再触发卖出"
         },
         {
@@ -786,10 +763,10 @@
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": 6.3,
+          "return_pct": 7.26,
           "action": "v6h_stage_3",
           "action_label": "R11 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R11 已卖满50%，剩余1352份永久持有，不再触发卖出"
         },
         {
@@ -802,10 +779,10 @@
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": 11.06,
+          "return_pct": 13.25,
           "action": "v6h_stage_3",
           "action_label": "R12 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R12 已卖满50%，剩余1326份永久持有，不再触发卖出"
         },
         {
@@ -818,10 +795,10 @@
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": -6.94,
+          "return_pct": -5.5,
           "action": "v6h_stage_3",
           "action_label": "R13 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R13 已卖满50%，剩余1103份永久持有，不再触发卖出"
         },
         {
@@ -834,25 +811,25 @@
           "round_budget": 5000,
           "budget_remaining": 1000.0,
           "total_invested": 4000.0,
-          "return_pct": -6.18,
+          "return_pct": -2.37,
           "action": "buy",
           "action_label": "R14 建议定投(1x)",
           "action_color": "#e74c3c",
-          "action_detail": "R14 定投中，浮亏6.18%，建议买入1000元(1x)"
+          "action_detail": "R14 定投中，浮亏2.37%，建议买入1000元(1x)"
         }
       ],
-      "last_date": "20261123",
-      "last_price": 1.922,
+      "last_date": "20261124",
+      "last_price": 2.0,
       "weekly_j": -7.71,
       "weekly_k": 16.47,
       "weekly_d": 28.57,
       "shares": 27053.9463,
       "avg_cost": 1.3492,
-      "loss_pct": 42.46,
+      "loss_pct": 48.24,
       "total_invested": 69000.0,
-      "total_return": 18945.61,
-      "return_pct": 27.46,
-      "trade_count": 94,
+      "total_return": 19246.31,
+      "return_pct": 27.89,
+      "trade_count": 82,
       "recent_trades": [
         {
           "date": "20261030",
@@ -901,20 +878,20 @@
       ],
       "previous_week_date": "20261113",
       "previous_weekly_j": 3.989399284720065,
-      "weekly_j_change": -11.698767325224239,
-      "decision_source": "ledger"
+      "weekly_j_change": -11.698767325224239
     },
     {
       "name": "德国DAX",
       "ts_code": "513030.SH",
       "report_file": "dca_report_德国DAX.html",
-      "action_label": "R10 已减1/6·等收盘<中期线",
-      "action_color": "#f39c12",
-      "action": "v6h_stage_1",
-      "action_detail": "R1 已卖满50%，剩余2487份永久持有，不再触发卖出 | R2 已卖满50%，剩余2782份永久持有，不再触发卖出 | R3 已卖满50%，剩余2861份永久持有，不再触发卖出 | R4 已卖满50%，剩余2059份永久持有，不再触发卖出 | R5 已卖满50%，剩余1908份永久持有，不再触发卖出 | R6 已卖满50%，剩余1888份永久持有，不再触发卖出 | R7 已卖满50%，剩余1778份永久持有，不再触发卖出 | R8 已卖满50%，剩余1355份永久持有，不再触发卖出 | R9 已卖满50%，剩余1437份永久持有，不再触发卖出 | R10 收盘<多空线再减1/6，之后永久持有剩余1/2 ｜ 依据20261120收盘周线（下次周线更新：本周最后一个交易日收盘后） ｜ 本周盘中预览J=14.36(未确认)",
+      "action_label": "R1 已卖50%·永久持有",
+      "action_color": "#456faf",
+      "action": "v6h_stage_3",
+      "action_detail": "R1 已卖满50%，剩余2487份永久持有，不再触发卖出 | R2 已卖满50%，剩余2782份永久持有，不再触发卖出 | R3 已卖满50%，剩余2861份永久持有，不再触发卖出 | R4 已卖满50%，剩余2059份永久持有，不再触发卖出 | R5 已卖满50%，剩余1908份永久持有，不再触发卖出 | R6 已卖满50%，剩余1888份永久持有，不再触发卖出 | R7 已卖满50%，剩余1778份永久持有，不再触发卖出 | R8 已卖满50%，剩余1355份永久持有，不再触发卖出 | R9 已卖满50%，剩余1437份永久持有，不再触发卖出 | R10 已卖满50%，剩余1406份永久持有，不再触发卖出 ｜ 依据20261120收盘周线（下次周线更新：本周最后一个交易日收盘后） ｜ 本周盘中预览J=19.5(未确认)",
       "signal_week_date": "20261120",
       "confirmation_rule": "exchange_week_close_v2",
-      "preview_weekly_j": 14.36,
+      "sell_policy": "weekly_aggregate_next_open_v1",
+      "preview_weekly_j": 19.5,
       "positions": [
         {
           "round_id": 1,
@@ -926,10 +903,10 @@
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": 32.65,
+          "return_pct": 33.86,
           "action": "v6h_stage_3",
           "action_label": "R1 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R1 已卖满50%，剩余2487份永久持有，不再触发卖出"
         },
         {
@@ -942,10 +919,10 @@
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": 42.0,
+          "return_pct": 43.13,
           "action": "v6h_stage_3",
           "action_label": "R2 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R2 已卖满50%，剩余2782份永久持有，不再触发卖出"
         },
         {
@@ -958,10 +935,10 @@
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": 54.55,
+          "return_pct": 55.18,
           "action": "v6h_stage_3",
           "action_label": "R3 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R3 已卖满50%，剩余2861份永久持有，不再触发卖出"
         },
         {
@@ -974,10 +951,10 @@
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": 20.24,
+          "return_pct": 21.66,
           "action": "v6h_stage_3",
           "action_label": "R4 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R4 已卖满50%，剩余2059份永久持有，不再触发卖出"
         },
         {
@@ -990,10 +967,10 @@
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": 16.07,
+          "return_pct": 16.18,
           "action": "v6h_stage_3",
           "action_label": "R5 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R5 已卖满50%，剩余1908份永久持有，不再触发卖出"
         },
         {
@@ -1006,10 +983,10 @@
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": 15.56,
+          "return_pct": 16.58,
           "action": "v6h_stage_3",
           "action_label": "R6 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R6 已卖满50%，剩余1888份永久持有，不再触发卖出"
         },
         {
@@ -1022,10 +999,10 @@
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": 10.44,
+          "return_pct": 10.91,
           "action": "v6h_stage_3",
           "action_label": "R7 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R7 已卖满50%，剩余1778份永久持有，不再触发卖出"
         },
         {
@@ -1038,10 +1015,10 @@
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": -4.53,
+          "return_pct": -4.33,
           "action": "v6h_stage_3",
           "action_label": "R8 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R8 已卖满50%，剩余1355份永久持有，不再触发卖出"
         },
         {
@@ -1054,69 +1031,61 @@
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": -0.95,
+          "return_pct": -0.05,
           "action": "v6h_stage_3",
           "action_label": "R9 已卖50%·永久持有",
-          "action_color": "#3498db",
+          "action_color": "#456faf",
           "action_detail": "R9 已卖满50%，剩余1437份永久持有，不再触发卖出"
         },
         {
           "round_id": 10,
-          "shares": 1875.1905,
+          "shares": 1406.3929,
           "avg_cost": 1.7776,
-          "sell_stage": 2,
+          "sell_stage": 3,
           "j_peak": 83.86,
           "dca_active": true,
           "round_budget": 5000,
           "budget_remaining": 0.0,
           "total_invested": 5000.0,
-          "return_pct": -6.01,
-          "action": "v6h_stage_2",
-          "action_label": "R10 已减1/3·等收盘<多空线",
-          "action_color": "#f39c12",
-          "action_detail": "R10 收盘<多空线再减1/6，之后永久持有剩余1/2"
+          "return_pct": -5.91,
+          "action": "v6h_stage_3",
+          "action_label": "R10 已卖50%·永久持有",
+          "action_color": "#456faf",
+          "action_detail": "R10 已卖满50%，剩余1406份永久持有，不再触发卖出"
         }
       ],
-      "last_date": "20261123",
-      "last_price": 1.67,
+      "last_date": "20261124",
+      "last_price": 1.685,
       "weekly_j": 35.08,
       "weekly_k": 33.4,
       "weekly_d": 32.57,
-      "shares": 20430.1243,
-      "avg_cost": 1.2645,
-      "loss_pct": 32.07,
+      "shares": 19961.3267,
+      "avg_cost": 1.2524,
+      "loss_pct": 34.54,
       "total_invested": 50000.0,
-      "total_return": 9717.92,
-      "return_pct": 19.44,
-      "trade_count": 67,
+      "total_return": 9360.17,
+      "return_pct": 18.72,
+      "trade_count": 56,
       "recent_trades": [
-        {
-          "date": "20261120",
-          "action": "SELL",
-          "price": 1.675,
-          "amount": 785.24,
-          "shares": 468.7976,
-          "round": 10,
-          "reason": "R10 J峰值回撤(J_peak=83.86, J=35.08)减仓1/6",
-          "total_shares": 2343.9882,
-          "profit": -48.1
-        },
         {
           "date": "20261123",
           "action": "SELL",
-          "price": 1.67,
-          "amount": 782.89,
-          "shares": 468.7976,
+          "price": 1.66,
+          "amount": 2334.61,
+          "shares": 1406.3929,
           "round": 10,
-          "reason": "R10 收盘(1.6700)<中期线(1.7952) 减仓1/6",
-          "total_shares": 1875.1905,
-          "profit": -50.44
+          "reason": "R10 周线统一减仓（信号20261120，累计卖出目标50.00%）：J峰值回撤（83.86→35.08）；收盘(1.6750)<中期线(1.8032)；收盘(1.6750)<多空线(1.8023)",
+          "total_shares": 1406.3929,
+          "profit": -165.39,
+          "signal_date": "20261120",
+          "execution": "next_session_open",
+          "target_stage": 3,
+          "target_sold_ratio": 0.5
         }
       ],
       "previous_week_date": "20261113",
       "previous_weekly_j": 83.85510138370546,
-      "weekly_j_change": -48.779334935322325,
-      "decision_source": "ledger"
+      "weekly_j_change": -48.779334935322325
     }
   ]
 }

@@ -1,22 +1,36 @@
 {
   "schemaVersion": 2,
-  "lastUpdate": "2026-11-23 20:21:10 北京时间",
-  "generatedAt": "2026-11-23T20:21:10+08:00",
-  "totalStocks": null,
+  "lastUpdate": "2026-11-24 20:19:43 北京时间",
+  "generatedAt": "2026-11-24T20:19:43+08:00",
+  "totalStocks": 1,
   "c154Stocks": null,
   "c432Stocks": null,
   "macdStocks": null,
-  "multiIndicatorStocks": 14,
+  "multiIndicatorStocks": 20,
   "latestCounts": {
-    "stockSelection": null,
+    "stockSelection": 1,
     "c154Html": null,
     "c432Html": null,
     "macdHtml": null,
-    "multiIndicator": 14
+    "multiIndicator": 20
   },
-  "totalReports": 175,
-  "latestDate": "20261123",
+  "totalReports": 176,
+  "latestDate": "20261124",
   "reports": [
+    {
+      "date": "20261124",
+      "stockSelection": "html/20261124/stock_selection_20261124.html",
+      "c154Html": null,
+      "c432Html": null,
+      "macdHtml": null,
+      "industryTrend": "html/20261124/industry_total_amount_trend.html",
+      "j13Trend": "html/20261124/first_j13_step_daily_count.html",
+      "sentimentRebound": "html/20261124/sentiment_rebound_strategy.html",
+      "multiIndicator": "html/20261124/multi_indicator_selection_20261124.html",
+      "c154Result": null,
+      "c432Result": null,
+      "macdResult": null
+    },
     {
       "date": "20261123",
       "stockSelection": null,

@@ -1,6 +1,6 @@
 {
   "next_round_id": 15,
-  "total_sell_amount": 34223.95821539816,
+  "total_sell_amount": 34138.41588398552,
   "trades": [
     {
       "date": "20211126",
@@ -36,37 +36,19 @@
       "avg_cost": 1.1784
     },
     {
-      "date": "20220106",
-      "action": "SELL",
-      "price": 1.158,
-      "amount": 818.93,
-      "shares": 707.1964,
-      "round": 1,
-      "reason": "R1 止损减仓1/6: 收盘跌破多空线且创新低",
-      "total_shares": 3535.9818,
-      "profit": -14.4
-    },
-    {
-      "date": "20220107",
-      "action": "SELL",
-      "price": 1.158,
-      "amount": 818.93,
-      "shares": 707.1964,
-      "round": 1,
-      "reason": "R1 收盘(1.1580)<中期线(1.1805) 减仓1/6",
-      "total_shares": 2828.7854,
-      "profit": -14.4
-    },
-    {
       "date": "20220110",
       "action": "SELL",
-      "price": 1.158,
-      "amount": 818.93,
-      "shares": 707.1964,
+      "price": 1.159,
+      "amount": 2458.92,
+      "shares": 2121.5891,
       "round": 1,
-      "reason": "R1 收盘(1.1580)<多空线(1.1905) 减仓1/6",
+      "reason": "R1 周线统一减仓（信号20220107，累计卖出目标50.00%）：V4止损：收盘跌破多空线且创新低；收盘(1.1580)<中期线(1.1805)；收盘(1.1580)<多空线(1.1910)",
       "total_shares": 2121.5891,
-      "profit": -14.4
+      "profit": -41.08,
+      "signal_date": "20220107",
+      "execution": "next_session_open",
+      "target_stage": 3,
+      "target_sold_ratio": 0.5
     },
     {
       "date": "20220114",
@@ -113,37 +95,19 @@
       "avg_cost": 1.1211
     },
     {
-      "date": "20220224",
+      "date": "20220307",
       "action": "SELL",
-      "price": 1.064,
-      "amount": 790.92,
-      "shares": 743.3448,
+      "price": 1.044,
+      "amount": 2328.16,
+      "shares": 2230.0345,
       "round": 2,
-      "reason": "R2 止损减仓1/6: 收盘跌破多空线且创新低",
-      "total_shares": 3716.7242,
-      "profit": -42.41
-    },
-    {
-      "date": "20220225",
-      "action": "SELL",
-      "price": 1.076,
-      "amount": 799.84,
-      "shares": 743.3448,
-      "round": 2,
-      "reason": "R2 收盘(1.0760)<中期线(1.1028) 减仓1/6",
-      "total_shares": 2973.3794,
-      "profit": -33.49
-    },
-    {
-      "date": "20220228",
-      "action": "SELL",
-      "price": 1.075,
-      "amount": 799.1,
-      "shares": 743.3448,
-      "round": 2,
-      "reason": "R2 收盘(1.0750)<多空线(1.1356) 减仓1/6",
+      "reason": "R2 周线统一减仓（信号20220304，累计卖出目标50.00%）：V4止损：收盘跌破多空线且创新低；收盘(1.0570)<中期线(1.0906)；收盘(1.0570)<多空线(1.1262)",
       "total_shares": 2230.0345,
-      "profit": -34.24
+      "profit": -171.84,
+      "signal_date": "20220304",
+      "execution": "next_session_open",
+      "target_stage": 3,
+      "target_sold_ratio": 0.5
     },
     {
       "date": "20220624",
@@ -201,37 +165,34 @@
       "avg_cost": 0.9853
     },
     {
-      "date": "20220805",
+      "date": "20220808",
       "action": "SELL",
-      "price": 1.066,
-      "amount": 901.61,
+      "price": 1.07,
+      "amount": 904.99,
       "shares": 845.7868,
       "round": 3,
-      "reason": "R3 周线J=101.98>=93 减仓1/6",
+      "reason": "R3 周线统一减仓（信号20220805，累计卖出目标16.67%）：周线J=101.98≥93",
       "total_shares": 4228.9342,
-      "profit": 68.28
+      "profit": 71.66,
+      "signal_date": "20220805",
+      "execution": "next_session_open",
+      "target_stage": 1,
+      "target_sold_ratio": 0.16666666666666666
     },
     {
-      "date": "20220823",
+      "date": "20220905",
       "action": "SELL",
-      "price": 1.058,
-      "amount": 894.84,
-      "shares": 845.7868,
+      "price": 1.02,
+      "amount": 1725.41,
+      "shares": 1691.5737,
       "round": 3,
-      "reason": "R3 收盘(1.0580)<中期线(1.0602) 减仓1/6",
-      "total_shares": 3383.1474,
-      "profit": 61.51
-    },
-    {
-      "date": "20220829",
-      "action": "SELL",
-      "price": 1.04,
-      "amount": 879.62,
-      "shares": 845.7868,
-      "round": 3,
-      "reason": "R3 收盘(1.0400)<多空线(1.0428) 减仓1/6",
+      "reason": "R3 周线统一减仓（信号20220902，累计卖出目标50.00%）：收盘(1.0200)<中期线(1.0572)；收盘(1.0200)<多空线(1.0418)",
       "total_shares": 2537.3605,
-      "profit": 46.28
+      "profit": 58.74,
+      "signal_date": "20220902",
+      "execution": "next_session_open",
+      "target_stage": 3,
+      "target_sold_ratio": 0.5
     },
     {
       "date": "20220923",
@@ -289,37 +250,49 @@
       "avg_cost": 0.9861
     },
     {
-      "date": "20221118",
+      "date": "20221121",
       "action": "SELL",
       "price": 1.064,
       "amount": 899.12,
       "shares": 845.0397,
       "round": 4,
-      "reason": "R4 周线J=100.51>=93 减仓1/6",
+      "reason": "R4 周线统一减仓（信号20221118，累计卖出目标16.67%）：周线J=100.51≥93",
       "total_shares": 4225.1987,
-      "profit": 65.79
+      "profit": 65.79,
+      "signal_date": "20221118",
+      "execution": "next_session_open",
+      "target_stage": 1,
+      "target_sold_ratio": 0.16666666666666666
     },
     {
-      "date": "20221206",
+      "date": "20221212",
       "action": "SELL",
-      "price": 1.065,
-      "amount": 899.97,
+      "price": 1.056,
+      "amount": 892.36,
       "shares": 845.0397,
       "round": 4,
-      "reason": "R4 收盘(1.0650)<中期线(1.0736) 减仓1/6",
+      "reason": "R4 周线统一减仓（信号20221209，累计卖出目标33.33%）：收盘(1.0670)<中期线(1.0730)",
       "total_shares": 3380.1589,
-      "profit": 66.63
+      "profit": 59.03,
+      "signal_date": "20221209",
+      "execution": "next_session_open",
+      "target_stage": 2,
+      "target_sold_ratio": 0.3333333333333333
     },
     {
-      "date": "20221220",
+      "date": "20221226",
       "action": "SELL",
-      "price": 1.048,
-      "amount": 885.6,
+      "price": 1.037,
+      "amount": 876.31,
       "shares": 845.0397,
       "round": 4,
-      "reason": "R4 收盘(1.0480)<多空线(1.0503) 减仓1/6",
+      "reason": "R4 周线统一减仓（信号20221223，累计卖出目标50.00%）：收盘(1.0350)<多空线(1.0489)",
       "total_shares": 2535.1192,
-      "profit": 52.27
+      "profit": 42.97,
+      "signal_date": "20221223",
+      "execution": "next_session_open",
+      "target_stage": 3,
+      "target_sold_ratio": 0.5
     },
     {
       "date": "20230106",
@@ -355,37 +328,49 @@
       "avg_cost": 1.0382
     },
     {
-      "date": "20230331",
+      "date": "20230403",
       "action": "SELL",
-      "price": 1.094,
-      "amount": 878.13,
+      "price": 1.095,
+      "amount": 878.93,
       "shares": 802.6791,
       "round": 5,
-      "reason": "R5 周线J=98.18>=93 减仓1/6",
+      "reason": "R5 周线统一减仓（信号20230331，累计卖出目标16.67%）：周线J=98.18≥93",
       "total_shares": 4013.3953,
-      "profit": 44.8
+      "profit": 45.6,
+      "signal_date": "20230331",
+      "execution": "next_session_open",
+      "target_stage": 1,
+      "target_sold_ratio": 0.16666666666666666
     },
     {
-      "date": "20230526",
+      "date": "20230529",
       "action": "SELL",
-      "price": 1.186,
-      "amount": 951.98,
+      "price": 1.201,
+      "amount": 964.02,
       "shares": 802.6791,
       "round": 5,
-      "reason": "R5 收盘(1.1860)<中期线(1.1955) 减仓1/6",
+      "reason": "R5 周线统一减仓（信号20230526，累计卖出目标33.33%）：收盘(1.1860)<中期线(1.1955)",
       "total_shares": 3210.7162,
-      "profit": 118.64
+      "profit": 130.68,
+      "signal_date": "20230526",
+      "execution": "next_session_open",
+      "target_stage": 2,
+      "target_sold_ratio": 0.3333333333333333
     },
     {
-      "date": "20230803",
+      "date": "20230807",
       "action": "SELL",
-      "price": 1.218,
-      "amount": 977.66,
+      "price": 1.226,
+      "amount": 984.08,
       "shares": 802.6791,
       "round": 5,
-      "reason": "R5 收盘(1.2180)<多空线(1.2337) 减仓1/6",
+      "reason": "R5 周线统一减仓（信号20230804，累计卖出目标50.00%）：收盘(1.2280)<多空线(1.2335)",
       "total_shares": 2408.0372,
-      "profit": 144.33
+      "profit": 150.75,
+      "signal_date": "20230804",
+      "execution": "next_session_open",
+      "target_stage": 3,
+      "target_sold_ratio": 0.5
     },
     {
       "date": "20230811",
@@ -432,37 +417,19 @@
       "avg_cost": 1.213
     },
     {
-      "date": "20230928",
-      "action": "SELL",
-      "price": 1.189,
-      "amount": 816.82,
-      "shares": 686.9786,
-      "round": 6,
-      "reason": "R6 J峰值回撤(J_peak=60.12, J=19.15)减仓1/6",
-      "total_shares": 3434.8929,
-      "profit": -16.52
-    },
-    {
       "date": "20231009",
       "action": "SELL",
-      "price": 1.161,
-      "amount": 797.58,
-      "shares": 686.9786,
+      "price": 1.165,
+      "amount": 2400.99,
+      "shares": 2060.9357,
       "round": 6,
-      "reason": "R6 收盘(1.1610)<中期线(1.2196) 减仓1/6",
-      "total_shares": 2747.9143,
-      "profit": -35.75
-    },
-    {
-      "date": "20231010",
-      "action": "SELL",
-      "price": 1.185,
-      "amount": 814.07,
-      "shares": 686.9786,
-      "round": 6,
-      "reason": "R6 收盘(1.1850)<多空线(1.2212) 减仓1/6",
+      "reason": "R6 周线统一减仓（信号20230928，累计卖出目标50.00%）：J峰值回撤（60.12→19.15）；收盘(1.1890)<中期线(1.2234)；收盘(1.1890)<多空线(1.2243)",
       "total_shares": 2060.9357,
-      "profit": -19.26
+      "profit": -99.01,
+      "signal_date": "20230928",
+      "execution": "next_session_open",
+      "target_stage": 3,
+      "target_sold_ratio": 0.5
     },
     {
       "date": "20231020",
@@ -498,37 +465,34 @@
       "avg_cost": 1.1785
     },
     {
-      "date": "20231124",
+      "date": "20231127",
       "action": "SELL",
-      "price": 1.228,
-      "amount": 868.37,
+      "price": 1.227,
+      "amount": 867.66,
       "shares": 707.1419,
       "round": 7,
-      "reason": "R7 周线J=97.56>=93 减仓1/6",
+      "reason": "R7 周线统一减仓（信号20231124，累计卖出目标16.67%）：周线J=97.56≥93",
       "total_shares": 3535.7094,
-      "profit": 35.04
+      "profit": 34.33,
+      "signal_date": "20231124",
+      "execution": "next_session_open",
+      "target_stage": 1,
+      "target_sold_ratio": 0.16666666666666666
     },
     {
-      "date": "20231205",
+      "date": "20240108",
       "action": "SELL",
-      "price": 1.221,
-      "amount": 863.42,
+      "price": 1.308,
+      "amount": 924.94,
       "shares": 707.1419,
       "round": 7,
-      "reason": "R7 收盘(1.2210)<中期线(1.2218) 减仓1/6",
+      "reason": "R7 周线统一减仓（信号20240105，累计卖出目标33.33%）：收盘(1.3000)<中期线(1.3035)",
       "total_shares": 2828.5675,
-      "profit": 30.09
-    },
-    {
-      "date": "20240207",
-      "action": "SELL",
-      "price": 1.363,
-      "amount": 963.83,
-      "shares": 707.1419,
-      "round": 7,
-      "reason": "R7 收盘(1.3630)<多空线(1.3711) 减仓1/6",
-      "total_shares": 2121.4256,
-      "profit": 130.5
+      "profit": 91.61,
+      "signal_date": "20240105",
+      "execution": "next_session_open",
+      "target_stage": 2,
+      "target_sold_ratio": 0.3333333333333333
     },
     {
       "date": "20240419",
@@ -540,6 +504,21 @@
       "reason": "周线J=8.05, 金额=1000",
       "total_shares": 724.6377,
       "avg_cost": 1.38
+    },
+    {
+      "date": "20240422",
+      "action": "SELL",
+      "price": 1.382,
+      "amount": 977.27,
+      "shares": 707.1419,
+      "round": 7,
+      "reason": "R7 周线统一减仓（信号20240419，累计卖出目标50.00%）：收盘(1.3800)<多空线(1.4813)",
+      "total_shares": 2121.4256,
+      "profit": 143.94,
+      "signal_date": "20240419",
+      "execution": "next_session_open",
+      "target_stage": 3,
+      "target_sold_ratio": 0.5
     },
     {
       "date": "20240426",
@@ -586,37 +565,19 @@
       "avg_cost": 1.4165
     },
     {
-      "date": "20240726",
+      "date": "20240729",
       "action": "SELL",
-      "price": 1.422,
-      "amount": 836.55,
-      "shares": 588.2889,
+      "price": 1.462,
+      "amount": 2580.24,
+      "shares": 1764.8668,
       "round": 8,
-      "reason": "R8 J峰值回撤(J_peak=72.52, J=43.57)减仓1/6",
-      "total_shares": 2941.4447,
-      "profit": 3.21
-    },
-    {
-      "date": "20240730",
-      "action": "SELL",
-      "price": 1.469,
-      "amount": 864.2,
-      "shares": 588.2889,
-      "round": 8,
-      "reason": "R8 收盘(1.4690)<中期线(1.4797) 减仓1/6",
-      "total_shares": 2353.1558,
-      "profit": 30.86
-    },
-    {
-      "date": "20240802",
-      "action": "SELL",
-      "price": 1.409,
-      "amount": 828.9,
-      "shares": 588.2889,
-      "round": 8,
-      "reason": "R8 收盘(1.4090)<多空线(1.4650) 减仓1/6",
+      "reason": "R8 周线统一减仓（信号20240726，累计卖出目标50.00%）：J峰值回撤（72.52→43.57）；收盘(1.4220)<中期线(1.4855)；收盘(1.4220)<多空线(1.4662)",
       "total_shares": 1764.8668,
-      "profit": -4.43
+      "profit": 80.24,
+      "signal_date": "20240726",
+      "execution": "next_session_open",
+      "target_stage": 3,
+      "target_sold_ratio": 0.5
     },
     {
       "date": "20241101",
@@ -641,37 +602,19 @@
       "avg_cost": 1.409
     },
     {
-      "date": "20241220",
+      "date": "20241223",
       "action": "SELL",
-      "price": 1.404,
-      "amount": 830.39,
-      "shares": 591.4461,
+      "price": 1.413,
+      "amount": 2507.14,
+      "shares": 1774.3383,
       "round": 9,
-      "reason": "R9 J峰值回撤(J_peak=78.31, J=52.45)减仓1/6",
-      "total_shares": 2957.2304,
-      "profit": -2.94
-    },
-    {
-      "date": "20241224",
-      "action": "SELL",
-      "price": 1.433,
-      "amount": 847.54,
-      "shares": 591.4461,
-      "round": 9,
-      "reason": "R9 收盘(1.4330)<中期线(1.4352) 减仓1/6",
-      "total_shares": 2365.7843,
-      "profit": 14.21
-    },
-    {
-      "date": "20250221",
-      "action": "SELL",
-      "price": 1.471,
-      "amount": 870.02,
-      "shares": 591.4461,
-      "round": 9,
-      "reason": "R9 收盘(1.4710)<多空线(1.4718) 减仓1/6",
+      "reason": "R9 周线统一减仓（信号20241220，累计卖出目标50.00%）：J峰值回撤（78.31→52.45）；收盘(1.4040)<中期线(1.4362)；收盘(1.4040)<多空线(1.4309)",
       "total_shares": 1774.3383,
-      "profit": 36.68
+      "profit": 7.14,
+      "signal_date": "20241220",
+      "execution": "next_session_open",
+      "target_stage": 3,
+      "target_sold_ratio": 0.5
     },
     {
       "date": "20250228",
@@ -729,37 +672,49 @@
       "avg_cost": 1.4156
     },
     {
-      "date": "20250430",
+      "date": "20250506",
       "action": "SELL",
-      "price": 1.421,
-      "amount": 836.53,
+      "price": 1.437,
+      "amount": 845.95,
       "shares": 588.6922,
       "round": 10,
-      "reason": "R10 周线J=98.92>=93 减仓1/6",
+      "reason": "R10 周线统一减仓（信号20250430，累计卖出目标16.67%）：周线J=98.92≥93",
       "total_shares": 2943.461,
-      "profit": 3.2
+      "profit": 12.62,
+      "signal_date": "20250430",
+      "execution": "next_session_open",
+      "target_stage": 1,
+      "target_sold_ratio": 0.16666666666666666
     },
     {
-      "date": "20250623",
+      "date": "20250714",
       "action": "SELL",
-      "price": 1.453,
-      "amount": 855.37,
+      "price": 1.495,
+      "amount": 880.09,
       "shares": 588.6922,
       "round": 10,
-      "reason": "R10 收盘(1.4530)<中期线(1.4659) 减仓1/6",
+      "reason": "R10 周线统一减仓（信号20250711，累计卖出目标33.33%）：收盘(1.5000)<中期线(1.5093)",
       "total_shares": 2354.7688,
-      "profit": 22.04
+      "profit": 46.76,
+      "signal_date": "20250711",
+      "execution": "next_session_open",
+      "target_stage": 2,
+      "target_sold_ratio": 0.3333333333333333
     },
     {
-      "date": "20251118",
+      "date": "20251124",
       "action": "SELL",
-      "price": 1.804,
-      "amount": 1062.0,
+      "price": 1.792,
+      "amount": 1054.94,
       "shares": 588.6922,
       "round": 10,
-      "reason": "R10 收盘(1.8040)<多空线(1.8085) 减仓1/6",
+      "reason": "R10 周线统一减仓（信号20251121，累计卖出目标50.00%）：收盘(1.7920)<多空线(1.8074)",
       "total_shares": 1766.0766,
-      "profit": 228.67
+      "profit": 221.6,
+      "signal_date": "20251121",
+      "execution": "next_session_open",
+      "target_stage": 3,
+      "target_sold_ratio": 0.5
     },
     {
       "date": "20251226",
@@ -806,37 +761,49 @@
       "avg_cost": 1.8485
     },
     {
-      "date": "20260213",
+      "date": "20260224",
       "action": "SELL",
       "price": 2.111,
       "amount": 951.66,
       "shares": 450.8079,
       "round": 11,
-      "reason": "R11 周线J=98.59>=93 减仓1/6",
+      "reason": "R11 周线统一减仓（信号20260213，累计卖出目标16.67%）：周线J=98.59≥93",
       "total_shares": 2254.0393,
-      "profit": 118.32
+      "profit": 118.32,
+      "signal_date": "20260213",
+      "execution": "next_session_open",
+      "target_stage": 1,
+      "target_sold_ratio": 0.16666666666666666
     },
     {
-      "date": "20260303",
+      "date": "20260309",
       "action": "SELL",
-      "price": 1.998,
-      "amount": 900.71,
+      "price": 1.872,
+      "amount": 843.91,
       "shares": 450.8079,
       "round": 11,
-      "reason": "R11 收盘(1.9980)<中期线(2.0230) 减仓1/6",
+      "reason": "R11 周线统一减仓（信号20260306，累计卖出目标33.33%）：收盘(1.9830)<中期线(2.0242)",
       "total_shares": 1803.2315,
-      "profit": 67.38
+      "profit": 10.58,
+      "signal_date": "20260306",
+      "execution": "next_session_open",
+      "target_stage": 2,
+      "target_sold_ratio": 0.3333333333333333
     },
     {
-      "date": "20260304",
+      "date": "20260316",
       "action": "SELL",
-      "price": 1.915,
-      "amount": 863.3,
+      "price": 1.913,
+      "amount": 862.4,
       "shares": 450.8079,
       "round": 11,
-      "reason": "R11 收盘(1.9150)<多空线(1.9391) 减仓1/6",
+      "reason": "R11 周线统一减仓（信号20260313，累计卖出目标50.00%）：收盘(1.9190)<多空线(1.9456)",
       "total_shares": 1352.4236,
-      "profit": 29.96
+      "profit": 29.06,
+      "signal_date": "20260313",
+      "execution": "next_session_open",
+      "target_stage": 3,
+      "target_sold_ratio": 0.5
     },
     {
       "date": "20260320",
@@ -883,37 +850,49 @@
       "avg_cost": 1.8848
     },
     {
-      "date": "20260522",
+      "date": "20260525",
       "action": "SELL",
-      "price": 2.132,
-      "amount": 942.63,
+      "price": 2.202,
+      "amount": 973.58,
       "shares": 442.1323,
       "round": 12,
-      "reason": "R12 周线J=96.29>=93 减仓1/6",
+      "reason": "R12 周线统一减仓（信号20260522，累计卖出目标16.67%）：周线J=96.29≥93",
       "total_shares": 2210.6615,
-      "profit": 109.29
+      "profit": 140.24,
+      "signal_date": "20260522",
+      "execution": "next_session_open",
+      "target_stage": 1,
+      "target_sold_ratio": 0.16666666666666666
     },
     {
-      "date": "20260702",
+      "date": "20260706",
       "action": "SELL",
-      "price": 2.387,
-      "amount": 1055.37,
+      "price": 2.423,
+      "amount": 1071.29,
       "shares": 442.1323,
       "round": 12,
-      "reason": "R12 收盘(2.3870)<中期线(2.4422) 减仓1/6",
+      "reason": "R12 周线统一减仓（信号20260703，累计卖出目标33.33%）：收盘(2.4430)<中期线(2.4458)",
       "total_shares": 1768.5292,
-      "profit": 222.04
+      "profit": 237.95,
+      "signal_date": "20260703",
+      "execution": "next_session_open",
+      "target_stage": 2,
+      "target_sold_ratio": 0.3333333333333333
     },
     {
-      "date": "20260713",
+      "date": "20260720",
       "action": "SELL",
-      "price": 2.275,
-      "amount": 1005.85,
+      "price": 2.182,
+      "amount": 964.73,
       "shares": 442.1323,
       "round": 12,
-      "reason": "R12 收盘(2.2750)<多空线(2.3002) 减仓1/6",
+      "reason": "R12 周线统一减仓（信号20260717，累计卖出目标50.00%）：收盘(2.1630)<多空线(2.2892)",
       "total_shares": 1326.3969,
-      "profit": 172.52
+      "profit": 131.4,
+      "signal_date": "20260717",
+      "execution": "next_session_open",
+      "target_stage": 3,
+      "target_sold_ratio": 0.5
     },
     {
       "date": "20260724",
@@ -960,37 +939,34 @@
       "avg_cost": 2.2671
     },
     {
-      "date": "20261009",
+      "date": "20261012",
       "action": "SELL",
-      "price": 2.394,
-      "amount": 879.97,
+      "price": 2.378,
+      "amount": 874.09,
       "shares": 367.5715,
       "round": 13,
-      "reason": "R13 周线J=99.02>=93 减仓1/6",
+      "reason": "R13 周线统一减仓（信号20261009，累计卖出目标16.67%）：周线J=99.02≥93",
       "total_shares": 1837.8576,
-      "profit": 46.63
+      "profit": 40.75,
+      "signal_date": "20261009",
+      "execution": "next_session_open",
+      "target_stage": 1,
+      "target_sold_ratio": 0.16666666666666666
     },
     {
-      "date": "20261015",
+      "date": "20261019",
       "action": "SELL",
       "price": 2.238,
-      "amount": 822.63,
-      "shares": 367.5715,
+      "amount": 1645.25,
+      "shares": 735.143,
       "round": 13,
-      "reason": "R13 收盘(2.2380)<中期线(2.3151) 减仓1/6",
-      "total_shares": 1470.2861,
-      "profit": -10.71
-    },
-    {
-      "date": "20261016",
-      "action": "SELL",
-      "price": 2.261,
-      "amount": 831.08,
-      "shares": 367.5715,
-      "round": 13,
-      "reason": "R13 收盘(2.2610)<多空线(2.2901) 减仓1/6",
+      "reason": "R13 周线统一减仓（信号20261016，累计卖出目标50.00%）：收盘(2.2610)<中期线(2.3143)；收盘(2.2610)<多空线(2.2901)",
       "total_shares": 1102.7146,
-      "profit": -2.25
+      "profit": -21.42,
+      "signal_date": "20261016",
+      "execution": "next_session_open",
+      "target_stage": 3,
+      "target_sold_ratio": 0.5
     },
     {
       "date": "20261030",
@@ -1041,11 +1017,11 @@
     {
       "round_id": 1,
       "shares": 2121.5890664859444,
-      "total_cost": 2500.0000000000005,
+      "total_cost": 2500.0,
       "total_invested": 5000.0,
-      "total_sell_amount": 2456.800138990723,
+      "total_sell_amount": 2458.9217280572097,
       "dca_active": true,
-      "j_peak": 35.505540274330485,
+      "j_peak": 35.505540376336185,
       "pullback_sold": false,
       "sell_stage": 3,
       "waiting_golden": false,
@@ -1094,53 +1070,37 @@
           "avg_cost": 1.1784
         },
         {
-          "date": "20220106",
-          "action": "SELL",
-          "price": 1.158,
-          "amount": 818.93,
-          "shares": 707.1964,
-          "round": 1,
-          "reason": "R1 止损减仓1/6: 收盘跌破多空线且创新低",
-          "total_shares": 3535.9818,
-          "profit": -14.4
-        },
-        {
-          "date": "20220107",
-          "action": "SELL",
-          "price": 1.158,
-          "amount": 818.93,
-          "shares": 707.1964,
-          "round": 1,
-          "reason": "R1 收盘(1.1580)<中期线(1.1805) 减仓1/6",
-          "total_shares": 2828.7854,
-          "profit": -14.4
-        },
-        {
           "date": "20220110",
           "action": "SELL",
-          "price": 1.158,
-          "amount": 818.93,
-          "shares": 707.1964,
+          "price": 1.159,
+          "amount": 2458.92,
+          "shares": 2121.5891,
           "round": 1,
-          "reason": "R1 收盘(1.1580)<多空线(1.1905) 减仓1/6",
+          "reason": "R1 周线统一减仓（信号20220107，累计卖出目标50.00%）：V4止损：收盘跌破多空线且创新低；收盘(1.1580)<中期线(1.1805)；收盘(1.1580)<多空线(1.1910)",
           "total_shares": 2121.5891,
-          "profit": -14.4
+          "profit": -41.08,
+          "signal_date": "20220107",
+          "execution": "next_session_open",
+          "target_stage": 3,
+          "target_sold_ratio": 0.5
         }
       ],
       "week_invested": [
+        "20211126",
         "20211210",
-        "20211203",
-        "20211126"
-      ]
+        "20211203"
+      ],
+      "base_shares": 4243.178132971889,
+      "pending_sell": null
     },
     {
       "round_id": 2,
-      "shares": 2230.0345262664455,
+      "shares": 2230.034526266445,
       "total_cost": 2500.0,
       "total_invested": 5000.0,
-      "total_sell_amount": 2389.85366731554,
+      "total_sell_amount": 2328.1560454221685,
       "dca_active": true,
-      "j_peak": 46.80032110605213,
+      "j_peak": 48.70598456190036,
       "pullback_sold": false,
       "sell_stage": 3,
       "waiting_golden": false,
@@ -1200,54 +1160,38 @@
           "avg_cost": 1.1211
         },
         {
-          "date": "20220224",
+          "date": "20220307",
           "action": "SELL",
-          "price": 1.064,
-          "amount": 790.92,
-          "shares": 743.3448,
+          "price": 1.044,
+          "amount": 2328.16,
+          "shares": 2230.0345,
           "round": 2,
-          "reason": "R2 止损减仓1/6: 收盘跌破多空线且创新低",
-          "total_shares": 3716.7242,
-          "profit": -42.41
-        },
-        {
-          "date": "20220225",
-          "action": "SELL",
-          "price": 1.076,
-          "amount": 799.84,
-          "shares": 743.3448,
-          "round": 2,
-          "reason": "R2 收盘(1.0760)<中期线(1.1028) 减仓1/6",
-          "total_shares": 2973.3794,
-          "profit": -33.49
-        },
-        {
-          "date": "20220228",
-          "action": "SELL",
-          "price": 1.075,
-          "amount": 799.1,
-          "shares": 743.3448,
-          "round": 2,
-          "reason": "R2 收盘(1.0750)<多空线(1.1356) 减仓1/6",
+          "reason": "R2 周线统一减仓（信号20220304，累计卖出目标50.00%）：V4止损：收盘跌破多空线且创新低；收盘(1.0570)<中期线(1.0906)；收盘(1.0570)<多空线(1.1262)",
           "total_shares": 2230.0345,
-          "profit": -34.24
+          "profit": -171.84,
+          "signal_date": "20220304",
+          "execution": "next_session_open",
+          "target_stage": 3,
+          "target_sold_ratio": 0.5
         }
       ],
       "week_invested": [
-        "20220128",
         "20220121",
         "20220211",
-        "20220114"
-      ]
+        "20220114",
+        "20220128"
+      ],
+      "base_shares": 4460.06905253289,
+      "pending_sell": null
     },
     {
       "round_id": 3,
       "shares": 2537.3605134019513,
-      "total_cost": 2500.0000000000005,
+      "total_cost": 2500.0,
       "total_invested": 5000.0,
-      "total_sell_amount": 2676.0695548012577,
+      "total_sell_amount": 2630.397065560023,
       "dca_active": true,
-      "j_peak": 101.97899275722774,
+      "j_peak": 101.97899275722833,
       "pullback_sold": false,
       "sell_stage": 3,
       "waiting_golden": false,
@@ -1318,53 +1262,52 @@
           "avg_cost": 0.9853
         },
         {
-          "date": "20220805",
+          "date": "20220808",
           "action": "SELL",
-          "price": 1.066,
-          "amount": 901.61,
+          "price": 1.07,
+          "amount": 904.99,
           "shares": 845.7868,
           "round": 3,
-          "reason": "R3 周线J=101.98>=93 减仓1/6",
+          "reason": "R3 周线统一减仓（信号20220805，累计卖出目标16.67%）：周线J=101.98≥93",
           "total_shares": 4228.9342,
-          "profit": 68.28
+          "profit": 71.66,
+          "signal_date": "20220805",
+          "execution": "next_session_open",
+          "target_stage": 1,
+          "target_sold_ratio": 0.16666666666666666
         },
         {
-          "date": "20220823",
+          "date": "20220905",
           "action": "SELL",
-          "price": 1.058,
-          "amount": 894.84,
-          "shares": 845.7868,
+          "price": 1.02,
+          "amount": 1725.41,
+          "shares": 1691.5737,
           "round": 3,
-          "reason": "R3 收盘(1.0580)<中期线(1.0602) 减仓1/6",
-          "total_shares": 3383.1474,
-          "profit": 61.51
-        },
-        {
-          "date": "20220829",
-          "action": "SELL",
-          "price": 1.04,
-          "amount": 879.62,
-          "shares": 845.7868,
-          "round": 3,
-          "reason": "R3 收盘(1.0400)<多空线(1.0428) 减仓1/6",
+          "reason": "R3 周线统一减仓（信号20220902，累计卖出目标50.00%）：收盘(1.0200)<中期线(1.0572)；收盘(1.0200)<多空线(1.0418)",
           "total_shares": 2537.3605,
-          "profit": 46.28
+          "profit": 58.74,
+          "signal_date": "20220902",
+          "execution": "next_session_open",
+          "target_stage": 3,
+          "target_sold_ratio": 0.5
         }
       ],
       "week_invested": [
-        "20220624",
-        "20220701",
         "20220708",
-        "20220715",
-        "20220722"
-      ]
+        "20220722",
+        "20220701",
+        "20220624",
+        "20220715"
+      ],
+      "base_shares": 5074.7210268039025,
+      "pending_sell": null
     },
     {
       "round_id": 4,
-      "shares": 2535.1192124306,
+      "shares": 2535.1192124305994,
       "total_cost": 2500.0,
       "total_invested": 5000.0,
-      "total_sell_amount": 2684.691245964005,
+      "total_sell_amount": 2667.790451214468,
       "dca_active": true,
       "j_peak": 100.505861132787,
       "pullback_sold": false,
@@ -1437,53 +1380,67 @@
           "avg_cost": 0.9861
         },
         {
-          "date": "20221118",
+          "date": "20221121",
           "action": "SELL",
           "price": 1.064,
           "amount": 899.12,
           "shares": 845.0397,
           "round": 4,
-          "reason": "R4 周线J=100.51>=93 减仓1/6",
+          "reason": "R4 周线统一减仓（信号20221118，累计卖出目标16.67%）：周线J=100.51≥93",
           "total_shares": 4225.1987,
-          "profit": 65.79
+          "profit": 65.79,
+          "signal_date": "20221118",
+          "execution": "next_session_open",
+          "target_stage": 1,
+          "target_sold_ratio": 0.16666666666666666
         },
         {
-          "date": "20221206",
+          "date": "20221212",
           "action": "SELL",
-          "price": 1.065,
-          "amount": 899.97,
+          "price": 1.056,
+          "amount": 892.36,
           "shares": 845.0397,
           "round": 4,
-          "reason": "R4 收盘(1.0650)<中期线(1.0736) 减仓1/6",
+          "reason": "R4 周线统一减仓（信号20221209，累计卖出目标33.33%）：收盘(1.0670)<中期线(1.0730)",
           "total_shares": 3380.1589,
-          "profit": 66.63
+          "profit": 59.03,
+          "signal_date": "20221209",
+          "execution": "next_session_open",
+          "target_stage": 2,
+          "target_sold_ratio": 0.3333333333333333
         },
         {
-          "date": "20221220",
+          "date": "20221226",
           "action": "SELL",
-          "price": 1.048,
-          "amount": 885.6,
+          "price": 1.037,
+          "amount": 876.31,
           "shares": 845.0397,
           "round": 4,
-          "reason": "R4 收盘(1.0480)<多空线(1.0503) 减仓1/6",
+          "reason": "R4 周线统一减仓（信号20221223，累计卖出目标50.00%）：收盘(1.0350)<多空线(1.0489)",
           "total_shares": 2535.1192,
-          "profit": 52.27
+          "profit": 42.97,
+          "signal_date": "20221223",
+          "execution": "next_session_open",
+          "target_stage": 3,
+          "target_sold_ratio": 0.5
         }
       ],
       "week_invested": [
-        "20221021",
         "20221028",
-        "20221014",
         "20220923",
-        "20220930"
-      ]
+        "20220930",
+        "20221014",
+        "20221021"
+      ],
+      "base_shares": 5070.238424861199,
+      "pending_sell": null
     },
     {
       "round_id": 5,
       "shares": 2408.037183244516,
-      "total_cost": 2500.0000000000005,
+      "total_cost": 2500.0,
       "total_invested": 5000.0,
-      "total_sell_amount": 2807.771355663105,
+      "total_sell_amount": 2827.0356531290627,
       "dca_active": true,
       "j_peak": 98.18206797353048,
       "pullback_sold": false,
@@ -1534,58 +1491,72 @@
           "avg_cost": 1.0382
         },
         {
-          "date": "20230331",
+          "date": "20230403",
           "action": "SELL",
-          "price": 1.094,
-          "amount": 878.13,
+          "price": 1.095,
+          "amount": 878.93,
           "shares": 802.6791,
           "round": 5,
-          "reason": "R5 周线J=98.18>=93 减仓1/6",
+          "reason": "R5 周线统一减仓（信号20230331，累计卖出目标16.67%）：周线J=98.18≥93",
           "total_shares": 4013.3953,
-          "profit": 44.8
+          "profit": 45.6,
+          "signal_date": "20230331",
+          "execution": "next_session_open",
+          "target_stage": 1,
+          "target_sold_ratio": 0.16666666666666666
         },
         {
-          "date": "20230526",
+          "date": "20230529",
           "action": "SELL",
-          "price": 1.186,
-          "amount": 951.98,
+          "price": 1.201,
+          "amount": 964.02,
           "shares": 802.6791,
           "round": 5,
-          "reason": "R5 收盘(1.1860)<中期线(1.1955) 减仓1/6",
+          "reason": "R5 周线统一减仓（信号20230526，累计卖出目标33.33%）：收盘(1.1860)<中期线(1.1955)",
           "total_shares": 3210.7162,
-          "profit": 118.64
+          "profit": 130.68,
+          "signal_date": "20230526",
+          "execution": "next_session_open",
+          "target_stage": 2,
+          "target_sold_ratio": 0.3333333333333333
         },
         {
-          "date": "20230803",
+          "date": "20230807",
           "action": "SELL",
-          "price": 1.218,
-          "amount": 977.66,
+          "price": 1.226,
+          "amount": 984.08,
           "shares": 802.6791,
           "round": 5,
-          "reason": "R5 收盘(1.2180)<多空线(1.2337) 减仓1/6",
+          "reason": "R5 周线统一减仓（信号20230804，累计卖出目标50.00%）：收盘(1.2280)<多空线(1.2335)",
           "total_shares": 2408.0372,
-          "profit": 144.33
+          "profit": 150.75,
+          "signal_date": "20230804",
+          "execution": "next_session_open",
+          "target_stage": 3,
+          "target_sold_ratio": 0.5
         }
       ],
       "week_invested": [
         "20230120",
         "20230106",
         "20230113"
-      ]
+      ],
+      "base_shares": 4816.074366489032,
+      "pending_sell": null
     },
     {
       "round_id": 6,
       "shares": 2060.935737299375,
       "total_cost": 2500.0,
       "total_invested": 5000.0,
-      "total_sell_amount": 2428.4692771177633,
+      "total_sell_amount": 2400.990133953772,
       "dca_active": true,
       "j_peak": 60.118473478679505,
       "pullback_sold": true,
       "sell_stage": 3,
       "waiting_golden": false,
-      "golden_confirmed": true,
-      "price_below_dk_sold": false,
+      "golden_confirmed": false,
+      "price_below_dk_sold": true,
       "round_budget": 5000,
       "round_periods": 5,
       "buy_count": 4,
@@ -1640,52 +1611,36 @@
           "avg_cost": 1.213
         },
         {
-          "date": "20230928",
-          "action": "SELL",
-          "price": 1.189,
-          "amount": 816.82,
-          "shares": 686.9786,
-          "round": 6,
-          "reason": "R6 J峰值回撤(J_peak=60.12, J=19.15)减仓1/6",
-          "total_shares": 3434.8929,
-          "profit": -16.52
-        },
-        {
           "date": "20231009",
           "action": "SELL",
-          "price": 1.161,
-          "amount": 797.58,
-          "shares": 686.9786,
+          "price": 1.165,
+          "amount": 2400.99,
+          "shares": 2060.9357,
           "round": 6,
-          "reason": "R6 收盘(1.1610)<中期线(1.2196) 减仓1/6",
-          "total_shares": 2747.9143,
-          "profit": -35.75
-        },
-        {
-          "date": "20231010",
-          "action": "SELL",
-          "price": 1.185,
-          "amount": 814.07,
-          "shares": 686.9786,
-          "round": 6,
-          "reason": "R6 收盘(1.1850)<多空线(1.2212) 减仓1/6",
+          "reason": "R6 周线统一减仓（信号20230928，累计卖出目标50.00%）：J峰值回撤（60.12→19.15）；收盘(1.1890)<中期线(1.2234)；收盘(1.1890)<多空线(1.2243)",
           "total_shares": 2060.9357,
-          "profit": -19.26
+          "profit": -99.01,
+          "signal_date": "20230928",
+          "execution": "next_session_open",
+          "target_stage": 3,
+          "target_sold_ratio": 0.5
         }
       ],
       "week_invested": [
-        "20230818",
         "20230825",
         "20230811",
+        "20230818",
         "20230901"
-      ]
+      ],
+      "base_shares": 4121.87147459875,
+      "pending_sell": null
     },
     {
       "round_id": 7,
       "shares": 2121.4256178551755,
-      "total_cost": 2500.0000000000005,
+      "total_cost": 2500.0,
       "total_invested": 5000.0,
-      "total_sell_amount": 2695.624818421309,
+      "total_sell_amount": 2769.8747150462405,
       "dca_active": true,
       "j_peak": 97.55803596246778,
       "pullback_sold": false,
@@ -1736,51 +1691,65 @@
           "avg_cost": 1.1785
         },
         {
-          "date": "20231124",
+          "date": "20231127",
           "action": "SELL",
-          "price": 1.228,
-          "amount": 868.37,
+          "price": 1.227,
+          "amount": 867.66,
           "shares": 707.1419,
           "round": 7,
-          "reason": "R7 周线J=97.56>=93 减仓1/6",
+          "reason": "R7 周线统一减仓（信号20231124，累计卖出目标16.67%）：周线J=97.56≥93",
           "total_shares": 3535.7094,
-          "profit": 35.04
+          "profit": 34.33,
+          "signal_date": "20231124",
+          "execution": "next_session_open",
+          "target_stage": 1,
+          "target_sold_ratio": 0.16666666666666666
         },
         {
-          "date": "20231205",
+          "date": "20240108",
           "action": "SELL",
-          "price": 1.221,
-          "amount": 863.42,
+          "price": 1.308,
+          "amount": 924.94,
           "shares": 707.1419,
           "round": 7,
-          "reason": "R7 收盘(1.2210)<中期线(1.2218) 减仓1/6",
+          "reason": "R7 周线统一减仓（信号20240105，累计卖出目标33.33%）：收盘(1.3000)<中期线(1.3035)",
           "total_shares": 2828.5675,
-          "profit": 30.09
+          "profit": 91.61,
+          "signal_date": "20240105",
+          "execution": "next_session_open",
+          "target_stage": 2,
+          "target_sold_ratio": 0.3333333333333333
         },
         {
-          "date": "20240207",
+          "date": "20240422",
           "action": "SELL",
-          "price": 1.363,
-          "amount": 963.83,
+          "price": 1.382,
+          "amount": 977.27,
           "shares": 707.1419,
           "round": 7,
-          "reason": "R7 收盘(1.3630)<多空线(1.3711) 减仓1/6",
+          "reason": "R7 周线统一减仓（信号20240419，累计卖出目标50.00%）：收盘(1.3800)<多空线(1.4813)",
           "total_shares": 2121.4256,
-          "profit": 130.5
+          "profit": 143.94,
+          "signal_date": "20240419",
+          "execution": "next_session_open",
+          "target_stage": 3,
+          "target_sold_ratio": 0.5
         }
       ],
       "week_invested": [
-        "20231103",
         "20231020",
-        "20231027"
-      ]
+        "20231027",
+        "20231103"
+      ],
+      "base_shares": 4242.851235710351,
+      "pending_sell": null
     },
     {
       "round_id": 8,
       "shares": 1764.8668358609953,
-      "total_cost": 2500.0000000000005,
+      "total_cost": 2500.0,
       "total_invested": 5000.0,
-      "total_sell_amount": 2529.6424647340928,
+      "total_sell_amount": 2580.235314028775,
       "dca_active": true,
       "j_peak": 72.51997986182096,
       "pullback_sold": true,
@@ -1853,53 +1822,37 @@
           "avg_cost": 1.4165
         },
         {
-          "date": "20240726",
+          "date": "20240729",
           "action": "SELL",
-          "price": 1.422,
-          "amount": 836.55,
-          "shares": 588.2889,
+          "price": 1.462,
+          "amount": 2580.24,
+          "shares": 1764.8668,
           "round": 8,
-          "reason": "R8 J峰值回撤(J_peak=72.52, J=43.57)减仓1/6",
-          "total_shares": 2941.4447,
-          "profit": 3.21
-        },
-        {
-          "date": "20240730",
-          "action": "SELL",
-          "price": 1.469,
-          "amount": 864.2,
-          "shares": 588.2889,
-          "round": 8,
-          "reason": "R8 收盘(1.4690)<中期线(1.4797) 减仓1/6",
-          "total_shares": 2353.1558,
-          "profit": 30.86
-        },
-        {
-          "date": "20240802",
-          "action": "SELL",
-          "price": 1.409,
-          "amount": 828.9,
-          "shares": 588.2889,
-          "round": 8,
-          "reason": "R8 收盘(1.4090)<多空线(1.4650) 减仓1/6",
+          "reason": "R8 周线统一减仓（信号20240726，累计卖出目标50.00%）：J峰值回撤（72.52→43.57）；收盘(1.4220)<中期线(1.4855)；收盘(1.4220)<多空线(1.4662)",
           "total_shares": 1764.8668,
-          "profit": -4.43
+          "profit": 80.24,
+          "signal_date": "20240726",
+          "execution": "next_session_open",
+          "target_stage": 3,
+          "target_sold_ratio": 0.5
         }
       ],
       "week_invested": [
-        "20240419",
         "20240430",
+        "20240419",
+        "20240517",
         "20240510",
-        "20240426",
-        "20240517"
-      ]
+        "20240426"
+      ],
+      "base_shares": 3529.7336717219905,
+      "pending_sell": null
     },
     {
       "round_id": 9,
       "shares": 1774.3382544658714,
       "total_cost": 2500.0,
       "total_invested": 5000.0,
-      "total_sell_amount": 2547.949733412991,
+      "total_sell_amount": 2507.1399535602764,
       "dca_active": true,
       "j_peak": 78.30558789842154,
       "pullback_sold": true,
@@ -1939,50 +1892,34 @@
           "avg_cost": 1.409
         },
         {
-          "date": "20241220",
+          "date": "20241223",
           "action": "SELL",
-          "price": 1.404,
-          "amount": 830.39,
-          "shares": 591.4461,
+          "price": 1.413,
+          "amount": 2507.14,
+          "shares": 1774.3383,
           "round": 9,
-          "reason": "R9 J峰值回撤(J_peak=78.31, J=52.45)减仓1/6",
-          "total_shares": 2957.2304,
-          "profit": -2.94
-        },
-        {
-          "date": "20241224",
-          "action": "SELL",
-          "price": 1.433,
-          "amount": 847.54,
-          "shares": 591.4461,
-          "round": 9,
-          "reason": "R9 收盘(1.4330)<中期线(1.4352) 减仓1/6",
-          "total_shares": 2365.7843,
-          "profit": 14.21
-        },
-        {
-          "date": "20250221",
-          "action": "SELL",
-          "price": 1.471,
-          "amount": 870.02,
-          "shares": 591.4461,
-          "round": 9,
-          "reason": "R9 收盘(1.4710)<多空线(1.4718) 减仓1/6",
+          "reason": "R9 周线统一减仓（信号20241220，累计卖出目标50.00%）：J峰值回撤（78.31→52.45）；收盘(1.4040)<中期线(1.4362)；收盘(1.4040)<多空线(1.4309)",
           "total_shares": 1774.3383,
-          "profit": 36.68
+          "profit": 7.14,
+          "signal_date": "20241220",
+          "execution": "next_session_open",
+          "target_stage": 3,
+          "target_sold_ratio": 0.5
         }
       ],
       "week_invested": [
-        "20241101",
-        "20241108"
-      ]
+        "20241108",
+        "20241101"
+      ],
+      "base_shares": 3548.676508931743,
+      "pending_sell": null
     },
     {
       "round_id": 10,
       "shares": 1766.0765961354634,
-      "total_cost": 2500.0000000000005,
+      "total_cost": 2500.0,
       "total_invested": 5000.0,
-      "total_sell_amount": 2753.9021055738986,
+      "total_sell_amount": 2780.9819467146435,
       "dca_active": true,
       "j_peak": 98.92042381686014,
       "pullback_sold": false,
@@ -2055,53 +1992,67 @@
           "avg_cost": 1.4156
         },
         {
-          "date": "20250430",
+          "date": "20250506",
           "action": "SELL",
-          "price": 1.421,
-          "amount": 836.53,
+          "price": 1.437,
+          "amount": 845.95,
           "shares": 588.6922,
           "round": 10,
-          "reason": "R10 周线J=98.92>=93 减仓1/6",
+          "reason": "R10 周线统一减仓（信号20250430，累计卖出目标16.67%）：周线J=98.92≥93",
           "total_shares": 2943.461,
-          "profit": 3.2
+          "profit": 12.62,
+          "signal_date": "20250430",
+          "execution": "next_session_open",
+          "target_stage": 1,
+          "target_sold_ratio": 0.16666666666666666
         },
         {
-          "date": "20250623",
+          "date": "20250714",
           "action": "SELL",
-          "price": 1.453,
-          "amount": 855.37,
+          "price": 1.495,
+          "amount": 880.09,
           "shares": 588.6922,
           "round": 10,
-          "reason": "R10 收盘(1.4530)<中期线(1.4659) 减仓1/6",
+          "reason": "R10 周线统一减仓（信号20250711，累计卖出目标33.33%）：收盘(1.5000)<中期线(1.5093)",
           "total_shares": 2354.7688,
-          "profit": 22.04
+          "profit": 46.76,
+          "signal_date": "20250711",
+          "execution": "next_session_open",
+          "target_stage": 2,
+          "target_sold_ratio": 0.3333333333333333
         },
         {
-          "date": "20251118",
+          "date": "20251124",
           "action": "SELL",
-          "price": 1.804,
-          "amount": 1062.0,
+          "price": 1.792,
+          "amount": 1054.94,
           "shares": 588.6922,
           "round": 10,
-          "reason": "R10 收盘(1.8040)<多空线(1.8085) 减仓1/6",
+          "reason": "R10 周线统一减仓（信号20251121，累计卖出目标50.00%）：收盘(1.7920)<多空线(1.8074)",
           "total_shares": 1766.0766,
-          "profit": 228.67
+          "profit": 221.6,
+          "signal_date": "20251121",
+          "execution": "next_session_open",
+          "target_stage": 3,
+          "target_sold_ratio": 0.5
         }
       ],
       "week_invested": [
         "20250328",
-        "20250314",
-        "20250321",
         "20250307",
-        "20250228"
-      ]
+        "20250314",
+        "20250228",
+        "20250321"
+      ],
+      "base_shares": 3532.153192270927,
+      "pending_sell": null
     },
     {
       "round_id": 11,
       "shares": 1352.423592452219,
-      "total_cost": 2500.000000000001,
+      "total_cost": 2500.0,
       "total_invested": 5000.0,
-      "total_sell_amount": 2715.6665736440555,
+      "total_sell_amount": 2657.9631670327617,
       "dca_active": true,
       "j_peak": 98.58782102275043,
       "pullback_sold": false,
@@ -2163,52 +2114,66 @@
           "avg_cost": 1.8485
         },
         {
-          "date": "20260213",
+          "date": "20260224",
           "action": "SELL",
           "price": 2.111,
           "amount": 951.66,
           "shares": 450.8079,
           "round": 11,
-          "reason": "R11 周线J=98.59>=93 减仓1/6",
+          "reason": "R11 周线统一减仓（信号20260213，累计卖出目标16.67%）：周线J=98.59≥93",
           "total_shares": 2254.0393,
-          "profit": 118.32
+          "profit": 118.32,
+          "signal_date": "20260213",
+          "execution": "next_session_open",
+          "target_stage": 1,
+          "target_sold_ratio": 0.16666666666666666
         },
         {
-          "date": "20260303",
+          "date": "20260309",
           "action": "SELL",
-          "price": 1.998,
-          "amount": 900.71,
+          "price": 1.872,
+          "amount": 843.91,
           "shares": 450.8079,
           "round": 11,
-          "reason": "R11 收盘(1.9980)<中期线(2.0230) 减仓1/6",
+          "reason": "R11 周线统一减仓（信号20260306，累计卖出目标33.33%）：收盘(1.9830)<中期线(2.0242)",
           "total_shares": 1803.2315,
-          "profit": 67.38
+          "profit": 10.58,
+          "signal_date": "20260306",
+          "execution": "next_session_open",
+          "target_stage": 2,
+          "target_sold_ratio": 0.3333333333333333
         },
         {
-          "date": "20260304",
+          "date": "20260316",
           "action": "SELL",
-          "price": 1.915,
-          "amount": 863.3,
+          "price": 1.913,
+          "amount": 862.4,
           "shares": 450.8079,
           "round": 11,
-          "reason": "R11 收盘(1.9150)<多空线(1.9391) 减仓1/6",
+          "reason": "R11 周线统一减仓（信号20260313，累计卖出目标50.00%）：收盘(1.9190)<多空线(1.9456)",
           "total_shares": 1352.4236,
-          "profit": 29.96
+          "profit": 29.06,
+          "signal_date": "20260313",
+          "execution": "next_session_open",
+          "target_stage": 3,
+          "target_sold_ratio": 0.5
         }
       ],
       "week_invested": [
         "20260116",
-        "20251231",
         "20260109",
-        "20251226"
-      ]
+        "20251226",
+        "20251231"
+      ],
+      "base_shares": 2704.847184904438,
+      "pending_sell": null
     },
     {
       "round_id": 12,
       "shares": 1326.3968756399424,
       "total_cost": 2500.0000000000005,
       "total_invested": 5000.0,
-      "total_sell_amount": 3003.846791032589,
+      "total_sell_amount": 3009.594510827029,
       "dca_active": true,
       "j_peak": 96.28889516864092,
       "pullback_sold": false,
@@ -2270,52 +2235,66 @@
           "avg_cost": 1.8848
         },
         {
-          "date": "20260522",
+          "date": "20260525",
           "action": "SELL",
-          "price": 2.132,
-          "amount": 942.63,
+          "price": 2.202,
+          "amount": 973.58,
           "shares": 442.1323,
           "round": 12,
-          "reason": "R12 周线J=96.29>=93 减仓1/6",
+          "reason": "R12 周线统一减仓（信号20260522，累计卖出目标16.67%）：周线J=96.29≥93",
           "total_shares": 2210.6615,
-          "profit": 109.29
+          "profit": 140.24,
+          "signal_date": "20260522",
+          "execution": "next_session_open",
+          "target_stage": 1,
+          "target_sold_ratio": 0.16666666666666666
         },
         {
-          "date": "20260702",
+          "date": "20260706",
           "action": "SELL",
-          "price": 2.387,
-          "amount": 1055.37,
+          "price": 2.423,
+          "amount": 1071.29,
           "shares": 442.1323,
           "round": 12,
-          "reason": "R12 收盘(2.3870)<中期线(2.4422) 减仓1/6",
+          "reason": "R12 周线统一减仓（信号20260703，累计卖出目标33.33%）：收盘(2.4430)<中期线(2.4458)",
           "total_shares": 1768.5292,
-          "profit": 222.04
+          "profit": 237.95,
+          "signal_date": "20260703",
+          "execution": "next_session_open",
+          "target_stage": 2,
+          "target_sold_ratio": 0.3333333333333333
         },
         {
-          "date": "20260713",
+          "date": "20260720",
           "action": "SELL",
-          "price": 2.275,
-          "amount": 1005.85,
+          "price": 2.182,
+          "amount": 964.73,
           "shares": 442.1323,
           "round": 12,
-          "reason": "R12 收盘(2.2750)<多空线(2.3002) 减仓1/6",
+          "reason": "R12 周线统一减仓（信号20260717，累计卖出目标50.00%）：收盘(2.1630)<多空线(2.2892)",
           "total_shares": 1326.3969,
-          "profit": 172.52
+          "profit": 131.4,
+          "signal_date": "20260717",
+          "execution": "next_session_open",
+          "target_stage": 3,
+          "target_sold_ratio": 0.5
         }
       ],
       "week_invested": [
-        "20260410",
-        "20260327",
         "20260320",
-        "20260403"
-      ]
+        "20260403",
+        "20260327",
+        "20260410"
+      ],
+      "base_shares": 2652.793751279885,
+      "pending_sell": null
     },
     {
       "round_id": 13,
       "shares": 1102.7145605948763,
       "total_cost": 2500.0,
       "total_invested": 5000.0,
-      "total_sell_amount": 2533.6704887268274,
+      "total_sell_amount": 2519.335199439094,
       "dca_active": true,
       "j_peak": 99.01883672988508,
       "pullback_sold": false,
@@ -2377,45 +2356,44 @@
           "avg_cost": 2.2671
         },
         {
-          "date": "20261009",
+          "date": "20261012",
           "action": "SELL",
-          "price": 2.394,
-          "amount": 879.97,
+          "price": 2.378,
+          "amount": 874.09,
           "shares": 367.5715,
           "round": 13,
-          "reason": "R13 周线J=99.02>=93 减仓1/6",
+          "reason": "R13 周线统一减仓（信号20261009，累计卖出目标16.67%）：周线J=99.02≥93",
           "total_shares": 1837.8576,
-          "profit": 46.63
+          "profit": 40.75,
+          "signal_date": "20261009",
+          "execution": "next_session_open",
+          "target_stage": 1,
+          "target_sold_ratio": 0.16666666666666666
         },
         {
-          "date": "20261015",
+          "date": "20261019",
           "action": "SELL",
           "price": 2.238,
-          "amount": 822.63,
-          "shares": 367.5715,
+          "amount": 1645.25,
+          "shares": 735.143,
           "round": 13,
-          "reason": "R13 收盘(2.2380)<中期线(2.3151) 减仓1/6",
-          "total_shares": 1470.2861,
-          "profit": -10.71
-        },
-        {
-          "date": "20261016",
-          "action": "SELL",
-          "price": 2.261,
-          "amount": 831.08,
-          "shares": 367.5715,
-          "round": 13,
-          "reason": "R13 收盘(2.2610)<多空线(2.2901) 减仓1/6",
+          "reason": "R13 周线统一减仓（信号20261016，累计卖出目标50.00%）：收盘(2.2610)<中期线(2.3143)；收盘(2.2610)<多空线(2.2901)",
           "total_shares": 1102.7146,
-          "profit": -2.25
+          "profit": -21.42,
+          "signal_date": "20261016",
+          "execution": "next_session_open",
+          "target_stage": 3,
+          "target_sold_ratio": 0.5
         }
       ],
       "week_invested": [
-        "20260814",
-        "20260731",
         "20260724",
+        "20260731",
+        "20260814",
         "20260807"
-      ]
+      ],
+      "base_shares": 2205.4291211897525,
+      "pending_sell": null
     },
     {
       "round_id": 14,
@@ -2486,10 +2464,12 @@
       ],
       "week_invested": [
         "20261120",
-        "20261106",
         "20261030",
-        "20261113"
-      ]
+        "20261113",
+        "20261106"
+      ],
+      "base_shares": 1952.627683596198,
+      "pending_sell": null
     }
   ]
 }

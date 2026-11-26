@@ -1,11 +1,11 @@
 {
-  "position": 24.0,
+  "position": 26.0,
   "position_cost": 2000.0,
-  "investment_level_idx": 1,
+  "investment_level_idx": 2,
   "red_bar_count": 0,
-  "green_bar_count": 1,
-  "last_trade_date": "20261125",
-  "last_bar_date": "20261125",
+  "green_bar_count": 2,
+  "last_trade_date": "20261126",
+  "last_bar_date": "20261126",
   "trades": [
     {
       "date": "20260319",
@@ -310,7 +310,17 @@
       "j13_count": 3545,
       "threshold": 2787.6000000000004,
       "reason": "J13数量(3545)超过90%分位数(2787.6)"
+    },
+    {
+      "date": "20261126",
+      "action": "BUY",
+      "type": "倍投",
+      "amount": 4000,
+      "level": 2,
+      "j13_count": 3774,
+      "threshold": 2816.8,
+      "reason": "J13数量(3774)超过90%分位数(2816.8)"
     }
   ],
-  "saved_at": "2026-11-25 12:18:22"
+  "saved_at": "2026-11-26 12:21:12"
 }

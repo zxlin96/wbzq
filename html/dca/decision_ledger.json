@@ -2,7 +2,7 @@
   "version": 1,
   "etfs": {
     "红利低波": {
-      "current_week": "20261120",
+      "current_week": "20261127",
       "weeks": {
         "20260918": {
           "signal_week": "20260918",
@@ -87,6 +87,16 @@
           "recorded_at": "2026-11-20 12:20:28",
           "source": "live",
           "confirmation_rule": "exchange_week_close_v2"
+        },
+        "20261127": {
+          "signal_week": "20261127",
+          "action": "hold",
+          "action_label": "持有（仓位50%）",
+          "weekly_j": 85.66,
+          "recorded_at": "2026-11-27 12:21:39",
+          "source": "live",
+          "confirmation_rule": "exchange_week_close_v2",
+          "sell_policy": null
         }
       }
     },
@@ -1188,7 +1198,7 @@
       }
     },
     "纳指100": {
-      "current_week": "20261120",
+      "current_week": "20261127",
       "weeks": {
         "20261009": {
           "signal_week": "20261009",
@@ -1251,6 +1261,17 @@
           "confirmation_rule": "exchange_week_close_v2",
           "sell_policy": "weekly_aggregate_next_open_v1",
           "sell_orders": []
+        },
+        "20261127": {
+          "signal_week": "20261127",
+          "action": "buy",
+          "action_label": "R12 建议定投(1x)",
+          "weekly_j": 1.57,
+          "recorded_at": "2026-11-27 12:21:39",
+          "source": "live",
+          "confirmation_rule": "exchange_week_close_v2",
+          "sell_policy": "weekly_aggregate_next_open_v1",
+          "sell_orders": []
         }
       },
       "superseded_decisions": [
@@ -1268,7 +1289,7 @@
       ]
     },
     "标普500": {
-      "current_week": "20261120",
+      "current_week": "20261127",
       "weeks": {
         "20261009": {
           "signal_week": "20261009",
@@ -1331,6 +1352,17 @@
           "confirmation_rule": "exchange_week_close_v2",
           "sell_policy": "weekly_aggregate_next_open_v1",
           "sell_orders": []
+        },
+        "20261127": {
+          "signal_week": "20261127",
+          "action": "invest_remaining",
+          "action_label": "R11 建议投入剩余预算4000元",
+          "weekly_j": 23.33,
+          "recorded_at": "2026-11-27 12:21:39",
+          "source": "live",
+          "confirmation_rule": "exchange_week_close_v2",
+          "sell_policy": "weekly_aggregate_next_open_v1",
+          "sell_orders": []
         }
       },
       "superseded_decisions": [
@@ -1348,7 +1380,7 @@
       ]
     },
     "日经225": {
-      "current_week": "20261120",
+      "current_week": "20261127",
       "weeks": {
         "20261009": {
           "signal_week": "20261009",
@@ -1411,6 +1443,17 @@
           "confirmation_rule": "exchange_week_close_v2",
           "sell_policy": "weekly_aggregate_next_open_v1",
           "sell_orders": []
+        },
+        "20261127": {
+          "signal_week": "20261127",
+          "action": "buy",
+          "action_label": "R14 建议定投(0x)",
+          "weekly_j": 5.53,
+          "recorded_at": "2026-11-27 12:21:39",
+          "source": "live",
+          "confirmation_rule": "exchange_week_close_v2",
+          "sell_policy": "weekly_aggregate_next_open_v1",
+          "sell_orders": []
         }
       },
       "superseded_decisions": [
@@ -1428,7 +1471,7 @@
       ]
     },
     "德国DAX": {
-      "current_week": "20261120",
+      "current_week": "20261127",
       "weeks": {
         "20261009": {
           "signal_week": "20261009",
@@ -1488,6 +1531,17 @@
           "weekly_j": 35.08,
           "recorded_at": "2026-11-24 12:19:21",
           "source": "rule_migration",
+          "confirmation_rule": "exchange_week_close_v2",
+          "sell_policy": "weekly_aggregate_next_open_v1",
+          "sell_orders": []
+        },
+        "20261127": {
+          "signal_week": "20261127",
+          "action": "v6h_stage_3",
+          "action_label": "R1 已卖50%·永久持有",
+          "weekly_j": 25.33,
+          "recorded_at": "2026-11-27 12:21:39",
+          "source": "live",
           "confirmation_rule": "exchange_week_close_v2",
           "sell_policy": "weekly_aggregate_next_open_v1",
           "sell_orders": []

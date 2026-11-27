@@ -796,6 +796,17 @@
       "reason": "周线J=-13.20, 金额=3000",
       "total_shares": 4181.9478,
       "avg_cost": 2.1521
+    },
+    {
+      "date": "20261127",
+      "action": "BUY",
+      "price": 2.108,
+      "amount": 3000.0,
+      "shares": 1423.1499,
+      "round": 12,
+      "reason": "周线J=1.57, 金额=3000",
+      "total_shares": 5605.0977,
+      "avg_cost": 2.1409
     }
   ],
   "positions": [
@@ -806,7 +817,7 @@
       "total_invested": 15000.0,
       "total_sell_amount": 7054.588078605061,
       "dca_active": true,
-      "j_peak": 91.56285872601467,
+      "j_peak": 91.56285874078343,
       "pullback_sold": true,
       "sell_stage": 3,
       "waiting_golden": false,
@@ -893,11 +904,11 @@
         }
       ],
       "week_invested": [
-        "20220211",
         "20220121",
-        "20220128",
+        "20220218",
         "20220114",
-        "20220218"
+        "20220128",
+        "20220211"
       ],
       "base_shares": 15711.777457917731,
       "pending_sell": null
@@ -909,7 +920,7 @@
       "total_invested": 15000.0,
       "total_sell_amount": 7639.512868786467,
       "dca_active": true,
-      "j_peak": 110.84696520696178,
+      "j_peak": 110.84696520699043,
       "pullback_sold": false,
       "sell_stage": 3,
       "waiting_golden": false,
@@ -1000,10 +1011,10 @@
         }
       ],
       "week_invested": [
-        "20220602",
         "20220520",
+        "20220513",
         "20220527",
-        "20220513"
+        "20220602"
       ],
       "base_shares": 17670.42298100185,
       "pending_sell": null
@@ -1015,7 +1026,7 @@
       "total_invested": 15000.0,
       "total_sell_amount": 7642.470242037634,
       "dca_active": true,
-      "j_peak": 97.74311610317201,
+      "j_peak": 97.74311610317207,
       "pullback_sold": false,
       "sell_stage": 3,
       "waiting_golden": false,
@@ -1117,11 +1128,11 @@
         }
       ],
       "week_invested": [
-        "20221014",
-        "20220916",
-        "20221021",
         "20220923",
-        "20220930"
+        "20220930",
+        "20221021",
+        "20220916",
+        "20221014"
       ],
       "base_shares": 18283.421631668978,
       "pending_sell": null
@@ -1209,10 +1220,10 @@
         }
       ],
       "week_invested": [
-        "20230120",
-        "20230106",
         "20230113",
-        "20221230"
+        "20221230",
+        "20230106",
+        "20230120"
       ],
       "base_shares": 18552.331518692845,
       "pending_sell": null
@@ -1289,9 +1300,9 @@
         }
       ],
       "week_invested": [
-        "20230901",
+        "20230825",
         "20230818",
-        "20230825"
+        "20230901"
       ],
       "base_shares": 13421.522084860582,
       "pending_sell": null
@@ -1562,9 +1573,9 @@
         }
       ],
       "week_invested": [
+        "20240816",
         "20240809",
-        "20240802",
-        "20240816"
+        "20240802"
       ],
       "base_shares": 10497.836102978483,
       "pending_sell": null
@@ -1652,9 +1663,9 @@
         }
       ],
       "week_invested": [
-        "20250228",
         "20250321",
         "20250307",
+        "20250228",
         "20250314"
       ],
       "base_shares": 10158.86444259757,
@@ -1784,11 +1795,11 @@
         }
       ],
       "week_invested": [
+        "20260213",
         "20260206",
-        "20260227",
-        "20260306",
         "20260313",
-        "20260213"
+        "20260306",
+        "20260227"
       ],
       "base_shares": 8306.85216082838,
       "pending_sell": null
@@ -1902,9 +1913,9 @@
         }
       ],
       "week_invested": [
-        "20260807",
         "20260731",
         "20260710",
+        "20260807",
         "20260717",
         "20260724"
       ],
@@ -1913,9 +1924,9 @@
     },
     {
       "round_id": 12,
-      "shares": 4181.947800228734,
-      "total_cost": 9000.0,
-      "total_invested": 9000.0,
+      "shares": 5605.097705352074,
+      "total_cost": 12000.0,
+      "total_invested": 12000.0,
       "total_sell_amount": 0.0,
       "dca_active": true,
       "j_peak": 2.5929600360248486,
@@ -1926,7 +1937,7 @@
       "price_below_dk_sold": false,
       "round_budget": 15000,
       "round_periods": 5,
-      "buy_count": 3,
+      "buy_count": 4,
       "dca_exited": false,
       "dca_exit_date": "",
       "dca_exit_amount": 0.0,
@@ -1965,14 +1976,26 @@
           "reason": "周线J=-13.20, 金额=3000",
           "total_shares": 4181.9478,
           "avg_cost": 2.1521
+        },
+        {
+          "date": "20261127",
+          "action": "BUY",
+          "price": 2.108,
+          "amount": 3000.0,
+          "shares": 1423.1499,
+          "round": 12,
+          "reason": "周线J=1.57, 金额=3000",
+          "total_shares": 5605.0977,
+          "avg_cost": 2.1409
         }
       ],
       "week_invested": [
-        "20261113",
         "20261106",
-        "20261120"
+        "20261120",
+        "20261127",
+        "20261113"
       ],
-      "base_shares": 4181.947800228734,
+      "base_shares": 5605.097705352074,
       "pending_sell": null
     }
   ]
